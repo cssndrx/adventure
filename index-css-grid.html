@@ -1,0 +1,50 @@
+<!doctype html>
+<head>
+
+<!-- 
+https://css-tricks.com/snippets/css/complete-guide-grid/ 
+
+-->
+<style>
+.parent {
+background-color: grey;
+display:grid;
+grid-template-columns: 50% 50%;
+
+/*
+
+ can be a length, a percentage, or a fraction of the free space in the grid (using the fr unit) 
+
+ 40px 50px auto 50px 40px
+
+ */
+grid-template-rows: 25% auto 25%;
+}
+
+.child{
+background-color: green;
+height: 50px;
+width: 50px;
+border: 1px solid red;
+}
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="parent">
+
+<div class="child"></div>
+<div class="child"></div>
+<div class="child"></div>
+<div class="child"></div>
+<div class="child"></div>
+<div class="child"></div>
+
+
+</div>
+
+</body>

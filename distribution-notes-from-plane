@@ -1,0 +1,62 @@
+
+for investigating:
+QQ plot
+martingale
+sum two independent vars <> convolution of densities
+random walk example for normal dist
+ttao's blog
+
+---
+
+
+https://en.wikipedia.org/wiki/Normal_distribution
+QQ plot
++/- two normals
+
+approximate normality
+binomial -- when N is large
+(also, add in poisson approximates binomial)
+
+assumed normality
+biology: many log-normal
+
+produced normality
+lack of normality in residuals: model is not powerful enough
+
+---
+
+https://en.wikipedia.org/wiki/Central_limit_theorem
+
+CLT
+iid, needs finite variance
+
+what is a martingale again?
+
+The density of the sum of two or more independent variables is the convolution of their densities (if these densities exist). 
+
+random walk: distance from start is normal
+
+Sir Francis Galton described the Central Limit Theorem in this way:[42]
+I know of scarcely anything so apt to impress the imagination as the wonderful form of cosmic order expressed by the "Law of Frequency of Error". The law would have been personified by the Greeks and deified, if they had known of it. It reigns with serenity and in complete self-effacement, amidst the wildest confusion. The huger the mob, and the greater the apparent anarchy, the more perfect is its sway. It is the supreme law of Unreason. Whenever a large sample of chaotic elements are taken in hand and marshalled in the order of their magnitude, an unsuspected and most beautiful form of regularity proves to have been latent all along.
+
+---
+
+https://en.wikipedia.org/wiki/Law_of_large_numbers
+
+describes the result of performing the same experiment a large number of times
+the average of the results obtained from a large number of trials should be close to the expected value
+
+finite variance not needed
+
+weak law:
+probabilty sample mean differs from true mean by more than epsilon, goes to 0 
+leaves open probability that sample mean > epsilon, but rarely
+holds for more cases
+
+strong law:
+pr(sample mean = mean) = 1
+holds for fewer cases
+
+go through links on ttao's blog:
+https://terrytao.wordpress.com/2008/06/18/the-strong-law-of-large-numbers/
+
