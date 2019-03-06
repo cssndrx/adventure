@@ -3,6 +3,8 @@
 
 <head>
 <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:200,400,700,900" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Gloria+Hallelujah" rel="stylesheet">
+
 <script src="js/lodash.min.js"></script>
 <script src="js/d3.v4.min.js"></script>
 
@@ -23,6 +25,17 @@ button{
   font: inherit;
   color: inherit;
   cursor: pointer;
+}
+
+.sign-text{
+  font-family: 'Gloria Hallelujah', cursive;
+}
+
+.sign{
+  border-bottom: 4px solid transparent;
+}
+.sign:hover{
+  border-bottom: 4px solid rgba(170, 141, 90, 0.3);
 }
 
 body {
@@ -602,16 +615,68 @@ have bar showing how much money is needed.
 
 <script type="text/x-template" id="forest-intro-template">
 <div>
+
+
+<div style="position:relative">
+
+  <div style="z-index:1; position:absolute; left:400px;top:0px;">
+  <img src="images/fairy.png" style="width:50px;">
+  <div style="width:100px; display:inline-block; font-size:10px;">
+    <p>
+    Wait a minute adventurer, are you sure? 
+    </p>
+    <p>
+    <!-- show these on the signs Choice A has EV 6, while choice B has EV 4. -->
+    You can still change your mind if you want.
+    </p>
+  </div>
+
+
+  </div>
+
+  <div style="position:relative; display:inline-block;" class="sign">
+    <img src="images/sign7.png" style="width: 180px;">
+    <div style="position:absolute; width:170px;height:100px; text-align:center; top: 30px; left:10px; cursor:pointer; color: #4E3B27" class="sign-text">10% chance of getting lost</div>
+  </div>
+
+  <div style="position:relative; display:inline-block;" class="sign">
+    <img src="images/sign7.png" style="width: 180px;height:240px;">
+    <div style="position:absolute; width:170px;height:100px; text-align:center; top: 30px; left:10px; cursor:pointer; color: #4E3B27" class="sign-text">
+        <forest-outcomes :renderAsDistribution="false"></forest-outcomes>
+    </div>
+  </div>
+</div>
+
+
+
+<div>
+<div style="position:relative; display:inline-block;" class="sign">
+  <img src="images/sign7.png" style="width: 180px;height:240px;">
+  <div style="position:absolute; width:170px;height:100px; text-align:center; top: 30px; left:10px; cursor:pointer; color: #4E3B27" class="sign-text">
+      <forest-outcomes :renderAsDistribution="false"></forest-outcomes>
+  </div>
+</div>
+
+<div style="position:relative; display:inline-block;" class="sign">
+  <img src="images/sign7.png" style="width: 180px;height:240px;">
+  <div style="position:absolute; width:170px;height:100px; text-align:center; top: 30px; left:10px; cursor:pointer; color: #4E3B27" class="sign-text">
+      <forest-outcomes :renderAsDistribution="true"></forest-outcomes>
+  </div>
+</div>
+
+</div>
+
+
+
 <h4>Forest journey</h4>
 
 <img src="images/forest1.png">
 
-<stagger>
 <div>
   You approach the first fork in the road.
 </div>
 
-<img src="images/sign6.png">
+<img src="images/sign6.png" style="height: 200px;">
 
 <!-- basic prob comparison -->
 <div>
@@ -637,7 +702,6 @@ It says there is a ...
   </guess-button>
 </div>
 
-</stagger>
 
 <story ref="right-basic">
 That's right. In this forest, you definitely want to minimize the chance of getting lost.
@@ -1018,7 +1082,7 @@ Regardless of the outcome, you feel satisfied satisfied knowing that you made th
 
 <distribution v-if="renderAsDistribution" :outcomes="outcomes"></distribution>
 
-<div v-else v-for="outcome in outcomes" :key="outcome" style="margin-left: 24px; font-size:13px;">
+<div v-else v-for="outcome in outcomes" :key="outcome" style=" font-size:13px; margin-bottom:0px;">
 
   {{renderCertainty(outcome.certainty)}}: 
 
@@ -1670,7 +1734,7 @@ Vue.component('distribution', {
     xAttr: {type: String, default: 'hp'},
     yAttr: {type: String, default: 'certainty'},
 
-    // We want the x-axis to be the same between problems, so
+    // If we want the x-axis to be the same between problems, so
     // hardcode it here.
     xMin: {type: Number, default: -10},
     xMax: {type: Number, default: 10},
@@ -2075,7 +2139,7 @@ new Vue({
   data: {
 
     storyPoints: storyPoints,
-    currentStoryPoint: storyPoints[3],
+    currentStoryPoint: storyPoints[2],
 
     // Obj property additions do not update DOM, so prepopulate all the keys in the object. Or use lists.
     // storyState: null, // A string like 'hyderabadCertainty' used to jump to a particular point in the story.
