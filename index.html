@@ -35,7 +35,7 @@ button{
   border-bottom: 4px solid transparent;
 }
 .sign:hover{
-  border-bottom: 4px solid rgba(170, 141, 90, 0.3);
+  border-bottom: 4px solid #ddd;
 }
 
 body {
@@ -613,59 +613,18 @@ have bar showing how much money is needed.
 
 
 
-<script type="text/x-template" id="forest-intro-template">
-<div>
-
-
-<div style="position:relative">
-
-  <div style="z-index:1; position:absolute; left:400px;top:0px;">
-  <img src="images/fairy.png" style="width:50px;">
-  <div style="width:100px; display:inline-block; font-size:10px;">
-    <p>
-    Wait a minute adventurer, are you sure? 
-    </p>
-    <p>
-    <!-- show these on the signs Choice A has EV 6, while choice B has EV 4. -->
-    You can still change your mind if you want.
-    </p>
-  </div>
-
-
-  </div>
-
+<script type="text/x-template" id="wooden-sign-template">
   <div style="position:relative; display:inline-block;" class="sign">
-    <img src="images/sign7.png" style="width: 180px;">
-    <div style="position:absolute; width:170px;height:100px; text-align:center; top: 30px; left:10px; cursor:pointer; color: #4E3B27" class="sign-text">10% chance of getting lost</div>
-  </div>
-
-  <div style="position:relative; display:inline-block;" class="sign">
-    <img src="images/sign7.png" style="width: 180px;height:240px;">
+    <img src="images/sign7.png" style="width: 190px;" :style="{height: height + 'px'}">
     <div style="position:absolute; width:170px;height:100px; text-align:center; top: 30px; left:10px; cursor:pointer; color: #4E3B27" class="sign-text">
-        <forest-outcomes :renderAsDistribution="false"></forest-outcomes>
+      <slot></slot>
     </div>
   </div>
-</div>
+</script>
 
 
-
+<script type="text/x-template" id="forest-intro-template">
 <div>
-<div style="position:relative; display:inline-block;" class="sign">
-  <img src="images/sign7.png" style="width: 180px;height:240px;">
-  <div style="position:absolute; width:170px;height:100px; text-align:center; top: 30px; left:10px; cursor:pointer; color: #4E3B27" class="sign-text">
-      <forest-outcomes :renderAsDistribution="false"></forest-outcomes>
-  </div>
-</div>
-
-<div style="position:relative; display:inline-block;" class="sign">
-  <img src="images/sign7.png" style="width: 180px;height:240px;">
-  <div style="position:absolute; width:170px;height:100px; text-align:center; top: 30px; left:10px; cursor:pointer; color: #4E3B27" class="sign-text">
-      <forest-outcomes :renderAsDistribution="true"></forest-outcomes>
-  </div>
-</div>
-
-</div>
-
 
 
 <h4>Forest journey</h4>
@@ -676,29 +635,24 @@ have bar showing how much money is needed.
   You approach the first fork in the road.
 </div>
 
-<img src="images/sign6.png" style="height: 200px;">
+<div>
+Choose which way to proceed.
+</div>
 
 <!-- basic prob comparison -->
-<div>
-It says there is a ...
-</div>
 
-<div class="forest-intro-problem">
-<div>
-  10% chance of getting lost in taking path A
-</div>
-<div>
-  20% chance of getting lost in taking path B
-</div>
-</div>
+
+<wooden-sign>10% chance of getting lost in taking path A</wooden-sign>
+<wooden-sign>20% chance of getting lost in taking path B</wooden-sign>
+
 
 <div>
   <guess-button :onClickFn="() => show('right-basic')">
-    Go A
+    <wooden-sign>10% chance of getting lost in taking path A</wooden-sign>
   </guess-button>
   <guess-button :onClickFn="() => show('wrong-basic')" 
                 :correct="false">
-    Go B
+    <wooden-sign>20% chance of getting lost in taking path B</wooden-sign>
   </guess-button>
 </div>
 
@@ -1033,27 +987,14 @@ Regardless of the outcome, you feel satisfied satisfied knowing that you made th
      style="max-width:150px; margin:8px; max-height: 150px;">
    </div>
 
-<div style="text-align: left;">
-  <div v-for="choice in problem.choices">
-    <div>
-<!--      <img v-if="choice.image"
-           :src="'images/' + choice.image"
-           style="max-width:40px; max-height:40px; vertical-align:middle"> -->
-      {{choice.name}}:
-    </div>
-    <forest-outcomes :outcomes="choice.outcomes" :renderAsDistribution="problem.renderAsDistribution"></forest-outcomes>
-  </div>
-</div>
-
 <once-group>
   <once-button v-for="choice in problem.choices"
                :onClickFn="() => choiceMade(choice)"
                :key="choice">
-<!--    <div v-if="choice.image" style="margin-bottom:8px;">
-      <img :src="'images/' + choice.image"
-           style="max-width:40px">
-    </div>-->
-    {{choice.name}}
+
+    <div>{{choice.name}}</div>
+    <forest-outcomes :outcomes="choice.outcomes" :renderAsDistribution="problem.renderAsDistribution"></forest-outcomes>
+
   </once-button>
 </once-group>
 
@@ -1080,9 +1021,9 @@ Regardless of the outcome, you feel satisfied satisfied knowing that you made th
 <script type="text/x-template" id="forest-outcomes-template">
 <div>
 
-<distribution v-if="renderAsDistribution" :outcomes="outcomes"></distribution>
+<distribution v-if="renderAsDistribution" :outcomes="outcomes" :fittedX="true" :chartHeight="100" :chartWidth="140"></distribution>
 
-<div v-else v-for="outcome in outcomes" :key="outcome" style=" font-size:13px; margin-bottom:0px;">
+<div v-else v-for="outcome in outcomes" :key="outcome" style=" font-size:13px; margin-bottom:4px; background-color: rgb(150, 125, 82)">
 
   {{renderCertainty(outcome.certainty)}}: 
 
@@ -1449,13 +1390,13 @@ hmm: this should probably be a forest-problem
   </div>
 
   <!-- show the mean as a bar -->
-  <div style="border-left: 2px solid #74361F; width:0px; height:160px; position:absolute; bottom: 0px; pointer-events:none; font-size:8px; white-space: nowrap; position:relative;"
+  <div v-if="showMean" style="border-left: 2px solid #74361F; width:0px; height:160px; position:absolute; bottom: 0px; pointer-events:none; font-size:8px; white-space: nowrap; position:relative;"
        :style="meanStyle">
 
      <span style="position:absolute;bottom:-12px; color: #74361F; left:-15px; font-weight: bold;">mn {{ $root.roundTo(stats.mean, 1)}}</span>
 
     <!-- show the std as a horizontal thing -->
-    <div style="height: 14px; border-top: 1px solid #F6AB83; 
+    <div v-if="showStd" style="height: 14px; border-top: 1px solid #F6AB83; 
     border-bottom: 1px solid #F6AB83; position:absolute; bottom: -52px; color: #F6AB83; text-align: center; padding-top:2px"
          :style="stdStyle">sd {{$root.roundTo(stats.std, 1)}}</div>
 
@@ -1738,22 +1679,31 @@ Vue.component('distribution', {
     // hardcode it here.
     xMin: {type: Number, default: -10},
     xMax: {type: Number, default: 10},
+    // Uses xMin and xMax if false, otherwise fits to smallest xMin and xMax.
+    fittedX: {type: Boolean, default: false},
+    showMean: {type: Boolean, default: false},
+    showStd: {type: Boolean, default: false},
 
     margin: {
       type: Object, 
       default: function(){
-        return {top: 0, right: 10, bottom: 0, left: 10};
+        return {top: 0, right: 0, bottom: 0, left: 20};
       }
     },
   },
   computed: {
     barWidth: function(){
-      return (this.chartWidth - this.margin.left - this.margin.right) / (this.xMax - this.xMin);
+      var domain = this.domain;
+      return (this.chartWidth - this.margin.left - this.margin.right) / (domain[1] - domain[0]);
+    },
+    domain: function(){
+      // Note: we adjust for barWidth within barStyle.
+      var xVals = _.map(this.outcomes, outcome => outcome[this.xAttr]);
+      return this.fittedX ? [_.min(xVals), _.max(xVals)] : [this.xMin, this.xMax];
     },
     xScale: function(){
-      // Note: we adjust for barWidth within barStyle.
       return d3.scaleLinear()
-        .domain([this.xMin, this.xMax])
+        .domain(this.domain)
         .range([this.margin.left, this.chartWidth-this.margin.right]);
     },
 
@@ -1912,6 +1862,12 @@ Vue.component('delay', {
   template: `<span style="display:none"></span>`,
 });
 
+Vue.component('wooden-sign', {
+  props: {
+    height: {type: Number, default: 150},
+  },
+  template: '#wooden-sign-template',
+});
 
 // https://jsfiddle.net/39hkrot0/5/
 Vue.component('once-group', {
@@ -1993,13 +1949,11 @@ Vue.component('once-button', {
   template: '<button @click="$parent.childClicked(self, onClickFn, value)"><slot></slot></button>'
 });
 
-// stopped here adding a guess-button
 // guess-button differs from once-button, in that it doesn't live in a 
 // special parent.
-// if a guess-button is clicked, it's siblings may still be clicked.
+// If a guess-button is clicked, it's siblings may still be clicked.
 // guess-button just provides a color to the user whether the guess was
 // correct or not
-
 Vue.component('guess-button', {
   props: {
     correct: {type: Boolean, default: true},
@@ -2016,7 +1970,6 @@ Vue.component('guess-button', {
                     ><slot></slot></button>`
 });
 
-correct: Boolean
 
 // https://jsfiddle.net/jamesbrndwgn/85h6n1q9/14/
 Vue.component('stagger', {
