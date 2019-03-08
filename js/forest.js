@@ -151,6 +151,7 @@ var forestProblems = [
 {
 	name: 'a-stream',
 	images: ['stream1.png'],
+	intro: 'Now, you are really thirsty. Do you...',
  	choices: [
 		{
 			name: 'Drink the water in the stream',
@@ -176,6 +177,7 @@ var forestProblems = [
 {
 	name: 'a-mushroom',
 	images: ['mushroom1.png'],
+	intro: 'Ooh look a mushroom! Do you...',
  	choices: [
 		{
 			name: 'Eat',
@@ -202,6 +204,7 @@ var forestProblems = [
 {
 	name: 'a-hungry',
 	images: ['mushroom2.png', 'berry1.png'],
+	intro: 'Hm, now you are really hungry. Do you...',
  	choices: [
 		{
 			name: 'Eat mushroom',
@@ -242,6 +245,7 @@ var forestProblems = [
 {
 	name: 'b-berry-or-mushroom-1',
 	images: ['berry2.png', 'mushroom3.png'],
+	intro: 'You\'re really hungry. You feel compelled to eat something.',
  	choices: [
 		{
 			name: 'Eat berry',

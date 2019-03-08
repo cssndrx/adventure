@@ -1,12 +1,57 @@
-<script type="text/x-template" id="sign-template">
-  <div style="position:relative; display:inline-block;" class="sign">
-    <img src="images/sign7.png" style="width: 190px;" :style="{height: height + 'px'}">
-    <div style="position:absolute; width:170px;height:100px; text-align:center; top: 30px; left:10px; cursor:pointer; color: #4E3B27" class="sign-text">
-      <slot></slot>
-    </div>
-  </div>
-</script>
+  <!--
 
+explanation:
+
+// Don't let the user proceed
+
+You hear a small squeal.
+
+Wait a minute, adventurer! Are you sure about your decision?
+
+The expected value for [[ right choice ]] was 
+
+__
+
+which was more favorable than [[ wrong choice ]]:
+
+You can change your mind if you want.
+
+[[ the choices again ]]
+
+
+// If user chooses, the right one.
+
+Yay! Squeals the spirit. 
+
+Regardless of the outcome, you feel satisfied satisfied knowing that you made the right decision.
+
+
+// User chooses wrong one.
+Aw, okay. You do you. 
+
+The spirit retreated sadly.
+
+-------
+
+// For when we let the user proceed.
+
+// User made the wrong EV decision.
+
+Regardless of the outcome, you feel a twinge of regret about your decision making. 
+
+The expected value for [[ right choice ]] was 
+
+0.4 * 15 + 0.6 * 0 = ??
+
+which was more favorable than [[wrong choice]]:
+
+[[ calc ]]
+
+// User made the right EV decision.
+
+Regardless of the outcome, you feel satisfied satisfied knowing that you made the right decision.
+
+-->
 
 <div style="position:relative">
 

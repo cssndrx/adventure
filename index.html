@@ -25,6 +25,12 @@ button{
   font: inherit;
   color: inherit;
   cursor: pointer;
+  transition: 1s ease all;
+}
+
+button:disabled,
+button[disabled]{
+  cursor: none;
 }
 
 .sign-text{
@@ -85,7 +91,7 @@ img{
 }
 
 .selected-answer{
-  background-color: green;
+  background-color: #777;
   color: white;
 }
 
@@ -905,81 +911,9 @@ the radiant sunlight. You have definitely emerged stronger.
 <script type="text/x-template" id="forest-problem-template">
 <div>
 
-  <!--
-
-explanation:
-
-// Don't let the user proceed
-
-You hear a small squeal.
-
-Wait a minute, adventurer! Are you sure about your decision?
-
-The expected value for [[ right choice ]] was 
-
-__
-
-which was more favorable than [[ wrong choice ]]:
-
-You can change your mind if you want.
-
-[[ the choices again ]]
-
-
-// If user chooses, the right one.
-
-Yay! Squeals the spirit. 
-
-Regardless of the outcome, you feel satisfied satisfied knowing that you made the right decision.
-
-
-// User chooses wrong one.
-Aw, okay. You do you. 
-
-The spirit retreated sadly.
-
--------
-
-// For when we let the user proceed.
-
-// User made the wrong EV decision.
-
-Regardless of the outcome, you feel a twinge of regret about your decision making. 
-
-The expected value for [[ right choice ]] was 
-
-0.4 * 15 + 0.6 * 0 = ??
-
-which was more favorable than [[wrong choice]]:
-
-[[ calc ]]
-
-// User made the right EV decision.
-
-Regardless of the outcome, you feel satisfied satisfied knowing that you made the right decision.
-
--->
-
-<div v-if="problem.name == 'a-fire'">
-  You are really cold. Do you...
+<div>
+  {{problem.intro}}
 </div>
-
-<div v-if="problem.name == 'a-stream'">
-  Now, you are really thirsty. Do you...
-</div>
-
-<div v-if="problem.name == 'a-mushroom'">
-  Ooh look a mushroom! Do you...
-</div>
-
-<div v-if="problem.name == 'a-hungry'">
-  Hm, now you are really hungry. Do you...
-</div>
-
-<div v-if="problem.name == 'b-berry-or-mushroom-1'">
-  You're really hungry. You feel compelled to eat something.
-</div>
-
 
 <div><img v-if="problem.images"
      v-for="image_name in problem.images" 
@@ -987,16 +921,17 @@ Regardless of the outcome, you feel satisfied satisfied knowing that you made th
      style="max-width:150px; margin:8px; max-height: 150px;">
    </div>
 
-<once-group>
-  <once-button v-for="choice in problem.choices"
-               :onClickFn="() => choiceMade(choice)"
-               :key="choice">
+<div>
+  <button v-for="choice in problem.choices"
+          @click="choiceMade($event, choice)"
+          :key="choice">
 
+    <div style="font-size:11px; margin-bottom:4px;">EV: {{outcomesMean(choice.outcomes)}}</div>
     <div>{{choice.name}}</div>
     <forest-outcomes :outcomes="choice.outcomes" :renderAsDistribution="problem.renderAsDistribution"></forest-outcomes>
 
-  </once-button>
-</once-group>
+  </button>
+</div>
 
 
 <div v-if="userOutcome !== null">
@@ -1772,16 +1707,33 @@ Vue.component('forest-problem', {
   },
   data: function(){
     return {
-      // problem: forestProblems[this.name],
-
       userChoice: null,
       userOutcome: null,
     };
   },
+  computed: {
+    rightChoice: function(){
+     // function outcomesMean(outcomes){
+      var evs = this.problem.choices.map(choice => outcomesMean(choice.outcomes));
+      var maxEvInd = evs.indexOf(Math.max(...evs));
+      return this.problem.choices[maxEvInd];
+    }
+  },
   methods: {
-    choiceMade: function(choice){
+    outcomesMean: outcomesMean,
+    choiceMade: function($event, choice){
       this.userChoice = choice;
       this.userOutcome = drawFromOutcomes(choice.outcomes);
+
+      // Color the clicked button.
+      var elt = $event.target
+      while (elt.tagName !== 'BUTTON'){
+        elt = elt.parentElement;
+      }
+      elt.style.backgroundColor = this.userChoice == this.rightChoice ? 'green' : 'red';
+
+      // Disable all buttons.
+      this.$el.querySelectorAll('button').forEach(elt => elt.disabled=true);
 
       this.$emit('problem-complete', {userChoice: this.userChoice,
                                       userOutcome: this.userOutcome});      
@@ -2092,7 +2044,7 @@ new Vue({
   data: {
 
     storyPoints: storyPoints,
-    currentStoryPoint: storyPoints[2],
+    currentStoryPoint: storyPoints[3],
 
     // Obj property additions do not update DOM, so prepopulate all the keys in the object. Or use lists.
     // storyState: null, // A string like 'hyderabadCertainty' used to jump to a particular point in the story.
