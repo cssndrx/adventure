@@ -375,8 +375,7 @@ Vue.component('monk-game', {
 });
 
 
-// todo: rename as "moneybag-widget"
-Vue.component('static-moneybag-widget', {
+Vue.component('moneybag-widget', {
   props: {
     width: {type: Number, default: 300},
     numWinIfRight: {type: Number, default: 1},
@@ -409,8 +408,6 @@ Vue.component('static-moneybag-widget', {
         height: this.moneybagWidth * 236/200 + 'px',
       };
     },
-
-
   },
 
   data: function(){
@@ -430,10 +427,8 @@ Vue.component('static-moneybag-widget', {
       while (refElement.className !== 'ref-element'){
         refElement = refElement.parentElement;
       }
-
-      // console.log(event.target.className + ' ' + event.clientX + '      ' + refElement.className + JSON.stringify(refElement.getBoundingClientRect()));        
       return {x: event.clientX - refElement.getBoundingClientRect().x,
-            y: event.clientY - refElement.getBoundingClientRect().x};
+            y: event.clientY - refElement.getBoundingClientRect().y};
     },
 
     onDrag: function($event){
@@ -445,16 +440,16 @@ Vue.component('static-moneybag-widget', {
       }
       this.relativeMousePos = this.getRelativeMousePos($event);
       numBagsInX = Math.max(1, Math.ceil(this.relativeMousePos.x / this.moneybagWidth));
-      numBagsInY = Math.max(0, Math.ceil(this.relativeMousePos.y / (this.moneybagWidth *1.2)) +1); 
+      numBagsInY = Math.max(0, Math.floor(this.relativeMousePos.y / (this.moneybagWidth *(35/30)))); 
       this.numInteractiveBags = numBagsInX + numBagsInY * 10;
+    },
 
-      // todo: figure out how to get 
-
-      // get the relative position of the event
-      // compute num moneybags to render
+    submitBet: function(){
+      // emit the event
+      this.$emit('bet-submit', this.$root.paramsFromBet(this.numWinIfRight, this.numLoseIfWrong));
     }
   },
-  template: '#static-moneybag-widget-template'
+  template: '#moneybag-widget-template'
 });
 
 // static moneybag widget: renders 1:4 statically
@@ -651,33 +646,6 @@ Vue.component('special-monk-interaction', {
   template: '#special-monk-interaction-template'
 });
 
-Vue.component('interactive-moneybag-widget', {
-  props: {
-    numWinIfRight: {type: Number, default: 1},
-    showCertainty: {type: Boolean, default: true},
-  },
-  data: function(){
-    return {
-      numLoseIfWrong: 1,
-    }
-  },
-  methods: {
-    incrementNumLoseIfWrong: function(){
-      this.numLoseIfWrong++;
-    },
-    decrementNumLoseIfWrong: function(){
-      if (this.numLoseIfWrong > 1){
-        this.numLoseIfWrong--;
-      }
-    },
-    submitBet: function(){
-      // emit the event
-      this.$emit('bet-submit', this.$root.paramsFromBet(this.numWinIfRight, this.numLoseIfWrong));
-    }
-  },
-  template: '#interactive-moneybag-widget-template'
-});
-
 
 Vue.component('certainty-widget', {
   props: {
@@ -687,6 +655,11 @@ Vue.component('certainty-widget', {
         return [0.5, 0.6, 0.7, 0.8, 0.9];
       },
     },
+  },
+  data: function(){
+    return {
+      hoveredCertainty: null,
+    };
   },
   methods: {
     submitCertainty: function(certainty){

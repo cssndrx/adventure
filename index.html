@@ -242,36 +242,18 @@ have bar showing how much money is needed.
       :key="certainty"
       :value="certainty"
       v-for="certainty in certainties" 
-      :onClickFn="submitCertainty">{{$root.renderAsPercent(certainty)}}</once-button>
+      :onClickFn="submitCertainty"
+      @mouseenter.native="hoveredCertainty = certainty"
+      >{{$root.renderAsPercent(certainty)}}</once-button>
   </once-group>
+
+  <moneybag-widget v-show="hoveredCertainty !== null" :numLoseIfWrong="$root.paramsFromCertainty(hoveredCertainty).numLoseIfWrong"></moneybag-widget>
 
 </div>
 </script>
 
 
-<script type="text/x-template" id="interactive-moneybag-widget-template">
-<div style="user-select:none">
-  <static-moneybag-widget :numLoseIfWrong="numLoseIfWrong"
-  :showCertainty="showCertainty" :isInteractive="true"></static-moneybag-widget>
-</div>  
-</script>
-
-
-<!--<script type="text/x-template" id="interactive-moneybag-widget-template">
-<div style="user-select:none">
-  <static-moneybag-widget :numLoseIfWrong="numLoseIfWrong"
-  :showCertainty="showCertainty"></static-moneybag-widget>
-
-  <div style="margin-top: 16px;">
-    <div style="font-size:8px; margin-bottom:8px;">Use these to adjust the bet!</div>
-    <button @click="decrementNumLoseIfWrong">-</button>
-    <button @click="incrementNumLoseIfWrong">+</button>
-    <button @click="submitBet">Bet</button>
-  </div>
-</div>  
-</script>-->
-
-<script type="text/x-template" id="static-moneybag-widget-template">
+<script type="text/x-template" id="moneybag-widget-template">
 <table style="text-align: left">
   <tr>
     <td style="width:50px;font-size:10px;">Win if right ({{numWinIfRight}})</td>
@@ -338,7 +320,14 @@ have bar showing how much money is needed.
 
 <script type="text/x-template" id="monk-question-template">
 <div>
-  <div>{{datum.question}}</div>
+  <div style="display:inline-block">
+    <img src="images/monk_head.png" style="width:80px;">
+  </div>
+
+<div style="display:inline-block; width:300px">
+  <div style="display:inline-block">
+    {{datum.question}}
+  </div>
 
   <once-group>
     <once-button v-for="answer in datum.answers"
@@ -355,11 +344,12 @@ have bar showing how much money is needed.
                      @bet-submit="onBetSubmit">
     </certainty-widget>
 
-    <interactive-moneybag-widget v-if="vizType == 'bet'" 
+    <moneybag-widget v-if="vizType == 'bet'" 
                      @bet-submit="onBetSubmit"
-    ></interactive-moneybag-widget>
-
+                     :isInteractive="true"
+    ></moneybag-widget>
   </div>
+</div>
 
 </div>
 </script>
@@ -538,16 +528,12 @@ have bar showing how much money is needed.
     <stagger v-else-if="isUserCorrect"
                       @stagger-complete="monkReactionComplete">
       <div>That is correct.</div>
-      <div>And since you were {{percent}} sure...</div>
-      <static-moneybag-widget :numLoseIfWrong="numLoseIfWrong"></static-moneybag-widget>
       <div>You win {{numMoneybagsGained}} moneybags.</div>
     </stagger>
 
     <stagger v-else-if="!isUserCorrect"
                       @stagger-complete="monkReactionComplete">
       <div>Nope, that's incorrect.</div>
-      <div>And since you were {{percent}} sure...</div>
-      <static-moneybag-widget :numLoseIfWrong="numLoseIfWrong"></static-moneybag-widget>
       <div>You lose {{Math.abs(numMoneybagsGained)}} moneybags.</div>
     </stagger>
 
@@ -560,32 +546,39 @@ have bar showing how much money is needed.
 <script type="text/x-template" id="monk-game-template">
 <div>
 
-  <div style="font-weight:bold; font-size: 12px;">    
+  <div style="font-size: 12px;">    
     <div>
-    Earn enough moneybags to leave the monastery and begin your travels.
+    Dear player, earn enough moneybags to leave the monastery and begin your travels.
     </div>
 
     <div>
-    The more sure you are, the more likely the monk is to take you up on your bet... but the more you stand to lose.
+    The more sure you are in your answers, the more likely the monk will take you up on your bet — but  also the more you stand to lose.
     </div>
 
     <button @click="show('questions')">Ok!</button> 
   </div> 
 
-  <story ref="questions">
-    <div v-for="question in visibleQuestions">
-      <basic-monk-interaction
-        v-if="question.type === 'basic'"
-        :key="question"
-        :datum="question"
-        @question-complete="onQuestionComplete"></basic-monk-interaction>
+  <div v-for="question in visibleQuestions">
 
-      <special-monk-interaction
-        v-if="question.type === 'special'"
-        :key="question"
-        :datum="question"
-        @question-complete="onQuestionComplete"></special-monk-interaction>
-    </div>
+    <div style="border-top: 1px solid #eee;"></div>
+
+    <basic-monk-interaction
+      v-if="question.type === 'basic'"
+      :key="question"
+      :datum="question"
+      @question-complete="onQuestionComplete"></basic-monk-interaction>
+
+    <special-monk-interaction
+      v-if="question.type === 'special'"
+      :key="question"
+      :datum="question"
+      @question-complete="onQuestionComplete"></special-monk-interaction>
+
+  </div>
+
+
+  <story ref="questions">
+
   </story>
 
   <!--progress indicator -->
@@ -1198,8 +1191,10 @@ hmm: this should probably be a forest-problem
 
 <div v-for="(certainty, index) in visibleCertainties">
   <div>What is the fair bet if you are {{$root.renderAsPercent(certainty)}} sure?</div>  
-  <interactive-moneybag-widget 
-    @bet-submit="dualAnswerSubmit" :show-certainty="false"></interactive-moneybag-widget>
+  <moneybag-widget 
+    @bet-submit="dualAnswerSubmit" :show-certainty="false"
+    :isInteractive="true"
+    ></moneybag-widget>
   <div>{{monkMessages[index]}}</div>
 </div>
 
@@ -1230,8 +1225,9 @@ hmm: this should probably be a forest-problem
 <script type="text/x-template" id="monk-intro-template">
 <div>
 
-  <interactive-moneybag-widget
-  ></interactive-moneybag-widget>
+<!--    <moneybag-widget 
+                     :isInteractive="true"
+    ></moneybag-widget> -->
 
   <div><img src="images/monk.png" width="400px"></div>
 
@@ -1263,8 +1259,10 @@ hmm: this should probably be a forest-problem
   <story ref="monk-hyderabad-bet">
     <div>How many money bags are you willing to lose, if I pay you one money bag if you are right?</div>
 
-    <interactive-moneybag-widget @bet-submit="hyderabadBetSubmit" :show-certainty="false"
-    ></interactive-moneybag-widget>
+    <moneybag-widget @bet-submit="hyderabadBetSubmit"  
+      :show-certainty="false"
+      :isInteractive="true"
+    ></moneybag-widget>
 
   </story>
 
@@ -1317,7 +1315,7 @@ hmm: this should probably be a forest-problem
         <div>
         You said you were {{hyderabadCertaintyParams.percent}} sure, which would translate to the following bet:
         </div>
-        <static-moneybag-widget :showCertainty="false" :numLoseIfWrong="hyderabadCertaintyParams.numLoseIfWrong"></static-moneybag-widget>
+        <moneybag-widget :showCertainty="false" :numLoseIfWrong="hyderabadCertaintyParams.numLoseIfWrong"></moneybag-widget>
         <button @click="show('monk-dual-explanation')">Why??</button>
 
         </stagger>
@@ -1463,6 +1461,10 @@ to be the center of mass of the probability distribution. i.e.
 Pretend the probability distribution is made of a solid material
 and you are balancing the material on your finger. The X-axis value
 of that balance point, is the expected value.
+</div>
+
+<div style="font-size: 12px;">
+  Click where you think the EV is.
 </div>
 
 <visual-ev-click v-for="outcomes in visibleQuestions"
@@ -2134,7 +2136,7 @@ new Vue({
   data: {
 
     storyPoints: storyPoints,
-    currentStoryPoint: storyPoints[0],
+    currentStoryPoint: storyPoints[1],
 
     // Obj property additions do not update DOM, so prepopulate all the keys in the object. Or use lists.
     // storyState: null, // A string like 'hyderabadCertainty' used to jump to a particular point in the story.
