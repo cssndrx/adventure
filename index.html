@@ -957,9 +957,19 @@ the radiant sunlight. You have definitely emerged stronger.
 
     <div style="font-size:11px; margin-bottom:4px;">EV: {{outcomesMean(choice.outcomes)}}</div>
     <div>{{choice.name}}</div>
-    <forest-outcomes :ref="choice.name"
+
+    <distribution v-if="problem.renderAsDistribution" 
+                  @outcome-drawn="outcomeDrawn"
+                  :ref="choice.name"
+                  :outcomes="choice.outcomes" 
+                  :fittedX="true" 
+                  :chartHeight="100" 
+                  :chartWidth="140"></distribution>
+
+    <forest-outcomes v-if="!problem.renderAsDistribution"
+                     :ref="choice.name"
                      :outcomes="choice.outcomes" 
-                     :renderAsDistribution="problem.renderAsDistribution"></forest-outcomes>
+    ></forest-outcomes>
 
   </button>
 </div>
@@ -987,9 +997,7 @@ the radiant sunlight. You have definitely emerged stronger.
 <script type="text/x-template" id="forest-outcomes-template">
 <div>
 
-<distribution v-if="renderAsDistribution" :outcomes="outcomes" :fittedX="true" :chartHeight="100" :chartWidth="140"></distribution>
-
-<div v-else v-for="(outcome, index) in outcomes" :key="outcome" 
+<div v-for="(outcome, index) in outcomes" :key="outcome" 
   style="font-size:13px; margin-bottom:4px;"
   :style="{'background-color': outcomeColors[index]}">
 
@@ -1013,6 +1021,7 @@ the radiant sunlight. You have definitely emerged stronger.
     {{outcome.caption ? '(' + outcome.caption + ')' : ''}}
   </span>
 </div>
+
 </div>
 </script>
 
@@ -1353,8 +1362,10 @@ hmm: this should probably be a forest-problem
      style="position:relative; margin-bottom:64px;">
 
   <!-- add axis containing important points -->
-  <div class="axis" style="position:relative; bottom: 0px; border-bottom: 1px solid #F6AB83;"
-      :style="{top: chartHeight + 'px'}"></div>
+  <div class="axis" 
+      style="position:relative; bottom: 0px; border-top: 1px solid #F6AB83; font-size:10px; padding-top:8px; text-transform:uppercase"
+      :style="{top: chartHeight + 'px'}">
+    {{xAttr}}</div>
 
   <div class="bar" v-for="(outcome, index) in outcomes"
        :key="outcome"
@@ -1532,7 +1543,6 @@ const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
 Vue.component('forest-outcomes', {
   props: {
     outcomes: {type: Array, default: () => [{certainty: 0.1, hp:4}, {certainty: 0.3, hp:3}, {certainty: 0.4, hp:2}, {certainty: 0.2, hp:1}] },
-    renderAsDistribution: {type: Boolean, default: false},
     certaintyAs: {type: String, default: 'percent'}, // 'odds'
   },
   data: function(){
@@ -1551,20 +1561,26 @@ Vue.component('forest-outcomes', {
   },
 
   methods: {
+
+
     drawOutcome: async function(){
       var numCycles = 5;
-      var chosenInd = drawIndFromOutcomes(this.outcomes);
+      var outcomeInd = drawIndFromOutcomes(this.outcomes);
+      var numIters = numCycles*this.outcomes.length+outcomeInd;
 
-      var cycleTime = 500; // ms
-      var activeTimes = this.outcomes.map(outcome => outcome.certainty * cycleTime);
+      // milliseconds
+      var activeTimes = this.outcomes.map(outcome => outcome.certainty * 500);
 
       // Each outcome is active for a different length of time.
-      for (var i=0; i<numCycles*this.outcomes.length+chosenInd; i++){
+      for (var i=0; i<numIters; i++){
         var animatedInd = i % activeTimes.length;
         this.animatedInd = animatedInd;
         await wait(activeTimes[animatedInd]);
 
-        // check if it's the last one and emit an event??
+        // Check if it's the last one and emit an event.
+        if (i == this.numIters-1){
+          this.$emit('outcome-drawn', {outcomeInd: outcomeInd});          
+        }
       }
     },
 
@@ -1753,9 +1769,9 @@ Vue.component('distribution', {
     }
   },
 
-  mounted: function(){
-    this.drawOutcome();
-  },
+  // mounted: function(){
+  //   this.drawOutcome();
+  // },
   methods: {
     renderAsPercent: renderAsPercent,
     barStyle: function(outcome, barIndex){
@@ -1770,18 +1786,22 @@ Vue.component('distribution', {
     // todo: dedup?
     drawOutcome: async function(){
       var numCycles = 5;
-      var chosenInd = drawIndFromOutcomes(this.outcomes);
+      var outcomeInd = drawIndFromOutcomes(this.outcomes);
+      var numIters = numCycles*this.outcomes.length+outcomeInd;
 
-      var cycleTime = 500; // ms
-      var activeTimes = this.outcomes.map(outcome => outcome.certainty * cycleTime);
+      // milliseconds
+      var activeTimes = this.outcomes.map(outcome => outcome.certainty * 500);
 
       // Each outcome is active for a different length of time.
-      for (var i=0; i<numCycles*this.outcomes.length+chosenInd; i++){
+      for (var i=0; i<numIters; i++){
         var animatedInd = i % activeTimes.length;
         this.animatedInd = animatedInd;
         await wait(activeTimes[animatedInd]);
 
-        // check if it's the last one and emit an event??
+        // Check if it's the last one and emit an event.
+        if (i == numIters-1){
+          this.$emit('outcome-drawn', {outcomeInd: outcomeInd});
+        }
       }
     },
 
@@ -1835,8 +1855,7 @@ Vue.component('forest-problem', {
       // var audio = new Audio('sounds/bloop1.wav');
       // audio.play();
 
-      // this.userChoice = choice;
-      // this.userOutcome = drawFromOutcomes(choice.outcomes);
+      this.userChoice = choice;
 
       // Color the clicked button.
       var elt = $event.target
@@ -1848,10 +1867,15 @@ Vue.component('forest-problem', {
       // Disable all buttons.
       this.$el.querySelectorAll('button').forEach(elt => elt.disabled=true);
 
-      // this.$emit('problem-complete', {userChoice: this.userChoice,
-      //                                 userOutcome: this.userOutcome});     
-
       this.$refs[choice.name][0].drawOutcome(); 
+    },
+
+    outcomeDrawn: function(params){
+      this.userOutcome = this.userChoice.outcomes[params.outcomeInd];
+
+      debugger;
+      this.$emit('problem-complete', {userChoice: this.userChoice,
+                                      userOutcome: this.userOutcome});     
     }
   },
   template: '#forest-problem-template'
