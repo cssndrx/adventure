@@ -375,13 +375,15 @@ Vue.component('monk-game', {
 });
 
 
-
+// todo: rename as "moneybag-widget"
 Vue.component('static-moneybag-widget', {
   props: {
     width: {type: Number, default: 300},
     numWinIfRight: {type: Number, default: 1},
     numLoseIfWrong: {type: Number, default: 1},
     showCertainty: {type: Boolean, default: true},
+
+    isInteractive: {type: Boolean, default: false},
   },
   computed:{
     moneybagWidth: function(){
@@ -406,11 +408,57 @@ Vue.component('static-moneybag-widget', {
         width: (1-this.positiveFraction) * this.moneybagWidth + 'px',
         height: this.moneybagWidth * 236/200 + 'px',
       };
+    },
+
+
+  },
+
+  data: function(){
+    return {
+      relativeMousePos: null,
+      numInteractiveBags: 1, // default to 1
+    }
+  },
+
+  methods: {
+    getRelativeMousePos: function(event){
+      // https://stackoverflow.com/questions/5921413/difference-between-e-target-and-e-currenttarget
+      // e.target is what triggers the event dispatcher to trigger and e.currentTarget is what you assigned your listener to.
+
+      // Find the 'dist' element to compute relative mouse coords.
+      var refElement = event.target;
+      while (refElement.className !== 'ref-element'){
+        refElement = refElement.parentElement;
+      }
+
+      // console.log(event.target.className + ' ' + event.clientX + '      ' + refElement.className + JSON.stringify(refElement.getBoundingClientRect()));        
+      return {x: event.clientX - refElement.getBoundingClientRect().x,
+            y: event.clientY - refElement.getBoundingClientRect().x};
+    },
+
+    onDrag: function($event){
+      console.log('on drag: '+ $event.clientX + ' ' + $event.clientY);
+      if ($event.clientX === 0 && $event.clientY === 0){
+        // For some reason, on dragdrop clientX/clientY === 0. 
+        // Discard this event.
+        return;
+      }
+      this.relativeMousePos = this.getRelativeMousePos($event);
+      numBagsInX = Math.max(1, Math.ceil(this.relativeMousePos.x / this.moneybagWidth));
+      numBagsInY = Math.max(0, Math.ceil(this.relativeMousePos.y / (this.moneybagWidth *1.2)) +1); 
+      this.numInteractiveBags = numBagsInX + numBagsInY * 10;
+
+      // todo: figure out how to get 
+
+      // get the relative position of the event
+      // compute num moneybags to render
     }
   },
   template: '#static-moneybag-widget-template'
 });
 
+// static moneybag widget: renders 1:4 statically
+// interactive moneybag widget: reports back the number of moneybags (inits with 1:1)
 
 Vue.component('monk-question', {
   props: {

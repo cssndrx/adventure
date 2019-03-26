@@ -30,7 +30,7 @@ button{
 
 button:disabled,
 button[disabled]{
-  cursor: none;
+/*  cursor: none; */
 }
 
 .sign-text{
@@ -136,6 +136,14 @@ button {
 
 .forest-intro-problem{
   font-size: 12px;
+}
+
+.draggable-moneybag {
+  transition: all 1s ease;
+}
+
+.draggable-moneybag:hover{
+  border: 2px solid green;
 }
 
 </style>
@@ -244,6 +252,14 @@ have bar showing how much money is needed.
 <script type="text/x-template" id="interactive-moneybag-widget-template">
 <div style="user-select:none">
   <static-moneybag-widget :numLoseIfWrong="numLoseIfWrong"
+  :showCertainty="showCertainty" :isInteractive="true"></static-moneybag-widget>
+</div>  
+</script>
+
+
+<!--<script type="text/x-template" id="interactive-moneybag-widget-template">
+<div style="user-select:none">
+  <static-moneybag-widget :numLoseIfWrong="numLoseIfWrong"
   :showCertainty="showCertainty"></static-moneybag-widget>
 
   <div style="margin-top: 16px;">
@@ -253,7 +269,7 @@ have bar showing how much money is needed.
     <button @click="submitBet">Bet</button>
   </div>
 </div>  
-</script>
+</script>-->
 
 <script type="text/x-template" id="static-moneybag-widget-template">
 <table style="text-align: left">
@@ -268,9 +284,29 @@ have bar showing how much money is needed.
     </td>
   </tr>
   <tr>
-    <td style="width:50px;font-size:10px;">Lose if wrong ({{numLoseIfWrong}})</td>
+    <td style="width:50px;font-size:10px;">Lose if wrong ({{Math.max(numLoseIfWrong, numInteractiveBags)}})</td>
     <td> 
-      <span style="position:relative; display:inline-block;">
+      {{relativeMousePos}}
+      <div v-if="isInteractive" 
+        class="ref-element" 
+        droppable="true"
+        style="border: 1px solid blue; width: 340px;">
+        <img v-for="n in (numInteractiveBags - 1)" 
+             :style="{width: moneybagWidth+'px'}" 
+             style="margin-right:2px"
+             src="images/moneybag.png">
+
+        <img :style="{width: moneybagWidth+'px'}" 
+             src="images/moneybag.png"
+             draggable="true"
+             class="draggable-moneybag"
+             @drag="onDrag($event)">
+      </div>
+      <button v-if="isInteractive">Submit</button>
+
+
+      <span v-if="!isInteractive"
+            style="position:relative; display:inline-block;">
         <img v-for="n in Math.ceil(numLoseIfWrong)" 
              :style="{width: moneybagWidth+'px'}" 
              style="margin-right:2px"
@@ -864,7 +900,7 @@ the <b>expected value</b> of a random event is the average if you are able to ex
   a berry on the ground. 
   </div>
 
-  <img class="item-img" src="images/berry.jpg">
+  <img class="item-img" src="images/berry1.png">
   <div>
   The packaging says: Heals +10HP in a bind.
   </div>
@@ -956,9 +992,13 @@ the radiant sunlight. You have definitely emerged stronger.
 <script type="text/x-template" id="forest-outcomes-template">
 <div>
 
+{{outcomeColors}}
+
 <distribution v-if="renderAsDistribution" :outcomes="outcomes" :fittedX="true" :chartHeight="100" :chartWidth="140"></distribution>
 
-<div v-else v-for="outcome in outcomes" :key="outcome" style=" font-size:13px; margin-bottom:4px; background-color: rgb(150, 125, 82)">
+<div v-else v-for="(outcome, index) in outcomes" :key="outcome" 
+  style="font-size:13px; margin-bottom:4px;"
+  :style="{'background-color': outcomeColors[index]}">
 
   {{renderCertainty(outcome.certainty)}}: 
 
@@ -1189,6 +1229,10 @@ hmm: this should probably be a forest-problem
 
 <script type="text/x-template" id="monk-intro-template">
 <div>
+
+  <interactive-moneybag-widget
+  ></interactive-moneybag-widget>
+
   <div><img src="images/monk.png" width="400px"></div>
 
   <div>
@@ -1488,6 +1532,29 @@ Vue.component('forest-outcomes', {
     renderAsDistribution: {type: Boolean, default: false},
     certaintyAs: {type: String, default: 'percent'}, // 'odds'
   },
+  data: function(){
+    return {
+      animatedInd: null,
+//      shouldUpdateAnimatedInd: null,
+    };
+  },
+  computed: {
+    outcomeColors: function(){
+      var colors = _.times(this.outcomes.length, () => 'none');
+      if (this.animatedInd !== null){
+         colors[this.animatedInd] = 'green';
+      }
+      return colors;
+    }
+  },
+  // watch: {
+  //   shouldUpdateAnimatedInd: function(){
+  //     set
+  //   }
+  // },
+  mounted: function(){
+    this.animate();
+  },
   methods: {
     renderCertainty: function(certainty){
       if (this.certaintyAs == 'percent'){
@@ -1500,7 +1567,27 @@ Vue.component('forest-outcomes', {
       } else{
         console.error('unrecognized certaintyAs: ' + this.certaintyAs);
       }
-    }
+    },
+    animate: function(){
+      var numCycles = 5;
+      var chosenInd = 2; // todo: draw this
+
+      var cycleTime = 1000; // 1 second
+      var activeTimes = this.outcomes.map(outcome => outcome.certainty * cycleTime);
+
+      // stopped here: fix this
+      var this_ = this;
+      for (var i=0; i<numCycles*this.outcomes.length+chosenInd; i++){
+        var activeInd = i % activeTimes.length;
+        var activeTime = activeTimes[activeInd];
+        setTimeout(function(){
+          this_.animatedInd = activeInd;
+//          i++;
+        }, activeTime);
+      }
+    },
+
+
   },
   template: '#forest-outcomes-template',
 });
@@ -1712,7 +1799,7 @@ Vue.component('forest-problem', {
     };
   },
   computed: {
-    rightChoice: function(){
+    maxEVChoice: function(){
      // function outcomesMean(outcomes){
       var evs = this.problem.choices.map(choice => outcomesMean(choice.outcomes));
       var maxEvInd = evs.indexOf(Math.max(...evs));
@@ -1722,21 +1809,24 @@ Vue.component('forest-problem', {
   methods: {
     outcomesMean: outcomesMean,
     choiceMade: function($event, choice){
-      this.userChoice = choice;
-      this.userOutcome = drawFromOutcomes(choice.outcomes);
+      // var audio = new Audio('sounds/bloop1.wav');
+      // audio.play();
+
+      // this.userChoice = choice;
+      // this.userOutcome = drawFromOutcomes(choice.outcomes);
 
       // Color the clicked button.
       var elt = $event.target
       while (elt.tagName !== 'BUTTON'){
         elt = elt.parentElement;
       }
-      elt.style.backgroundColor = this.userChoice == this.rightChoice ? 'green' : 'red';
+      elt.style.backgroundColor = choice == this.maxEVChoice ? 'green' : 'red';
 
       // Disable all buttons.
       this.$el.querySelectorAll('button').forEach(elt => elt.disabled=true);
 
-      this.$emit('problem-complete', {userChoice: this.userChoice,
-                                      userOutcome: this.userOutcome});      
+      // this.$emit('problem-complete', {userChoice: this.userChoice,
+      //                                 userOutcome: this.userOutcome});      
     }
   },
   template: '#forest-problem-template'
@@ -2044,7 +2134,7 @@ new Vue({
   data: {
 
     storyPoints: storyPoints,
-    currentStoryPoint: storyPoints[3],
+    currentStoryPoint: storyPoints[0],
 
     // Obj property additions do not update DOM, so prepopulate all the keys in the object. Or use lists.
     // storyState: null, // A string like 'hyderabadCertainty' used to jump to a particular point in the story.
