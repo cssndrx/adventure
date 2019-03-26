@@ -151,7 +151,8 @@ var forestProblems = [
 {
 	name: 'a-stream',
 	images: ['stream1.png'],
-	intro: 'Now, you are really thirsty. Do you...',
+	intro: 'You find yourself really thirsty. Do you...',
+	renderAsDistribution: true,
  	choices: [
 		{
 			name: 'Drink the water in the stream',
@@ -163,7 +164,6 @@ var forestProblems = [
 		{
 			name: 'Don\'t drink the water',
 			outcomes: [{certainty: 1.0, hp: -12, caption: 'thirst'}],
-			// image: 'thirst.png'
 		},
 	]
 },
@@ -495,6 +495,11 @@ forestItems = _.mapValues(forestItems, v => Item(v));
 // ]
 // outcomes is a list of {certainty: __}
 function drawFromOutcomes(outcomes){
+	var ind = drawIndFromOutcomes(outcomes);
+	return outcomes[cumsum_ind];
+}
+
+function drawIndFromOutcomes(outcomes){
 	var certainties = _.map(outcomes, 'certainty');
 	if (!approx(sum(certainties), 1.0)){
 		console.error('certainties for outcomes did not sum to 1: ' + outcomes);
@@ -506,7 +511,7 @@ function drawFromOutcomes(outcomes){
 	while (cumsum_certainties[cumsum_ind] < rand){
 		cumsum_ind++;
 	}
-	return outcomes[cumsum_ind];
+	return cumsum_ind;
 }
 
 // By the way, if you're acutally in a survival situation: 

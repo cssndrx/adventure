@@ -957,7 +957,9 @@ the radiant sunlight. You have definitely emerged stronger.
 
     <div style="font-size:11px; margin-bottom:4px;">EV: {{outcomesMean(choice.outcomes)}}</div>
     <div>{{choice.name}}</div>
-    <forest-outcomes :outcomes="choice.outcomes" :renderAsDistribution="problem.renderAsDistribution"></forest-outcomes>
+    <forest-outcomes :ref="choice.name"
+                     :outcomes="choice.outcomes" 
+                     :renderAsDistribution="problem.renderAsDistribution"></forest-outcomes>
 
   </button>
 </div>
@@ -1542,20 +1544,18 @@ Vue.component('forest-outcomes', {
     outcomeColors: function(){
       var colors = _.times(this.outcomes.length, () => 'transparent');
       if (this.animatedInd !== null){
-         colors[this.animatedInd] = 'green';
+         colors[this.animatedInd] = '#ccc';
       }
       return colors;
     }
   },
-  mounted: function(){
-    this.animate();
-  },
-  methods: {
-    animate: async function(){
-      var numCycles = 5;
-      var chosenInd = 2; // todo: draw this
 
-      var cycleTime = 1000; // 1 second
+  methods: {
+    drawOutcome: async function(){
+      var numCycles = 5;
+      var chosenInd = drawIndFromOutcomes(this.outcomes);
+
+      var cycleTime = 500; // ms
       var activeTimes = this.outcomes.map(outcome => outcome.certainty * cycleTime);
 
       // Each outcome is active for a different length of time.
@@ -1563,6 +1563,8 @@ Vue.component('forest-outcomes', {
         var animatedInd = i % activeTimes.length;
         this.animatedInd = animatedInd;
         await wait(activeTimes[animatedInd]);
+
+        // check if it's the last one and emit an event??
       }
     },
 
@@ -1817,7 +1819,9 @@ Vue.component('forest-problem', {
       this.$el.querySelectorAll('button').forEach(elt => elt.disabled=true);
 
       // this.$emit('problem-complete', {userChoice: this.userChoice,
-      //                                 userOutcome: this.userOutcome});      
+      //                                 userOutcome: this.userOutcome});     
+
+      this.$refs[choice.name][0].drawOutcome(); 
     }
   },
   template: '#forest-problem-template'
