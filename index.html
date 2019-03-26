@@ -1356,9 +1356,9 @@ hmm: this should probably be a forest-problem
   <div class="axis" style="position:relative; bottom: 0px; border-bottom: 1px solid #F6AB83;"
       :style="{top: chartHeight + 'px'}"></div>
 
-  <div class="bar" v-for="outcome in outcomes"
+  <div class="bar" v-for="(outcome, index) in outcomes"
        :key="outcome"
-       :style="barStyle(outcome)"
+       :style="barStyle(outcome, index)"
        style="position:absolute; background-color:#C55A2C; bottom:0px; text-align: center; font-size:10px; color: white; margin-bottom:0px;"
        >
        {{renderAsPercent(outcome.certainty)}}
@@ -1746,15 +1746,45 @@ Vue.component('distribution', {
       }
     }
   },
+
+  data: function(){
+    return {
+      animatedInd: null,
+    }
+  },
+
+  mounted: function(){
+    this.drawOutcome();
+  },
   methods: {
     renderAsPercent: renderAsPercent,
-    barStyle: function(outcome){
+    barStyle: function(outcome, barIndex){
       return {
         width: this.barWidth + 'px',
         height: this.yScale(outcome[this.yAttr]) + 'px',
         left: (this.xScale(outcome[this.xAttr]) - this.barWidth / 2) + 'px',
+        'background-color': barIndex === this.animatedInd ? 'blue': 'orange'
+      };
+    },
+
+    // todo: dedup?
+    drawOutcome: async function(){
+      var numCycles = 5;
+      var chosenInd = drawIndFromOutcomes(this.outcomes);
+
+      var cycleTime = 500; // ms
+      var activeTimes = this.outcomes.map(outcome => outcome.certainty * cycleTime);
+
+      // Each outcome is active for a different length of time.
+      for (var i=0; i<numCycles*this.outcomes.length+chosenInd; i++){
+        var animatedInd = i % activeTimes.length;
+        this.animatedInd = animatedInd;
+        await wait(activeTimes[animatedInd]);
+
+        // check if it's the last one and emit an event??
       }
     },
+
   },
   template: '#distribution-template'
 });
