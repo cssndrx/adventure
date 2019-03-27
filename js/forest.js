@@ -1,3 +1,73 @@
+const forestIntro = [
+{
+	choices: [
+	{
+		name: '10% chance of getting lost in taking path A',
+		feedback: 'That\'s right. In this forest, you definitely want to minimize the chance of getting lost.',
+		right: true,
+	},
+
+	{
+		name: '20% chance of getting lost in taking path B',
+		feedback: 'Why are you maximizing the chance of getting lost? Try again.'
+	}
+	]
+},
+
+
+{
+	text: 'You journey deeper into the forest. Another fork.',
+	choices: [
+	{
+		name: 'Path A: 10% chance of getting lost',
+		feedback: 'This problem is the same as the first, because the probability of finding the right way = 1 - the probability of getting lost.',
+		right: true,
+	},
+
+	{
+		name: 'Path B: 80% chance of finding the right way',
+		feedback: 'Hm, nope. Try again.'
+	}
+	]
+},
+
+{
+	text: 'Even deeper into the forest, you see a new sign.',
+
+	choices: [
+	{
+		name: 'Path A: 4 in 5 times you\'d get lost',
+		feedback: '4 in 5 means you would be getting lost 80% of the time! Try again.',
+	},
+
+	{
+		name: 'Path B: 3 in 4 times you\'d get lost.',
+		feedback: 'Correct. It is better to get lost 75% of the time, than 80% of the time. ',
+		right: true,
+	}
+	]
+},
+
+// todo: make the odds thing better
+{
+	text: 'You journey on, until you are faced with your final problem.',
+
+	choices: [
+	{
+		name: 'Path A: 4 : 5 odds you\'d get lost',
+		feedback: 'Nope! Try again.',
+	},
+
+	{
+		name: 'Path A: 3 : 4 odds you\'d get lost',
+		feedback: 'Yes. Notice that 4 : 5 odds of something happening is very different from 4 in 5 times. With 4 : 5 odds, it\'s fairly 50-50, slightly in favor of not getting lost. 4 : 5 odds means that for every 5 moneybags you stake, you would earn 4 moneybags if the event happens.',
+		right: true,
+	}
+	]
+},
+
+];
+
 
 /*
 Progression of problems:
@@ -148,25 +218,24 @@ var forestProblems = [
 // 70% chance: +5 HP (nourishment)
 // 30% chance: -30HP (dysentery)
 
-{
-	name: 'a-stream',
-	images: ['stream1.png'],
-	intro: 'You find yourself really thirsty. Do you...',
-	renderAsDistribution: true,
- 	choices: [
-		{
-			name: 'Drink the water in the stream',
-			outcomes: [
-				{certainty: 0.7, hp: 5, caption: 'nourishment'}, 
-				{certainty: 0.3, hp: -30, caption: 'dysentery'}
-				],
-		},
-		{
-			name: 'Don\'t drink the water',
-			outcomes: [{certainty: 1.0, hp: -12, caption: 'thirst'}],
-		},
-	]
-},
+// {
+// 	name: 'a-stream',
+// 	images: ['stream1.png'],
+// 	intro: 'You find yourself really thirsty. Do you...',
+//  	choices: [
+// 		{
+// 			name: 'Drink the water in the stream',
+// 			outcomes: [
+// 				{certainty: 0.7, hp: 5, caption: 'nourishment'}, 
+// 				{certainty: 0.3, hp: -30, caption: 'dysentery'}
+// 				],
+// 		},
+// 		{
+// 			name: 'Don\'t drink the water',
+// 			outcomes: [{certainty: 1.0, hp: -12, caption: 'thirst'}],
+// 		},
+// 	]
+// },
 
 // (A) 2 choice EV vs constant (0)
 // mushroom: 
@@ -204,7 +273,7 @@ var forestProblems = [
 {
 	name: 'a-hungry',
 	images: ['mushroom2.png', 'berry1.png'],
-	intro: 'Hm, now you are really hungry. Do you...',
+	intro: 'You find yourself hungrily staring at the mysterious mushroom and fruit in the forest. Do you...',
  	choices: [
 		{
 			name: 'Eat mushroom',

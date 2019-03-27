@@ -16,6 +16,42 @@
 
 <style>
 
+/* https://codepen.io/anon/pen/Laoxro */
+.pulse{
+  position: relative;
+}
+
+.pulse:after {
+  content:"";
+  display:block;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 3px solid #CBA82C;
+  position:absolute;
+  top:-40px;
+  left:2px;
+  animation: pulse 2s ease 0s infinite;
+}
+
+@keyframes pulse {
+  0% {
+      opacity: 1;
+      transform: scale(1);
+  }
+  80% {
+      opacity: 0;
+      transform: scale(2);
+  }
+  100% {
+      opacity: 0;
+      transform: scale(3);
+  }
+}
+
+
+
+
 h4{
   font-size: 18px;
   font-weight: 500;
@@ -138,14 +174,6 @@ button {
   font-size: 12px;
 }
 
-.draggable-moneybag {
-  transition: all 1s ease;
-}
-
-.draggable-moneybag:hover{
-  border: 2px solid green;
-}
-
 </style>
 
 <body>
@@ -243,7 +271,7 @@ have bar showing how much money is needed.
       :value="certainty"
       v-for="certainty in certainties" 
       :onClickFn="submitCertainty"
-      @mouseenter.native="hoveredCertainty = certainty"
+      @mouseenter.native="onHover(certainty)"
       >{{$root.renderAsPercent(certainty)}}</once-button>
   </once-group>
 
@@ -268,24 +296,26 @@ have bar showing how much money is needed.
   <tr>
     <td style="width:50px;font-size:10px;">Lose if wrong ({{Math.max(numLoseIfWrong, numInteractiveBags)}})</td>
     <td> 
-      {{relativeMousePos}}
-      <div v-if="isInteractive" 
-        class="ref-element" 
-        droppable="true"
-        style="border: 1px solid blue; width: 340px;">
+      <div v-if="isInteractive" >
+      <div style="font-size:10px;">Drag the last moneybag until the bet looks fair to you.</div>
+      <div class="ref-element" 
+           droppable="true"
+           style="width: 340px;">
+
         <img v-for="n in (numInteractiveBags - 1)" 
              :style="{width: moneybagWidth+'px'}" 
              style="margin-right:2px"
              src="images/moneybag.png">
 
-        <img :style="{width: moneybagWidth+'px'}" 
-             src="images/moneybag.png"
-             draggable="true"
-             class="draggable-moneybag"
-             @drag="onDrag($event)">
+        <div style="display:inline-block; cursor:ew-resize; margin-bottom:0px;"
+               draggable="true"
+               @drag="onDrag($event)">
+          <img :style="{width: moneybagWidth+'px'}" 
+               src="images/moneybag.png">
+          <span class="pulse"></span>
+          </div>
       </div>
-      <button v-if="isInteractive">Submit</button>
-
+      </div> <!-- end isInteractive -->
 
       <span v-if="!isInteractive"
             style="position:relative; display:inline-block;">
@@ -300,6 +330,10 @@ have bar showing how much money is needed.
                :style="fractionalCoverStyle"></span>
       </span>
     </td>
+  </tr>
+  <tr v-if="isInteractive">
+    <td></td>
+    </td><button @click="submitBet">Looks fair to me</button></td>
   </tr>
 </table>
 </script>
@@ -674,175 +708,16 @@ have bar showing how much money is needed.
 Choose which way to proceed.
 </div>
 
-<!-- basic prob comparison -->
+<div v-for="(problem, index) in visibleProblems" :key="problem">
 
+  <div>{{problem.text}}</div>
+  <guess-button v-for="choice in problem.choices"   
+        :key="choice"
+        :isRight="choice.right"
+        :onClickFn="() => choiceClicked(choice)">{{choice.name}}</guess-button>
+  <div style="margin-top:16px;">{{feedbacks[index]}}</div>
 
-<wooden-sign>10% chance of getting lost in taking path A</wooden-sign>
-<wooden-sign>20% chance of getting lost in taking path B</wooden-sign>
-
-
-<div>
-  <guess-button :onClickFn="() => show('right-basic')">
-    <wooden-sign>10% chance of getting lost in taking path A</wooden-sign>
-  </guess-button>
-  <guess-button :onClickFn="() => show('wrong-basic')" 
-                :correct="false">
-    <wooden-sign>20% chance of getting lost in taking path B</wooden-sign>
-  </guess-button>
 </div>
-
-
-<story ref="right-basic">
-That's right. In this forest, you definitely want to minimize the chance of getting lost.
-<delay :delayFn="() => show('1-x')" :delay="1000"></delay>
-</story>
-
-<story ref="wrong-basic">
-Why are you maximizing the chance of getting lost? Try again.
-</story>
-
-
-
-
-<story ref="1-x">
-
-  <stagger>
-
-  <div>
-    You journey deeper into the forest.
-  </div>
-
-  <div>
-    Another fork.
-  </div>
-
-  <div class="forest-intro-problem">
-  <div>
-    Path A: 10% chance of getting lost
-  </div>
-  <div>
-    Path B: 80% chance of finding the right way
-  </div>
-  </div>
-
-  <div>
-    <guess-button :onClickFn="() => show('right-1-x')">
-      Go A
-    </guess-button>
-    <guess-button :onClickFn="() => show('wrong-1-x')" 
-                  :correct="false">
-      Go B
-    </guess-button>
-  </div>
-  </stagger>
-
-  <story ref="wrong-1-x">
-    Hm, nope. Try again.
-  </story>
-
-  <story ref="right-1-x">
-    <div>
-    Correct. 
-    </div>
-
-    <div>
-    This problem is the same as the first, because the probability of finding the right way = 1 - the probability of getting lost. 
-    </div>
-
-    <delay :delayFn="() => show('x-in-y-times')" :delay="1000"></delay>
-  </story>
-</story> 
-
-
-<story ref="x-in-y-times">
-  <div>
-    Even deeper into the forest, you see a new sign.
-  </div>
-
-  <div class="forest-intro-problem">
-  <div>
-    Path A: 4 in 5 times you'd get lost
-  </div>
-  <div>
-    Path B: 3 in 4 times you'd get lost.
-  </div>
-  </div>
-
-  <div>
-    <guess-button :onClickFn="() => show('wrong-x-in-y')"
-                  :correct="false">
-      Go A
-    </guess-button>
-    <guess-button :onClickFn="() => show('right-x-in-y')">
-      Go B
-    </guess-button>
-  </div>
-
-  <story ref="wrong-x-in-y">
-    4 in 5 means you would be getting lost 80% of the time! Try again.
-  </story>
-
-  <story ref="right-x-in-y">
-    Correct. It is better to get lost 75% of the time, than 80% of the time. 
-
-    <delay :delayFn="() => show('x-y-odds')"></delay>
-  </story>
-
-</story>
-
-
-<story ref="x-y-odds">
-
-  <div>
-    You journey on, until you are faced with a new problem...
-  </div>
-
-  <div class="forest-intro-problem">
-  <div>
-    Path A: 4 : 5 odds you'd get lost
-  </div>
-  <div>
-    Path B: 3 : 4 odds you'd get lost.
-  </div>
-  </div>
-
-  <div>
-
-    <guess-button :onClickFn="() => show('wrong-x-y-odds')"
-                  :correct="false">
-      Go A
-    </guess-button>
-    <guess-button :onClickFn="() => show('right-x-y-odds')">
-      Go B
-    </guess-button>
-  </div>
-
-  <story ref="wrong-x-y-odds">
-    Nope! Try again.
-  </story>
-
-  <story ref="right-x-y-odds">
-    Yes!
-    <delay :delayFn="() => show('x-y-odds-explanation')"></delay>
-  </story>
-
-  <story ref="x-y-odds-explanation">
-    <div>
-    Notice that 4 : 5 odds of something happening is very different from 4 in 5 times.
-    </div>
-
-    <div>
-    With 4 : 5 odds, it's fairly 50-50, slightly in favor of not getting lost. 4 : 5 odds means that for every 5 moneybags you stake, you would earn 4 moneybags if the event happens.
-    </div>
-
-    <div>
-    With 4 in 5 times, you're almost certainly getting lost.
-    </div>
-
-    <button @click="$root.setStoryPoint('forest-game')">Continue</button>
-  </story>
-
-</story>
 
 
 </div>
@@ -955,7 +830,7 @@ the radiant sunlight. You have definitely emerged stronger.
           @click="choiceMade($event, choice)"
           :key="choice">
 
-    <div style="font-size:11px; margin-bottom:4px;">EV: {{outcomesMean(choice.outcomes)}}</div>
+<!--    <div style="font-size:11px; margin-bottom:4px;">EV: {{outcomesMean(choice.outcomes)}}</div> -->
     <div>{{choice.name}}</div>
 
     <distribution v-if="problem.renderAsDistribution" 
@@ -967,6 +842,7 @@ the radiant sunlight. You have definitely emerged stronger.
                   :chartWidth="140"></distribution>
 
     <forest-outcomes v-if="!problem.renderAsDistribution"
+                     @outcome-drawn="outcomeDrawn"
                      :ref="choice.name"
                      :outcomes="choice.outcomes" 
     ></forest-outcomes>
@@ -981,8 +857,6 @@ the radiant sunlight. You have definitely emerged stronger.
   <div>
   You chose {{userChoice.name}}. 
   </div>
-
-  <text-animation :tokens="['And', '.', '.', '.', '.', '.']" :interval="100"></text-animation>
 
   <div>
   You {{userOutcome.hp < 0 ? 'lose': 'gain'}} {{userOutcome.hp}} HP.
@@ -1262,7 +1136,8 @@ hmm: this should probably be a forest-problem
     How certain are you of your answer?
     </div>
 
-    <certainty-widget @bet-submit="hyderabadCertaintySubmit"></certainty-widget>
+    <certainty-widget @bet-submit="hyderabadCertaintySubmit"
+                      :showMoneybagWidget="false"></certainty-widget>
   </story>
 
   <story ref="monk-hyderabad-bet">
@@ -1564,9 +1439,9 @@ Vue.component('forest-outcomes', {
 
 
     drawOutcome: async function(){
-      var numCycles = 5;
+      var numCycles = 3;
       var outcomeInd = drawIndFromOutcomes(this.outcomes);
-      var numIters = numCycles*this.outcomes.length+outcomeInd;
+      var numIters = numCycles*this.outcomes.length+outcomeInd -1;
 
       // milliseconds
       var activeTimes = this.outcomes.map(outcome => outcome.certainty * 500);
@@ -1578,8 +1453,9 @@ Vue.component('forest-outcomes', {
         await wait(activeTimes[animatedInd]);
 
         // Check if it's the last one and emit an event.
-        if (i == this.numIters-1){
-          this.$emit('outcome-drawn', {outcomeInd: outcomeInd});          
+        if (i == numIters-1){
+          console.log('outcome ind: ' + outcomeInd)
+          this.$emit('outcome-drawn', {outcomeInd: outcomeInd});
         }
       }
     },
@@ -1769,9 +1645,6 @@ Vue.component('distribution', {
     }
   },
 
-  // mounted: function(){
-  //   this.drawOutcome();
-  // },
   methods: {
     renderAsPercent: renderAsPercent,
     barStyle: function(outcome, barIndex){
@@ -1787,7 +1660,7 @@ Vue.component('distribution', {
     drawOutcome: async function(){
       var numCycles = 5;
       var outcomeInd = drawIndFromOutcomes(this.outcomes);
-      var numIters = numCycles*this.outcomes.length+outcomeInd;
+      var numIters = numCycles*this.outcomes.length+outcomeInd -1;
 
       // milliseconds
       var activeTimes = this.outcomes.map(outcome => outcome.certainty * 500);
@@ -1825,8 +1698,45 @@ Vue.component('variance-witch', {
 });
 
 Vue.component('forest-intro', {
+  data: function(){
+    return {
+      forestProblems: forestIntro,
+      questionInd: 0,
+      feedbacks: [],
+    }
+  },
+  computed:{
+    visibleProblems: function(){
+      // Return slice from [0, questionInd] inclusive.
+      // Slice is safe from array out of bounds errors.
+      return this.forestProblems.slice(0, this.questionInd+1);
+    },
+  },
+  watch: {
+    visibleProblems: scrollWindow,
+  },
   methods: {
     show: show,
+    choiceClicked: function(choice){
+      if (this.feedbacks.length <= this.questionInd){
+        this.feedbacks.push(choice.feedback);
+      } else {
+        this.feedbacks[this.feedbacks.length - 1] = choice.feedback;
+      }
+
+      if (choice.right === true){
+        var this_ = this;
+        setTimeout(function(){
+          this_.questionInd++;
+
+          // Move to next section.
+          if (this.questionInd == this.forestProblems.length){
+            this.$root.setStoryPoint('forest-game');      
+          }
+        }, 1000);
+      }
+
+    }
   },
   template: '#forest-intro-template'
 });
@@ -1862,7 +1772,9 @@ Vue.component('forest-problem', {
       while (elt.tagName !== 'BUTTON'){
         elt = elt.parentElement;
       }
-      elt.style.backgroundColor = choice == this.maxEVChoice ? 'green' : 'red';
+
+      // green : red
+      elt.style.backgroundColor = choice == this.maxEVChoice ? 'rgb(107,224,94)' : 'rgb(252,90,101)';
 
       // Disable all buttons.
       this.$el.querySelectorAll('button').forEach(elt => elt.disabled=true);
@@ -1872,8 +1784,6 @@ Vue.component('forest-problem', {
 
     outcomeDrawn: function(params){
       this.userOutcome = this.userChoice.outcomes[params.outcomeInd];
-
-      debugger;
       this.$emit('problem-complete', {userChoice: this.userChoice,
                                       userOutcome: this.userOutcome});     
     }
@@ -2047,8 +1957,8 @@ Vue.component('once-button', {
 // correct or not
 Vue.component('guess-button', {
   props: {
-    correct: {type: Boolean, default: true},
-    onClickFn: {type: Function},
+    isRight: {type: Boolean, default: true},
+    onClickFn: {type: Function, default: function(){}},
   },
   data: function(){
     return {
@@ -2056,8 +1966,8 @@ Vue.component('guess-button', {
     };
   },
   template: `<button @click="isClicked = true; onClickFn()" 
-                    :class="{'selected-answer' : isClicked === true && correct === true}"
-                    :disabled="isClicked===true && correct===false"
+                    :class="{'selected-answer' : isClicked === true && isRight === true}"
+                    :disabled="isClicked===true && isRight===false"
                     ><slot></slot></button>`
 });
 
@@ -2170,7 +2080,6 @@ var storyPoints = [
   component: 'distribution-interlude',
   nest: 1
 },
-
 
 ];
 

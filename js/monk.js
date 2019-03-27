@@ -655,6 +655,7 @@ Vue.component('certainty-widget', {
         return [0.5, 0.6, 0.7, 0.8, 0.9];
       },
     },
+    showMoneybagWidget: {type: Boolean, default: true},
   },
   data: function(){
     return {
@@ -667,7 +668,12 @@ Vue.component('certainty-widget', {
       this.$emit('bet-submit', 
         this.$root.paramsFromCertainty(certainty)
       );
-    }
+    },
+    onHover: function(certainty){
+      if (this.showMoneybagWidget) { 
+        this.hoveredCertainty = certainty;
+      }
+    },
   },
   template: '#certainty-widget-template'
 });
