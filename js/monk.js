@@ -328,10 +328,10 @@ Vue.component('monk-intro', {
 Vue.component('monk-game', {
   props: {
     numMoneybagsNeeded: {type: Number, default: 10},
+    monkQuestions: {type: Array, default: () => monkQuestions},
   },
   data: function(){
     return {
-      monkQuestions: monkQuestions,
       questionInd: 0, // index of the active question
       numUserMoneybags: 0,
 
