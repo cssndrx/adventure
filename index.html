@@ -55,11 +55,18 @@ button:active{
   font-family: 'Bungee Shade', cursive;    
 }
 
-.selected-answer{
-/*  background-color: #ccc;
-  color: white;*/
+.clicked-button{
   font-family: 'Bungee Shade', cursive;  
 }
+
+.right-answer{
+  color: green;
+}
+
+.wrong-answer{
+  color: red;
+}
+
 
 /* https://codepen.io/anon/pen/Laoxro */
 .pulse{
@@ -210,7 +217,7 @@ button {
 <div style="max-width: 400px; margin: 0 auto; text-align: center;">
 
 <!-- <div><img src="images/map.jpg" width="400px"></div>
-<button>Enter</button> -->
+<game-button>Enter</game-button> -->
 
 
 
@@ -234,14 +241,14 @@ button {
 <!--
 
 <div>Which plant is poisonous?</div>
-<button class="image-button">
+<game-button class="image-button">
   <img src="images/dolls_eyes.jpg">
   <div>This one</div>
-</button>
-<button class="image-button">
+</game-button>
+<game-button class="image-button">
   <img src="images/poke_weed.jpg">
   <div>That one</div>
-</button>
+</game-button>
 
 
 
@@ -359,7 +366,7 @@ have bar showing how much money is needed.
   </tr>
   <tr v-if="isInteractive">
     <td></td>
-    </td><button @click="submitBet">Looks fair to me</button></td>
+    </td><game-button :onClickFn="submitBet">Looks fair to me</game-button></td>
   </tr>
 </table>
 </script>
@@ -445,7 +452,7 @@ have bar showing how much money is needed.
         As a newcomer to this world, you don't know anything about these two places, it is equally likely that your quest could proceed through either of them. In this case, it makes sense to choose either answer but express your certainy as 50 - 50. This is called a uniform prior. You have no information, so all choices are equal.
       </div>
 
-      <button @click="emitQuestionComplete">Continue</button>
+      <game-button :onClickFn="emitQuestionComplete">Continue</game-button>
     </div> <!-- end uniform prior -->
 
 
@@ -478,7 +485,7 @@ have bar showing how much money is needed.
         It is also possible to incorporate additional knowledge, like whether it rained yesterday, into your probability but that's a topic for another day.
       </div>
 
-      <button @click="emitQuestionComplete">Continue</button>
+      <game-button :onClickFn="emitQuestionComplete">Continue</game-button>
       </stagger>
     </div> <!-- end rain prior -->
 
@@ -521,7 +528,7 @@ have bar showing how much money is needed.
         This is known as the <a href="//en.wikipedia.org/wiki/Conjunction_fallacy" target="_blank">Conjunction Fallacy</a>  where sometimes our brains get tricked into pattern matching, but if you think about the actual probabilistic events the answer is clear. Take a look at the most famous example, the Linda Problem.
       </div>
 
-      <button @click="emitQuestionComplete">Continue</button>
+      <game-button :onClickFn="emitQuestionComplete">Continue</game-button>
       </stagger>
 
     </div> <!-- end brenda -->
@@ -549,7 +556,7 @@ have bar showing how much money is needed.
 
       </div>
 
-      <button @click="emitQuestionComplete">Continue</button>
+      <game-button :onClickFn="emitQuestionComplete">Continue</game-button>
       </stagger>
 
     </div>
@@ -615,7 +622,7 @@ have bar showing how much money is needed.
     The more sure you are in your answers, the more likely the monk will take you up on your bet — but  also the more you stand to lose.
     </div>
 
-    <button @click="show('questions')">Ok!</button> 
+    <game-button :onClickFn="() => show('questions')">Ok!</game-button> 
   </div> 
 
   <div v-for="question in visibleQuestions">
@@ -665,7 +672,7 @@ have bar showing how much money is needed.
       You have earned the requisite moneybags to proceed in your quest.
     </div>
 
-    <button @click="isGameComplete=true;">Proceed</button>
+    <game-button :onClickFn="() => isGameComplete=true">Proceed</game-button>
   </div>
 
   <div v-if="gameOutcome === 'monkOutOfQuestions'">
@@ -685,7 +692,7 @@ have bar showing how much money is needed.
       Very well then. You may proceed but be very careful because you don't have much money to make mistakes!
     </div>
 
-    <button @click="isGameComplete = true;">Proceed</button>
+    <game-button :onClickFn="() => isGameComplete = true">Proceed</game-button>
   </div>
 
 
@@ -698,7 +705,7 @@ have bar showing how much money is needed.
 
     <!-- might be cool to have bowing monk art -->
 
-    <button @click="$root.setStoryPoint('forest-intro')">To the forest</button>
+    <game-button :onClickFn="() => $root.setStoryPoint('forest-intro')">To the forest</game-button>
 
   </div>
 
@@ -735,10 +742,10 @@ Choose which way to proceed.
 <div v-for="(problem, index) in visibleProblems" :key="problem">
 
   <div>{{problem.text}}</div>
-  <guess-button v-for="choice in problem.choices"   
+  <game-button v-for="choice in problem.choices"   
         :key="choice"
         :isRight="choice.right"
-        :onClickFn="() => choiceClicked(choice)">{{choice.name}}</guess-button>
+        :onClickFn="() => choiceClicked(choice)">{{choice.name}}</game-button>
   <div style="margin-top:16px;">{{feedbacks[index]}}</div>
 
 </div>
@@ -850,8 +857,8 @@ the radiant sunlight. You have definitely emerged stronger.
    </div>
 
 <div>
-  <button v-for="choice in problem.choices"
-          @click="choiceMade($event, choice)"
+  <game-button v-for="choice in problem.choices"
+          :onClickFn="() => choiceMade($event, choice)"
           :key="choice">
 
 <!--    <div style="font-size:11px; margin-bottom:4px;">EV: {{outcomesMean(choice.outcomes)}}</div> -->
@@ -871,7 +878,7 @@ the radiant sunlight. You have definitely emerged stronger.
                      :outcomes="choice.outcomes" 
     ></forest-outcomes>
 
-  </button>
+  </game-button>
 </div>
 
 
@@ -1006,7 +1013,7 @@ hmm: this should probably be a forest-problem
   deviate from the average**?
   </div>
 
-  <button @click="show('how-to')">That does seem important</button>
+  <game-button :onClickFn="() => show('how-to')">That does seem important</game-button>
 </stagger>
 
 <story ref="how-to">
@@ -1052,7 +1059,7 @@ hmm: this should probably be a forest-problem
     todo: ask yan
   </div>
 
-  <button @click="show('std')">Continue</button>
+  <game-button :onClickFn="() => show('std')">Continue</game-button>
 </story>
 
 <story ref="std">
@@ -1084,7 +1091,7 @@ hmm: this should probably be a forest-problem
   *As opposed to the variance, which is in that unit^2.
   </div>
 
-  <button @click="">Wow! Thanks much, Variance Witch!</button>
+  <game-button :onClickFn="">Wow! Thanks much, Variance Witch!</game-button>
 </stagger>
 </story>
 
@@ -1121,7 +1128,7 @@ hmm: this should probably be a forest-problem
       To start your quest, you will need to earn enough moneybags to fund your travels. Let's see if you can use what you learned about fair bets.
     </div>
 
-    <button @click="$root.setStoryPoint('monk-game')">Continue</button>
+    <game-button :onClickFn="() => $root.setStoryPoint('monk-game')">Continue</game-button>
   </stagger>
 </div> <!-- end isEndGame -->
 
@@ -1143,7 +1150,7 @@ hmm: this should probably be a forest-problem
   </div>
 
   <div>
-  <button @click="show('monk-hyderabad-question')">Talk to</button>
+  <game-button @click.native="show('monk-hyderabad-question')">Talk to</game-button>
   </div>
 
   <story ref="monk-hyderabad-question">
@@ -1224,7 +1231,7 @@ hmm: this should probably be a forest-problem
         You said you were {{hyderabadCertaintyParams.percent}} sure, which would translate to the following bet:
         </div>
         <moneybag-widget :showCertainty="false" :numLoseIfWrong="hyderabadCertaintyParams.numLoseIfWrong"></moneybag-widget>
-        <button @click="show('monk-dual-explanation')">Why??</button>
+        <game-button :onClickFn="() => show('monk-dual-explanation')">Why??</game-button>
 
         </stagger>
       </div>
@@ -1236,7 +1243,7 @@ hmm: this should probably be a forest-problem
       If you are right {{hyderabadCertaintyParams.percent}} of the time, you win 1 moneybag when you are right. You lose {{$root.renderAsPercent(1-hyderabadCertaintyParams.certainty)}} of the time, and lose {{hyderabadCertaintyParams.numLoseIfWrong}} moneybags. Averaging over many times, you break even. 
     </div>
 
-    <button @click="show('monk-dual-quiz')">Hm...</button>
+    <game-button :onClickFn="() => show('monk-dual-quiz')">Hm...</game-button>
   </story>
 
   <story ref="monk-dual-quiz">
@@ -1786,9 +1793,6 @@ Vue.component('forest-problem', {
   methods: {
     outcomesMean: outcomesMean,
     choiceMade: function($event, choice){
-      // var audio = new Audio('sounds/bloop1.wav');
-      // audio.play();
-
       this.userChoice = choice;
 
       // Color the clicked button.
@@ -1924,7 +1928,7 @@ Vue.component('once-group', {
           // var button_value = item.componentInstance.$props.value;
           // if (button_value === this_.userAnswer){
           if (childComponent === item.componentInstance){
-            item.elm.classList.add('selected-answer');
+            item.elm.classList.add('clicked-button');
           } else {
             item.elm.setAttribute('disabled', true); 
           }
@@ -1975,17 +1979,17 @@ Vue.component('once-button', {
       self: this
     }
   },
-  template: '<button @click="$parent.childClicked(self, onClickFn, value)"><slot></slot></button>'
+  template: '<game-button :onClickFn="() => $parent.childClicked(self, onClickFn, value)"><slot></slot></game-button>'
 });
 
-// guess-button differs from once-button, in that it doesn't live in a 
+// game-button differs from once-button, in that it doesn't live in a 
 // special parent.
-// If a guess-button is clicked, it's siblings may still be clicked.
-// guess-button just provides a color to the user whether the guess was
+// If a game-button is clicked, it's siblings may still be clicked.
+// game-button just provides a color to the user whether the guess was
 // correct or not
-Vue.component('guess-button', {
-  props: {
-    isRight: {type: Boolean, default: true},
+Vue.component('game-button', {
+  props: {    
+    isRight: {type: Boolean, default: null},
     onClickFn: {type: Function, default: function(){}},
   },
   data: function(){
@@ -1993,9 +1997,20 @@ Vue.component('guess-button', {
       isClicked: false,
     };
   },
-  template: `<button @click="isClicked = true; onClickFn()" 
-                    :class="{'selected-answer' : isClicked === true && isRight === true}"
-                    :disabled="isClicked===true && isRight===false"
+  methods: {
+    buttonClicked: function(){      
+      if (this.isClicked === true){
+        return;
+      }; 
+      var audio = new Audio('sounds/bloop1.wav');
+      audio.play();
+      this.onClickFn();
+      this.isClicked = true;
+    }
+  },
+  template: `<button @click="buttonClicked()" 
+                    :class="{'clicked-button' : isClicked, 'right-answer': isClicked===true && isRight===true,
+                      'wrong-answer': isClicked===true && isRight===false }"
                     ><slot></slot></button>`
 });
 
