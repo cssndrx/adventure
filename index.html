@@ -2,8 +2,26 @@
 <meta charset="utf-8" />
 
 <head>
-<link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:200,400,700,900" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css?family=Gloria+Hallelujah" rel="stylesheet">
+<!--<link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:200,400,700,900" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Gloria+Hallelujah" rel="stylesheet">-->
+
+<!--
+font-family: 'VT323', monospace;
+font-family: 'Princess Sofia', cursive;
+font-family: 'Indie Flower', cursive;
+font-family: 'Dokdo', cursive;
+font-family: 'East Sea Dokdo', cursive;
+font-family: 'Creepster', cursive;
+font-family: 'Bungee Hairline', cursive;
+font-family: 'Bungee', cursive;
+font-family: 'Bungee Shade', cursive;
+font-family: 'Bungee Inline', cursive;
+font-family: 'Cormorant Garamond', serif;
+-->
+
+<!-- todo: strip and remove the unused -->
+<link href="https://fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Bungee|Bungee+Hairline|Bungee+Inline|Bungee+Shade|Cormorant+Garamond|Creepster|Dokdo|East+Sea+Dokdo|Indie+Flower|Princess+Sofia|VT323" rel="stylesheet">
 
 <script src="js/lodash.min.js"></script>
 <script src="js/d3.v4.min.js"></script>
@@ -15,6 +33,33 @@
 <script src="js/forest.js"></script>
 
 <style>
+
+.handwriting{
+  font-family: 'Dokdo', cursive;  
+}
+
+
+button{
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  transition: 1s ease all;
+  font-family: 'Dokdo', cursive;
+}
+
+button:hover{
+  font-family: 'Bungee Shade', cursive;  
+}
+
+button:active{
+  font-family: 'Bungee Shade', cursive;    
+}
+
+.selected-answer{
+/*  background-color: #ccc;
+  color: white;*/
+  font-family: 'Bungee Shade', cursive;  
+}
 
 /* https://codepen.io/anon/pen/Laoxro */
 .pulse{
@@ -49,28 +94,14 @@
   }
 }
 
-
-
-
 h4{
   font-size: 18px;
   font-weight: 500;
 }
 
-button{
-  font: inherit;
-  color: inherit;
-  cursor: pointer;
-  transition: 1s ease all;
-}
-
-button:disabled,
-button[disabled]{
-/*  cursor: none; */
-}
 
 .sign-text{
-  font-family: 'Gloria Hallelujah', cursive;
+  font-family: 'Princess Sofia', cursive;
 }
 
 .sign{
@@ -124,11 +155,6 @@ img{
   border-radius: 8px;
   padding: 8px;
   color: #fff;
-}
-
-.selected-answer{
-  background-color: #ccc;
-  color: white;
 }
 
 .fade-from {
@@ -282,9 +308,9 @@ have bar showing how much money is needed.
 
 
 <script type="text/x-template" id="moneybag-widget-template">
-<table style="text-align: left">
+<table style="text-align: left" class="handwriting">
   <tr>
-    <td style="width:50px;font-size:10px;">Win if right ({{numWinIfRight}})</td>
+    <td style="width:50px;font-size:12px;">Win if right ({{numWinIfRight}})</td>
     <td><img v-for="n in numWinIfRight" 
              :style="{width: moneybagWidth+'px'}" 
              style="margin-right:2px"
@@ -294,10 +320,10 @@ have bar showing how much money is needed.
     </td>
   </tr>
   <tr>
-    <td style="width:50px;font-size:10px;">Lose if wrong ({{Math.max(numLoseIfWrong, numInteractiveBags)}})</td>
+    <td style="width:50px;font-size:12px;">Lose if wrong ({{Math.max(numLoseIfWrong, numInteractiveBags)}})</td>
     <td> 
       <div v-if="isInteractive" >
-      <div style="font-size:10px;">Drag the last moneybag until the bet looks fair to you.</div>
+      <div style="font-size:12px;">Drag the last moneybag until the bet looks fair to you.</div>
       <div class="ref-element" 
            droppable="true"
            style="width: 340px;">
@@ -696,9 +722,7 @@ have bar showing how much money is needed.
 <div>
 
 
-<h4>Forest journey</h4>
-
-<img src="images/forest1.png">
+<img src="images/forest_dark.png" style="margin-top:40px;">
 
 <div>
   You approach the first fork in the road.
@@ -748,7 +772,7 @@ out alive.
   <div>Inventory: {{inventory}}</div>
 </div> 
 
-<img src="images/spirit2.png">
+<img src="images/dance_of_rebirth.jpg">
 
 <div>
 You feel the swirl of spirits of the forest, as though you're
@@ -2096,7 +2120,7 @@ new Vue({
   data: {
 
     storyPoints: storyPoints,
-    currentStoryPoint: storyPoints[3],
+    currentStoryPoint: storyPoints[0],
 
     // Obj property additions do not update DOM, so prepopulate all the keys in the object. Or use lists.
     // storyState: null, // A string like 'hyderabadCertainty' used to jump to a particular point in the story.
