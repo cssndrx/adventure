@@ -275,8 +275,8 @@ have bar showing how much money is needed.
 
 {{testVal}}
 <once-group>
-  <once-button :onClickFn="() => testVal='A'">A</once-button>
-  <once-button :onClickFn="() => testVal='B'">B</once-button>
+  <once-button @click.native="testVal='A'">A</once-button>
+  <once-button @click.native="testVal='B'">B</once-button>
 </once-group>
 
 -->
@@ -301,9 +301,8 @@ have bar showing how much money is needed.
   <once-group>
     <once-button 
       :key="certainty"
-      :value="certainty"
       v-for="certainty in certainties" 
-      :onClickFn="submitCertainty"
+      @click.native="submitCertainty(certainty)"
       @mouseenter.native="onHover(certainty)"
       >{{$root.renderAsPercent(certainty)}}</once-button>
   </once-group>
@@ -366,7 +365,7 @@ have bar showing how much money is needed.
   </tr>
   <tr v-if="isInteractive">
     <td></td>
-    </td><game-button :onClickFn="submitBet">Looks fair to me</game-button></td>
+    </td><game-button @click.native="submitBet">Looks fair to me</game-button></td>
   </tr>
 </table>
 </script>
@@ -399,8 +398,7 @@ have bar showing how much money is needed.
   <once-group>
     <once-button v-for="answer in datum.answers"
                  :key="answer"
-                 :value="answer"
-                 :onClickFn="userChoseAnswer">{{answer}}</once-button>
+                 @click.native="userChoseAnswer(answer)">{{answer}}</once-button>
   </once-group>
 
 
@@ -452,7 +450,7 @@ have bar showing how much money is needed.
         As a newcomer to this world, you don't know anything about these two places, it is equally likely that your quest could proceed through either of them. In this case, it makes sense to choose either answer but express your certainy as 50 - 50. This is called a uniform prior. You have no information, so all choices are equal.
       </div>
 
-      <game-button :onClickFn="emitQuestionComplete">Continue</game-button>
+      <game-button @click.native="emitQuestionComplete">Continue</game-button>
     </div> <!-- end uniform prior -->
 
 
@@ -485,7 +483,7 @@ have bar showing how much money is needed.
         It is also possible to incorporate additional knowledge, like whether it rained yesterday, into your probability but that's a topic for another day.
       </div>
 
-      <game-button :onClickFn="emitQuestionComplete">Continue</game-button>
+      <game-button @click.native="emitQuestionComplete">Continue</game-button>
       </stagger>
     </div> <!-- end rain prior -->
 
@@ -528,7 +526,7 @@ have bar showing how much money is needed.
         This is known as the <a href="//en.wikipedia.org/wiki/Conjunction_fallacy" target="_blank">Conjunction Fallacy</a>  where sometimes our brains get tricked into pattern matching, but if you think about the actual probabilistic events the answer is clear. Take a look at the most famous example, the Linda Problem.
       </div>
 
-      <game-button :onClickFn="emitQuestionComplete">Continue</game-button>
+      <game-button @click.native="emitQuestionComplete">Continue</game-button>
       </stagger>
 
     </div> <!-- end brenda -->
@@ -556,7 +554,7 @@ have bar showing how much money is needed.
 
       </div>
 
-      <game-button :onClickFn="emitQuestionComplete">Continue</game-button>
+      <game-button @click.native="emitQuestionComplete">Continue</game-button>
       </stagger>
 
     </div>
@@ -622,7 +620,7 @@ have bar showing how much money is needed.
     The more sure you are in your answers, the more likely the monk will take you up on your bet — but  also the more you stand to lose.
     </div>
 
-    <game-button :onClickFn="() => show('questions')">Ok!</game-button> 
+    <game-button @click.native="show('questions')">Ok!</game-button> 
   </div> 
 
   <div v-for="question in visibleQuestions">
@@ -672,7 +670,7 @@ have bar showing how much money is needed.
       You have earned the requisite moneybags to proceed in your quest.
     </div>
 
-    <game-button :onClickFn="() => isGameComplete=true">Proceed</game-button>
+    <game-button @click.native="isGameComplete=true">Proceed</game-button>
   </div>
 
   <div v-if="gameOutcome === 'monkOutOfQuestions'">
@@ -681,8 +679,8 @@ have bar showing how much money is needed.
     </div>
 
     <once-group>
-      <once-button :onClickFn="() => userWantToProceedPoor=true">Let player proceed in the quest</once-button>
-      <once-button :onClickFn="() => userWantsToProceedPoor=false">Send player home</once-button>
+      <once-button @click.native="userWantToProceedPoor=true">Let player proceed in the quest</once-button>
+      <once-button @click.native="userWantsToProceedPoor=false">Send player home</once-button>
     </once-group>
   </div> 
 
@@ -692,7 +690,7 @@ have bar showing how much money is needed.
       Very well then. You may proceed but be very careful because you don't have much money to make mistakes!
     </div>
 
-    <game-button :onClickFn="() => isGameComplete = true">Proceed</game-button>
+    <game-button @click.native="isGameComplete = true">Proceed</game-button>
   </div>
 
 
@@ -705,7 +703,7 @@ have bar showing how much money is needed.
 
     <!-- might be cool to have bowing monk art -->
 
-    <game-button :onClickFn="() => $root.setStoryPoint('forest-intro')">To the forest</game-button>
+    <game-button @click.native="$root.setStoryPoint('forest-intro')">To the forest</game-button>
 
   </div>
 
@@ -745,7 +743,7 @@ Choose which way to proceed.
   <game-button v-for="choice in problem.choices"   
         :key="choice"
         :isRight="choice.right"
-        :onClickFn="() => choiceClicked(choice)">{{choice.name}}</game-button>
+        @click.native="choiceClicked(choice)">{{choice.name}}</game-button>
   <div style="margin-top:16px;">{{feedbacks[index]}}</div>
 
 </div>
@@ -790,7 +788,7 @@ the <b>expected value</b> of a random event is the average if you are able to ex
 
 <once-group>
   <once-button>Continue</once-button>
-  <once-button :onClickFn="() => show('spirit-berry')">Thank the forest spirits</once-button>
+  <once-button @click.native="show('spirit-berry')">Thank the forest spirits</once-button>
 </once-group>
 
 <story ref="spirit-berry">
@@ -809,7 +807,7 @@ the <b>expected value</b> of a random event is the average if you are able to ex
  <hidden>{{addToInventory('spirit-berry')}}</hidden> -->
 
   <once-group>
-    <once-button :onClickFn="() => {addToInventory('spirit-berry')}">Add to inventory</once-button>
+    <once-button @click.native="addToInventory('spirit-berry')">Add to inventory</once-button>
   </once-group>
 </story>
 
@@ -858,7 +856,7 @@ the radiant sunlight. You have definitely emerged stronger.
 
 <div>
   <game-button v-for="choice in problem.choices"
-          :onClickFn="() => choiceMade($event, choice)"
+          @click.native="choiceMade($event, choice)"
           :key="choice">
 
 <!--    <div style="font-size:11px; margin-bottom:4px;">EV: {{outcomesMean(choice.outcomes)}}</div> -->
@@ -1013,7 +1011,7 @@ hmm: this should probably be a forest-problem
   deviate from the average**?
   </div>
 
-  <game-button :onClickFn="() => show('how-to')">That does seem important</game-button>
+  <game-button @click.native="show('how-to')">That does seem important</game-button>
 </stagger>
 
 <story ref="how-to">
@@ -1033,8 +1031,8 @@ hmm: this should probably be a forest-problem
   </div>
 
   <once-group>
-    <once-button :onClickFn="() => show('std')">Easy!</once-button>
-    <once-button :onClickFn="() => show('why-square')">Why do you square it?</once-button>
+    <once-button @click.native="show('std')">Easy!</once-button>
+    <once-button @click.native="show('why-square')">Why do you square it?</once-button>
   </once-group>
 </story>
 
@@ -1047,8 +1045,8 @@ hmm: this should probably be a forest-problem
   </div>
 
   <once-group>
-    <once-button :onClickFn="() => show('std')">Oh okay</once-button>
-    <once-button :onClickFn="() => show('why-not-abs')">Why don't you take the absolute value?</once-button>
+    <once-button @click.native="show('std')">Oh okay</once-button>
+    <once-button @click.native="show('why-not-abs')">Why don't you take the absolute value?</once-button>
   </once-group>
 </story>
 
@@ -1059,7 +1057,7 @@ hmm: this should probably be a forest-problem
     todo: ask yan
   </div>
 
-  <game-button :onClickFn="() => show('std')">Continue</game-button>
+  <game-button @click.native="show('std')">Continue</game-button>
 </story>
 
 <story ref="std">
@@ -1091,7 +1089,7 @@ hmm: this should probably be a forest-problem
   *As opposed to the variance, which is in that unit^2.
   </div>
 
-  <game-button :onClickFn="">Wow! Thanks much, Variance Witch!</game-button>
+  <game-button @click.native="">Wow! Thanks much, Variance Witch!</game-button>
 </stagger>
 </story>
 
@@ -1128,7 +1126,7 @@ hmm: this should probably be a forest-problem
       To start your quest, you will need to earn enough moneybags to fund your travels. Let's see if you can use what you learned about fair bets.
     </div>
 
-    <game-button :onClickFn="() => $root.setStoryPoint('monk-game')">Continue</game-button>
+    <game-button @click.native="$root.setStoryPoint('monk-game')">Continue</game-button>
   </stagger>
 </div> <!-- end isEndGame -->
 
@@ -1157,8 +1155,8 @@ hmm: this should probably be a forest-problem
     <div>Which has the bigger population Hyderabad or Islamabad?</div>
 
     <once-group>
-      <once-button :onClickFn="() => show('monk-hyderabad-certainty')">Hyderabad</once-button>
-      <once-button :onClickFn="() => show('monk-hyderabad-certainty')">Islamabad</once-button>
+      <once-button @click.native="show('monk-hyderabad-certainty')">Hyderabad</once-button>
+      <once-button @click.native="show('monk-hyderabad-certainty')">Islamabad</once-button>
     </once-group>
   </story>
 
@@ -1205,8 +1203,8 @@ hmm: this should probably be a forest-problem
         </div>
 
         <once-group>
-          <once-button :value="'monk-dual-explanation'">Explain it anyways</once-button>
-          <once-button :value="'monk-dual-quiz'">Yeah, old news</once-button>
+          <once-button @click.native="show('monk-dual-explanation')">Explain it anyways</once-button>
+          <once-button @click.native="show('monk-dual-quiz')">Yeah, old news</once-button>
         </once-group>
     
         </stagger>
@@ -1231,7 +1229,7 @@ hmm: this should probably be a forest-problem
         You said you were {{hyderabadCertaintyParams.percent}} sure, which would translate to the following bet:
         </div>
         <moneybag-widget :showCertainty="false" :numLoseIfWrong="hyderabadCertaintyParams.numLoseIfWrong"></moneybag-widget>
-        <game-button :onClickFn="() => show('monk-dual-explanation')">Why??</game-button>
+        <game-button @click.native="show('monk-dual-explanation')">Why??</game-button>
 
         </stagger>
       </div>
@@ -1243,7 +1241,7 @@ hmm: this should probably be a forest-problem
       If you are right {{hyderabadCertaintyParams.percent}} of the time, you win 1 moneybag when you are right. You lose {{$root.renderAsPercent(1-hyderabadCertaintyParams.certainty)}} of the time, and lose {{hyderabadCertaintyParams.numLoseIfWrong}} moneybags. Averaging over many times, you break even. 
     </div>
 
-    <game-button :onClickFn="() => show('monk-dual-quiz')">Hm...</game-button>
+    <game-button @click.native="show('monk-dual-quiz')">Hm...</game-button>
   </story>
 
   <story ref="monk-dual-quiz">
@@ -1912,10 +1910,7 @@ Vue.component('once-group', {
   template: `<div><slot></slot></div>`,
   methods: {
 
-    // childComponent is always populated
-    // onClickFn can be undefined (but defaults to this.$root.show)
-    // value can be undefined (if onClickFn does not require value)
-    childClicked: function(childComponent, onClickFn, value) {
+    childClicked: function(childComponent) {
       if (this.userAnswer !== null){
         return;
       }
@@ -1934,35 +1929,6 @@ Vue.component('once-group', {
           }
         }
       });
-
-      if (value === undefined && onClickFn === undefined){
-        // this button does nothing. We are probably sketching the story.
-        // todo: add an error once we are prod ready
-      } else if (value !== undefined && onClickFn === undefined){
-        // Value is given but no handler, so assume it's navigation.
-
-        // Traverse up the tree trying to call $parent.show(value) until
-        // it succeeds.
-        // Log error if it still doesn't work by the time it hits the root.
-        var ancestor = this.$parent;
-        while (true){
-          if (hasShow(ancestor, value)){
-            // We successfully found the show.
-            break;
-          } else {
-            if (ancestor === this.$root){
-              console.error('once-group could not show(' + value + ')');
-              break;              
-            }
-            ancestor = ancestor.$parent;            
-          }
-        }
-      } else {
-        // onClickFn is defined, and it's okay if we pass it an
-        // undefined value because it won't be used.
-        onClickFn(value);
-      } 
-
     }
   }
 });
@@ -1970,16 +1936,12 @@ Vue.component('once-group', {
 // once-button must live inside a once-group
 // The once-group enforces that only one child can be called once.
 Vue.component('once-button', {
-  props: {
-    value: {type: [String, Number]},
-    onClickFn: {type: Function},
-  },
   data: function(){
     return {
       self: this
     }
   },
-  template: '<game-button :onClickFn="() => $parent.childClicked(self, onClickFn, value)"><slot></slot></game-button>'
+  template: '<game-button @click.native="$parent.childClicked(self)"><slot></slot></game-button>'
 });
 
 // game-button differs from once-button, in that it doesn't live in a 
@@ -1990,7 +1952,6 @@ Vue.component('once-button', {
 Vue.component('game-button', {
   props: {    
     isRight: {type: Boolean, default: null},
-    onClickFn: {type: Function, default: function(){}},
   },
   data: function(){
     return {
@@ -2004,7 +1965,6 @@ Vue.component('game-button', {
       }; 
       var audio = new Audio('sounds/bloop1.wav');
       audio.play();
-      this.onClickFn();
       this.isClicked = true;
     }
   },
