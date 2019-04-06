@@ -1904,17 +1904,17 @@ Vue.component('wooden-sign', {
 Vue.component('once-group', {
   data: function(){
     return {
-      userAnswer: null
+      isClicked: false
     }
   },
   template: `<div><slot></slot></div>`,
   methods: {
 
     childClicked: function(childComponent) {
-      if (this.userAnswer !== null){
+      if (this.isClicked){
         return;
       }
-      this.userAnswer = value;
+      this.isClicked = true;
 
       // Change the buttons to indicate that it is disabled.
       var this_ = this;
@@ -1963,8 +1963,7 @@ Vue.component('game-button', {
       if (this.isClicked === true){
         return;
       }; 
-      var audio = new Audio('sounds/bloop1.wav');
-      audio.play();
+      this.$root.play('swish');
       this.isClicked = true;
     }
   },
@@ -2098,7 +2097,8 @@ new Vue({
     currentStoryPoint: storyPoints[0],
 
     // Obj property additions do not update DOM, so prepopulate all the keys in the object. Or use lists.
-    // storyState: null, // A string like 'hyderabadCertainty' used to jump to a particular point in the story.
+
+    soundNameToCount: {},
   },
   methods: {
     show: show, 
@@ -2149,6 +2149,15 @@ new Vue({
         'margin-left': storyPoint.nest * 8 + 'px',
         'font-size': '12px'
       };
+    },
+
+    play: function(soundName){
+      const count = this.soundNameToCount[soundName] || 0;
+
+      var audio = new Audio('sounds/swish' + (count % 2) + '.wav');
+      audio.play();      
+
+      this.soundNameToCount[soundName] = count+1;
     }
   } // end methods
 });
