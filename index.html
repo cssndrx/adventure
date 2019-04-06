@@ -324,7 +324,7 @@ have bar showing how much money is needed.
 
 
 <script type="text/x-template" id="moneybag-widget-template">
-<table style="text-align: left; font-size: 12px;" class="handwriting">
+<table style="text-align: left; font-size: 12px; user-select:none;" class="handwriting">
   <tr>
     <td style="width:50px;">Win if right ({{numWinIfRight}})</td>
     <td><img v-for="n in numWinIfRight" 
@@ -336,10 +336,10 @@ have bar showing how much money is needed.
     </td>
   </tr>
   <tr>
-    <td style="width:50px;">Lose if wrong ({{Math.max(numLoseIfWrong, numInteractiveBags)}})</td>
+    <td style="width:50px;">Lose if wrong ({{numLosingMoneybags}})</td>
     <td> 
       <span style="position:relative; display:inline-block;">
-        <img v-for="n in Math.max(Math.ceil(numLoseIfWrong), numInteractiveBags)" 
+        <img v-for="n in Math.ceil(numLosingMoneybags)" 
              :style="{width: moneybagWidth+'px'}" 
              style="margin-right:2px"
              src="images/moneybag.png">
@@ -351,17 +351,18 @@ have bar showing how much money is needed.
       </span>
     </td>
   </tr>
-  <tr v-if="isInteractive">
+  <tr v-if="isInteractive === true && isBetSubmitted === false">
     <td></td>
     <td>
       <div style="font-size:12px;">Click to wager moneybags until the bet looks fair.
-      <button @click="numInteractiveBags=Math.max(1, numInteractiveBags-1)" class="uncertain" style="font-size:12px">less sure</button>
-      <button @click="numInteractiveBags+=1" class="bold" style="font-size:16px">MORE SURE</button>
+      <button 
+        v-show="numLosingMoneybags > 0"
+        @click="numInteractiveBags=Math.max(0, numInteractiveBags-1); $root.play('remove')" 
+        class="uncertain" 
+        style="font-size:12px">less sure</button>
+      <button @click="numInteractiveBags+=1; $root.play('gold')" class="bold" style="font-size:16px">MORE SURE</button>
       </div>
-
-      <div style="position:relative; ">
-        <button class="handwriting" @click.native="submitBet" style="position:absolute; top:0px; right:0px;">Looks fair to me</button>
-      </div>
+      <button v-show="numLosingMoneybags > 0" class="handwriting" @click="submitBet">Looks fair to me</button>
   </td>
   </tr>
 </table>
@@ -1960,7 +1961,7 @@ Vue.component('game-button', {
       if (this.isClicked === true){
         return;
       }; 
-      this.$root.play('swish');
+      this.$root.play('heal');
       this.isClicked = true;
     }
   },
@@ -2150,9 +2151,10 @@ new Vue({
     },
 
     play: function(soundName){
+      console.log('playing ' + soundName);
       const count = this.soundNameToCount[soundName] || 0;
 
-      var audio = new Audio('sounds/swish' + (count % 2) + '.wav');
+      var audio = new Audio('sounds/' + soundName + (count % 2) + '.wav');
       audio.play();      
 
       this.soundNameToCount[soundName] = count+1;

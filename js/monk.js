@@ -390,7 +390,7 @@ Vue.component('moneybag-widget', {
       return this.width / 10;
     },
     percent: function(){
-      var params = this.$root.paramsFromBet(this.numWinIfRight, this.numLoseIfWrong);
+      var params = this.$root.paramsFromBet(this.numWinIfRight, this.numLosingMoneybags);
       return params.percent;
     },
 
@@ -408,12 +408,17 @@ Vue.component('moneybag-widget', {
         height: this.moneybagWidth * 236/200 + 'px',
       };
     },
+    numLosingMoneybags: function(){
+      return this.isInteractive ? this.numInteractiveBags : this.numLoseIfWrong;
+    }
   },
 
   data: function(){
     return {
       relativeMousePos: null,
-      numInteractiveBags: 1, // default to 1
+      numInteractiveBags: 0, // default to 1
+
+      isBetSubmitted: false,
     }
   },
 
@@ -446,7 +451,9 @@ Vue.component('moneybag-widget', {
 
     submitBet: function(){
       // emit the event
+      this.$root.play('heal');
       this.$emit('bet-submit', this.$root.paramsFromBet(this.numWinIfRight, this.numLoseIfWrong));
+      this.isBetSubmitted = true;
     }
   },
   template: '#moneybag-widget-template'
