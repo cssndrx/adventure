@@ -38,20 +38,30 @@ font-family: 'Cormorant Garamond', serif;
   font-family: 'Dokdo', cursive;  
 }
 
+.bold {
+  font-family: 'Bungee Shade', cursive;  
+}
+
+.uncertain {
+  font-family: 'Bungee Hairline', cursive;
+}
 
 button{
+  cursor: pointer;
+}
+
+.game-button{
   font: inherit;
   color: inherit;
-  cursor: pointer;
   transition: 1s ease all;
   font-family: 'Dokdo', cursive;
 }
 
-button:hover{
+.game-button:hover{
   font-family: 'Bungee Shade', cursive;  
 }
 
-button:active{
+.game-button:active{
   font-family: 'Bungee Shade', cursive;    
 }
 
@@ -314,9 +324,9 @@ have bar showing how much money is needed.
 
 
 <script type="text/x-template" id="moneybag-widget-template">
-<table style="text-align: left" class="handwriting">
+<table style="text-align: left; font-size: 12px;" class="handwriting">
   <tr>
-    <td style="width:50px;font-size:12px;">Win if right ({{numWinIfRight}})</td>
+    <td style="width:50px;">Win if right ({{numWinIfRight}})</td>
     <td><img v-for="n in numWinIfRight" 
              :style="{width: moneybagWidth+'px'}" 
              style="margin-right:2px"
@@ -326,32 +336,10 @@ have bar showing how much money is needed.
     </td>
   </tr>
   <tr>
-    <td style="width:50px;font-size:12px;">Lose if wrong ({{Math.max(numLoseIfWrong, numInteractiveBags)}})</td>
+    <td style="width:50px;">Lose if wrong ({{Math.max(numLoseIfWrong, numInteractiveBags)}})</td>
     <td> 
-      <div v-if="isInteractive" >
-      <div style="font-size:12px;">Drag the last moneybag until the bet looks fair to you.</div>
-      <div class="ref-element" 
-           droppable="true"
-           style="width: 340px;">
-
-        <img v-for="n in (numInteractiveBags - 1)" 
-             :style="{width: moneybagWidth+'px'}" 
-             style="margin-right:2px"
-             src="images/moneybag.png">
-
-        <div style="display:inline-block; cursor:ew-resize; margin-bottom:0px;"
-               draggable="true"
-               @drag="onDrag($event)">
-          <img :style="{width: moneybagWidth+'px'}" 
-               src="images/moneybag.png">
-          <span class="pulse"></span>
-          </div>
-      </div>
-      </div> <!-- end isInteractive -->
-
-      <span v-if="!isInteractive"
-            style="position:relative; display:inline-block;">
-        <img v-for="n in Math.ceil(numLoseIfWrong)" 
+      <span style="position:relative; display:inline-block;">
+        <img v-for="n in Math.max(Math.ceil(numLoseIfWrong), numInteractiveBags)" 
              :style="{width: moneybagWidth+'px'}" 
              style="margin-right:2px"
              src="images/moneybag.png">
@@ -365,7 +353,16 @@ have bar showing how much money is needed.
   </tr>
   <tr v-if="isInteractive">
     <td></td>
-    </td><game-button @click.native="submitBet">Looks fair to me</game-button></td>
+    <td>
+      <div style="font-size:12px;">Click to wager moneybags until the bet looks fair.
+      <button @click="numInteractiveBags=Math.max(1, numInteractiveBags-1)" class="uncertain" style="font-size:12px">less sure</button>
+      <button @click="numInteractiveBags+=1" class="bold" style="font-size:16px">MORE SURE</button>
+      </div>
+
+      <div style="position:relative; ">
+        <button class="handwriting" @click.native="submitBet" style="position:absolute; top:0px; right:0px;">Looks fair to me</button>
+      </div>
+  </td>
   </tr>
 </table>
 </script>
@@ -1137,9 +1134,9 @@ hmm: this should probably be a forest-problem
 <script type="text/x-template" id="monk-intro-template">
 <div>
 
-<!--    <moneybag-widget 
+   <moneybag-widget 
                      :isInteractive="true"
-    ></moneybag-widget> -->
+    ></moneybag-widget> 
 
   <div><img src="images/monk.png" width="400px"></div>
 
@@ -1970,6 +1967,7 @@ Vue.component('game-button', {
   template: `<button @click="buttonClicked()" 
                     :class="{'clicked-button' : isClicked, 'right-answer': isClicked===true && isRight===true,
                       'wrong-answer': isClicked===true && isRight===false }"
+                    class="game-button"
                     ><slot></slot></button>`
 });
 
