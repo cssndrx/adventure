@@ -34,6 +34,17 @@ font-family: 'Cormorant Garamond', serif;
 
 <style>
 
+.fulcrum {
+  color: white;
+  content: '50%';
+  width: 0; 
+  height: 0; 
+  border-left: 50px solid transparent;
+  border-right: 50px solid transparent;
+  
+  border-bottom: 50px solid black;
+}
+
 .handwriting{
   font-family: 'Dokdo', cursive;  
 }
@@ -119,6 +130,41 @@ button{
       transform: scale(3);
   }
 }
+
+.right-wobble{
+  position: absolute;
+  animation: rightwobble 1s ease 0s 1;
+}
+
+@keyframes rightwobble {
+  0% {
+    transform: rotate(0turn);
+  }
+  30% {
+    transform: rotate(0.005turn);
+  }
+  100% {
+    transform: rotate(0turn);
+  }
+}
+
+.left-wobble{
+  position: absolute;
+  animation: leftwobble 1s ease 0s 1;
+}
+
+@keyframes leftwobble {
+  0% {
+    transform: rotate(0turn);
+  }
+  30% {
+    transform: rotate(-0.005turn);
+  }
+  100% {
+    transform: rotate(0turn);
+  }
+}
+
 
 .lr-arrow{
   position: absolute;
@@ -392,7 +438,7 @@ have bar showing how much money is needed.
 </script>
 
 <script type="text/x-template" id="moneybag-widget-template">
-<div>
+<span>
 
 <table style="text-align: left; font-size: 12px; user-select:none; width:100%;" class="handwriting">
   <tr>
@@ -409,15 +455,15 @@ have bar showing how much money is needed.
       <div v-if="showInstructions"
            style="font-size:12px; margin-bottom:0px">Click to wager moneybags until the bet looks fair.
       </div>
-      <button 
-        @click="numInteractiveBags+=1; $root.play('gold')" 
-        class="bold moneybag-button" 
-        style="font-size:16px">MORE</button>
       <button
         v-show="numLosingMoneybags > 0"
         @click="numInteractiveBags=Math.max(0, numInteractiveBags-1); $root.play('remove')" 
         class="uncertain moneybag-button" 
         style="font-size:12px">less</button>
+      <button 
+        @click="numInteractiveBags+=1; $root.play('gold')" 
+        class="bold moneybag-button" 
+        style="font-size:16px">MORE</button>
 
 <button v-if="isInteractive ===true && numLosingMoneybags > 0" 
   class="handwriting moneybag-button" 
@@ -427,8 +473,7 @@ have bar showing how much money is needed.
   </tr>
 </table>
 
-
-</div>
+</span>
 </script>
 
 <script type="text/x-template" id="story-template">
@@ -446,15 +491,31 @@ have bar showing how much money is needed.
 
 
 <script type="text/x-template" id="monk-question-template">
-<div>
-  <div style="display:inline-block; position:relative;">
+<div style="margin-bottom:0px;">
+  <div class="handwriting"
+        style="display:inline-block; position:relative;">
     <img src="images/monk_head.png" style="width:80px;">
-    <div style="width:24px; border:1px solid black; transform:rotate(310deg); position:absolute; top:-10px; left:50px;"></div>
-    <div class="handwriting"
-         style="position:absolute; top: -40px; left: 64px;">Hm...</div>
+
+    <!-- speech pointing to left -->
+    <div v-if="showThinkingBubble">
+      <div style="width:22px; border:1px solid black; transform:rotate(50deg); position:absolute; top:-14px; left:10px;"></div>
+      <div style="position:absolute; top: -40px; left:0px;">
+           <text-animation 
+              :tokens="['H', 'm', 'm', '.', '.', '.']" 
+              :interval="200"
+              @text-animation-complete="onThinkingComplete"></text-animation>
+      </div>
+    </div>
+
+    <!-- speech pointing to right -->
+    <div v-if="monkSays">
+      <div style="width:24px; border:1px solid black; transform:rotate(310deg); position:absolute; top:-14px; left:50px;"></div>
+      <div style="position:absolute; top: -40px; left: 60px;">{{monkSays}}</div>
+    </div>
+
   </div>
 
-<div style="display:inline-block; width:300px">
+<div style="display:inline-block; width:300px; margin-bottom:0px">
   <div style="display:inline-block">
     {{datum.question}}
   </div>
@@ -466,7 +527,7 @@ have bar showing how much money is needed.
   </once-group>
 
 
-  <div v-if="userAnswer">
+  <div v-if="userAnswer" style="margin-bottom:0px;">
     <div>How sure are you of your answer?</div>
 
     <certainty-widget v-if="vizType == 'certainty'"
@@ -490,12 +551,6 @@ have bar showing how much money is needed.
                  :datum="datum"
                  :vizType="vizType"></monk-question>
 
-
-  <text-animation v-if="userCertainty !== null"
-                  :tokens="['Hm', '.', '.', '.', '.', '.']" 
-                  :interval="100"
-                  @text-animation-complete="showExplanation=true;"></text-animation>
-
   <div v-if="showExplanation">
 
     <div v-if="datum.id === 'uniform-prior'">
@@ -505,7 +560,7 @@ have bar showing how much money is needed.
       </div>
       <div v-if="userCertainty !== null && userCertainty !== 0.5">
         <div>
-          Hm, what do you know that makes you think {{userAnswer}} is more likely? 
+          What do you know that makes you think {{userAnswer}} is more likely? 
         </div>
       </div>
 
@@ -531,7 +586,7 @@ have bar showing how much money is needed.
       </div>
 
       <div v-if="isUserCorrect === false && userCertainty > 0.5">
-        Hm... I Don't think that's quite right.
+        I don't think that's quite right.
       </div>
 
       <!-- Explanation shows up regardless. -->
@@ -634,13 +689,8 @@ have bar showing how much money is needed.
 <div>
   <monk-question @answer-complete="onAnswerComplete"
                  :datum="datum"
-                 :vizType="vizType"></monk-question>
-
-
-  <text-animation v-if="userCertainty !== null"
-                  :tokens="['Hm', '.', '.', '.', '.', '.']" 
-                  :interval="100"
-                  @text-animation-complete="isMonkDoneThinking=true;"></text-animation>
+                 :vizType="vizType"
+                 :monkSays="monkSays"></monk-question>
 
   <div v-if="isMonkDoneThinking">
 
@@ -656,13 +706,11 @@ have bar showing how much money is needed.
 
     <stagger v-else-if="isUserCorrect"
                       @stagger-complete="monkReactionComplete">
-      <div>That is correct.</div>
       <div>You win {{numMoneybagsGained}} moneybags.</div>
     </stagger>
 
     <stagger v-else-if="!isUserCorrect"
                       @stagger-complete="monkReactionComplete">
-      <div>Nope, that's incorrect.</div>
       <div>You lose {{Math.abs(numMoneybagsGained)}} moneybags.</div>
     </stagger>
 
@@ -675,12 +723,12 @@ have bar showing how much money is needed.
 <script type="text/x-template" id="monk-game-template">
 <div>
 
-  <div style="font-size: 12px;">    
-    <div>
-    Dear player, earn enough moneybags to leave the monastery and begin your travels.
+  <div>    
+    <div style="font-size:16px;">
+    Player, earn enough moneybags to leave the monastery and begin your travels.
     </div>
 
-    <div>
+    <div style="font-size: 12px;">
     The more sure you are in your answers, the more likely the monk will take you up on your bet — but  also the more you stand to lose.
     </div>
 
@@ -1174,6 +1222,21 @@ hmm: this should probably be a forest-problem
 </div>
 </script>
 
+<script type="text/x-template" id="fulcrum-template">
+
+<div>
+
+<div class="left-wobble" style="width:300px; border-top: 5px solid black;"></div>
+
+<!-- fulcrum container -->
+<div style="position:relative; left: 100px">
+  <div style="position:absolute; width:100px; text-align: center; font-size:24px; color:white; left:0px; top:10px">60%</div>
+  <div class="fulcrum"></div>
+</div>
+
+</div>
+
+</script>
 
 <script type="text/x-template" id="monk-dual-quiz-template">
 
@@ -1215,15 +1278,17 @@ hmm: this should probably be a forest-problem
 <script type="text/x-template" id="monk-intro-template">
 <div>
 
-  <!--  
+<fulcrum></fulcrum>
 
-   <moneybag-widget
-                     :isInteractive="true"
-    ></moneybag-widget> 
+<!--  
 
-  <div class="clickme-button">Obnoxious</div>
+<moneybag-widget
+                 :isInteractive="true"
+></moneybag-widget> 
 
-  <span style="font-size:64px;" class="lr-arrow">></span>
+<div class="clickme-button">Obnoxious</div>
+
+<span style="font-size:64px;" class="lr-arrow">></span>
 
 <div class="pulse-text">Hi!</div>
 
@@ -1277,7 +1342,7 @@ hmm: this should probably be a forest-problem
         <stagger>
 
         <div>
-          Ah, you see... those two questions were one and the same.
+          Good. Those two questions were one and the same.
         </div>
 
         <div>
@@ -1293,7 +1358,7 @@ hmm: this should probably be a forest-problem
         </div>
 
         <once-group>
-          <once-button @click.native="show('monk-dual-explanation')">Explain it anyways</once-button>
+          <once-button @click.native="show('monk-dual-explanation')">See the cool visualization</once-button>
           <once-button @click.native="show('monk-dual-quiz')">Yeah, old news</once-button>
         </once-group>
     
@@ -1314,11 +1379,13 @@ hmm: this should probably be a forest-problem
           What you think is fair, should directly correspond to how sure you are. 
         </div>
 
-
         <div>
         You said you were <span class="bold"> {{hyderabadCertaintyParams.percent}} sure</span>, which would translate to the following bet:
         </div>
+
         <moneybag-widget :showCertainty="false" :numLoseIfWrong="hyderabadCertaintyParams.numLoseIfWrong"></moneybag-widget>
+
+
         <game-button @click.native="show('monk-dual-explanation')">Why??</game-button>
 
         </stagger>

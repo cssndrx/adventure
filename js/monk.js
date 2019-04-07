@@ -374,6 +374,34 @@ Vue.component('monk-game', {
   template: '#monk-game-template'
 });
 
+
+Vue.component('fulcrum', {
+  // props: {
+  //   color: {type: String, default: 'brown'},
+  //   number: {type: Number, default: 1},
+  //   width: {type: Number, default: 20},
+  //   layout: {type: String, default: 'horizontal'},
+  // },
+  // computed:{
+  //   // e.g. 0.3, if numLoseIfWrong == 2.3.
+  //   positiveFraction: function(){
+  //     return this.number - Math.floor(this.number);
+  //   },
+
+  //   // {width: '10px', height:'30px', top:'-4px'}
+  //   fractionalCoverStyle: function(){
+  //     // compute the styling of a white square that is aligned right
+  //     // which creates the illusion of the fractional moneybag.
+  //     return {
+  //       width: (1-this.positiveFraction) * this.width + 'px',
+  //       height: this.width * 236/200 + 'px',
+  //     };
+  //   },
+  // },
+  template: '#fulcrum-template'
+});
+
+
 Vue.component('money-bags', {
   props: {
     color: {type: String, default: 'brown'},
@@ -473,6 +501,9 @@ Vue.component('monk-question', {
     // extra: ['Blah blah']
     datum: {type: Object},
     vizType: {type: String, default: 'certainty'}, // 'bet', 'certainty'
+
+    // Give the monk something to say in a speech bubble.
+    monkSays: {type: String, default: null},
   },
 
   data: function(){
@@ -483,6 +514,8 @@ Vue.component('monk-question', {
       // isMonkBetting: null,  
       // numMoneybagsGained: null,   
       // numLoseIfWrong: null, 
+      params: null,
+      showThinkingBubble: false,
     }
   },
 
@@ -502,8 +535,13 @@ Vue.component('monk-question', {
 
     onBetSubmit: function(params){
       params['userAnswer'] = this.userAnswer;
-      this.$emit('answer-complete', params);
+      this.params = params;
+      this.showThinkingBubble = true;
     },
+
+    onThinkingComplete: function(){
+      this.$emit('answer-complete', this.params);      
+    }
 
   },
   template: '#monk-question-template'
@@ -540,6 +578,12 @@ Vue.component('basic-monk-interaction', {
     percent: function(){
       return this.$root.renderAsPercent(this.userCertainty);
     },    
+    monkSays: function(){
+      if (this.userAnswer === null){
+        return null;
+      }
+      return this.isUserCorrect ? 'Correct' : 'Incorrect';
+    }
   },
   methods: {
 
@@ -563,6 +607,8 @@ Vue.component('basic-monk-interaction', {
       } else{
         this.numMoneybagsGained = 0;
       }
+
+      this.isMonkDoneThinking = true;
     },
 
     willMonkBet: function(certainty){
@@ -630,6 +676,7 @@ Vue.component('special-monk-interaction', {
       this.userAnswer = params.userAnswer;
       this.userCertainty = params.certainty;
 
+      this.showExplanation = true;
       // this.numLoseIfWrong = params.numLoseIfWrong;
 
       // // edit to handle cases of multiple correct answers
