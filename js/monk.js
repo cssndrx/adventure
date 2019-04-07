@@ -374,30 +374,17 @@ Vue.component('monk-game', {
   template: '#monk-game-template'
 });
 
-
-Vue.component('moneybag-widget', {
+Vue.component('money-bags', {
   props: {
-    width: {type: Number, default: 300},
-    numWinIfRight: {type: Number, default: 1},
-    numLoseIfWrong: {type: Number, default: 1},
-    showCertainty: {type: Boolean, default: true}, // currently unused
-    showInstructions: {type: Boolean, default: true},
-
-    isInteractive: {type: Boolean, default: false},
+    color: {type: String, default: 'brown'},
+    number: {type: Number, default: 1},
+    width: {type: Number, default: 20},
+    layout: {type: String, default: 'horizontal'},
   },
   computed:{
-    moneybagWidth: function(){
-      // Want to be able to show 10 moneybags side by side.
-      return this.width / 10;
-    },
-    percent: function(){
-      var params = this.$root.paramsFromBet(this.numWinIfRight, this.numLosingMoneybags);
-      return params.percent;
-    },
-
     // e.g. 0.3, if numLoseIfWrong == 2.3.
     positiveFraction: function(){
-      return this.numLoseIfWrong - Math.floor(this.numLoseIfWrong);
+      return this.number - Math.floor(this.number);
     },
 
     // {width: '10px', height:'30px', top:'-4px'}
@@ -405,9 +392,26 @@ Vue.component('moneybag-widget', {
       // compute the styling of a white square that is aligned right
       // which creates the illusion of the fractional moneybag.
       return {
-        width: (1-this.positiveFraction) * this.moneybagWidth + 'px',
-        height: this.moneybagWidth * 236/200 + 'px',
+        width: (1-this.positiveFraction) * this.width + 'px',
+        height: this.width * 236/200 + 'px',
       };
+    },
+  },
+  template: '#money-bags-template'
+});
+
+Vue.component('moneybag-widget', {
+  props: {
+    numWinIfRight: {type: Number, default: 1},
+    numLoseIfWrong: {type: Number, default: 1},
+    showCertainty: {type: Boolean, default: true}, // currently unused
+    showInstructions: {type: Boolean, default: true},
+    isInteractive: {type: Boolean, default: false},
+  },
+  computed:{
+    percent: function(){
+      var params = this.$root.paramsFromBet(this.numWinIfRight, this.numLosingMoneybags);
+      return params.percent;
     },
     numLosingMoneybags: function(){
       return this.isInteractive ? this.numInteractiveBags : this.numLoseIfWrong;
@@ -417,9 +421,7 @@ Vue.component('moneybag-widget', {
   data: function(){
     return {
       relativeMousePos: null,
-      numInteractiveBags: 0, // default to 1
-
-      isBetSubmitted: false,
+      numInteractiveBags: 0, // starting default
     }
   },
 
@@ -454,7 +456,6 @@ Vue.component('moneybag-widget', {
       // emit the event
       this.$root.play('heal');
       this.$emit('bet-submit', this.$root.paramsFromBet(this.numWinIfRight, this.numLosingMoneybags));
-//      this.isBetSubmitted = true;
     }
   },
   template: '#moneybag-widget-template'
