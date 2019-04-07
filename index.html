@@ -81,6 +81,12 @@ button{
   background-color: #ccc;
 }
 
+.progress-moneybag{
+  display: block;
+  margin: 0 auto;
+  width: 20px;
+}
+
 /* https://codepen.io/anon/pen/Laoxro */
 .pulse{
   position: relative;
@@ -667,8 +673,9 @@ have bar showing how much money is needed.
 <script type="text/x-template" id="monk-game-template">
 <div>
 
-  <div class="pulse-text">Hi!</div>
-  <span style="font-size:64px;" class="lr-arrow">></span>
+<!--  <div class="pulse-text">Hi!</div>
+  <span style="font-size:64px;" class="lr-arrow">></span>-->
+
   <div style="font-size: 12px;">    
     <div>
     Dear player, earn enough moneybags to leave the monastery and begin your travels.
@@ -704,20 +711,24 @@ have bar showing how much money is needed.
 
   </story>
 
-  <!--progress indicator -->
-  <div style="position:fixed; width: 50px; bottom: 0px; right:50px;"> 
+  <!-- moneybag progress indicator -->
+  <div class="handwriting" 
+      style="position:fixed; width: 50px; bottom: 0px; right:50px;"> 
     Acquired 
     <span style="display:inline-block;">{{$root.roundTo(numUserMoneybags, 1)}}/{{numMoneybagsNeeded}}</span>
 
-    <div v-for="_ in Math.floor(numUserMoneybags)" style="margin-bottom:0px;">
-      <img width="20px" src="images/moneybag.png">
+    <div v-if="numUserMoneybags < 0">
+      <img v-for="_ in Math.ceil(Math.abs(numUserMoneybags))" 
+           src="images/red_money.png"
+           class="progress-moneybag">
     </div>
-    <div v-if="numUserMoneybags < 0" 
-         v-for="_ in Math.ceil(Math.abs(numUserMoneybags))" style="margin-bottom:0px;">
-      <img width="20px" src="images/red_money.png">
-    </div>
-    <div v-for="_ in numMoneybagsNeeded" style="margin-bottom:0px;">
-      <img width="20px" src="images/grey_money.png">
+    <div v-else>
+      <img v-for="_ in Math.ceil(numUserMoneybags)"
+           class="progress-moneybag"
+           src="images/moneybag.png">
+      <img v-for="_ in (numMoneybagsNeeded - Math.ceil(numUserMoneybags))"
+           class="progress-moneybag" 
+           src="images/grey_money.png">
     </div>
   </div> 
 
