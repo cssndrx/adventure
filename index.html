@@ -77,6 +77,9 @@ button{
   color: red;
 }
 
+.moneybag-button:hover{
+  background-color: #ccc;
+}
 
 /* https://codepen.io/anon/pen/Laoxro */
 .pulse{
@@ -110,6 +113,51 @@ button{
       transform: scale(3);
   }
 }
+
+.lr-arrow{
+  position: absolute;
+  animation: lr 1s ease 0s infinite;
+}
+
+@keyframes lr {
+  0% {
+    transform: translateX(0px);
+  }
+  30% {
+    transform: translateX(20px);
+  }
+}
+
+
+.clickme-button{
+  animation: pulseborder 1s ease 0s infinite;
+}
+
+@keyframes pulseborder{
+  0% {
+    border-bottom: 1px dashed red;
+  }
+  30% {
+    border-bottom: 5px dashed red;
+  }  
+}
+
+.pulse-text{
+  animation: pulsetext 1s ease 0s infinite;
+}
+
+@keyframes pulsetext{
+  0% {
+    color: white;
+  }
+  30% {
+    color: orange;
+  }
+  100% {
+    color: white;
+  }
+}
+
 
 h4{
   font-size: 18px;
@@ -356,13 +404,20 @@ have bar showing how much money is needed.
     <td>
       <div style="font-size:12px;">Click to wager moneybags until the bet looks fair.
       <button 
+        @click="numInteractiveBags+=1; $root.play('gold')" 
+        class="bold moneybag-button" 
+        style="font-size:16px">MORE SURE</button>
+      <button
         v-show="numLosingMoneybags > 0"
         @click="numInteractiveBags=Math.max(0, numInteractiveBags-1); $root.play('remove')" 
-        class="uncertain" 
+        class="uncertain moneybag-button" 
         style="font-size:12px">less sure</button>
-      <button @click="numInteractiveBags+=1; $root.play('gold')" class="bold" style="font-size:16px">MORE SURE</button>
+
       </div>
-      <button v-show="numLosingMoneybags > 0" class="handwriting" @click="submitBet">Looks fair to me</button>
+
+      <button v-show="numLosingMoneybags > 0" 
+        class="handwriting moneybag-button" 
+        @click="submitBet">Looks fair to me</button>
   </td>
   </tr>
 </table>
@@ -384,8 +439,11 @@ have bar showing how much money is needed.
 
 <script type="text/x-template" id="monk-question-template">
 <div>
-  <div style="display:inline-block">
+  <div style="display:inline-block; position:relative;">
     <img src="images/monk_head.png" style="width:80px;">
+    <div style="width:24px; border:1px solid black; transform:rotate(310deg); position:absolute; top:-10px; left:50px;"></div>
+    <div class="handwriting"
+         style="position:absolute; top: -40px; left: 64px;">Hm...</div>
   </div>
 
 <div style="display:inline-block; width:300px">
@@ -609,6 +667,8 @@ have bar showing how much money is needed.
 <script type="text/x-template" id="monk-game-template">
 <div>
 
+  <div class="pulse-text">Hi!</div>
+  <span style="font-size:64px;" class="lr-arrow">></span>
   <div style="font-size: 12px;">    
     <div>
     Dear player, earn enough moneybags to leave the monastery and begin your travels.
@@ -647,8 +707,18 @@ have bar showing how much money is needed.
   <!--progress indicator -->
   <div style="position:fixed; width: 50px; bottom: 0px; right:50px;"> 
     Acquired 
-    <span style="display:inline-block">{{$root.roundTo(numUserMoneybags, 1)}}/{{numMoneybagsNeeded}}</span>
-    <img width="30px" src="images/moneybag.png">
+    <span style="display:inline-block;">{{$root.roundTo(numUserMoneybags, 1)}}/{{numMoneybagsNeeded}}</span>
+
+    <div v-for="_ in Math.floor(numUserMoneybags)" style="margin-bottom:0px;">
+      <img width="20px" src="images/moneybag.png">
+    </div>
+    <div v-if="numUserMoneybags < 0" 
+         v-for="_ in Math.ceil(Math.abs(numUserMoneybags))" style="margin-bottom:0px;">
+      <img width="20px" src="images/red_money.png">
+    </div>
+    <div v-for="_ in numMoneybagsNeeded" style="margin-bottom:0px;">
+      <img width="20px" src="images/grey_money.png">
+    </div>
   </div> 
 
   <div v-if="gameOutcome === 'userWon'">
@@ -1103,7 +1173,7 @@ hmm: this should probably be a forest-problem
   <div>What is the fair bet if you are {{$root.renderAsPercent(certainty)}} sure?</div>  
   <moneybag-widget 
     @bet-submit="dualAnswerSubmit" :show-certainty="false"
-    :isInteractive="true"
+    :isInteractive="index == activeQuestionInd"
     ></moneybag-widget>
   <div>{{monkMessages[index]}}</div>
 </div>
@@ -1135,9 +1205,11 @@ hmm: this should probably be a forest-problem
 <script type="text/x-template" id="monk-intro-template">
 <div>
 
-   <moneybag-widget 
+<!--      <monk-dual-quiz></monk-dual-quiz> -->
+
+<!--   <moneybag-widget 
                      :isInteractive="true"
-    ></moneybag-widget> 
+    ></moneybag-widget> -->
 
   <div><img src="images/monk.png" width="400px"></div>
 
@@ -1224,7 +1296,7 @@ hmm: this should probably be a forest-problem
 
 
         <div>
-        You said you were {{hyderabadCertaintyParams.percent}} sure, which would translate to the following bet:
+        You said you were <span class="bold"> {{hyderabadCertaintyParams.percent}} sure</span>, which would translate to the following bet:
         </div>
         <moneybag-widget :showCertainty="false" :numLoseIfWrong="hyderabadCertaintyParams.numLoseIfWrong"></moneybag-widget>
         <game-button @click.native="show('monk-dual-explanation')">Why??</game-button>
@@ -1236,7 +1308,9 @@ hmm: this should probably be a forest-problem
 
   <story ref="monk-dual-explanation" v-if="isUserCalibrated !== null">
     <div>
-      If you are right {{hyderabadCertaintyParams.percent}} of the time, you win 1 moneybag when you are right. You lose {{$root.renderAsPercent(1-hyderabadCertaintyParams.certainty)}} of the time, and lose {{hyderabadCertaintyParams.numLoseIfWrong}} moneybags. Averaging over many times, you break even. 
+      todo: show this visually. left column has 7 rows of 1 moneybag. right column has 3 rows of 2.3 moneybags
+ 
+      If you are right <span class="bold">{{hyderabadCertaintyParams.percent}} of the time</span> and win 1 moneybag when you are right. You lose {{$root.renderAsPercent(1-hyderabadCertaintyParams.certainty)}} of the time, and lose {{hyderabadCertaintyParams.numLoseIfWrong}} moneybags. Averaging over many times, you break even. 
     </div>
 
     <game-button @click.native="show('monk-dual-quiz')">Hm...</game-button>
@@ -1976,7 +2050,7 @@ Vue.component('game-button', {
 // https://jsfiddle.net/jamesbrndwgn/85h6n1q9/14/
 Vue.component('stagger', {
   props: {
-    interval: {type: Number, default: 500},
+    interval: {type: Number, default: 300},
   },
 
   mounted: function(){
@@ -2093,7 +2167,7 @@ new Vue({
   data: {
 
     storyPoints: storyPoints,
-    currentStoryPoint: storyPoints[0],
+    currentStoryPoint: storyPoints[1],
 
     // Obj property additions do not update DOM, so prepopulate all the keys in the object. Or use lists.
 

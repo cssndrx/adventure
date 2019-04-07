@@ -452,8 +452,8 @@ Vue.component('moneybag-widget', {
     submitBet: function(){
       // emit the event
       this.$root.play('heal');
-      this.$emit('bet-submit', this.$root.paramsFromBet(this.numWinIfRight, this.numLoseIfWrong));
-      this.isBetSubmitted = true;
+      this.$emit('bet-submit', this.$root.paramsFromBet(this.numWinIfRight, this.numLosingMoneybags));
+//      this.isBetSubmitted = true;
     }
   },
   template: '#moneybag-widget-template'
