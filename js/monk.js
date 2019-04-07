@@ -380,7 +380,8 @@ Vue.component('moneybag-widget', {
     width: {type: Number, default: 300},
     numWinIfRight: {type: Number, default: 1},
     numLoseIfWrong: {type: Number, default: 1},
-    showCertainty: {type: Boolean, default: true},
+    showCertainty: {type: Boolean, default: true}, // currently unused
+    showInstructions: {type: Boolean, default: true},
 
     isInteractive: {type: Boolean, default: false},
   },

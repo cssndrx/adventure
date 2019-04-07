@@ -378,19 +378,18 @@ have bar showing how much money is needed.
 
 
 <script type="text/x-template" id="moneybag-widget-template">
-<table style="text-align: left; font-size: 12px; user-select:none;" class="handwriting">
+<div>
+
+<table style="text-align: left; font-size: 12px; user-select:none; width:100%;" class="handwriting">
   <tr>
-    <td style="width:50px;">Win if right ({{numWinIfRight}})</td>
+    <td>Win if right ({{numWinIfRight}})</td>
+    <td>Lose if wrong ({{numLosingMoneybags}})</td>
+  </tr>
+  <tr>
     <td><img v-for="n in numWinIfRight" 
              :style="{width: moneybagWidth+'px'}" 
              style="margin-right:2px"
              src="images/moneybag.png"></td>
-    <td v-if="showCertainty" style="position:relative;left:50px;font-size:20px;">
-      <span style="font-weight:bold; font-size:24px;">{{percent}}</span> sure
-    </td>
-  </tr>
-  <tr>
-    <td style="width:50px;">Lose if wrong ({{numLosingMoneybags}})</td>
     <td> 
       <span style="position:relative; display:inline-block;">
         <img v-for="n in Math.ceil(numLosingMoneybags)" 
@@ -400,7 +399,7 @@ have bar showing how much money is needed.
 
         <!-- cover up to make a fractional moneybag -->
          <span v-if="positiveFraction > 0.01"
-               style="background-color:white; position:absolute; right: 0px; top:0px;" 
+               style="background-color:rgba(255,255,255,0.8); position:absolute; right: 0px; top:0px;" 
                :style="fractionalCoverStyle"></span>
       </span>
     </td>
@@ -408,25 +407,29 @@ have bar showing how much money is needed.
   <tr v-if="isInteractive === true && isBetSubmitted === false">
     <td></td>
     <td>
-      <div style="font-size:12px;">Click to wager moneybags until the bet looks fair.
+      <div v-if="showInstructions"
+           style="font-size:12px; margin-bottom:0px">Click to wager moneybags until the bet looks fair.
+      </div>
       <button 
         @click="numInteractiveBags+=1; $root.play('gold')" 
         class="bold moneybag-button" 
-        style="font-size:16px">MORE SURE</button>
+        style="font-size:16px">MORE</button>
       <button
         v-show="numLosingMoneybags > 0"
         @click="numInteractiveBags=Math.max(0, numInteractiveBags-1); $root.play('remove')" 
         class="uncertain moneybag-button" 
-        style="font-size:12px">less sure</button>
+        style="font-size:12px">less</button>
 
-      </div>
+<button v-if="isInteractive ===true && numLosingMoneybags > 0" 
+  class="handwriting moneybag-button" 
+  @click="submitBet">Looks fair</button>
 
-      <button v-show="numLosingMoneybags > 0" 
-        class="handwriting moneybag-button" 
-        @click="submitBet">Looks fair to me</button>
-  </td>
+    </td>
   </tr>
 </table>
+
+
+</div>
 </script>
 
 <script type="text/x-template" id="story-template">
@@ -1218,9 +1221,9 @@ hmm: this should probably be a forest-problem
 
 <!--      <monk-dual-quiz></monk-dual-quiz> -->
 
-<!--   <moneybag-widget 
+   <moneybag-widget 
                      :isInteractive="true"
-    ></moneybag-widget> -->
+    ></moneybag-widget> 
 
   <div><img src="images/monk.png" width="400px"></div>
 
@@ -1255,6 +1258,7 @@ hmm: this should probably be a forest-problem
 
     <moneybag-widget @bet-submit="hyderabadBetSubmit"  
       :show-certainty="false"
+      :show-instructions="false"
       :isInteractive="true"
     ></moneybag-widget>
 
@@ -2178,7 +2182,7 @@ new Vue({
   data: {
 
     storyPoints: storyPoints,
-    currentStoryPoint: storyPoints[1],
+    currentStoryPoint: storyPoints[0],
 
     // Obj property additions do not update DOM, so prepopulate all the keys in the object. Or use lists.
 
