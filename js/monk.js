@@ -224,12 +224,14 @@ Vue.component('monk-dual-quiz', {
     certainties: {
       type: Array, 
       default: function(){
-        return [0.9]; // [0.5, 0.67, 0.8, 0.9, 0.99];
+        return [0.8, 0.9]; // [0.5, 0.67, 0.8, 0.9, 0.99];
       },
     },
   },
   data: function(){
     return {
+      activeInd: 0,
+
       monkIfCorrect: ['Yes!', 'Nice!', 'Correct!', 'Woohoo, my new student is doing so well.'],
       monkIfWrong: ['Hm... try again.', 'My computations are different. Try again.', 'Eh... try again.', 'Heart breaking! But no. Try again.'],
       activeQuestionInd: 0,
@@ -521,6 +523,16 @@ Vue.component('moneybag-widget', {
 // static moneybag widget: renders 1:4 statically
 // interactive moneybag widget: reports back the number of moneybags (inits with 1:1)
 
+
+Vue.component('monk-head', {
+  methods: {
+    hasSlot: function(name){
+      return !!this.$slots[ name ] || !!this.$scopedSlots[ name ];
+    }
+  },
+  template: '#monk-head-template'
+});
+
 Vue.component('monk-question', {
   props: {
     // question: 'Which of the following is older?',
@@ -551,10 +563,6 @@ Vue.component('monk-question', {
   watch: {
     userAnswer: scrollWindow,
   },
-
-  // mounted: function(){
-  //   setTimeout(scrollWindow, 800);
-  // },
 
   methods: {
     // e.g. Hyderabad, Islamabad
