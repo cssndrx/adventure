@@ -398,10 +398,10 @@ Vue.component('fulcrum', {
 
     for (var i=0; i<3; i++){
       this.numRightRows = i;
-      // this.shouldRightWobble = true;
-      // await wait(animationTime);
-      // this.shouldRightWobble = false;
-      // await wait(betweenAnimationTime);
+      this.shouldRightWobble = true;
+      await wait(animationTime);
+      this.shouldRightWobble = false;
+      await wait(betweenAnimationTime);
     }
   },
   // props: {
