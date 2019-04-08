@@ -34,12 +34,17 @@ font-family: 'Cormorant Garamond', serif;
 
 <style>
 
-.moneybag-widget td {
-  text-align: right;
+.moneybag-widget {
+  display:inline-grid;
+  grid-template-columns: 100px 1fr;
 }
 
-.moneybag-widget td:first-child {
+.moneybag-widget .lhs{
   text-align: left;
+}
+
+.moneybag-widget .rhs{
+  text-align: right;
 }
 
 .normal-divs div{
@@ -450,29 +455,27 @@ have bar showing how much money is needed.
 </script>
 
 <script type="text/x-template" id="moneybag-widget-template">
-<span>
 
-<table style="font-size: 12px; user-select:none; width:100%;" class="handwriting moneybag-widget">
-  <tr>
-    <td>Win if right ({{numWinIfRight}})</td>
-    <td>Lose if wrong ({{numLosingMoneybags}})</td>
-  </tr>
-  <tr>
-    <td><money-bags :number="numWinIfRight"></money-bags></td>
-    <td><money-bags :number="numLosingMoneybags"></money-bags></td>
-  </tr>
-  <tr v-if="isInteractive === true">
-    <td></td>
-    <td>
+<div style="font-size: 12px; user-select:none; width:100%;" class="moneybag-widget handwriting normal-divs">
+
+  <div class="lhs">
+    <div>Win if right ({{numWinIfRight}})</div>
+    <money-bags :number="numWinIfRight"></money-bags>
+  </div>
+
+  <div class="rhs">
+    <div>Lose if wrong ({{numLosingMoneybags}})</div>
+    <money-bags :number="numLosingMoneybags"></money-bags>
+
+    <div v-if="isInteractive === true">
       <div v-if="showInstructions"
            style="font-size:12px; margin-bottom:0px">Click to wager moneybags until the bet looks fair.
       </div>
-<button v-if="isInteractive ===true && numLosingMoneybags > 0" 
-  class="handwriting moneybag-button" 
-  @click="submitBet">Looks fair</button>
-
+      <button v-if="numLosingMoneybags > 0" 
+        class="handwriting moneybag-button" 
+        @click="submitBet">Looks fair</button>
       <button
-        v-show="numLosingMoneybags > 0"
+        v-if="numLosingMoneybags > 0"
         @click="numInteractiveBags=Math.max(0, numInteractiveBags-1); $root.play('remove0')" 
         class="uncertain moneybag-button" 
         style="font-size:12px">less</button>
@@ -480,13 +483,10 @@ have bar showing how much money is needed.
         @click="numInteractiveBags+=1; $root.play('gold')" 
         class="bold moneybag-button" 
         style="font-size:16px">MORE</button>
+    </div>
+  </div>
+</div>
 
-
-    </td>
-  </tr>
-</table>
-
-</span>
 </script>
 
 <script type="text/x-template" id="story-template">
@@ -1294,6 +1294,7 @@ when each moneybag comes in, trigger the wobble animation
   <fulcrum>
     <template v-slot:right>
       <moneybag-widget
+        style="width:400px"
         @bet-submit="dualAnswerSubmit" :show-certainty="false"
         :isInteractive="index == activeQuestionInd"
         ></moneybag-widget>
