@@ -376,6 +376,11 @@ Vue.component('monk-game', {
 
 
 Vue.component('fulcrum', {
+  props: {
+    width: {type: Number, default: 400},
+    certainty: {type: Number, default: 0.5},
+  },
+
   data: function(){
     return {
       numLeftRows: 0, 
@@ -404,28 +409,13 @@ Vue.component('fulcrum', {
       await wait(betweenAnimationTime);
     }
   },
-  // props: {
-  //   color: {type: String, default: 'brown'},
-  //   number: {type: Number, default: 1},
-  //   width: {type: Number, default: 20},
-  //   layout: {type: String, default: 'horizontal'},
-  // },
-  // computed:{
-  //   // e.g. 0.3, if numLoseIfWrong == 2.3.
-  //   positiveFraction: function(){
-  //     return this.number - Math.floor(this.number);
-  //   },
+  computed: {
+    percent: function(){
+      const params = this.$root.paramsFromCertainty(this.certainty);
+      return params.percent;
+    },
+  },
 
-  //   // {width: '10px', height:'30px', top:'-4px'}
-  //   fractionalCoverStyle: function(){
-  //     // compute the styling of a white square that is aligned right
-  //     // which creates the illusion of the fractional moneybag.
-  //     return {
-  //       width: (1-this.positiveFraction) * this.width + 'px',
-  //       height: this.width * 236/200 + 'px',
-  //     };
-  //   },
-  // },
   template: '#fulcrum-template'
 });
 
