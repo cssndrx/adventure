@@ -60,6 +60,7 @@ font-family: 'Cormorant Garamond', serif;
   border-left: 50px solid transparent;
   border-right: 50px solid transparent;  
   border-bottom: 50px solid black;
+  transition: all 1s ease;
 }
 
 .handwriting{
@@ -511,7 +512,7 @@ have bar showing how much money is needed.
 
 <script type="text/x-template" id="monk-head-template">
 <div class="handwriting normal-divs"
-      style="display:inline-block; position:relative;">
+      style="display:inline-block; position:relative; white-space: nowrap;">
   <img src="images/monk_head.png" style="width:80px;">
 
   <!-- speech pointing to left -->
@@ -1298,10 +1299,10 @@ when each moneybag comes in, trigger the wobble animation
   <div class="fulcrum" 
     style="position:absolute; bottom:0px;"
     :style="{left: (width*certainty - 50) + 'px'}">
-    <div style="position:absolute; width:30px; font-size:24px; color:white; left:-20px; top:16px">{{percent}}</div>
+    <div class="bold" style="position:absolute; width:30px; font-size:18px; color:white; left:-22px; top:22px">{{percent}}</div>
   </div>
 
-  <button @click="animate">Animate</button>
+<!--  <button @click="animate">Animate</button> -->
 
 </div>
 
@@ -1311,26 +1312,41 @@ when each moneybag comes in, trigger the wobble animation
 
 <div class="normal-divs">
 
-<div>What is the fair bet if you are ...</div>
 
-<div>
-<span v-for="certainty in certainties" class="bold" style="margin-left:8px; margin-right:8px;">
-  {{$root.renderAsPercent(certainty)}} SURE
-</span>
+<div style="vertical-align:middle;"> <!-- begin monk question -->
+
+<monk-head style="margin-top:50px; display:inline-block;">
+  <template v-if="isMonkThinking" v-slot:lhs>
+     <text-animation 
+        :text="'Hm...'"
+        :interval="200"
+        @text-animation-complete="showAnswer"></text-animation>
+  </template>
+
+  <template v-if="monkAnswer" v-slot:rhs>
+    {{monkAnswer}}
+  </template>
+</monk-head>
+
+<div style="width: 280px; display:inline-block; position:relative; top:-40px;">What is the fair bet if you are 
+  <div v-for="(certainty, index) in certainties" :class="{bold: index== activeInd, uncertain: index!==activeInd}" style="margin-left:8px; margin-right:8px; display:inline-block;">
+    {{$root.renderAsPercent(certainty)}}
+  </div>
+sure?
 </div>
 
+</div> <!-- end monk question -->
 
-
-<!--      :isInteractive="index == activeQuestionInd"-->
 <fulcrum :certainty="certainties[activeInd]">
   <template v-slot:right>
     <moneybag-widget
       style="width:400px"
       :isInteractive="true"
-      @bet-submit="dualAnswerSubmit" :show-certainty="false"
+      @bet-submit="betSubmit" :show-certainty="false"
       ></moneybag-widget>
   </template>
 </fulcrum>
+
 
 <div v-if="isEndGame">
   <stagger>
@@ -2340,7 +2356,7 @@ new Vue({
   data: {
 
     storyPoints: storyPoints,
-    currentStoryPoint: storyPoints[1],
+    currentStoryPoint: storyPoints[0],
 
     // Obj property additions do not update DOM, so prepopulate all the keys in the object. Or use lists.
 

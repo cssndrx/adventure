@@ -224,69 +224,50 @@ Vue.component('monk-dual-quiz', {
     certainties: {
       type: Array, 
       default: function(){
-        return [0.8, 0.9]; // [0.5, 0.67, 0.8, 0.9, 0.99];
+        return [0.5, 0.67, 0.8, 0.9, 0.99];
       },
     },
   },
   data: function(){
     return {
       activeInd: 0,
-
-      monkIfCorrect: ['Yes!', 'Nice!', 'Correct!', 'Woohoo, my new student is doing so well.'],
-      monkIfWrong: ['Hm... try again.', 'My computations are different. Try again.', 'Eh... try again.', 'Heart breaking! But no. Try again.'],
-      activeQuestionInd: 0,
-
-      userCorrectness: [], // Length is equal to the number of user guesses [true, false] (empty if not answered yet)
-      monkMessages: [], // Length is equal to that of the number of visible questions or (visible questions -1) (empty if not answered yet)
       isEndGame: false,
+      
+      monkAnswer: null,
+      isMonkThinking: false,
+      params: null,
     }
   },
-  watch: {
-    monkMessages: scrollWindow,
-    activeQuestionInd: scrollWindow,
-  },
-  computed: {
-    visibleCertainties: function(){
-      return this.certainties.slice(0, this.activeQuestionInd+1);
-    },
-  },
-  methods: {
-    updateArrayForActiveIndex: function(array, value){
-       if (array.length > this.activeQuestionInd){
-        this.$set(array, this.activeQuestionInd, value);
-       } else{
-        array.push(value);
-       }
-    },
-    addMonkMessage: function(last_correctness){
-      // Update monkMessages based on latest in userCorrectness
-      var num_similar_correctness = _.size(_.filter(this.userCorrectness, x => x ===last_correctness)); 
+  // watch: {
+  //   monkMessages: scrollWindow,
+  //   activeInd: scrollWindow,
+  // },
 
-      var message_array = last_correctness ? this.monkIfCorrect : this.monkIfWrong;
-      var message = message_array[(num_similar_correctness -1) % message_array.length];
-      this.updateArrayForActiveIndex(this.monkMessages, message);
+  methods: {
+    betSubmit: function(params){
+      this.params = params;
+      this.isMonkThinking = true;
     },
-    dualAnswerSubmit: function(params){
+    showAnswer: async function(){
+      var params = this.params;
       // check if the number of moneybags is correct
-      var certainty = this.certainties[this.activeQuestionInd];
+      var certainty = this.certainties[this.activeInd];
       var user_answer = params.numLoseIfWrong;
       var correct_answer = Math.round(this.$root.paramsFromCertainty(certainty).numLoseIfWrong); 
 
       var user_correctness = user_answer == correct_answer;
-      this.userCorrectness.push(user_correctness);
-      this.addMonkMessage(user_correctness);
 
-      console.log(this.userCorrectness);
+      this.isMonkThinking = false;
+      this.monkAnswer = user_correctness ? 'Correct': 'Try again';
 
       if (user_correctness === true){
-        var this_ = this;
-        // Let user relish correct answer for a bit, before giving the next question.
-        setTimeout(function(){
-          this_.activeQuestionInd++;
-          if (this_.activeQuestionInd >= this_.certainties.length){
-            this_.isEndGame = true;
-          }          
-        }, 600);
+        await wait(1000);
+        this.activeInd++;
+        this.monkAnswer = null;
+
+        if (this.activeInd >= this.certainties.length){
+          this.isEndGame = true;
+        }          
       }
     },
   },
