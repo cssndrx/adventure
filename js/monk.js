@@ -389,30 +389,35 @@ Vue.component('fulcrum', {
       shouldRightWobble: false,
     };
   },
-  mounted: async function(){
+  computed: {
+    percent: function(){
+      const params = this.$root.paramsFromCertainty(this.certainty);
+      return params.percent;
+    },
+  },
+  methods: {
+    animate: async function(){
     const animationTime = 500;
     const betweenAnimationTime = 200;
 
     for (var i=0; i<8; i++){
-      this.numLeftRows = i;
-      this.shouldLeftWobble = true;
+      this.numLeftRows = i+1;
+      this.$root.play('gold0');
+      this.shouldLeftWobble = true;        
       await wait(animationTime);
       this.shouldLeftWobble = false;
       await wait(betweenAnimationTime);
     }
 
     for (var i=0; i<3; i++){
-      this.numRightRows = i;
-      this.shouldRightWobble = true;
+      this.numRightRows = i+1;
+      this.$root.play('gold1');
+      this.shouldRightWobble = true;        
       await wait(animationTime);
       this.shouldRightWobble = false;
       await wait(betweenAnimationTime);
     }
-  },
-  computed: {
-    percent: function(){
-      const params = this.$root.paramsFromCertainty(this.certainty);
-      return params.percent;
+
     },
   },
 

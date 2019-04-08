@@ -461,7 +461,7 @@ have bar showing how much money is needed.
       </div>
       <button
         v-show="numLosingMoneybags > 0"
-        @click="numInteractiveBags=Math.max(0, numInteractiveBags-1); $root.play('remove')" 
+        @click="numInteractiveBags=Math.max(0, numInteractiveBags-1); $root.play('remove0')" 
         class="uncertain moneybag-button" 
         style="font-size:12px">less</button>
       <button 
@@ -1240,6 +1240,7 @@ when each moneybag comes in, trigger the wobble animation
 
 <div class="normal-divs" style="position:relative; width: 100%; height: 400px;">
 
+<button @click="animate">Animate</button>
 
   <!-- black bar and items -->
   <div :class="{'left-wobble': shouldLeftWobble, 'right-wobble': shouldRightWobble}" 
@@ -2347,12 +2348,16 @@ new Vue({
 
     play: function(soundName){
       console.log('playing ' + soundName);
-      const count = this.soundNameToCount[soundName] || 0;
 
-      var audio = new Audio('sounds/' + soundName + (count % 2) + '.wav');
+      var audio;
+      if (isNaN(soundName[soundName.length-1])){ // is string last char
+        const count = this.soundNameToCount[soundName] || 0;
+        this.soundNameToCount[soundName] = count+1;
+        audio = new Audio('sounds/' + soundName + (count % 2) + '.wav');
+      } else { // is number last char
+        audio = new Audio('sounds/' + soundName + '.wav');
+      }
       audio.play();      
-
-      this.soundNameToCount[soundName] = count+1;
     }
   } // end methods
 });
