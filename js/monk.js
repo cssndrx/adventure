@@ -376,6 +376,34 @@ Vue.component('monk-game', {
 
 
 Vue.component('fulcrum', {
+  data: function(){
+    return {
+      numLeftRows: 0, 
+      numRightRows: 0, 
+      shouldLeftWobble: false,
+      shouldRightWobble: false,
+    };
+  },
+  mounted: async function(){
+    const animationTime = 500;
+    const betweenAnimationTime = 200;
+
+    for (var i=0; i<8; i++){
+      this.numLeftRows = i;
+      this.shouldLeftWobble = true;
+      await wait(animationTime);
+      this.shouldLeftWobble = false;
+      await wait(betweenAnimationTime);
+    }
+
+    for (var i=0; i<3; i++){
+      this.numRightRows = i;
+      // this.shouldRightWobble = true;
+      // await wait(animationTime);
+      // this.shouldRightWobble = false;
+      // await wait(betweenAnimationTime);
+    }
+  },
   // props: {
   //   color: {type: String, default: 'brown'},
   //   number: {type: Number, default: 1},
@@ -407,7 +435,7 @@ Vue.component('money-bags', {
     color: {type: String, default: 'brown'},
     number: {type: Number, default: 1},
     width: {type: Number, default: 20},
-    layout: {type: String, default: 'horizontal'},
+    isHorizontal: {type: Boolean, default: true},
   },
   computed:{
     // e.g. 0.3, if numLoseIfWrong == 2.3.

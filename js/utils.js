@@ -1,3 +1,5 @@
+const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
+
 // Show the branching story.
 // Things to show must be <story>s, but you can apply styling.
 // <story> is hidden at first, and scrolls when it appears.
