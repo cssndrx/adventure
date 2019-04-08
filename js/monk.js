@@ -224,7 +224,7 @@ Vue.component('monk-dual-quiz', {
     certainties: {
       type: Array, 
       default: function(){
-        return [0.5, 0.67, 0.8, 0.9, 0.99];
+        return [0.9]; // [0.5, 0.67, 0.8, 0.9, 0.99];
       },
     },
   },

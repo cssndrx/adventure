@@ -36,7 +36,8 @@ font-family: 'Cormorant Garamond', serif;
 
 .moneybag-widget {
   display:inline-grid;
-  grid-template-columns: 100px 1fr;
+  grid-template-columns: 180px 1fr; /* chosen to get 10 moneybags on rhs*/
+  grid-template-rows: 44px 1fr;
 }
 
 .moneybag-widget .lhs{
@@ -458,19 +459,13 @@ have bar showing how much money is needed.
 
 <div style="font-size: 12px; user-select:none; width:100%;" class="moneybag-widget handwriting normal-divs">
 
-  <div class="lhs">
-    <div>Win if right ({{numWinIfRight}})</div>
-    <money-bags :number="numWinIfRight"></money-bags>
-  </div>
+  <div v-if="isInteractive === true"></div>
 
-  <div class="rhs">
-    <div>Lose if wrong ({{numLosingMoneybags}})</div>
-    <money-bags :number="numLosingMoneybags"></money-bags>
-
-    <div v-if="isInteractive === true">
-      <div v-if="showInstructions"
-           style="font-size:12px; margin-bottom:0px">Click to wager moneybags until the bet looks fair.
-      </div>
+  <div v-if="isInteractive === true" class="rhs">
+    <div v-if="showInstructions"
+         style="font-size:12px; margin-bottom:0px">Add moneybags until the bet looks fair.
+    </div>
+    <div style="display:flex; justify-content:flex-end"> <!-- display:flex makes butons same height -->
       <button v-if="numLosingMoneybags > 0" 
         class="handwriting moneybag-button" 
         @click="submitBet">Looks fair</button>
@@ -483,8 +478,20 @@ have bar showing how much money is needed.
         @click="numInteractiveBags+=1; $root.play('gold')" 
         class="bold moneybag-button" 
         style="font-size:16px">MORE</button>
-    </div>
+      </div>
+  </div> <!-- end isInteractive -->
+
+
+  <div class="lhs" style="display:flex; flex-direction:column; justify-content:flex-end"> <!-- aligns content with bottom -->
+    <div>Win if right ({{numWinIfRight}})</div>
+    <money-bags :number="numWinIfRight"></money-bags>
   </div>
+
+  <div class="rhs">
+    <div>Lose if wrong ({{numLosingMoneybags}})</div>
+    <money-bags :number="numLosingMoneybags"></money-bags>
+  </div> 
+
 </div>
 
 </script>
@@ -1278,7 +1285,7 @@ when each moneybag comes in, trigger the wobble animation
   <div class="fulcrum" 
     style="position:absolute; bottom:0px;"
     :style="{left: (width*certainty - 50) + 'px'}">
-    <div style="position:absolute; width:30px; font-size:24px; color:white; left:-16px; top:16px">{{percent}}</div>
+    <div style="position:absolute; width:30px; font-size:24px; color:white; left:-20px; top:16px">{{percent}}</div>
   </div>
 
 </div>
@@ -1291,7 +1298,7 @@ when each moneybag comes in, trigger the wobble animation
 
 <div v-for="(certainty, index) in visibleCertainties">
   <div>What is the fair bet if you are {{$root.renderAsPercent(certainty)}} sure?</div>  
-  <fulcrum>
+  <fulcrum :certainty="certainty">
     <template v-slot:right>
       <moneybag-widget
         style="width:400px"
@@ -1334,7 +1341,8 @@ when each moneybag comes in, trigger the wobble animation
 
 <!--  
 
-<fulcrum></fulcrum>
+
+
 
 <moneybag-widget
                  :isInteractive="true"
