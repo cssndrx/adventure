@@ -387,6 +387,9 @@ Vue.component('fulcrum', {
       numRightRows: 0, 
       shouldLeftWobble: false,
       shouldRightWobble: false,
+
+      animationTime: 500,
+      betweenAnimationTime: 200,
     };
   },
   computed: {
@@ -397,28 +400,31 @@ Vue.component('fulcrum', {
   },
   methods: {
     animate: async function(){
-    const animationTime = 500;
-    const betweenAnimationTime = 200;
-
-    for (var i=0; i<8; i++){
-      this.numLeftRows = i+1;
-      this.$root.play('gold0');
-      this.shouldLeftWobble = true;        
-      await wait(animationTime);
-      this.shouldLeftWobble = false;
-      await wait(betweenAnimationTime);
-    }
-
-    for (var i=0; i<3; i++){
-      this.numRightRows = i+1;
-      this.$root.play('gold1');
-      this.shouldRightWobble = true;        
-      await wait(animationTime);
-      this.shouldRightWobble = false;
-      await wait(betweenAnimationTime);
-    }
-
+      for (var i=0; i<8; i++){
+        this.numLeftRows = i+1;
+        this.$root.play('gold0');
+        await this.leftWobble();
+      }
+      for (var i=0; i<3; i++){
+        this.numRightRows = i+1;
+        this.$root.play('gold1');
+        await this.rightWobble();
+      }
     },
+
+    leftWobble: async function(){
+      this.shouldLeftWobble = true;        
+      await wait(this.animationTime);
+      this.shouldLeftWobble = false;
+      await wait(this.betweenAnimationTime);      
+    },
+
+    rightWobble: async function(){
+      this.shouldRightWobble = true;        
+      await wait(this.animationTime);
+      this.shouldRightWobble = false;
+      await wait(this.betweenAnimationTime);      
+    }
   },
 
   template: '#fulcrum-template'

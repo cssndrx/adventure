@@ -34,6 +34,14 @@ font-family: 'Cormorant Garamond', serif;
 
 <style>
 
+.moneybag-widget td {
+  text-align: right;
+}
+
+.moneybag-widget td:first-child {
+  text-align: left;
+}
+
 .normal-divs div{
   margin-bottom: 0px;
 }
@@ -444,7 +452,7 @@ have bar showing how much money is needed.
 <script type="text/x-template" id="moneybag-widget-template">
 <span>
 
-<table style="text-align: left; font-size: 12px; user-select:none; width:100%;" class="handwriting">
+<table style="font-size: 12px; user-select:none; width:100%;" class="handwriting moneybag-widget">
   <tr>
     <td>Win if right ({{numWinIfRight}})</td>
     <td>Lose if wrong ({{numLosingMoneybags}})</td>
@@ -459,6 +467,10 @@ have bar showing how much money is needed.
       <div v-if="showInstructions"
            style="font-size:12px; margin-bottom:0px">Click to wager moneybags until the bet looks fair.
       </div>
+<button v-if="isInteractive ===true && numLosingMoneybags > 0" 
+  class="handwriting moneybag-button" 
+  @click="submitBet">Looks fair</button>
+
       <button
         v-show="numLosingMoneybags > 0"
         @click="numInteractiveBags=Math.max(0, numInteractiveBags-1); $root.play('remove0')" 
@@ -469,9 +481,6 @@ have bar showing how much money is needed.
         class="bold moneybag-button" 
         style="font-size:16px">MORE</button>
 
-<button v-if="isInteractive ===true && numLosingMoneybags > 0" 
-  class="handwriting moneybag-button" 
-  @click="submitBet">Looks fair</button>
 
     </td>
   </tr>
@@ -1241,6 +1250,7 @@ when each moneybag comes in, trigger the wobble animation
 <div class="normal-divs" style="position:relative; width: 100%; height: 400px;">
 
 <button @click="animate">Animate</button>
+      <slot name="left"></slot>
 
   <!-- black bar and items -->
   <div :class="{'left-wobble': shouldLeftWobble, 'right-wobble': shouldRightWobble}" 
@@ -1249,16 +1259,17 @@ when each moneybag comes in, trigger the wobble animation
 
     <!-- left side items -->
     <div style="position:absolute; left: 0px; bottom:0px;">
-      <div v-for="n in numLeftRows">
+      <!--<div v-for="n in numLeftRows">
         <money-bags></money-bags>
-      </div>
+      </div> -->
     </div>
 
     <!-- right side items -->
     <div style="position:absolute; right: 0px; bottom:0px;">
-      <div v-for="n in numRightRows">
+      <slot name="right"></slot>
+      <!-- <div v-for="n in numRightRows">
         <money-bags :number="2.3"></money-bags>
-      </div>
+      </div> -->
     </div>
 
   </div>
@@ -1280,10 +1291,14 @@ when each moneybag comes in, trigger the wobble animation
 
 <div v-for="(certainty, index) in visibleCertainties">
   <div>What is the fair bet if you are {{$root.renderAsPercent(certainty)}} sure?</div>  
-  <moneybag-widget 
-    @bet-submit="dualAnswerSubmit" :show-certainty="false"
-    :isInteractive="index == activeQuestionInd"
-    ></moneybag-widget>
+  <fulcrum>
+    <template v-slot:right>
+      <moneybag-widget
+        @bet-submit="dualAnswerSubmit" :show-certainty="false"
+        :isInteractive="index == activeQuestionInd"
+        ></moneybag-widget>
+    </template>
+  </fulcrum>
   <div>{{monkMessages[index]}}</div>
 </div>
 
@@ -1314,9 +1329,11 @@ when each moneybag comes in, trigger the wobble animation
 <script type="text/x-template" id="monk-intro-template">
 <div>
 
-<fulcrum></fulcrum>
+ <monk-dual-quiz></monk-dual-quiz>
 
 <!--  
+
+<fulcrum></fulcrum>
 
 <moneybag-widget
                  :isInteractive="true"
