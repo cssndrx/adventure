@@ -6,7 +6,6 @@ var specialMonkQuestions = [
   id: 'uniform-prior',
   question: 'Your quest is more likely to proceed through...',
   answers: ['Ice Mountain', 'Crevasse of Doom'],
-  correct: ['Ice Mountain', 'Crevasse of Doom']
 
 
 // User chooses 0.5. 
@@ -119,7 +118,7 @@ var specialMonkQuestions = [
 }
 
 // Adding a special question requires adding an explanation in the
-// special-monk-interaction temlate.
+// monk-interaction template.
 
 ];
 
@@ -207,7 +206,7 @@ stopped here: adding visual plant questions
 ];
 
 
-//basicMonkQuestions = [];
+basicMonkQuestions = [];
 //specialMonkQuestions = [specialMonkQuestions[2]];
 
 var monkQuestions = (function(){
@@ -618,7 +617,7 @@ Vue.component('monk-question', {
   template: '#monk-question-template'
 });
 
-Vue.component('basic-monk-interaction', {
+Vue.component('monk-interaction', {
   props: {
     // question: 'Which of the following is older?',
     // answers: ['Etruscan Gold Book', 'Madrid Codex'],
@@ -631,18 +630,20 @@ Vue.component('basic-monk-interaction', {
 
   data: function(){
     return {
-      userAnswer: null,     // e.g. Hyderabad, Islamabad
-      userCertainty: null,
-      isMonkDoneThinking: false,
-      isMonkBetting: null,  
-      numMoneybagsGained: null,   
+      params: null,
+      userCertainty: null, // duplication of params.userCertainty
 
-      numLoseIfWrong: null, 
+      isMonkDoneThinking: false,
+      showExplanation: false,
     }
   },
 
   computed: {
     isUserCorrect: function(){
+      if (this.datum.id == 'uniform-prior'){
+        return this.userCertainty == 0.5;
+      }
+
       return _.includes(this.datum.correct, this.userAnswer);
     },
 
@@ -657,44 +658,48 @@ Vue.component('basic-monk-interaction', {
         return 'Eh';
       }
       return this.isUserCorrect ? 'Correct' : 'Incorrect';
-    }
-  },
-  methods: {
-
-    // params = {userAnswer: certainty: numWinIfRight: numLoseIfWrong: }
-    onAnswerComplete: function(params){
-      this.userAnswer = params.userAnswer;
-      this.userCertainty = params.certainty;
-
-      this.isMonkBetting = this.willMonkBet(params.certainty);
-
-      if (this.isMonkBetting){
-
-        this.numLoseIfWrong = params.numLoseIfWrong;
-
-        // edit to handle cases of multiple correct answers
-        if (this.isUserCorrect){
-          this.numMoneybagsGained = params.numWinIfRight; 
-        } else {
-          this.numMoneybagsGained = -params.numLoseIfWrong; 
-        }
-      } else{
-        this.numMoneybagsGained = 0;
-      }
-
-      this.isMonkDoneThinking = true;
     },
 
-    willMonkBet: function(certainty){
-      if (certainty > 0.6){
+    isMonkBetting: function(){
+      if (this.params === null){
+        return null;
+      }
+      const certainty = this.params.certainty;
+      if (this.datum.type == 'special'){
         return true;
       }
-      
+      if (certainty > 0.6){
+        return true;
+      }      
       var p = {
         0.6: 0.8,
         0.5: 0.5
       }[certainty];
       return Math.random() < p;
+    },
+
+    numMoneybagsGained: function(){
+      if (this.isMonkBetting === false){
+        return 0;
+      }
+
+      if (this.isUserCorrect === false){
+        // Just lose 1 moneybag for messing up a prior question.
+        if (['uniform-prior', 'rain-prior'].indexOf(this.datum.id) > -1){
+          return -1;
+        }
+      }
+
+      return this.isUserCorrect ? this.params.numWinIfRight : -this.params.numLoseIfWrong; 
+    },
+  },
+  methods: {
+
+    // params = {userAnswer: certainty: numWinIfRight: numLoseIfWrong: }
+    onAnswerComplete: function(params){
+      this.params = params;
+      this.userCertainty = params.certainty;
+      this.isMonkDoneThinking = true;
     },
 
     monkReactionComplete: function(){
@@ -707,73 +712,7 @@ Vue.component('basic-monk-interaction', {
       }, 1000);
     }
   },
-  template: '#basic-monk-interaction-template'
-});
-
-
-Vue.component('special-monk-interaction', {
-  props: {
-    // question: 'Which of the following is older?',
-    // answers: ['Etruscan Gold Book', 'Madrid Codex'],
-    // correct: ['Etruscan Gold Book'],
-    // images: ['etruscan_gold_book.jpg', 'madrid_codex.jpg']
-    // extra: ['Blah blah']
-    datum: {type: Object},
-    vizType: {type: String, default: 'certainty'}, // 'bet', 'certainty'
-  },
-
-  data: function(){
-    return {
-      userAnswer: null, // e.g. Hyderabad, Islamabad
-      userCertainty: null,
-
-      numMoneybagsGained: 0, // special interactions gain/lose 0 bags by default.   
-      // numLoseIfWrong: null, 
-
-      showExplanation: false,
-    }
-  },
-
-  computed: {
-    isUserCorrect: function(){
-      return _.includes(this.datum.correct, this.userAnswer);
-    },
-
-    percent: function(){
-      return this.$root.renderAsPercent(this.userCertainty);
-    },    
-  },
-  methods: {
-
-    // params = {userAnswer: certainty: numWinIfRight: numLoseIfWrong: }
-    onAnswerComplete: function(params){
-      this.userAnswer = params.userAnswer;
-      this.userCertainty = params.certainty;
-
-      this.showExplanation = true;
-      // this.numLoseIfWrong = params.numLoseIfWrong;
-
-      // // edit to handle cases of multiple correct answers
-      // if (this.isUserCorrect){
-      //   this.numMoneybagsGained = params.numWinIfRight; 
-      // } else {
-      //   this.numMoneybagsGained = -params.numLoseIfWrong; 
-      // }
-    },
-
-    emitQuestionComplete: function(){
-      var this_ = this;
-      console.log('hit in child');
-      setTimeout(function(){
-        console.log(' emitting: ' + this_.numMoneybagsGained);
-        this_.$emit('question-complete', {
-          // may need to pass in other info ??
-          numMoneybagsGained: this_.numMoneybagsGained
-        });      
-      }, 1000);
-    }
-  },
-  template: '#special-monk-interaction-template'
+  template: '#monk-interaction-template'
 });
 
 

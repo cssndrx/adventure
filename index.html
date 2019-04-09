@@ -600,154 +600,14 @@ have bar showing how much money is needed.
 </script>
 
 
-<script type="text/x-template" id="special-monk-interaction-template">
-<div>
-  <monk-question @answer-complete="onAnswerComplete"
-                 :datum="datum"
-                 :vizType="vizType"></monk-question>
-
-  <div v-if="showExplanation">
-
-    <div v-if="datum.id === 'uniform-prior'">
-      <div v-if="userCertainty === 0.5">
-        Good. You will receive a 1 moneybag reward.
-        <hidden>{{numMoneybagsGained = 1}}</hidden>
-      </div>
-      <div v-if="userCertainty !== null && userCertainty !== 0.5">
-        <div>
-          What do you know that makes you think {{userAnswer}} is more likely? 
-        </div>
-      </div>
-
-      <!-- Explanation shows up regardless. -->
-      <div>
-        As a newcomer to this world, you don't know anything about these two places, it is equally likely that your quest could proceed through either of them. In this case, it makes sense to choose either answer but express your certainy as 50 - 50. This is called a uniform prior. You have no information, so all choices are equal.
-      </div>
-
-      <game-button @click.native="emitQuestionComplete">Continue</game-button>
-    </div> <!-- end uniform prior -->
-
-
-    <div v-if="datum.id === 'rain-prior'">
-      <stagger>
-
-      <div v-if="userCertainty === 0.5">
-        Ah, you chose 0.5 because you are unsure whether it will rain tomorrow? 0.5 should be used to express total uncertainty, but in this case you do know something.
-      </div>
-
-      <div v-if="isUserCorrect === true && userCertainty > 0.5">
-        Very wise. You will receive a 1 moneybag reward.
-        <hidden>{{numMoneybagsGained = 1}}</hidden>
-      </div>
-
-      <div v-if="isUserCorrect === false && userCertainty > 0.5">
-        I don't think that's quite right.
-      </div>
-
-      <!-- Explanation shows up regardless. -->
-      <div>
-        I also don't know whether it will rain tomorrow, but based off our past experiences living on earth, there are more sunny days than rainy days -- so in this case you have prior knowledge on the frequency of sunny days vs rainy days which you can use to inform your decision.
-      </div>
-
-      <div>
-      A calibrated player would answer based on the observed frequency of rain.
-      </div>
-
-      <div>
-        It is also possible to incorporate additional knowledge, like whether it rained yesterday, into your probability but that's a topic for another day.
-      </div>
-
-      <game-button @click.native="emitQuestionComplete">Continue</game-button>
-      </stagger>
-    </div> <!-- end rain prior -->
-
-
-    <div v-if="datum.id === 'brenda-question'">
-
-      <!--
-      // User right answer with 100% certainty
-      // Mm... good. You recognized the Conjuction Fallacy.
-
-      // While it is mathematically true that you have selected the right 
-      // answer, but I personally shy away from being 100% certain about
-      // anything because it means that you would be willing to give up an
-      // entire universe of moneybags if wrong, in exchange for a single 
-      // moneybag if you are right. And who knows, you might have misunderstood
-      // the question... 
-
-      // In this case, you were right though. Here is your 1 moneybag reward.
-      -->
-
-      <stagger>
-      <div v-if="userCertainty == 0.9 && isUserCorrect">
-        Mm, very good. You will receive a 1 moneybag reward.
-        <hidden>{{numMoneybagsGained = 1}}</hidden>
-      </div>
-
-      <div v-if="userCertainty < 0.9 && isUserCorrect">
-        Your answer is correct but why aren't you more certain? 
-      </div>
-
-      <div v-if="isUserCorrect === false">
-        Ah, not quite... 
-      </div>
-
-      <div>
-        The chance that Brenda is a millenial AND something else is true, is always lower than the chane that Brenda is a millenial.
-      </div>
-
-      <div>
-        This is known as the <a href="//en.wikipedia.org/wiki/Conjunction_fallacy" target="_blank">Conjunction Fallacy</a>  where sometimes our brains get tricked into pattern matching, but if you think about the actual probabilistic events the answer is clear. Take a look at the most famous example, the Linda Problem.
-      </div>
-
-      <game-button @click.native="emitQuestionComplete">Continue</game-button>
-      </stagger>
-
-    </div> <!-- end brenda -->
-
-    <div v-if="datum.id === 'linda-question'">
-
-      <stagger>
-      <div v-if="userCertainty == 0.9 && isUserCorrect">
-        Mm, very good. You seem to understand the Conjunction Fallacy, and will receive a 1 moneybag reward.
-        <hidden>{{numMoneybagsGained = 1}}</hidden>
-      </div>
-
-      <div v-else>
-        <div>
-          This question was exactly the same as the Brenda situation above.
-        </div>
-
-        <div v-if="isUserCorrect === false">
-         Oh well...
-        </div>
-
-        <div v-if="userCertainty < 0.9">
-          Your answer is correct but why aren't you more certain?
-        </div>
-
-      </div>
-
-      <game-button @click.native="emitQuestionComplete">Continue</game-button>
-      </stagger>
-
-    </div>
-
-</div> <!-- end show explanation -->
-
-</div>
-</script>
-
-
-
-<script type="text/x-template" id="basic-monk-interaction-template">
+<script type="text/x-template" id="monk-interaction-template">
 <div>
   <monk-question @answer-complete="onAnswerComplete"
                  :datum="datum"
                  :vizType="vizType"
                  :monkSays="monkSays"></monk-question>
 
-  <div v-if="isMonkDoneThinking">
+  <div v-if="isMonkDoneThinking && datum.type =='basic'">
 
     <stagger v-if="isMonkBetting === false"
                       @stagger-complete="monkReactionComplete">
@@ -767,6 +627,105 @@ have bar showing how much money is needed.
     </stagger>
 
   </div>
+
+
+  <div v-if="isMonkDoneThinking && datum.type=='special'"> <!-- begin special explanations -->
+
+    <div v-if="datum.id === 'uniform-prior'">
+
+      <div v-if="isUserCorrect === false">
+        What makes you think {{params.userAnswer}} is more likely? 
+      </div>
+
+      <!-- Explanation shows up regardless. -->
+      <div>
+        As a newcomer to this world, you don't know anything about these two places, it is equally likely that your quest could proceed through either of them. In this case, it makes sense to choose either answer but express your certainty as 50 - 50.
+      </div>
+
+      <div>
+       This is called a <span class="handwriting">uniform prior</span>. You have no information, so all choices are equal.
+      </div>
+    </div> <!-- end uniform prior -->
+
+
+    <div v-if="datum.id === 'rain-prior'">
+
+      <div v-if="userCertainty === 0.5">
+        Ah, you chose 0.5 because you are unsure whether it will rain tomorrow? 0.5 should be used to express total uncertainty, but in this case you do know something.
+      </div>
+
+      <!-- Explanation shows up regardless. -->
+      <div>
+        I also don't know whether it will rain tomorrow, but based off our past experiences living on Earth, there are more sunny days than rainy days -- so in this case you have prior knowledge on the frequency of sunny days vs rainy days which you can use to inform your decision.
+      </div>
+
+      <div>
+        A calibrated player would answer using the observed frequency of rain.
+      </div>
+
+      <div>
+        It is also possible to incorporate additional knowledge, like whether it rained yesterday, into your probability but that's a topic for another day.
+      </div>
+    </div> <!-- end rain prior -->
+
+
+    <div v-if="datum.id === 'brenda-question'">
+
+      <!--
+      // User right answer with 100% certainty
+      // Mm... good. You recognized the Conjuction Fallacy.
+
+      // While it is mathematically true that you have selected the right 
+      // answer, but I personally shy away from being 100% certain about
+      // anything because it means that you would be willing to give up an
+      // entire universe of moneybags if wrong, in exchange for a single 
+      // moneybag if you are right. And who knows, you might have misunderstood
+      // the question... 
+
+      // In this case, you were right though. Here is your 1 moneybag reward.
+      -->
+
+      <div v-if="userCertainty < 0.9 && isUserCorrect">
+        Your answer is correct but why aren't you more certain? 
+      </div>
+
+      <div>
+        The chance that Brenda is a millenial AND something else is true, is always lower than the chane that Brenda is a millenial.
+      </div>
+
+      <div>
+        This is known as the <a href="//en.wikipedia.org/wiki/Conjunction_fallacy" target="_blank">Conjunction Fallacy</a>  where sometimes our brains get tricked into pattern matching, but if you think about the actual probabilistic events the answer is clear. Take a look at the most famous example, the Linda Problem.
+      </div>
+
+    </div> <!-- end brenda -->
+
+    <div v-if="datum.id === 'linda-question'">
+
+      <div v-if="userCertainty == 0.9 && isUserCorrect">
+        You seem to understand the Conjunction Fallacy.
+      </div>
+
+      <div v-else>
+        <div>
+          This question was exactly the same as the Brenda situation above.
+        </div>
+
+        <div v-if="userCertainty < 0.9">
+          Your answer is correct but why aren't more certain given that mathematically this is true?
+        </div>
+      </div>
+    </div> <!-- end linda -->
+
+
+    <!-- Tell user payout and let them move on -->
+    <div>
+      {{isUserCorrect ? 'Gain ': 'Lose '}} {{ Math.abs(numMoneybagsGained) }} moneybag.
+    </div>
+
+    <game-button @click.native="monkReactionComplete">Continue</game-button>
+
+  </div> <!-- end special explanations -->
+
 </div>
 </script>
 
@@ -776,7 +735,7 @@ have bar showing how much money is needed.
 <div>
 
   <div>    
-    <div style="font-size:16px;">
+    <div style="font-size:15px;">
     Player, earn enough moneybags to leave the monastery and begin your travels.
     </div>
 
@@ -784,22 +743,15 @@ have bar showing how much money is needed.
     The more sure you are in your answers, the more likely the monk will take you up on your bet — but  also the more you stand to lose.
     </div>
 
-    <game-button @click.native="show('questions')">Ok!</game-button> 
   </div> 
 
   <div v-for="question in visibleQuestions">
 
     <div style="border-top: 1px solid #eee;"></div>
 
-    <basic-monk-interaction
-      v-if="question.type === 'basic'"
+    <monk-interaction
       :datum="question"
-      @question-complete="onQuestionComplete"></basic-monk-interaction>
-
-    <special-monk-interaction
-      v-if="question.type === 'special'"
-      :datum="question"
-      @question-complete="onQuestionComplete"></special-monk-interaction>
+      @question-complete="onQuestionComplete"></monk-interaction>
 
   </div>
 
@@ -2407,7 +2359,7 @@ new Vue({
   data: {
 
     storyPoints: storyPoints,
-    currentStoryPoint: storyPoints[0],
+    currentStoryPoint: storyPoints[1],
 
     // Obj property additions do not update DOM, so prepopulate all the keys in the object. Or use lists.
     soundNameToCount: {},
