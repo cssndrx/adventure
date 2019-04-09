@@ -34,6 +34,55 @@ font-family: 'Cormorant Garamond', serif;
 
 <style>
 
+.game-button{
+  font-family: 'Dokdo', cursive;
+  font-size: 14px;
+}
+
+.game-button:hover{
+  font-family: 'Bungee Shade', cursive; 
+  font-size: 12px;
+}
+
+.game-button:active{
+  font-family: 'Bungee Shade', cursive;    
+}
+
+body {
+/*  font-family: Helvetica Neue, Arial, sans-serif;*/
+  font-family: 'Source Code Pro', monospace;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+button{
+  max-width: 150px;
+  margin-right: 8px;
+  cursor: pointer;
+
+  background-color: white;
+  border-radius: 4px;
+}
+
+h4{
+  font-size: 18px;
+  font-weight: 500;
+}
+
+a{
+  color: #337ab7; /* boostrap blue */
+  text-decoration: none;
+  cursor: pointer;
+}
+
+div{
+  margin-bottom: 16px;
+}
+
+img{
+  max-width: 400px;
+}
+
 .monk-dual-quiz .active{
   font-family: 'Bungee Shade', cursive; 
   font-size: 18px;   
@@ -92,24 +141,6 @@ font-family: 'Cormorant Garamond', serif;
 
 .uncertain {
   font-family: 'Bungee Hairline', cursive;
-}
-
-button{
-  cursor: pointer;
-}
-
-.game-button{
-  font: inherit;
-  color: inherit;
-  font-family: 'Dokdo', cursive;
-}
-
-.game-button:hover{
-  font-family: 'Bungee Shade', cursive;  
-}
-
-.game-button:active{
-  font-family: 'Bungee Shade', cursive;    
 }
 
 .clicked-button{
@@ -247,13 +278,6 @@ button{
   }
 }
 
-
-h4{
-  font-size: 18px;
-  font-weight: 500;
-}
-
-
 .sign-text{
   font-family: 'Princess Sofia', cursive;
 }
@@ -263,26 +287,6 @@ h4{
 }
 .sign:hover{
   border-bottom: 4px solid #ddd;
-}
-
-body {
-/*  font-family: Helvetica Neue, Arial, sans-serif;*/
-  font-family: 'Source Code Pro', monospace;
-  font-size: 14px;
-  line-height: 1.4;
-}
-
-a{
-  color: #337ab7; /* boostrap blue */
-  text-decoration: none;
-}
-
-div{
-  margin-bottom: 16px;
-}
-
-img{
-  max-width: 400px;
 }
 
 .item-img{
@@ -327,15 +331,6 @@ img{
 .story-index{
   margin-top: 32px;
   border: 2px solid grey;
-}
-
-a{
-  cursor: pointer;
-}
-
-button {
-  max-width: 150px;
-  margin-right: 8px;
 }
 
 .active-tab{
@@ -578,7 +573,8 @@ have bar showing how much money is needed.
   <once-group>
     <once-button v-for="answer in datum.answers"
                  :key="answer"
-                 @click.native="userChoseAnswer(answer)">{{answer}}</once-button>
+                 @click.native="userChoseAnswer(answer)"
+                 style="max-width:120px;">{{answer}}</once-button>
   </once-group>
 
 
@@ -651,7 +647,7 @@ have bar showing how much money is needed.
     <div v-if="datum.id === 'rain-prior'">
 
       <div v-if="userCertainty === 0.5">
-        Ah, you chose 0.5 because you are unsure whether it will rain tomorrow? 0.5 should be used to express total uncertainty, but in this case you do know something.
+        You chose 0.5 because you are unsure whether it will rain tomorrow? 0.5 should be used to express total uncertainty, but in this case you do know something.
       </div>
 
       <!-- Explanation shows up regardless. -->
@@ -718,7 +714,7 @@ have bar showing how much money is needed.
 
 
     <!-- Tell user payout and let them move on -->
-    <div>
+    <div v-if="numMoneybagsGained !== 0">
       {{isUserCorrect ? 'Gain ': 'Lose '}} {{ Math.abs(numMoneybagsGained) }} moneybag.
     </div>
 
@@ -1445,7 +1441,7 @@ sure?
         <stagger>
 
         <div>
-          Good. Those two questions were one and the same.
+          Good. Those two questions were the same.
         </div>
 
         <div>
@@ -2231,7 +2227,7 @@ Vue.component('game-button', {
   template: `<button @click="buttonClicked()" 
                     :class="{'clicked-button' : isClicked, 'right-answer': isClicked===true && isRight===true,
                       'wrong-answer': isClicked===true && isRight===false }"
-                    class="game-button smooth"
+                    class="game-button"
                     ><slot></slot></button>`
 });
 
@@ -2359,7 +2355,7 @@ new Vue({
   data: {
 
     storyPoints: storyPoints,
-    currentStoryPoint: storyPoints[1],
+    currentStoryPoint: storyPoints[0],
 
     // Obj property additions do not update DOM, so prepopulate all the keys in the object. Or use lists.
     soundNameToCount: {},

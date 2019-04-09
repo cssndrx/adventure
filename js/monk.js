@@ -1,113 +1,28 @@
 
-
+// Note: Adding a special question requires adding an explanation in the
+// monk-interaction template.
 var specialMonkQuestions = [
-{
-  // uniform prior
-  id: 'uniform-prior',
-  question: 'Your quest is more likely to proceed through...',
-  answers: ['Ice Mountain', 'Crevasse of Doom'],
+// {
+//   // uniform prior
+//   id: 'uniform-prior',
+//   question: 'Your quest is more likely to proceed through...',
+//   answers: ['Ice Mountain', 'Crevasse of Doom'],
+// },
 
-
-// User chooses 0.5. 
-// Very good.
-
-// User chooses not 0.5.
-// If user chooses not 0.5. Hm, what do you know tha makes you think 
-// <X> is more likely? 
-
-// Explanation that shows up regardless.
-// Given that you don't know anything about
-// these two places, it is equally likely that your quest could proceed 
-// through either of them. In this case, it makes sense to choose either
-// answer but express your certainy as 50 - 50. This is called a 
-// uniform prior. You have no information, so all choices are equal.
-
-
-// Nothing to win
-// Nothing to lose
-
-},
-
-
-{
-  // priors
-  // http://www.bbc.com/earth/story/20150827-the-wettest-place-on-earth
-  // dang, there's some place where it rains 320 days a year.
-  id: 'rain-prior',
-  question: 'Will it rain in this town tomorrow?',
-  answers: ['Yes', 'No'],
-  correct: ['No'],
-
-// User chooses 0.5.
-
-// Ah, you chose 0.5 because you are unsure whether it will rain tomorrow?
-
-// User chooses 'No' with some greater certainty.
-
-// Ah, very wise.
-
-// User chooses 'Yes' with some greater certainty.
-
-// Hm... I don't think that's quite right.
-
-// Explanation that shows up regardless.
-// I also don't know whether it will rain tomorrow, 
-// but based off our past experiences
-// living on earth, there are more sunny days than rainy
-// days -- so in this case you have prior knowledge on the frequency
-// of sunny days vs rainy days which you can use to inform your decision.
-
-// A calibrated player would answer based on the observed frequency of rain.
-
-// It is also possible to incorporate additional knowledge, like
-// whether it rained yesterday, into your probability but that's a topic
-// for another day.
-
-// Nothing to win
-// Nothing to lose
-
-},
+// {
+//   // priors
+//   // http://www.bbc.com/earth/story/20150827-the-wettest-place-on-earth
+//   // dang, there's some place where it rains 320 days a year.
+//   id: 'rain-prior',
+//   question: 'Will it rain in this town tomorrow?',
+//   answers: ['Yes', 'No'],
+//   correct: ['No'],
+// },
 {
   id: 'brenda-question',
   question: 'Which is more likely?',
   answers: ['Brenda is a millenial', 'Brenda is a millenial who spends too much time worrying about what her friends think of her and eats avocado toast'],
   correct: ['Brenda is a millenial']
-
-
-// User right answer with 100% certainty
-
-// Mm... good. You recognized the Conjuction Fallacy.
-
-// While it is mathematically true that you have selected the right 
-// answer, but I personally shy away from being 100% certain about
-// anything because it means that you would be willing to give up an
-// entire universe of moneybags if wrong, in exchange for a single 
-// moneybag if you are right. And who knows, you might have misunderstood
-// the question... 
-
-// In this case, you were right though. Here is your 1 moneybag reward.
-
-// User right answer with high certainty
-
-// Mm... very good. You recognized the Conjuction Fallacy.
-// Here is your 1 moneybag reward.
-
-
-// User wrong answer
-// Ah, not quite... 
-
-// User right answer with low certainty
-// Hm, your answer is correct but why aren't you more certain? 
-
-
-// The chance that Brenda is a millenial AND something else is true,
-// is always lower than the chane that Brenda is a millenial.
-
-// This is known as the https://en.wikipedia.org/wiki/Conjunction_fallacy
-// where sometimes our brains get tricked into pattern matching, 
-// but if you think about the actual probabilistic events the answer
-// is clear. Take a look at the most famous example, the Linda Problem.
-
 },
 
 {
@@ -116,9 +31,6 @@ var specialMonkQuestions = [
   answers: ['Linda is a bank teller', 'Linda is a bank teller and is active in the feminist movement.'],
   correct: ['Linda is a bank teller']
 }
-
-// Adding a special question requires adding an explanation in the
-// monk-interaction template.
 
 ];
 
@@ -206,7 +118,7 @@ stopped here: adding visual plant questions
 ];
 
 
-basicMonkQuestions = [];
+//basicMonkQuestions = [];
 //specialMonkQuestions = [specialMonkQuestions[2]];
 
 var monkQuestions = (function(){
@@ -643,8 +555,12 @@ Vue.component('monk-interaction', {
       if (this.datum.id == 'uniform-prior'){
         return this.userCertainty == 0.5;
       }
-
-      return _.includes(this.datum.correct, this.userAnswer);
+      if (this.datum.id == 'rain-prior'){
+        if (this.userCertainty == 0.5){
+          return false;
+        }
+      }
+      return _.includes(this.datum.correct, this.params.userAnswer);
     },
 
     percent: function(){
@@ -683,12 +599,17 @@ Vue.component('monk-interaction', {
         return 0;
       }
 
+      if (this.datum.id == 'rain-prior' && this.userCertainty == 0.5){
+        return 0;
+      }
+
       if (this.isUserCorrect === false){
         // Just lose 1 moneybag for messing up a prior question.
         if (['uniform-prior', 'rain-prior'].indexOf(this.datum.id) > -1){
           return -1;
         }
       }
+
 
       return this.isUserCorrect ? this.params.numWinIfRight : -this.params.numLoseIfWrong; 
     },
