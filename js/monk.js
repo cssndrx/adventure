@@ -218,6 +218,30 @@ var monkQuestions = (function(){
 })();
 
 
+Vue.component('fair-bet-viz', {
+  props: {
+    certainty: { type: Number, default: 0.5 },
+  },
+  computed: {
+    numTimesRightOutOf10: function(){
+      return Math.round(this.certainty * 10);
+    },
+    numLoseIfWrong: function(){
+      const params = this.$root.paramsFromCertainty(this.certainty);
+      return params.numLoseIfWrong;      
+    },
+    fulcrumStyle: function(){
+      return {height: lerp(this.certainty, 0.5, 1.0, 200, 400) + 'px'};
+    },
+  },
+  methods: {
+    wobble: function(){
+      this.$refs['fulcrum'].wobble(1);      
+    }
+  },
+  template: '#fair-bet-viz-template'
+});
+
 
 Vue.component('monk-dual-quiz', {
   props: {
@@ -291,13 +315,17 @@ Vue.component('monk-dual-quiz', {
 Vue.component('monk-intro', {
   data: function(){
     return {
-      hyderabadCertaintyParams: null,
+      hyderabadCertainty: null,
       hyderabadBetParams: null,
     };
   },
   computed: {
+    hyderabadCertaintyParams: function(){
+      return this.$root.paramsFromCertainty(this.hyderabadCertainty);
+    },
+
     isUserCalibrated: function(){
-      if (this.hyderabadCertaintyParams === null || this.hyderabadBetParams === null){
+      if (this.hyderabadCertainty === null || this.hyderabadBetParams === null){
         return null;
       }
 
@@ -305,11 +333,15 @@ Vue.component('monk-intro', {
       var intLoseMoneybags = this.hyderabadBetParams.numLoseIfWrong;
 
       return Math.round(floatLoseMoneybags) === intLoseMoneybags;
+    },
+
+    fairBetVizCertainty: function(){
+      return this.hyderabadCertainty == 0.5 ? 0.8 : this.hyderabadCertainty;
     }
   },
   methods: {
     hyderabadCertaintySubmit: function(params){
-      this.hyderabadCertaintyParams = params;
+      this.hyderabadCertainty = params.certainty;
       this.show('monk-hyderabad-bet');
     },
     hyderabadBetSubmit: function(params){
@@ -402,19 +434,12 @@ Vue.component('fulcrum', {
     }
   },
   methods: {
-    animate: async function(){
-      for (var i=0; i<8; i++){
-        this.numLeftRows = i+1;
-        this.$root.play('gold0');
+    wobble: async function(num_times){
+      for (var i=0; i<num_times; i++){
         await this.leftWobble();
-      }
-      for (var i=0; i<3; i++){
-        this.numRightRows = i+1;
-        this.$root.play('gold1');
         await this.rightWobble();
       }
     },
-
     leftWobble: async function(){
       this.shouldLeftWobble = true;        
       await wait(this.animationTime);
@@ -451,9 +476,10 @@ Vue.component('money-bags', {
     fractionalCoverStyle: function(){
       // compute the styling of a white square that is aligned right
       // which creates the illusion of the fractional moneybag.
+      const fudge = 4;
       return {
         width: (1-this.positiveFraction) * this.width + 'px',
-        height: this.width * 236/200 + 'px',
+        height: this.width * 236/200 + fudge + 'px',
       };
     },
   },

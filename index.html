@@ -468,7 +468,7 @@ have bar showing how much money is needed.
 
   <!-- cover up to make a fractional moneybag -->
    <span v-if="positiveFraction > 0.01"
-         style="background-color:rgba(255,255,255,0.8); position:absolute; right: 0px; bottom:0px;" 
+         style="background-color:rgba(255,255,255,0.8); position:absolute; right: 0px; bottom:4px;" 
          :style="fractionalCoverStyle"></span>
 </span>
 
@@ -1326,6 +1326,40 @@ when each moneybag comes in, trigger the wobble animation
 
 </script>
 
+<script type="text/x-template" id="fair-bet-viz-template">
+<fulcrum :style="fulcrumStyle" ref="fulcrum">
+
+  <template v-slot:left>
+    <div style="display:inline-block; position:relative">
+
+      <div v-for="_ in numTimesRightOutOf10" > 
+        <money-bags></money-bags>
+      </div>
+
+      <div style="position:absolute; color: #bbb; font-size: 10px; white-space: nowrap; top: 0px; left: 32px; text-align:left">
+        {{numTimesRightOutOf10}} times out of 10: <br> 
+        <span class="bold">+1 moneybag</span>
+      </div>
+    </div>
+  </template>
+
+  <template v-slot:right>
+    <div style="display:inline-block; position:relative">
+      <div v-for="_ in (10-numTimesRightOutOf10)" > 
+        <money-bags :number="numLoseIfWrong"></money-bags>
+      </div>
+
+      <div style="position:absolute; color: #bbb; font-size: 10px; white-space: nowrap; top: 0px; left:-110px; text-align: right">
+        {{10-numTimesRightOutOf10}} times out of 10<br> 
+        <span class="bold">-{{numLoseIfWrong}} moneybag</span>
+      </div>
+    </div>
+  </template>
+
+</fulcrum>
+</script>
+
+
 <script type="text/x-template" id="monk-dual-quiz-template">
 
 <div class="monk-dual-quiz">
@@ -1379,9 +1413,7 @@ sure?
     </div>
 
     <div>
-    In my opinion, it is easier to visualize the fair bet and convert that to how sure you are. Human brains work better on concrete numbers and quantities. For more, [[see Dor's research]].
-    todo: run that experiment
-    todo: link dor
+    In my opinion, it is easier to visualize the fair bet and convert that to how sure you are. Human brains work better on concrete numbers and quantities. 
     </div>
 
     <game-button @click.native="$root.setStoryPoint('monk-game')">Continue</game-button>
@@ -1396,7 +1428,10 @@ sure?
 <div>
 
 
+
 <!--  
+
+<fair-bet-viz></fair-bet-viz>
 
  <monk-dual-quiz></monk-dual-quiz>
 
@@ -1514,12 +1549,12 @@ sure?
 
   <story ref="monk-dual-explanation" v-if="isUserCalibrated !== null">
     <div>
-      todo: show this visually. left column has 7 rows of 1 moneybag. right column has 3 rows of 2.3 moneybags
- 
-      If you are right <span class="bold">{{hyderabadCertaintyParams.percent}} of the time</span> and win 1 moneybag when you are right. You lose {{$root.renderAsPercent(1-hyderabadCertaintyParams.certainty)}} of the time, and lose {{hyderabadCertaintyParams.numLoseIfWrong}} moneybags. Averaging over many times, you break even. 
+      If you are right {{$root.renderAsPercent(fairBetVizCertainty)}} of the time, and win 1 moneybag whenever you are right. You lose {{$root.renderAsPercent(1-fairBetVizCertainty)}} of the time, and lose {{$root.paramsFromCertainty(fairBetVizCertainty).numLoseIfWrong}} moneybags. Averaging over many times, you break even. 
     </div>
 
-    <game-button @click.native="show('monk-dual-quiz')">Hm...</game-button>
+    <fair-bet-viz ref="fbv" :certainty="fairBetVizCertainty"></fair-bet-viz>
+
+    <game-button @click.native="$refs['fbv'].wobble(); show('monk-dual-quiz')">Hm...</game-button>
   </story>
 
   <story ref="monk-dual-quiz">
@@ -2378,9 +2413,15 @@ new Vue({
     currentStoryPoint: storyPoints[0],
 
     // Obj property additions do not update DOM, so prepopulate all the keys in the object. Or use lists.
-
     soundNameToCount: {},
   },
+
+  watch: {
+    currentStoryPoint: function(){
+      this.$root.play('swish');
+    },
+  },
+
   methods: {
     show: show, 
     renderAsPercent: renderAsPercent,
@@ -2397,6 +2438,7 @@ new Vue({
         debugger;
       }
       this.currentStoryPoint = story_point[0];
+      this.play('achievement0');
     },
 
     // Given 0.8 --> returns {}
