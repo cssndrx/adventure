@@ -238,10 +238,12 @@ Vue.component('monk-dual-quiz', {
       params: null,
     }
   },
-  // watch: {
-  //   monkMessages: scrollWindow,
-  //   activeInd: scrollWindow,
-  // },
+
+  watch: {
+    activeInd: function(){
+      this.$root.play('swish');
+    },
+  },
 
   methods: {
     betSubmit: function(params){
@@ -251,14 +253,17 @@ Vue.component('monk-dual-quiz', {
     showAnswer: async function(){
       var params = this.params;
       // check if the number of moneybags is correct
-      var certainty = this.certainties[this.activeInd];
-      var user_answer = params.numLoseIfWrong;
-      var correct_answer = Math.round(this.$root.paramsFromCertainty(certainty).numLoseIfWrong); 
+      const certainty = this.certainties[this.activeInd];
+      const user_answer = params.numLoseIfWrong;
+      const correct_answer = Math.round(this.$root.paramsFromCertainty(certainty).numLoseIfWrong); 
 
-      var user_correctness = user_answer == correct_answer;
+      const user_correctness = user_answer == correct_answer;
 
       this.isMonkThinking = false;
       this.monkAnswer = user_correctness ? 'Correct': 'Try again';
+
+      // const sound = user_correctness ? 'swish' : 'incorrect';
+      // this.$root.play(sound);
 
       if (user_correctness === true){
         await wait(1000);
@@ -268,7 +273,15 @@ Vue.component('monk-dual-quiz', {
         if (this.activeInd >= this.certainties.length){
           this.isEndGame = true;
         }          
+      } else {
+        this.$root.play('incorrect');
       }
+    },
+    leftWobble: async function(){
+      await this.$refs['fulcrum'].leftWobble();
+    },
+    rightWobble: async function(){
+      await this.$refs['fulcrum'].rightWobble();
     },
   },
   template: '#monk-dual-quiz-template',  
@@ -361,7 +374,7 @@ Vue.component('monk-game', {
 Vue.component('fulcrum', {
   props: {
     width: {type: Number, default: 400},
-    certainty: {type: Number, default: 0.5},
+    certainty: {type: Number, default: null},
   },
 
   data: function(){
@@ -377,9 +390,16 @@ Vue.component('fulcrum', {
   },
   computed: {
     percent: function(){
+      if (!this.certainty){
+        return '';
+      }
       const params = this.$root.paramsFromCertainty(this.certainty);
       return params.percent;
     },
+    fulcrumStyle: function(){
+      const certainty = this.certainty || 0.5;
+      return {left: (this.width*certainty - 50) + 'px'};
+    }
   },
   methods: {
     animate: async function(){
@@ -496,6 +516,18 @@ Vue.component('moneybag-widget', {
       // emit the event
       this.$root.play('heal');
       this.$emit('bet-submit', this.$root.paramsFromBet(this.numWinIfRight, this.numLosingMoneybags));
+    },
+
+    lessClick: function(){
+      this.numInteractiveBags = Math.max(0, this.numInteractiveBags-1); 
+      this.$root.play('remove0');
+      this.$emit('less-money');
+    },
+
+    moreClick: function(){
+      this.numInteractiveBags+=1; 
+      this.$root.play('gold'); 
+      this.$emit('more-money');
     }
   },
   template: '#moneybag-widget-template'

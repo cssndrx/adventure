@@ -34,6 +34,22 @@ font-family: 'Cormorant Garamond', serif;
 
 <style>
 
+.monk-dual-quiz .active{
+  font-family: 'Bungee Shade', cursive; 
+  font-size: 18px;   
+}
+
+.monk-dual-quiz .inactive{
+  font-family: 'Bungee Hairline', cursive;
+  font-size: 10px;
+  color: #ccc;
+  cursor: pointer;
+}
+
+.monk-dual-quiz .inactive:hover{
+  color:black;
+}
+
 .moneybag-widget {
   display:inline-grid;
   grid-template-columns: 180px 1fr; /* chosen to get 10 moneybags on rhs*/
@@ -60,6 +76,9 @@ font-family: 'Cormorant Garamond', serif;
   border-left: 50px solid transparent;
   border-right: 50px solid transparent;  
   border-bottom: 50px solid black;
+}
+
+.smooth{
   transition: all 1s ease;
 }
 
@@ -82,7 +101,6 @@ button{
 .game-button{
   font: inherit;
   color: inherit;
-  transition: 1s ease all;
   font-family: 'Dokdo', cursive;
 }
 
@@ -472,11 +490,11 @@ have bar showing how much money is needed.
         @click="submitBet">Looks fair</button>
       <button
         v-if="numLosingMoneybags > 0"
-        @click="numInteractiveBags=Math.max(0, numInteractiveBags-1); $root.play('remove0')" 
+        @click="lessClick" 
         class="uncertain moneybag-button" 
         style="font-size:12px">less</button>
       <button 
-        @click="numInteractiveBags+=1; $root.play('gold')" 
+        @click="moreClick" 
         class="bold moneybag-button" 
         style="font-size:16px">MORE</button>
       </div>
@@ -1296,13 +1314,13 @@ when each moneybag comes in, trigger the wobble animation
   </div>
 
   <!-- triangle fulcrum -->
-  <div class="fulcrum" 
+  <div class="fulcrum smooth" 
     style="position:absolute; bottom:0px;"
-    :style="{left: (width*certainty - 50) + 'px'}">
+    :style="fulcrumStyle">
     <div class="bold" style="position:absolute; width:30px; font-size:18px; color:white; left:-22px; top:22px">{{percent}}</div>
   </div>
 
-<!--  <button @click="animate">Animate</button> -->
+<!--<button @click="animate">Animate</button>-->
 
 </div>
 
@@ -1310,10 +1328,9 @@ when each moneybag comes in, trigger the wobble animation
 
 <script type="text/x-template" id="monk-dual-quiz-template">
 
-<div class="normal-divs">
+<div class="monk-dual-quiz">
 
-
-<div style="vertical-align:middle;"> <!-- begin monk question -->
+<div class="normal-divs" style="vertical-align:middle;"> <!-- begin monk question -->
 
 <monk-head style="margin-top:50px; display:inline-block;">
   <template v-if="isMonkThinking" v-slot:lhs>
@@ -1329,7 +1346,9 @@ when each moneybag comes in, trigger the wobble animation
 </monk-head>
 
 <div style="width: 280px; display:inline-block; position:relative; top:-40px;">What is the fair bet if you are 
-  <div v-for="(certainty, index) in certainties" :class="{bold: index== activeInd, uncertain: index!==activeInd}" style="margin-left:8px; margin-right:8px; display:inline-block;">
+  <div v-for="(certainty, index) in certainties" 
+    :class="{active: index== activeInd, inactive: index!==activeInd}" style="margin-left:8px; margin-right:8px; display:inline-block;"
+    @click="activeInd = index">
     {{$root.renderAsPercent(certainty)}}
   </div>
 sure?
@@ -1337,12 +1356,17 @@ sure?
 
 </div> <!-- end monk question -->
 
-<fulcrum :certainty="certainties[activeInd]">
+<fulcrum :certainty="certainties[activeInd]" ref="fulcrum"
+         :style="{height: certainties[activeInd] == 0.99 ? '400px': '200px'}"
+         class="smooth">
   <template v-slot:right>
     <moneybag-widget
       style="width:400px"
       :isInteractive="true"
-      @bet-submit="betSubmit" :show-certainty="false"
+      :show-certainty="false"
+      @bet-submit="betSubmit" 
+      @more-money="rightWobble"
+      @less-money="leftWobble"
       ></moneybag-widget>
   </template>
 </fulcrum>
@@ -1360,10 +1384,6 @@ sure?
     todo: link dor
     </div>
 
-    <div>
-      To start your quest, you will need to earn enough moneybags to fund your travels. Let's see if you can use what you learned about fair bets.
-    </div>
-
     <game-button @click.native="$root.setStoryPoint('monk-game')">Continue</game-button>
   </stagger>
 </div> <!-- end isEndGame -->
@@ -1375,11 +1395,10 @@ sure?
 <script type="text/x-template" id="monk-intro-template">
 <div>
 
- <monk-dual-quiz></monk-dual-quiz>
 
 <!--  
 
-
+ <monk-dual-quiz></monk-dual-quiz>
 
 
 <moneybag-widget
@@ -2228,7 +2247,7 @@ Vue.component('game-button', {
   template: `<button @click="buttonClicked()" 
                     :class="{'clicked-button' : isClicked, 'right-answer': isClicked===true && isRight===true,
                       'wrong-answer': isClicked===true && isRight===false }"
-                    class="game-button"
+                    class="game-button smooth"
                     ><slot></slot></button>`
 });
 
