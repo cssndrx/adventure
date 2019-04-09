@@ -589,11 +589,6 @@ Vue.component('monk-question', {
   data: function(){
     return {
       userAnswer: null, 
-      // userCertainty: null,
-      // isMonkDoneThinking: false,
-      // isMonkBetting: null,  
-      // numMoneybagsGained: null,   
-      // numLoseIfWrong: null, 
       params: null,
       showThinkingBubble: false,
     }
@@ -655,8 +650,11 @@ Vue.component('basic-monk-interaction', {
       return this.$root.renderAsPercent(this.userCertainty);
     },    
     monkSays: function(){
-      if (this.userAnswer === null){
+      if (this.isMonkBetting === null){
         return null;
+      }
+      if (this.isMonkBetting === false){
+        return 'Eh';
       }
       return this.isUserCorrect ? 'Correct' : 'Incorrect';
     }
