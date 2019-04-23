@@ -22,6 +22,7 @@ font-family: 'Cormorant Garamond', serif;
 <!-- todo: strip and remove the unused -->
 <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css?family=Bungee|Bungee+Hairline|Bungee+Inline|Bungee+Shade|Cormorant+Garamond|Creepster|Dokdo|East+Sea+Dokdo|Indie+Flower|Princess+Sofia|VT323" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=East+Sea+Dokdo|Gaegu:300,400,700|Montserrat:300,400|Open+Sans|Raleway|Roboto+Slab" rel="stylesheet">
 
 <script src="js/lodash.min.js"></script>
 <script src="js/d3.v4.min.js"></script>
@@ -33,6 +34,24 @@ font-family: 'Cormorant Garamond', serif;
 <script src="js/forest.js"></script>
 
 <style>
+
+
+.cat-style{
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 300;
+/*  font-family: 'Raleway', sans-serif;*/
+
+}
+.cat-problem{
+  margin: 16px;
+  font-family: 'Gaegu', cursive;
+  font-size: 16px;
+  line-height: 1.5em;
+}
+
+.cat-tongue{
+  font-family: 'Gaegu', cursive;
+}
 
 .game-button{
   font-family: 'Dokdo', cursive;
@@ -1649,10 +1668,113 @@ of that balance point, is the expected value.
 </script>
 
 
+<script type="text/x-template" id="cat-forest-template">
+<div style="text-align:left" class="cat-style">
+
+<div class="cat-tongue" style="font-size:64px;">Da Cat Forest</div>
+
+<div>
+Adventurer, if you're up to the task. 
+</div>
+
+<div>
+Your journey will take you through the distribution forest. 
+</div>
+
+<div>
+A distribution shows the possible outcomes and how likely they are to occur.
+</div>
+
+
+
+<div class="cat-problem" style="text-align:left; margin-left: 32px;">
+
+  <div class="cat-tongue" style="font-size:32px;">The Average Cat</div>
+
+  <img src="images/cat1.png">
+  <div>
+    Cat surveyed forest. Average cat eat 5.2 mouse/day. Dat lot!
+  </div>
+
+  <div>
+  Diss cat only get 2 mouse/day. Is diss cat very unlucky?
+  </div>
+
+  <button>Yes, poor kitty</button>
+  <button>No</button>
+  <button>Not enough info</button>
+</div>
+
+<div>
+  Yarrr king make average go up! Average no help with outlier!
+</div>
+
+<div>
+  Okkk okkk we try again.
+</div>
+
+<div class="cat-problem">
+  <div class="cat-tongue" style="font-size:32px;">The Average And Standard Deviation Cat</div>
+
+  <div style="text-align:center;">
+    <img src="images/cat2.png">
+  </div>
+
+  <div>
+    Ok we ignore king cat data point.
+  </div>
+
+  <div>
+    Compare this cat forest with neighbor cat forest.
+  </div>
+
+</div>
+
+
+</div>
+</script>
+
 <!-- end templates -->
 
 
 <script>
+
+Vue.component('cat-forest', {
+  // data: function(){
+  //   return {
+  //     evQuestions: evQuestions,
+  //     questionInd: 0,
+
+  //     isGameComplete: false,
+  //   };
+  // },
+  // computed: {
+  //   visibleQuestions: function(){
+  //     return this.evQuestions.slice(0, this.questionInd+1);      
+  //   },
+  // },
+  // watch: {
+  //   visibleQuestions: scrollWindow,
+  //   isGameComplete: scrollWindow
+  // },
+  // methods: {
+  //   onQuestionComplete: function(params){
+  //     this.questionInd++;
+  //     // this.numUserMoneybags += params.numMoneybagsGained;
+
+  //     // if (this.numUserMoneybags == this.numMoneybagsNeeded){
+  //     //   // todo: trigger game end
+  //     //   this.gameOutcome = 'userWon';        
+  //     // } else if (this.questionInd == this.monkQuestions.length){
+  //     //   // todo: trigger game end
+  //     //   this.gameOutcome = 'monkOutOfQuestions';
+  //     // } else {
+  //     //   this.questionInd++;        
+  //     // }
+  //   },
+  // },
+  template: '#cat-forest-template',
+});
 
 var evQuestions = [
 
@@ -2322,27 +2444,32 @@ Vue.component('story', {
 
 
 var storyPoints = [
+// {
+//   name: 'Monk Intro',
+//   component: 'monk-intro',
+// },
+// {
+//   name: 'Monk Game',
+//   component: 'monk-game',
+// },
+// {
+//   name: 'Forest Intro',
+//   component: 'forest-intro',
+// },
+// {
+//   name: 'Forest Game',
+//   component: 'forest-game',
+// },
+// {
+//   name: 'Distribution Interlude',
+//   component: 'distribution-interlude',
+//   nest: 1
+// },
 {
-  name: 'Monk Intro',
-  component: 'monk-intro',
+  name: 'Cats',
+  component: 'cat-forest',
 },
-{
-  name: 'Monk Game',
-  component: 'monk-game',
-},
-{
-  name: 'Forest Intro',
-  component: 'forest-intro',
-},
-{
-  name: 'Forest Game',
-  component: 'forest-game',
-},
-{
-  name: 'Distribution Interlude',
-  component: 'distribution-interlude',
-  nest: 1
-},
+
 
 ];
 

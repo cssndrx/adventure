@@ -2,22 +2,22 @@
 // Note: Adding a special question requires adding an explanation in the
 // monk-interaction template.
 var specialMonkQuestions = [
-// {
-//   // uniform prior
-//   id: 'uniform-prior',
-//   question: 'Your quest is more likely to proceed through...',
-//   answers: ['Ice Mountain', 'Crevasse of Doom'],
-// },
+{
+  // uniform prior
+  id: 'uniform-prior',
+  question: 'Your quest is more likely to proceed through...',
+  answers: ['Ice Mountain', 'Crevasse of Doom'],
+},
 
-// {
-//   // priors
-//   // http://www.bbc.com/earth/story/20150827-the-wettest-place-on-earth
-//   // dang, there's some place where it rains 320 days a year.
-//   id: 'rain-prior',
-//   question: 'Will it rain in this town tomorrow?',
-//   answers: ['Yes', 'No'],
-//   correct: ['No'],
-// },
+{
+  // priors
+  // http://www.bbc.com/earth/story/20150827-the-wettest-place-on-earth
+  // dang, there's some place where it rains 320 days a year.
+  id: 'rain-prior',
+  question: 'Will it rain in this town tomorrow?',
+  answers: ['Yes', 'No'],
+  correct: ['No'],
+},
 {
   id: 'brenda-question',
   question: 'Which is more likely?',
