@@ -1,75 +1,56 @@
 
 Adventurer, if you're up to the task. 
 
-Your journey will take you through the distribution forest. 
-
-A distribution shows the possible outcomes and how likely they are to occur.
-
-
-----
-
-One data point that can assist your decision is the *expected value* of the distribution.
-
-The expected value tells you the average outcome if you were able to repeat the process many times.
-
-To compute the average, just imagine where the distribution would balance if you were holding it on your finger. 
-
-(click to balance the distribution)
-
-
-What are real life decisions that actually should be solved via expected value??? stopped here
-- A or B?
-- Long winded story describing some situation. If you just calculate the EV it's a lot simpler.
-- Sir talksalot
-
-
-What if the entire format was you helping people / gaining things. That makes the problems a lot more motivated.
-
-Adventurer, can I ask your opinion on this? 
-
-EV + Bayes ones + Distributions can be like this.
-
-Cat:
-Sometimes when I hunt meow I don't catch anything. Sometimes I catch stuff. When I hunt by the river, I catch things 60% of the time. I could also prepare a mouse trap, which takes 1 hr of effort. And when I mouse trap, my success rate increases to 80%. If I hunt for 4 hrs a day before, going home for the day, do you think I should mouse twap or not? 
-
-[A] [B] [Not enough info]
-
-RT: 
-Hello adventurer, I come from another world. I work at a forestry conservation effort. I have a human who is interested in using forests to sequester atmospheric carbon. I am confused, should we protect __. 
-
-[A] [B] [Not enough info]
-
-
-A forest of cats?? --- I like this.
-
-Meow meow. I'm looking for a new friend, but I'm not sure if it should be a human or a canine. Humans give me food, and depending on the food it gives me this level of happiness. Canines give me warmth and they have fur, which gives me this level of happiness. Sometimes they lick me, which makes me unhappy. 
-
-
-
-
-
-Do you think I should live in a group of kitties? Or by myself? 
-
-
-Variance: 
-
-Boss cat very mad. Boss cat say I need to catch 400 mice in a week. 
-- infeasible options
-
-- EV: 70 mice/day. 
-- EV: 65 mice/day.
-- EV: 60 mice/day.
-
-[A] [B] [Not enough info]
-
-
-Me play cat poker with cat friends. Me about to lose. What do?
-- EV: +2 coins
-- EV: -2 coins
-
-[A] [B] [Not enough info]
+Your journey will take you through an average forest, where you will encounter creatures that need your help.
 
 ---
+
+title
+
+
+---
+
+optimize mice
+optimize happiness
+optimize time
+
+---
+
+Sometimes I get 5 treats/day. Sometimes I get 3 treats/day. 
+
+On average, how many treats per day do I get?
+
+[4] [Not enough info]
+
+4:
+
+There is actually not enough info to answer this. You would need to know the frequency at which the cat gets 5 treats/day vs 3 treats / day to compute the average. 
+
+Correct. 
+
+
+60% of days, I get 5 treats/day. 40% of days, I get 3 treats/day. 
+
+[input] [Not enough info]
+
+4.2: That is correct. 
+
+Other: Not quite,
+
+60% * 5 + 40% * 3 = 4.2.
+
+Not enough info: Thre is enough info. 
+
+---
+
+
+
+
+---
+
+// outliers
+
+Survey cat:
 
 Cat surveyed forest and found that average cat eat 5.2 mouse/day. Dat lot!
 
@@ -79,3 +60,269 @@ Diss cat only eat 2 mouse/day. Is this cat very unlucky?
 
 
 YASS Turn out King Cat berry fat and eat 200 mouse/day. He no eat all dose actually. He lick dem all and find most delicious, but he answer survey.  
+
+
+---
+
+// basic EV
+
+Hunter cat:
+Sometimes when I hunt I don't catch anything. Sometimes I catch stuff. When I hunt by the river, I catch things 60% of the time. I could also prepare a mouse trap, which takes 1 hr of effort. And when I mouse trap, my success rate increases to 80%. If I hunt for 4 hrs a day before, going home for the day, do you think I should mouse twap or not? 
+
+[A] [B] [Not enough info]
+
+
+---
+
+// Think of the incremental
+
+Cat massage make 
+
+Explanation:
+
+---
+
+// Per dollar spend
+
+Tree cat:
+Hello, I love trees cat. Trees pull carbon from air. We want to pull carbon from air. Should we purchase forest A ___. 
+
+[A] [B] [Not enough info]
+
+
+---
+
+---
+
+
+**Distributions
+
+The cats problems are getting harder. 
+
+A distribution plots the possible outcomes and how likely they are to occur.
+
+To calculate the average (also called, expected value) of the distribution:
+
+(Slow way)
+
+(Fast way) 
+Imagine where the distribution would balance if you were holding it on your finger. 
+
+
+Do the slow way once:
+
+
+Do the fast way a number of times:
+(click to balance the distribution)
+
+---
+
+// Branching EV
+
+Cat go explore in area A and area B
+
+area A: 
+- 
+
+area B: 
+- 
+
+---
+
+// Don't want to compute the average.
+
+Cat run into monsters in dark forest
+
+Cat has 10 HP. 
+
+If I run into a monster, 
+30% of the time it is weak, and there is no damage.
+70% of the time it is something scary, and cat lose -10 hp.
+
+How much food shouhld cat bring into the forest ??
+
+---
+
+// Basic distribution
+
+(we can also write this out super long winded),
+(and then comrpess into distribution)
+
+Long winded:
+
+Meow meow. I'm looking for a new friend, but I'm not sure if it should be a human or a canine. Humans give me food:
+
+10% of the time they give me bacon, and that gives me 10happy.
+20% of the time they give me brocolli, and that gives me -1 happy.
+
+If they give me something to drink,
+40% of the time they give me milk, and that that makes me -3 happy because I like it but I'm lactose intolerant.
+
+
+and depending on the food it gives me some level of happiness. Canines give me warmth and they have fur, which gives me some level of happiness. Sometimes they lick me, which makes me unhappy. 
+
+
+Breiefer:
+
+Meow meow. I'm looking for a new friend, but I'm not sure if it should be a human or a canine. Humans give me food, and depending on the food it gives me some level of happiness. Canines give me warmth and they have fur, which gives me some level of happiness. Sometimes they lick me, which makes me unhappy. 
+
+[[Daily happiness from human prob distribution]]
+[[Daily happiness from canine prob distribution]]
+
+Should I seek out a human or canine?
+[Human] [Canine] [Not enough info]
+
+
+---
+
+// basic EV + logic puzzle
+
+Job hunting cat:
+I can lie around all day and be 5 happy. Or I can get job which sometimes makes me -2 happy, and sometimes makes me 10 happy. What best?
+
+[Lie around] [Get job] [Not enough info]
+
+Ohh job happy, does vary. Most day, -2 happy. Other time, 10 happy.
+
+[Lie around] [Get job] [Not enough info]
+
+That actually is enough information to solve the problem!
+
+Not quite.
+
+Explanation: 
+If on most days (i.e. >50% of days) the cat is -2 happy, then the expected value of the job is going to be less than 5. 
+
+If Cat were -0 happy exactly 50% of days and +10 happy 50% of days, then the average happiness of the cat would be exactly 5.
+
+
+Thank you adventurer, that feels right to me. [Explanation]
+The cat walks off happy and satisfied. [Explanation]
+Purr-fection. Thank you adventurer. [Explanation]
+
+
+----
+
+Housing Kitty:
+
+Do you think I should live in a group of kitties? Or by myself? 
+
+---
+
+
+Optimize time
+
+Cat in hurry. Which path go cat? 
+
+Path Acould go down path A, and path A leads to a fork, where one path goes ___. 
+
+[A] [B] [Need more info]
+
+---
+
+// High variance play + distribution
+
+Cat in trouble: 
+
+Boss cat very mad. Boss cat say I need to catch 400 mice in 5 days. 
+
+I don't know if I can do it.
+
+Which strategy should I use?
+- EV: 70 mice/day. 
+- EV: 65 mice/day.
+- EV: 60 mice/day.
+
+[A] [B] [C] [Not enough info] [That's impossible]
+
+The situation is not impossible.
+
+Oh, this adventurer want to see distribution? 
+
+Ok, here you go.
+
+[A] [B] [C]
+
+Oh thank you adventurer. Wish this cat luck!
+
+Explanation: 
+
+
+---
+
+Oh yes, this cat can tell you more. 
+
+---
+
+// High variance play + max ent (no distribution)
+
+Cat heard you help other cat pick best mouse strategy for job. So cat came. 
+
+Cat also need help pick strategy to get __ mice in __ days.
+
+
+Strategy A average 70 mice/day, very consistent. Standard deviation is 2.
+Strategy B average 65 mice/day, less consistent. Standard deviation 10.
+Strategy C average 60 mice/day, but very inconsistent. Standard deviation 20.
+
+[A] [B] [C] [Not enough info] [That's impossible]
+
+
+Diss cat don't know distribution. Just know mean and standard deviation. Cat is sorry.
+
+[A] [B] [C]
+
+Without the distribution, the "maximum entropy" distribution to assume is the normal distribution. The maximum entropy distribution ___. 
+
+
+---
+
+Huuuman. Puuurrrrr. 
+
+---
+
+// High variance play
+
+I ask human about cat poker. Does human play cat pokerrr? 
+
+Me play cat poker with friends. First to 100 coins wins. Me friend have 90 coins. Me have 30 coins. 
+
+What move I make.
+- EV: +2 coins
+- EV: -2 coins
+
+[A] [B] [Not enough info]
+
+??
+
+
+---
+
+How to compute expected value procedurally?
+How to compute expected value visually?
+Make decisions based on EV when you can repeat decision many times
+
+e.g.
+
+Arts & Aesthetics
+Basic Needs
+Business & Commerce
+Communication
+Defense
+Economics
+Education
+Environment
+Ethics & Religion
+Government & Politics
+Law & Justice
+Media
+Miscellaneous
+Physical Health
+Psychological Health
+Recreation
+Safety
+Social Relationships
+Technology
+Transportation
+
+

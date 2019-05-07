@@ -13,11 +13,20 @@ const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
 function show(ref_name){
   // https://stackoverflow.com/questions/36970062/vue-js-document-getelementbyid-shorthand
   console.log('hitting show: ' + ref_name);
+
+  // Turn all the other refs inactive.
+  _.values(this.$refs).forEach(function(comp){
+    if (comp.data && comp.data.isVisible === true){
+      comp.data.isVisible = false;
+    }
+  });
+
+  // Turn one ref active.
   var vue_component = this.$refs[ref_name];
   if (vue_component === undefined){
     throw 'cannot find ref_name: ' + ref_name;
   } else {
-    vue_component.$data.isActive = true;        
+    vue_component.$data.isVisible = true;        
   }
 }
 
