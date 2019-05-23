@@ -51,7 +51,9 @@ div{
 /* font-family: 'Dokdo', cursive; -- funky */
 /* font-family: 'Bungee Shade', cursive; -- pop art caps */
 
-
+ul{
+  margin-top: 0px;
+}
 
 h4{
   font-size: 18px;
@@ -66,6 +68,11 @@ a{
 
 img{
   max-width: 400px;
+}
+
+.nope{
+  color:red; 
+  font-size: 10px; 
 }
 
 .dialog-text *{
@@ -83,13 +90,12 @@ button{
   background-color: white;
   border-radius: 4px;
 
-  display: block;
   font-size: 24px;
   font-weight: 900;
   margin-bottom: 8px; 
 }
 
-.question button:hover{
+.question button:hover, .question .clicked-button{
   color: white;
   background-color: black;
 }
@@ -111,21 +117,11 @@ button{
   margin-bottom: 8px;
 }
 
-.fade-enter-active, .fade-leave-active {
-  transition: opacity 1s;
-}
-.fade-enter, .fade-leave-to {
-  opacity: 0;
-}
 
 .hidden-at-first{
   opacity: 0;
   transition: opacity 1s;
 }
-
-/*.become-dull{
-  transition: opacity 2s;
-}*/
 
 .wobble{
   position: absolute;
@@ -203,7 +199,7 @@ button{
 
 .fallover{
   position: absolute;
-  animation: fallover 1s ease-in 0s 1 normal forwards;  
+  animation: fallover 1s ease-in 0s 1; /* to not stand back up:  normal forwards;  */
 }
 
 .dot{
@@ -237,6 +233,45 @@ button{
 }
 
 
+.extra-info, .extra-info *{
+  font-size: 12px;
+}
+
+.smaller-children, .smaller-children *{
+  font-size: 12px;
+}
+
+/* https://w3bits.com/rainbow-text/ */
+.rainbow-text {
+  background-image: repeating-linear-gradient(45deg, violet, indigo, blue, green, orange, red, violet);
+  text-align: center;
+  background-size: 800% 800%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: rainbow 4s ease infinite;
+}
+
+@keyframes rainbow { 
+    0%{background-position:0% 50%}
+    50%{background-position:100% 25%}
+    100%{background-position:0% 50%}
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 1s;
+}
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
+
+.slide-fade-enter-active, .slide-fade-leave-active {
+  transition: all .3s ease;
+}
+.slide-fade-enter, .slide-fade-leave-to {
+  transform: translateY(-300px);
+  opacity: 0;
+}
+
 </style>
 
 <body>
@@ -247,6 +282,19 @@ button{
 
 
 <!--
+
+<transition name="slide-fade">
+<div v-if="show" style="background-color: blue; width:200px; height:200px;"></div>
+</transition>
+
+  <button @click="show = !show">
+    Toggle render
+  </button>
+
+
+<button class="rainbow-text">Test</button>
+
+
 <story :visible="true">
 Are you here?
 
@@ -284,7 +332,7 @@ You are going to bring us into this new world of <span class="animated infinite 
 <div>
 
 
-<div style="width: 150px; position:absolute; left: 0px; text-align: left; padding-left: 16px">
+<!-- <div style="width: 150px; position:absolute; left: 0px; text-align: left; padding-left: 16px">
 
   <div v-for="storyPoint in storyPoints"
       @click="currentStoryPoint = storyPoint"
@@ -293,7 +341,7 @@ You are going to bring us into this new world of <span class="animated infinite 
     <a :class="[storyPoint === currentStoryPoint ? 'active-tab': 'inactive-tab']">{{storyPoint.name}}</a>
   </div>
 
-</div>
+</div> -->
 
 
 <keep-alive>
@@ -311,8 +359,12 @@ You are going to bring us into this new world of <span class="animated infinite 
 <script type="text/x-template" id="chain-rule-template">
 <div>
 
+<!-- <buton-group :onClick="() => showFall = true">
+  <buton @click="showRainbow=true">Test buton</buton>
+</buton-group>
+
 <div style="position:relative; left: 200px">
-<div class="dot" @click="set('independence-problem')">
+<div class="dot" @click="set('problem0')">
   <span>The independence problem</span>
 </div>
 <div class="dot">
@@ -322,117 +374,262 @@ You are going to bring us into this new world of <span class="animated infinite 
   <span>This third thing</span>
 </div>
 </div>
+-->
 
-<transition name="fade">
 
-<avatar
+{{avatarState}}
+<transition-group name="fade" mode="out-in">
+
+<avatar key="intro"
   v-if="show('intro')"
   image="girl0.png" 
   text="I only date tall monsters with great hair."
-  :show-explanation="showExplanation"
-  :show-rainbow="showRainbow"
-  :show-fall="showFall">
-  <button @click="set('independence-problem')">Next</button>
+  :state="avatarState">
+  <buton @click="set('problem0')">Next</buton>
 </avatar>
 
-</transition>
-
-<transition name="fade">
-<avatar v-if="show('independence-problem')" 
+<avatar key="problem0"
+  v-if="show('problem0')" 
   image="girl1.png" 
-  text="If 1/2 of all monsters are tall, and 1/3 of monsters have great hair, what is the probability that a random monster is datable?">
-<button @click="set('independence-explanation')">1/6</button>
-<button @click="set('independence-explanation')">1/3</button>
-<button @click="set('independence-explanation')">5/6</button>
-<button @click="gotIndependenceProblemRight=true; set('independence-explanation')">Can't say</button>
+  text="If 1/2 of all monsters are tall, and 1/4 of monsters have great hair, what is the probability that a random monster is datable?"
+  :state="avatarState">
+
+  <buton-group :onClick="() => avatarState.showExplanation=true">
+    <buton>1/8</buton>
+    <buton nope="Why 1/3? Try again.">1/3</buton>
+    <buton nope="That doesn't make sense. 3/4 is more than the number of monsters that are tall. Try again.">3/4</buton>
+    <buton @click="yay('problem0')" yay>Can't say</buton>
+  </buton-group>
+
+  <template v-slot:explanation>
+    <div v-if="got('problem0')">
+      Right! It's not possible to say. 
+    </div>
+    <div v-else>
+      It's actually not possible to say.
+    </div>
+
+    <div>
+    Multiplying probabilities implies that the two events are independent.
+    </div>
+
+    <div>
+      Being tall must provide <span class="strong">no information</span> on whether a monster has great hair.
+    </div>
+
+    <buton @click="set('problem1')">Next</buton>
+  </template>
+
 </avatar>
-</transition>
 
 
-<transition name="fade">
-<explanation v-if="show('independence-explanation')">
-  <div v-if="gotIndependenceProblemRight">
-    Right! It's not possible to say. 
-  </div>
-  <div v-else>
-    It's actually not possible to say.
-  </div>
-
-  <div>
-  Multiplying probabilities implies that the two events are independent.
-  </div>
-
-  <div>
-    Being tall must provide <span class="strong">no information</span> on whether a monster has great hair.
-  </div>
-
-  <button @click="set('correlation-intuition')">Next</button>
-</explanation>
-</transition>
-
-
-<explanation v-if="show('correlation-intuition')">
-<div>
-  Suppose tall monsters are more likely to have great hair.
-</div>
-
-<div>
-  Then the probability that a random monster is datable is:
-</div>
-
-<div class="question">
-<button @click="set('chain-rule-2')">< 2/9</button>
-<button @click="set('chain-rule-2')">2/9</button>
-<button @click="set('chain-rule-2'); gotCorrelationIntuitionRight=true">> 2/9</button>
-</div>
-</explanation>
-
-
-<avatar v-if="show('chain-rule-2')"
+<avatar key="problem1" 
+        v-if="show('problem1')"
         image="girl0.png" 
-        text="I'd say about 1/2 of tall monsters have great hair.">
+        text="Yeah! I guess being tall and having great hair are slightly correlated. About 1/3 of tall monsters have great hair."
+        :state="avatarState">
 
   <template v-slot:extra>
     Facts from before:
     <ul>
-      <li>1/2 of monsters are tall</li>
-      <li>1/3 of monsters have great hair</li>
+      <li>1/2 of all monsters are tall</li>
+      <li>1/4 of all monsters have great hair</li>
     </ul>
   </template>
 
+  <template v-slot:question>
+    <div>What is the probability that a random monster is datable?, i.e. Is tall AND has great hair?</div>
 
-  <div>Final answer for the proportion of monsters who are datable?</div>
+    <buton-group :onClick="() => avatarState.showExplanation=true">
+      <buton @click="yay('problem1')" yay>1/6</buton>
+      <buton nope="We said that being tall and having great hair are not independent, so we cannot multiply 1/2 x 1/4.">1/8</buton>
+      <buton nope="Are you just multiplying things together? Try again.">1/24</buton>
+      <buton nope="The answer isn't always 'Can't say'...">Can't say</buton>
+    </buton-group>
+  </template>
 
-  <button>1/4</button>
-  <button>1/3</button>
-  <button>1/2</button>
-  <button>Can't say</button>
+  <template v-slot:explanation>
+    <div>
+      {{ got('problem1') ? 'Right.': 'Not quite.' }}
+    </div>
+
+    <div>
+      The probability that a monster has great hair AND is tall, combines:
+    </div>
+
+    <div>
+      (1) The probability the monster is tall: P(tall)
+    </div>
+
+    <div>
+      (2) The probability the monster has great hair, given that the monster is tall: P(great hair | tall)
+    </div>
+
+    <div>
+      P(great hair AND tall) = P(tall) * P (great hair | tall)
+    </div>
+
+    <buton @click="set('problem2')">Next</buton>
+  </template>
 </avatar>
 
 
-<avatar image="girl0.png"
-        text="Ooh, I forgot. I also want them to have tattoos. 1/4 of monsters have tattoos.">
-  <div>What is the probability that a random monster is datable?</div>
-  <button>1/4</button>
-  <button>1/3</button>
-  <button>1/2</button>
-  <button>Can't say</button>
+<avatar key="problem2"
+        v-if="show('problem2')"
+        image="girl0.png"
+        text="Oh thank you for your help so far. But I forgot... I also want them to have tattoos. 1/5 of monsters have tattoos."
+        :state="avatarState">
+  <div>What is P(tall, great hair, tattoos)?</div>
+
+  <buton-group :onClick="() => avatarState.showExplanation=true">
+    <buton>1/30</buton>
+    <buton nope="Remember, we want to use P(great hair|tall), not P(tall).">1/40</buton>
+    <buton nope="Wait, are you just blindly multiplying numbers? Stop that.">1/120</buton>
+    <buton @click="yay('problem2')" yay>Can't say</buton>
+  </buton-group>
 
   <template v-slot:extra>
     Facts from before:
     <ul>
-      <li>1/2 of monsters are tall</li>
-      <li>1/3 of monsters have great hair</li>
-      <li>1/2 of tall monsters have great hair</li>
+      <li>P(tall) = 1/2</li>
+      <li>P(great hair) = 1/4</li>
+      <li>P(great hair|tall) = 1/3</li>
     </ul>
   </template>
+
+  <template v-slot:explanation>
+    <div>
+      {{ got('problem2') ? 'Right.': 'Not quite.' }} Again, it's not possible to say!
+    </div>
+
+<!--     <div> assumed independence
+      Blindly multiplying P(tall) * P(great hair) * P(tattoos) assumes the events are independent. It doesn't work if any of the variables are very positively or negatively correlated.
+    </div>
+
+    <buton>How to do this properly?</buton>
+ -->
+    <div>
+      To do this properly, use the logic in the <span class="strong">Chain Rule</span>:
+    </div>
+
+    <div class="smaller-children" style="margin-left: 16px;">
+      <div style="color:magenta">
+        First, consider the probability of the monster being tall.
+      </div>
+
+      <div style="color:green">
+        Then, consider the probability of a tall monster having great hair.
+      </div>
+
+      <div style="color:blue">
+        Then, consider the probability that a tall monster with great hair... would have a tattoo.
+      </div>
+    </div>
+
+    <div>
+      Multiply together to filter down to monsters that are tall and have great hair and have tattoos.
+    </div>
+
+    <div>
+      Mathematically, this is written out as:
+    </div>
+
+    <div class="smaller-children">
+      P(tattoo AND great hair AND tall) = <span style="color:magenta">P(tall)</span> * <span style="color:green">P(great hair | tall)</span> * <span style="color:blue">P(tattoo | great hair AND tall)</span>
+    </div>
+
+    <buton>Try it</buton>
+
+  </template>
+
 </avatar>
 
 
-<avatar image="girl_mad.png" text="That's not very many people!">
+<avatar key="problem3" 
+        v-if="show('problem3')"
+        image="girl1.png" 
+        text="Ooh yeah I've heard of the Chain Rule. Here are more than enough numbers to get you through."
+        :state="avatarState">
+
+    <div class="extra-info">
+    Facts from before:
+    <ul>
+      <li>Veronica only dates tall monsters with great hair and tattoos</li>
+      <li>P(tall) = 1/2</li>
+      <li>P(great hair) = 1/4</li>
+      <li>P(great hair|tall) = 1/3</li>
+      <li>P(tattoos) = 1/5</li>
+      <li>P(tattoos|tall) = 1/6</li>
+      <li>P(tattoos|tall AND great hair) = 1/7</li>
+    </ul>
+    </div>
+
+    <div>
+    P(tall, great hair, tattooed) =
+    </div>
+
+    1/<input-box :right="42" />
 </avatar>
+
+
+<avatar key="problem4" 
+        v-if="show('problem4')"
+        image="girl1.png" 
+        text="Silly us! We forgot to include that these tall, great hair, tattooed monsters also need to be... around my age and single."
+        :state="avatarState">
+
+    <div class="extra-info">
+    Facts from before:
+    <ul>
+      <li>Veronica only dates monsters that are tall, have great hair, tattoos, around her age, and single</li>
+      <li>P(tall) = 1/2</li>
+      <li>P(great hair) = 1/4</li>
+      <li>P(great hair|tall) = 1/3</li>
+      <li>P(tattoos) = 1/5</li>
+      <li>P(tattoos|tall) = 1/6</li>
+      <li>P(tattoos|tall AND great hair) = 1/7</li>
+      <li>P(around her age|tall AND great hair AND tattoos) = 1/5</li>
+      <li>P(single|tall AND great hair AND tattoos AND around her age) = 1/2</li>
+    </ul>
+    </div>
+
+    <div>
+    P(tall, great hair, tattooed, around her age, single) =
+    </div>
+
+    1/<input-box :right="420" />
+</avatar>
+
+
+<avatar key="not-many"
+        v-if="show('not-many')"
+        animation="mad-bounce"
+        image="girl_mad.png" text="That's not very many people!">
+
+  What will you say to Veronica? 
+  <buton class="smaller-children">I know you'll find someone soon.</buton>
+  <buton class="smaller-children">Even though each individual criteria may not seem picky, requiring that a monster have all those traits leaves you with a very small dating pool.</buton>
+</avatar>
+
+
+
+<explanation key="congrats"
+  v-if="show('congrats')">
+  <div style="font-size: 48px; letter-spacing:4px;">
+  CONGRATS
+  </div>
+  
+  <ul>
+    <li>You learned about independence</li>
+    <li>You learned about Chain Rule</li>
+    <li>You befriended Veronica ❤️</li>
+  </ul> 
+</explanation>
+
+</transition-group>
 
 </div>
+
 </script>
 
 
@@ -460,9 +657,9 @@ You are going to bring us into this new world of <span class="animated infinite 
 
 
 <!-- overlay with explanation -->
-<transition name="fade">
-<div v-if="showExplanation"
-     style="position:absolute; z-index:1; height: 500px; width:100%; opacity:0.7; background-color: white; color:black;">
+<transition name="slide-fade">
+<div v-if="state.showExplanation && hasSlot('explanation')"
+     style="position:absolute; z-index:1; height: 500px; width:100%; opacity:0.9; background-color: white; color:black;">
   <explanation>
       <slot name="explanation"></slot>
   </explanation>
@@ -470,12 +667,10 @@ You are going to bring us into this new world of <span class="animated infinite 
 </transition>
 
 
-<transition name="fade">
-  <img v-if="showRainbow" src="images/rainbow.png">
-</transition>
+<img v-if="state.showRainbow" src="images/rainbow.png">
 
 <img :src="'images/'+ image" 
-     :class="{fallover: showFall}"
+     :class="imgClasses"
      style="height: 400px; left: 50px; position:absolute; top:0px;">
 
 
@@ -483,21 +678,26 @@ You are going to bring us into this new world of <span class="animated infinite 
 <div style="position:absolute; left: 300px; top:0px;">
   <img src="images/dialog.png" >
   <div style="position: absolute; left:40px; top:23px;" class="dialog-text">
-    <live-text>
+    <live-text @live-text-complete="showQuestionAndExtra()">
       {{text}}
     </live-text>
   </div>
 </div>
 
 <!-- Bottom right -->
-<div class="question" style="position:absolute; left: 380px; top: 300px; width: 300px;">
-  <slot></slot>
-</div>
+<transition name="fade">
+  <div v-if="showQuestion" class="question" style="position:absolute; left: 380px; top: 300px; width: 300px;">
+    <slot name="question"></slot>
+    <slot></slot> <!-- todo: consider removing default slot -->
+  </div>
+</transition>
 
 <!-- Bottom left -->
-<div style="position:absolute; top: 400px; left: 50px;">
-  <slot name="extra"></slot>
-</div>
+<transition name="fade">
+  <div v-if="showExtra" style="position:absolute; top: 400px; left: 50px; width:250px;" class="extra-info">
+    <slot name="extra"></slot>
+  </div>
+</transition>
 
 
 </div>
@@ -544,12 +744,31 @@ You are going to bring us into this new world of <span class="animated infinite 
 </script>
 
 
-<!--<script type="text/x-template" id="question-template">
-<div>
-  <slot name="question"></slot>
-  <slot name="answers"></slot>
+<script type="text/x-template" id="buton-template">
+<div style="margin-bottom:0px; position:relative;">
+  <button @click="butonClicked()" v-on="$listeners" :class="{'rainbow-text': showRainbowText, 'clicked-button': clickedButton}"><slot></slot>
+  </button>
+  <transition name="fade">
+    <div v-if="showNopeText" class="nope" style="margin-bottom:8px; position:relative; top:-4px;">
+      {{nope}}
+    </div>
+  </transition>
 </div>
-</script>-->
+</script>
+
+
+<script type="text/x-template" id="input-box-template">
+  <div style="display:inline-block; position:relative;">
+    <input v-model="val" placeholder="?" style="width:50px; display:inline">
+    <buton style="display:inline" @click="answerSubmit">Go</buton>
+  
+    <transition name="fade">
+      <span v-if="showNopeText" class="nope" style="position:absolute; bottom: -8px; margin-bottom:0px">
+        {{nopeText}}
+      </span>
+    </transition>
+  </div>
+</script>
 
 
 <!-- end templates -->
@@ -557,17 +776,169 @@ You are going to bring us into this new world of <span class="animated infinite 
 
 <script>
 
+const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+// https://alligator.io/vuejs/global-event-bus/
+const bus = new Vue();
+
+Vue.component('input-box', {
+  props: {
+    right: {type: Number, default: 0},
+    hints: {
+      type: Array, 
+      default: function(){ return ['Try again']; },
+    },
+    onRight: {
+      type: Function,
+      default: function(){},
+    },
+  },
+  computed: {
+    nopeText: function(){
+      return this.hints[Math.min(this.numWrong, this.hints.length-1)];
+    }
+  },
+  data: function(){
+    return {
+      val: null,
+      showNopeText: false,
+      numWrong: 0,
+    }
+  },
+  methods: {
+    answerSubmit: function(){
+      // look at the value in the input.
+      if (this.val == this.right){
+        this.showNopeText = false;
+        this.onRight();
+      } else {
+        this.numWrong++;
+        this.showNopeText = true;
+      }
+    }
+  },
+  template: '#input-box-template'
+});
+
+function isDescendant(ancestor, maybeChild){
+  var node = maybeChild.$parent;
+  while(node !== undefined){
+    if (node === ancestor){
+      return true;
+    }
+    node = node.$parent;
+  }
+  return false;
+}
+
 Vue.component('avatar', {
   props: {
     image: {type: String}, // 'girl.png'
     text: {type: String},
+    animation: {type: String, default: 'wobble'},
 
-    showExplanation: {type: Boolean, default:false},
-    showRainbow: {type: Boolean, default: false},
-    showFall: {type: Boolean, default: false},
+    // Events that get triggered from parent.
+    state: {type: Object, default: function() { 
+      return {
+        showExplanation: false, showRainbow: false, showFall: false}; 
+      }
+    },
+  },
+
+  computed: {
+    imgClasses: function(){
+      var classes = {fallover: this.state.showFall};
+      classes[this.animation] = true;
+      return classes;
+    }
+  },
+  data: function(){
+    return {
+      // Internally triggered events.
+      showQuestion: false,
+      showExtra: false,
+    };
+  },
+
+  methods: {
+    hasSlot: function(name){
+      return !!this.$slots[ name ] || !!this.$scopedSlots[ name ];
+    },
+    showQuestionAndExtra: async function(){
+      this.showQuestion=true; 
+      await wait(1000);
+      this.showExtra=true;
+    },
   },
   template: '#avatar-template'
 });
+
+
+// Just like a button, but with some special abilities.
+// When clicked it looks at it's parent to see if it's a buton-group.
+// Executes the onClick event if so.
+// e.g.
+// <buton-group onClick="doSomethingSecond">
+//   <buton @click="doSomethingFirst">Click me</buton>
+// </buton-group>
+
+// Unless the buton has nope text nope="something", in which case the buton-group does not get triggered.
+// e.g.
+// <buton nope="stop and think">Tricked ya</buton>
+
+// Buttons may also have a yay attribute.
+// Which causes the button to turn rainbow-text after it gets clicked.
+Vue.component('buton', {
+  props: {
+    nope: {type: String}, // Text for why the answer is wrong. Blocks progression.
+
+    // moved to attr
+    //yay: {type: Boolean, default:false}, // Causes cool animation to happen when clicked.
+  },
+  data: function(){
+    return {
+      showNopeText: false,
+      showRainbowText: false,
+      clickedButton: false,
+    }
+  },
+
+  methods: {
+    butonClicked: async function(){
+      console.log('buton clicked');
+      bus.$emit('buton-clicked', this);
+
+      if (this.nope){
+        this.showNopeText = true;
+        this.$emit('nope-clicked');
+        // Early return.
+        return;
+      }
+
+      this.clickedButton = true;
+      // if ('yay' in this.$attrs){
+      //   console.log('yay that was a good button');
+      //   this.showRainbowText = true;        
+      // }
+      // Add delay so any custom handlers on the buton execute before the generic buton-group executes.
+      await wait(1000);
+
+      if (this.$parent.onClick !== undefined){
+        this.$parent.onClick();        
+      }
+    },
+  },
+  template: '#buton-template'
+});
+
+Vue.component('buton-group', {
+  props: {
+    onClick: {type: Function, 
+              default: () => console.warn('buton-group should have onClick') },
+  },
+  template: '<div><slot></slot></div>'
+});
+
 
 Vue.component('explanation', {
   template: '#explanation-template'
@@ -578,30 +949,67 @@ Vue.component('chain-rule', {
     return {
       active: 'intro',
 
-      gotIndependenceProblemRight: false,
+      problemsRight: [], // 'problem0' (use string key)
       gotCorrelationIntuitionRight: false,
 
-      showRainbow: false,
-      showFall: false,
-      showExplanation: false,
+      avatarState: {
+        showRainbow: false,
+        showFall: false,
+        showExplanation: true,        
+      },
     };
   },
-  // mounted: function(){
-  //   debugger;
-  // },
+  mounted: async function(){
+    var this_ = this;
+    bus.$on('buton-clicked', async function(buton){
+      // Have avatar react based on buton attributes.
+      if ('yay' in buton.$attrs){
+        this_.avatarState.showRainbow = true;        
+      }
+      if (buton.nope !== undefined){
+        this_.avatarState.showFall = true;
+        await wait(3000);
+        this_.avatarState.showFall = false;
+      }
+    });
+  },
   methods: {
+    print: function(thing){
+      console.log(thing);
+    },
+    specialClicked: function(){
+      console.log('special clicked');
+    },
     show: function(id){
-//      return true;
-      return id == this.active;
+      return true;
+//      return id == this.active;
     }, 
-    set: async function(id){
+    yay: function(id){
+      this.problemsRight.push(id);
+    },
+    got: function(id){
+      return this.problemsRight.indexOf(id) > -1;
+    },
+    set: async function(id, optionalDelay){
       // do the animationss
-      this.showRainbow = true;
-      this.showFall = true;
-      this.showExplanation = true;
-      await wait(1000);
+      // this.avatarState.showRainbow = true;
+      // this.avatarState.showFall = true;
+      // this.avatarState.showExplanation = true;
+      if (optionalDelay !== undefined){
+//        debugger;
+        console.log('started waiting');
+        await wait(optionalDelay);        
+        console.log('done waiting');
+      }
 
       this.active = id;
+      // Reset avatar state.
+      console.log('reseting state');
+      this.avatarState = {
+        showRainbow: false,
+        showFall: false,
+        showExplanation: false,        
+      };
     },
   },
   template: '#chain-rule-template'
@@ -712,6 +1120,9 @@ Vue.component('live-text', {
         // }          
       }
     }
+
+    // I think sticking this here should work.
+    this.$emit('live-text-complete');
   },
 
   template: '#live-text-template'
@@ -764,6 +1175,8 @@ new Vue({
 
     // Obj property additions do not update DOM, so prepopulate all the keys in the object. Or use lists.
     soundNameToCount: {},
+
+    show: false,
   },
 
   watch: {
@@ -773,7 +1186,7 @@ new Vue({
   },
 
   methods: {
-    show: show, 
+//    show: show, 
     renderAsPercent: renderAsPercent,
 
     // round_to(2.777777, 0) -> 3
