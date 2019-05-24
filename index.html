@@ -20,11 +20,7 @@ font-family: 'Cormorant Garamond', serif;
 -->
 
 <!-- todo: strip and remove the unused -->
-<link href="https://fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css?family=Bungee|Bungee+Hairline|Bungee+Inline|Bungee+Shade|Cormorant+Garamond|Creepster|Dokdo|East+Sea+Dokdo|Indie+Flower|Princess+Sofia|VT323" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css?family=East+Sea+Dokdo|Gaegu:300,400,700|Montserrat:300,400|Open+Sans|Raleway|Roboto+Slab" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css?family=Eagle+Lake|Lato|Raleway" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css?family=Fira+Sans:300,800,900" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Dokdo|Fira+Sans:300,800,900" rel="stylesheet">
 
 <link href="css/animate.css" rel="stylesheet" type="text/css">
 <script src="js/lodash.min.js"></script>
@@ -94,9 +90,10 @@ button{
   background-color: white;
   border-radius: 4px;
 
-  font-size: 24px;
+  font-size: 20px;
   font-weight: 900;
   margin-bottom: 8px; 
+  padding: 4px 8px;
 }
 
 .question button:hover, .question .clicked-button{
@@ -359,6 +356,231 @@ You are going to bring us into this new world of <span class="animated infinite 
 
 </div> <!-- end #app -->
 
+<script type="text/x-template" id="coin-flips-template">
+  <div>
+<!-- <transition name="fade" mode="out-in">-->
+
+<avatar key="intro"
+  v-if="show('intro')"
+  image="monster.png" 
+  text="Hey player, come over here!"
+  :state="avatarState">
+  <buton @click="set('HHHHH')">Oblige</buton>
+</avatar>
+
+<avatar key="HHHHH"
+  v-if="show('HHHHH')"
+  image="monster.png" 
+  text="I tossed a coin 5 times and it landed HHHHH. What do you think it will land the 6th time?"
+  :state="avatarState">
+
+  <buton @click="set('userSaidH')">H</buton>
+  <buton @click="set('userSaidT')">T</buton>
+  <buton @click="set('HHHHH-finale')" yay>I don't know</buton>
+</avatar>
+
+
+<avatar key="userSaidT"
+  v-if="show('userSaidT')"
+  image="monster_wahh.png" 
+  text="I also said T and they diagnosed me with..."
+  :state="avatarState">
+
+  <div style="position:absolute; top:-200px; left:-300px; white-space: nowrap; font-size:64px" class="handwriting">GAMBLER'S FALLACY</div>
+
+  <div>The Gambler's Fallacy is a common misconception that events that haven't occured are more likely to occur.</div>
+
+  <div>Coins have no memory, so just because H came up a lot, doesn't mean that T is more likely to come up in the future.</div>
+
+  <buton @click="set('HHHHH-finale')">Next</buton>
+</avatar>
+
+
+<avatar key="userSaidH"
+  v-if="show('userSaidH')"
+  image="monster_wahh.png" 
+  text="I also said H and they diagnosed me with..."
+  :state="avatarState">
+
+  <div style="position:absolute; top:-200px; left:-300px; white-space: nowrap; font-size:64px" class="handwriting">HOT HAND FALLACY</div>
+
+  <div>Hot Hand Fallacy is a common misconception that events that have occurred recently are "hot" and more likely to come up.</div>
+
+  <div>Coins have no memory, so just because H came up a lot, doesn't mean that H is any more likely to come up in the future.</div>
+
+  <buton @click="set('HHHHH-finale')">Next</buton>
+</avatar>
+
+<avatar key="HHHHH-finale"
+  v-if="show('HHHHH-finale')"
+  image="monster.png" 
+  text="Wow, yeah! The correct answer is that there's no way to tell. You want another question?"
+  :state="avatarState">
+  <buton @click="set('HH')">Sure</buton>
+</avatar>
+
+
+<avatar key="HH"
+  v-if="show('HH')"
+  image="monster.png" 
+  text="What is the probability that I toss a coin twice and get HH?"
+  :state="avatarState">
+  <buton @click="avatarState.showOverlay=true">1/2</buton>
+  <buton @click="set('HHH')" yay>1/4</buton>
+  <buton @click="avatarState.showOverlay=true">Can't say</buton>
+
+  <template v-slot:overlay>
+    <div>
+      Coin flips are independent events (i.e. a result doesn't affect the next result). The probabilities of the joint event: seeing X AND Y can be combined with multiplication. The chance of getting HH is 1/2 x 1/2.
+    </div>
+
+    <div>
+      Another way to see this is that there are 4 possible outcomes:
+
+      HH
+      HT
+      TH
+      TT.
+
+      If we only care about the HH outcome, our probability of getting it is 1/4.
+    </div>
+
+    <buton @click="set('HHH')">Next</buton>
+  </template>
+</avatar>
+
+
+<avatar key="HHH"
+  v-if="show('HHH')"
+  image="monster.png" 
+  text="What is the probability that I toss a coin three times and get HHH?"
+  :state="avatarState">
+  <buton @click="avatarState.showOverlay=true">1/2</buton>
+  <buton @click="avatarState.showOverlay=true">1/3</buton>
+  <buton @click="set('10H')" yay>1/8</buton>
+  <buton @click="avatarState.showOverlay=true">Can't say</buton>
+
+  <template v-slot:overlay>
+    <div>
+      By the same logic as before, coin flips are independent events (i.e. a result doesn't affect the next result). The probabilities of the joint event: seeing X AND Y can be combined with multiplication. The chance of getting HHH is 1/2 x 1/2 x 1/2.
+    </div>
+
+    <div>
+      Another way to see this is that there are 8 possible outcomes:
+
+      HHH
+      HHT
+      HTH
+      HTT
+      THH
+      THT
+      TTH
+      TTT
+
+      If we only care about the HHH outcome, our probability of getting it is 1/8.
+    </div>
+
+    <buton @click="set('10H')">Next</buton>
+  </template>
+</avatar>
+
+
+<avatar key="10H"
+  v-if="show('10H')"
+  image="monster.png" 
+  text="What is the probability that I toss a coin 10 times and get HHHHHHHHHH?"
+  :state="avatarState">
+  <buton @click="set('10HT')" yay>1/(2^10)</buton>
+  <buton @click="avatarState.showOverlay=true">1/2</buton>
+  <buton @click="avatarState.showOverlay=true">1/10</buton>
+  <buton @click="avatarState.showOverlay=true">1/20</buton>
+  <buton @click="avatarState.showOverlay=true">Can't say</buton>
+
+  <template v-slot:overlay>
+    <div>
+      Remember that independent events can be combined with multiplication.
+    </div>
+
+    <div>
+      So the chance of getting HHHHHHHHHH is ....
+
+      (big fraction) approx .01%
+    </div>
+
+    <buton @click="set('10HT')">Next</buton>
+  </template>
+</avatar>
+
+<!-- or should we have the blocking ones?? -->
+<avatar key="10HT"
+  v-if="show('10HT')"
+  image="monster.png" 
+  text="What is the probability that I toss a coin 10 times and get HHHTHHTTTT?"
+  :state="avatarState">
+  <buton @click="set('10HT')" yay>1/(2^10)</buton>
+  <buton @click="avatarState.showOverlay=true">1/2</buton>
+  <buton @click="avatarState.showOverlay=true">1/10</buton>
+  <buton @click="avatarState.showOverlay=true">1/20</buton>
+  <buton @click="avatarState.showOverlay=true">Can't say</buton>
+
+  <template v-slot:overlay>
+    <div>
+      This problem is just like before. The chance of getting HHHTHHTTTT is the same as the probability of getting HHHHHHHHHH.
+    </div>
+
+    <buton @click="set('goodbye')">Next</buton>
+  </template>
+</avatar>
+
+
+<avatar key="goodbye"
+        v-if="show('goodbye')"
+        image="monster.png" text="Ha ha! Isn't it cool that it's the same probability as before?">
+
+  <buton @click="set('100H')">Next</buton>
+</avatar>
+
+
+<avatar key="100H"
+  v-if="show('100H')"
+  image="monster.png" 
+  text="Before you go, I have one final question... the other day I tossed a coin 100 times and it landed heads all 100 times! What do you think it will land on the 101st time?"
+  :state="avatarState">
+  <buton>H</buton>
+  <buton>T</buton>
+  <buton>I don't know</buton>
+
+  <template v-slot:overlay>
+
+    <div>
+      Har-har! This is a trick question but you got it!! The probability that this would happen on a fair coin is, 1/2^100... which ____. number of atoms in the universe. So the coin must not be fair.
+    </div>
+
+    <div>
+      Teehee thanks for playing with me!
+    </div>
+
+    <buton @click="set('congrats')">Next</buton>
+  </template>
+</avatar>
+
+
+<centered key="congrats"
+  v-if="show('congrats')">
+  <div style="font-size: 48px; letter-spacing:4px;">
+  CONGRATS
+  </div>
+  
+  <ul>
+    <li>You learned about independent events (two events that don't affect each other)</li>
+    <li>You learned how to calculate the joint probability of multiple independent events (you multiply)</li>
+    <li>You even got the monster's trick question!</li>
+  </ul> 
+</centered>
+
+</div>
+<!-- </transition> -->
+</script>
 
 <script type="text/x-template" id="chain-rule-template">
 <div>
@@ -383,44 +605,6 @@ You are going to bring us into this new world of <span class="animated infinite 
 
 <transition name="fade" mode="out-in">
 
-
-<!-- <avatar key="monster-intro"
-  v-if="show('monster-intro')"
-  image="monster.png" 
-  text="Hey player, come over here!"
-  :state="avatarState">
-  <buton @click="set('problem0')">Oblige</buton>
-</avatar>
-
-<avatar key="monster-intro"
-  v-if="show('monster-intro')"
-  image="monster.png" 
-  text="I tossed a coin 5 times and it landed HHHHH. What do you think it will land the 6th time?"
-  :state="avatarState">
-
-  <buton-group :onClick="() => avatarState.showExplanation=true">
-    <buton>H</buton>
-    <buton>T</buton>
-    <buton>I don't know</buton>
-  </buton-group>
-</avatar>
-
-
-<avatar key="monster-intro"
-  v-if="show('monster-intro')"
-  image="monster_wahh.png" 
-  text="That's what I said and they diagnosed me with..."
-  :state="avatarState">
-
-  <div style="position:absolute; top:-200px; left:-300px; white-space: nowrap; font-size:64px" class="handwriting">GAMBLER'S FALLACY</div>
-
-  <div>The Gambler's Fallacy is a common misconception that events that haven't occured are more likely to occur.</div>
-
-  <div>While this might make sense for ___, in coin tosses, there is no systematic cause for why ___.</div>
-</avatar> -->
-
-
-
 <avatar key="intro"
   v-if="show('intro')"
   image="girl0.png" 
@@ -435,14 +619,14 @@ You are going to bring us into this new world of <span class="animated infinite 
   text="If 1/2 of all monsters are tall, and 1/4 of monsters have great hair, what is the probability that a random monster is datable?"
   :state="avatarState">
 
-  <buton-group :onClick="() => avatarState.showExplanation=true">
+  <buton-group :onClick="() => avatarState.showOverlay=true">
     <buton>1/8</buton>
     <buton nope="Why 1/3? Try again.">1/3</buton>
     <buton nope="That doesn't make sense. 3/4 is more than the number of monsters that are tall. Try again.">3/4</buton>
     <buton @click="yay('problem0')" yay>Can't say</buton>
   </buton-group>
 
-  <template v-slot:explanation>
+  <template v-slot:overlay>
     <div v-if="got('problem0')">
       Right! It's not possible to say. 
     </div>
@@ -485,7 +669,7 @@ You are going to bring us into this new world of <span class="animated infinite 
   <template v-slot:question>
     <div>What is the probability that a random monster is datable?, i.e. Is tall AND has great hair?</div>
 
-    <buton-group :onClick="() => avatarState.showExplanation=true">
+    <buton-group :onClick="() => avatarState.showOverlay=true">
       <buton @click="yay('problem1')" yay>1/6</buton>
       <buton nope="We said that being tall and having great hair are not independent, so we cannot multiply 1/2 x 1/4.">1/8</buton>
       <buton nope="Are you just multiplying things together? Try again.">1/24</buton>
@@ -493,7 +677,7 @@ You are going to bring us into this new world of <span class="animated infinite 
     </buton-group>
   </template>
 
-  <template v-slot:explanation>
+  <template v-slot:overlay>
     <div>
       {{ got('problem1') ? 'Right.': 'Not quite.' }}
     </div>
@@ -526,7 +710,7 @@ You are going to bring us into this new world of <span class="animated infinite 
         :state="avatarState">
   <div>What is P(tall, great hair, tattoos)?</div>
 
-  <buton-group :onClick="() => avatarState.showExplanation=true">
+  <buton-group :onClick="() => avatarState.showOverlay=true">
     <buton>1/30</buton>
     <buton nope="Remember, we want to use P(great hair|tall), not P(tall).">1/40</buton>
     <buton nope="Wait, are you just blindly multiplying numbers? Stop that.">1/120</buton>
@@ -542,7 +726,7 @@ You are going to bring us into this new world of <span class="animated infinite 
     </ul>
   </template>
 
-  <template v-slot:explanation>
+  <template v-slot:overlay>
     <div>
       {{ got('problem2') ? 'Right.': 'Not quite.' }} Again, it's not possible to say!
     </div>
@@ -660,7 +844,7 @@ You are going to bring us into this new world of <span class="animated infinite 
 
 
 
-<explanation key="congrats"
+<centered key="congrats"
   v-if="show('congrats')">
   <div style="font-size: 48px; letter-spacing:4px;">
   CONGRATS
@@ -671,7 +855,7 @@ You are going to bring us into this new world of <span class="animated infinite 
     <li>You learned about Chain Rule</li>
     <li>You befriended Veronica ❤️</li>
   </ul> 
-</explanation>
+</centered>
 
 </transition>
 
@@ -679,10 +863,272 @@ You are going to bring us into this new world of <span class="animated infinite 
 
 </script>
 
+<script type="text/x-template" id="risk-reward-template">
+<transition name="fade" mode="out-in">
+
+<avatar key="ev"
+  v-if="show('intro')"
+  image="bear.png" 
+  text="What would you rather? (a) I pay you 1 coin or (b) I pay you 4 coins with 20% certainty. 80% of the time you get nothing."
+  :state="avatarState">
+  <buton @click="set('ev-right')">(a) 1 coin with certainty</buton>
+  <buton @click="set('ev-wrong'); delay(() => avatarState.showOverlay=true, 3000)">(b) 4 coins with 20% certainty</buton>
+
+</avatar>
+
+<avatar key="ev-right"
+  v-if="show('ev-right')"
+  image="bear.png" 
+  text="Well, that's correct."
+  :state="avatarState">
+
+  <template v-slot:question>
+    <div>
+     On average, the 4 coins with 20% probability is only worth 0.8 coins on average, so the 1 coin with certainty is worth more.
+    </div>
+
+    <buton @click="set('HHH')">Next</buton>
+  </template>
+</avatar>
+
+<avatar key="ev-wrong"
+  v-if="show('ev-wrong')"
+  image="bear_money.png" 
+  text="Heh heh ."
+  :state="avatarState">
+
+  <template v-slot:overlay>
+    <div>
+      Player! Your answer was incorrect.
+    </div>
+
+    <div>
+      On average, the 4 coins with 20% certainty is only worth 0.8 coins.
+    </div>
+
+    <div>
+      AND it's riskier because the payout isn't guaranteed.
+    </div>
+
+    <div>
+      By the risk-reward tradeoff, you ought to be compensated for extra risk with higher average reward.
+    </div>
+
+    <div style="font-size: 10px">
+      The bear offered a bum deal because 4 coins with 20% probability was higher risk and lower average reward.
+    </div>
+
+    <buton @click="set('HHH')">Next</buton>
+  </template>
+</avatar>
+
+
+<avatar key="userSaidT"
+  v-if="show('userSaidT')"
+  image="monster_wahh.png" 
+  text="I also said T and they diagnosed me with..."
+  :state="avatarState">
+
+  <div style="position:absolute; top:-200px; left:-300px; white-space: nowrap; font-size:64px" class="handwriting">GAMBLER'S FALLACY</div>
+
+  <div>The Gambler's Fallacy is a common misconception that events that haven't occured are more likely to occur.</div>
+
+  <div>Coins have no memory, so just because H came up a lot, doesn't mean that T is more likely to come up in the future.</div>
+
+  <buton @click="set('HHHHH-finale')">Next</buton>
+</avatar>
+
+
+<avatar key="userSaidH"
+  v-if="show('userSaidH')"
+  image="monster_wahh.png" 
+  text="I also said H and they diagnosed me with..."
+  :state="avatarState">
+
+  <div style="position:absolute; top:-200px; left:-300px; white-space: nowrap; font-size:64px" class="handwriting">HOT HAND FALLACY</div>
+
+  <div>Hot Hand Fallacy is a common misconception that events that have occurred recently are "hot" and more likely to come up.</div>
+
+  <div>Coins have no memory, so just because H came up a lot, doesn't mean that H is any more likely to come up in the future.</div>
+
+  <buton @click="set('HHHHH-finale')">Next</buton>
+</avatar>
+
+<avatar key="HHHHH-finale"
+  v-if="show('HHHHH-finale')"
+  image="monster.png" 
+  text="Wow, yeah! The correct answer is that there's no way to tell. You want another question?"
+  :state="avatarState">
+  <buton @click="set('HH')">Sure</buton>
+</avatar>
+
+
+<avatar key="HH"
+  v-if="show('HH')"
+  image="monster.png" 
+  text="What is the probability that I toss a coin twice and get HH?"
+  :state="avatarState">
+  <buton @click="avatarState.showOverlay=true">1/2</buton>
+  <buton @click="set('HHH')" yay>1/4</buton>
+  <buton @click="avatarState.showOverlay=true">Can't say</buton>
+
+  <template v-slot:overlay>
+    <div>
+      Coin flips are independent events (i.e. a result doesn't affect the next result). The probabilities of the joint event: seeing X AND Y can be combined with multiplication. The chance of getting HH is 1/2 x 1/2.
+    </div>
+
+    <div>
+      Another way to see this is that there are 4 possible outcomes:
+
+      HH
+      HT
+      TH
+      TT.
+
+      If we only care about the HH outcome, our probability of getting it is 1/4.
+    </div>
+
+    <buton @click="set('HHH')">Next</buton>
+  </template>
+</avatar>
+
+
+<avatar key="HHH"
+  v-if="show('HHH')"
+  image="monster.png" 
+  text="What is the probability that I toss a coin three times and get HHH?"
+  :state="avatarState">
+  <buton @click="avatarState.showOverlay=true">1/2</buton>
+  <buton @click="avatarState.showOverlay=true">1/3</buton>
+  <buton @click="set('10H')" yay>1/8</buton>
+  <buton @click="avatarState.showOverlay=true">Can't say</buton>
+
+  <template v-slot:overlay>
+    <div>
+      By the same logic as before, coin flips are independent events (i.e. a result doesn't affect the next result). The probabilities of the joint event: seeing X AND Y can be combined with multiplication. The chance of getting HHH is 1/2 x 1/2 x 1/2.
+    </div>
+
+    <div>
+      Another way to see this is that there are 8 possible outcomes:
+
+      HHH
+      HHT
+      HTH
+      HTT
+      THH
+      THT
+      TTH
+      TTT
+
+      If we only care about the HHH outcome, our probability of getting it is 1/8.
+    </div>
+
+    <buton @click="set('10H')">Next</buton>
+  </template>
+</avatar>
+
+
+<avatar key="10H"
+  v-if="show('10H')"
+  image="monster.png" 
+  text="What is the probability that I toss a coin 10 times and get HHHHHHHHHH?"
+  :state="avatarState">
+  <buton @click="set('10HT')" yay>1/(2^10)</buton>
+  <buton @click="avatarState.showOverlay=true">1/2</buton>
+  <buton @click="avatarState.showOverlay=true">1/10</buton>
+  <buton @click="avatarState.showOverlay=true">1/20</buton>
+  <buton @click="avatarState.showOverlay=true">Can't say</buton>
+
+  <template v-slot:overlay>
+    <div>
+      Remember that independent events can be combined with multiplication.
+    </div>
+
+    <div>
+      So the chance of getting HHHHHHHHHH is ....
+
+      (big fraction) approx .01%
+    </div>
+
+    <buton @click="set('10HT')">Next</buton>
+  </template>
+</avatar>
+
+<!-- or should we have the blocking ones?? -->
+<avatar key="10HT"
+  v-if="show('10HT')"
+  image="monster.png" 
+  text="What is the probability that I toss a coin 10 times and get HHHTHHTTTT?"
+  :state="avatarState">
+  <buton @click="set('10HT')" yay>1/(2^10)</buton>
+  <buton @click="avatarState.showOverlay=true">1/2</buton>
+  <buton @click="avatarState.showOverlay=true">1/10</buton>
+  <buton @click="avatarState.showOverlay=true">1/20</buton>
+  <buton @click="avatarState.showOverlay=true">Can't say</buton>
+
+  <template v-slot:overlay>
+    <div>
+      This problem is just like before. The chance of getting HHHTHHTTTT is the same as the probability of getting HHHHHHHHHH.
+    </div>
+
+    <buton @click="set('goodbye')">Next</buton>
+  </template>
+</avatar>
+
+
+<avatar key="goodbye"
+        v-if="show('goodbye')"
+        image="monster.png" text="Ha ha! Isn't it cool that it's the same probability as before?">
+
+  <buton @click="set('100H')">Next</buton>
+</avatar>
+
+
+<avatar key="100H"
+  v-if="show('100H')"
+  image="monster.png" 
+  text="Before you go, I have one final question... the other day I tossed a coin 100 times and it landed heads all 100 times! What do you think it will land on the 101st time?"
+  :state="avatarState">
+  <buton>H</buton>
+  <buton>T</buton>
+  <buton>I don't know</buton>
+
+  <template v-slot:overlay>
+
+    <div>
+      Har-har! This is a trick question but you got it!! The probability that this would happen on a fair coin is, 1/2^100... which ____. number of atoms in the universe. So the coin must not be fair.
+    </div>
+
+    <div>
+      Teehee thanks for playing with me!
+    </div>
+
+    <buton @click="set('congrats')">Next</buton>
+  </template>
+</avatar>
+
+
+<centered key="congrats"
+  v-if="show('congrats')">
+  <div style="font-size: 48px; letter-spacing:4px;">
+  CONGRATS
+  </div>
+  
+  <ul>
+    <li>You learned about independent events (two events that don't affect each other)</li>
+    <li>You learned how to calculate the joint probability of multiple independent events (you multiply)</li>
+    <li>You even got the monster's trick question!</li>
+  </ul> 
+</centered>
+
+</transition>
+</script>
+
+
 
 <!-- begin templates -->
-<script type="text/x-template" id="explanation-template">
-<div class="explanation">
+<script type="text/x-template" id="centered-template">
+<div class="centered">
   <div></div>
   <div></div>
   <div></div>
@@ -703,13 +1149,13 @@ You are going to bring us into this new world of <span class="animated infinite 
 <div style="position: relative; height: 500px;">
 
 
-<!-- overlay with explanation -->
+<!-- overlay-->
 <transition name="slide-fade">
-<div v-if="state.showExplanation && hasSlot('explanation')"
+<div v-if="state.showOverlay && hasSlot('overlay')"
      style="position:absolute; z-index:1; height: 500px; width:100%; opacity:0.9; background-color: white; color:black;">
-  <explanation>
-      <slot name="explanation"></slot>
-  </explanation>
+  <centered>
+      <slot name="overlay"></slot>
+  </centered>
 </div>
 </transition>
 
@@ -792,7 +1238,7 @@ You are going to bring us into this new world of <span class="animated infinite 
 
 
 <script type="text/x-template" id="buton-template">
-<div style="margin-bottom:0px; position:relative;">
+<span style="margin-bottom:0px; position:relative;">
   <button @click="butonClicked()" v-on="$listeners" :class="{'rainbow-text': showRainbowText, 'clicked-button': clickedButton}"><slot></slot>
   </button>
   <transition name="fade">
@@ -800,7 +1246,7 @@ You are going to bring us into this new world of <span class="animated infinite 
       {{nope}}
     </div>
   </transition>
-</div>
+</span>
 </script>
 
 
@@ -823,7 +1269,7 @@ You are going to bring us into this new world of <span class="animated infinite 
 
 <script>
 
-const wait = ms => new Promise(resolve => setTimeout(resolve, 0));
+const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 // https://alligator.io/vuejs/global-event-bus/
 const bus = new Vue();
@@ -887,7 +1333,7 @@ Vue.component('avatar', {
     // Events that get triggered from parent.
     state: {type: Object, default: function() { 
       return {
-        showExplanation: false, showRainbow: false, showFall: false}; 
+        showOverlay: false, showRainbow: false, showFall: false}; 
       }
     },
   },
@@ -987,84 +1433,91 @@ Vue.component('buton-group', {
 });
 
 
-Vue.component('explanation', {
-  template: '#explanation-template'
+Vue.component('centered', {
+  template: '#centered-template'
 });
 
-Vue.component('chain-rule', {
-  data: function(){
-    return {
-      active: 'intro',
+function makeComponent(component_name){
+  Vue.component(component_name, {
+    data: function(){
+      return {
+        active: 'intro',
 
-      problemsRight: [], // 'problem0' (use string key)
-      gotCorrelationIntuitionRight: false,
+        problemsRight: [], // 'problem0' (use string key)
 
-      avatarState: {
-        showRainbow: false,
-        showFall: false,
-        showExplanation: true,        
-      },
-    };
-  },
-  mounted: async function(){
-    var this_ = this;
-    bus.$on('buton-clicked', async function(buton){
-      // Have avatar react based on buton attributes.
-      if ('yay' in buton.$attrs){
-        this_.avatarState.showRainbow = true;        
-      }
-      if (buton.nope !== undefined){
-        this_.avatarState.showFall = true;
-        await wait(3000);
-        this_.avatarState.showFall = false;
-      }
-    });
-  },
-  methods: {
-    print: function(thing){
-      console.log(thing);
-    },
-    specialClicked: function(){
-      console.log('special clicked');
-    },
-    show: function(id){
-//      return true;
-      return id == this.active;
-    }, 
-    yay: function(id){
-      this.problemsRight.push(id);
-    },
-    got: function(id){
-      return this.problemsRight.indexOf(id) > -1;
-    },
-    set: async function(id, optionalDelay){
-      // do the animationss
-      // this.avatarState.showRainbow = true;
-      // this.avatarState.showFall = true;
-      // this.avatarState.showExplanation = true;
-      if (optionalDelay !== undefined){
-//        debugger;
-        console.log('started waiting');
-        await wait(optionalDelay);        
-        console.log('done waiting');
-      }
+        shortTermMemory: null, // A variable for dumping short term component state.
 
-      this.active = id;
-      // Reset avatar state.
-      console.log('reseting state');
-      this.avatarState = {
-        showRainbow: false,
-        showFall: false,
-        showExplanation: false,        
+        avatarState: {
+          showRainbow: false,
+          showFall: false,
+          showOverlay: true,        
+        },
       };
     },
-  },
-  template: '#chain-rule-template'
-});
+    mounted: async function(){
+      var this_ = this;
+      bus.$on('buton-clicked', async function(buton){
+        // Have avatar react based on buton attributes.
+        if ('yay' in buton.$attrs){
+          this_.avatarState.showRainbow = true;        
+        }
+        if (buton.nope !== undefined){
+          this_.avatarState.showFall = true;
+          await wait(3000);
+          this_.avatarState.showFall = false;
+        }
+      });
+    },
+    methods: {
+      print: function(thing){
+        console.log(thing);
+      },
+      specialClicked: function(){
+        console.log('special clicked');
+      },
+      show: function(id){
+//        return true;
+        return id == this.active;
+      }, 
+      yay: function(id){
+        this.problemsRight.push(id);
+      },
+      got: function(id){
+        return this.problemsRight.indexOf(id) > -1;
+      },
+      set: async function(id, optionalDelay){
+        // do the animationss
+        // this.avatarState.showRainbow = true;
+        // this.avatarState.showFall = true;
+        // this.avatarState.showOverlay = true;
+        if (optionalDelay !== undefined){
+  //        debugger;
+          console.log('started waiting');
+          await wait(optionalDelay);        
+          console.log('done waiting');
+        }
 
-// Vue.component('question', {
-//   template: '#question-template'
-// });
+        this.active = id;
+        // Reset avatar state.
+        console.log('reseting state');
+        this.avatarState = {
+          showRainbow: false,
+          showFall: false,
+          showOverlay: false,        
+        };
+      },
+      delay: async function(fn, ms){
+        await wait(ms);
+        fn();
+      }
+    },
+    template: '#' + component_name + '-template'
+  });
+}
+makeComponent('coin-flips'); // joint prob with independence
+makeComponent('chain-rule'); // conditional prob + join prob with chain rule
+makeComponent('risk-reward'); // EV
+
 
 
 // Hides content until it is revealed as part of the story.
@@ -1176,37 +1629,18 @@ Vue.component('live-text', {
 });
 
 var storyPoints = [
-// {
-//   name: 'Monk Intro',
-//   component: 'monk-intro',
-// },
-// {
-//   name: 'Monk Game',
-//   component: 'monk-game',
-// },
-// {
-//   name: 'Forest Intro',
-//   component: 'forest-intro',
-// },
-// {
-//   name: 'Forest Game',
-//   component: 'forest-game',
-// },
-// {
-//   name: 'Distribution Interlude',
-//   component: 'distribution-interlude',
-//   nest: 1
-// },
+{
+  name: 'Risk Reward',
+  component: 'risk-reward',
+},
+{
+  name: 'Coin Flips',
+  component: 'coin-flips',
+},
 {
   name: 'Chain Rule',
   component: 'chain-rule',
 },
-// {
-//   name: 'Cats',
-//   component: 'cat-forest',
-// },
-
-
 ];
 
 // Gotchas:
