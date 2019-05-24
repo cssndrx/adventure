@@ -42,6 +42,9 @@ font-family: 'Cormorant Garamond', serif;
 div{
   margin-bottom: 16px;
 }
+.normal-div, .normal-div div{
+  margin-bottom: 0px;
+}
 
 /* font-family: 'Gaegu', cursive; -- cute child like handwriting */
 /* font-family: 'Dokdo', cursive; -- funky */
@@ -232,20 +235,31 @@ button{
   animation: fallover 1s ease-in 0s 1; /* to not stand back up:  normal forwards;  */
 }
 
-.dot{
+.active-point{
+  background-color: black;
+}
+
+.point-container{
+  width: 40%; 
+  display:flex; 
+  justify-content:space-between; 
+  margin: 0 auto;
+}
+
+.point{
   display: inline-block;
-  width: 20px;
-  height: 20px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
-  background-color: #eee;
+  border: 2px solid black;
 }
 
-.dot:hover{
-  background-color: #777;
+.point:hover{
+  background-color: #333;
 }
 
 
-.dot span{
+.point span{
   display: none;
   position:absolute;
   font-size: 10px;
@@ -258,7 +272,7 @@ button{
   color: white;
 }
 
-.dot:hover span{
+.point:hover span{
   display: inline-block;
 }
 
@@ -607,30 +621,13 @@ You are going to bring us into this new world of <span class="animated infinite 
   </ul> 
 </centered>
 
-</div>
 <!-- </transition> -->
+</div>
 </script>
 
 <script type="text/x-template" id="chain-rule-template">
+
 <div>
-
-<!-- <buton-group :onClick="() => showFall = true">
-  <buton @click="showRainbow=true">Test buton</buton>
-</buton-group>
-
-<div style="position:relative; left: 200px">
-<div class="dot" @click="set('problem0')">
-  <span>The independence problem</span>
-</div>
-<div class="dot">
-  <span>This second great thing</span>
-</div>
-<div class="dot">
-  <span>This third thing</span>
-</div>
-</div>
--->
-
 
 <transition name="fade" mode="out-in">
 
@@ -893,16 +890,36 @@ You are going to bring us into this new world of <span class="animated infinite 
 </script>
 
 <script type="text/x-template" id="risk-reward-template">
+<div>
+
+<!-- jump to a diferent problem -->
+<div class="point-container">
+  <div v-for="point in points" 
+  @click="set(point.key)" 
+  class="point" 
+  :class="{'active-point': point.key == active}"
+  :style="pointStyle(point)">
+    <span>{{point.name}}</span>
+  </div>
+</div>
+
 
 <!-- <transition name="fade" mode="out-in"> -->
-<div>
+
+<avatar key="intro"
+  v-if="show('intro')"
+  image="bear.png" 
+  text="Do you dare play with a bear???"
+  :state="avatarState">
+  <buton @click="set('ev')">Yes</buton>
+</avatar>
 
 <avatar key="ev"
   v-if="show('ev')"
   image="bear.png" 
   text="What would you rather? (a) I pay you 1 coin or (b) I pay you 4 coins with 20% certainty. 80% of the time you get nothing."
   :state="avatarState">
-  <buton @click="set('ev-right')">(a) 1 coin with certainty</buton>
+  <buton @click="set('ev-right'); yay('ev')">(a) 1 coin with certainty</buton>
   <buton @click="set('ev-wrong'); delay(() => avatarState.showOverlay=true, 3000)">(b) 4 coins with 20% certainty</buton>
 </avatar>
 
@@ -917,7 +934,7 @@ You are going to bring us into this new world of <span class="animated infinite 
      On average, the 4 coins with 20% probability is only worth 0.8 coins on average, so the 1 coin with certainty is worth more.
     </div>
 
-    <buton @click="set('HHH')">Next</buton>
+    <buton @click="set('100')">Next</buton>
   </template>
 </avatar>
 
@@ -949,7 +966,7 @@ You are going to bring us into this new world of <span class="animated infinite 
       The bear offered a bum deal because 4 coins with 20% probability was higher risk and lower average reward.
     </div>
 
-    <buton @click="set('HHH')">Next</buton>
+    <buton @click="set('100')">Next</buton>
   </template>
 </avatar>
 
@@ -958,8 +975,8 @@ You are going to bring us into this new world of <span class="animated infinite 
   image="bear.png" 
   text="What I offered you the chance to pick one choice and play 100 times? Which would you pick?"
   :state="avatarState">
-  <buton @click="set('ev-right')">(a) 1 coin with certainty</buton>
-  <buton @click="set('ev-wrong'); delay(() => avatarState.showOverlay=true, 3000)">(b) 4 coins with 20% certainty</buton>
+  <buton @click="set('100-right'); yay('100')">(a) 1 coin with certainty</buton>
+  <buton @click="set('100-wrong'); delay(() => avatarState.showOverlay=true, 3000)">(b) 4 coins with 20% certainty</buton>
 </avatar>
 
 
@@ -1008,8 +1025,7 @@ You are going to bring us into this new world of <span class="animated infinite 
     This is a sneak peak of the Binomial Distribution which you will see later in this adventure. Statisticians have invented distributions to model many common scenarios. 
   </div>
 
-  <buton>Stats is cool</buton>
-  
+  <buton @click="set('congrats')">Stats is cool</buton>
 </centered>
 
 <centered key="congrats"
@@ -1096,7 +1112,6 @@ You are going to bring us into this new world of <span class="animated infinite 
   </div>
 </transition>
 
-
 </div>
 </script>
 
@@ -1117,7 +1132,7 @@ You are going to bring us into this new world of <span class="animated infinite 
 
 
 <script type="text/x-template" id="monk-head-template">
-<div class="handwriting normal-divs"
+<div class="handwriting normal-div"
       style="display:inline-block; position:relative; white-space: nowrap;">
   <img src="images/monk_head.png" style="width:80px;">
 
@@ -1341,12 +1356,13 @@ Vue.component('centered', {
   template: '#centered-template'
 });
 
-function makeComponent(component_name){
-  Vue.component(component_name, {
+function makeComponent(componentName, points){
+  Vue.component(componentName, {
     data: function(){
       return {
         active: 'intro',
 
+        points: points, 
         problemsRight: [], // 'problem0' (use string key)
 
         shortTermMemory: null, // A variable for dumping short term component state.
@@ -1380,8 +1396,8 @@ function makeComponent(component_name){
         console.log('special clicked');
       },
       show: function(id){
-        return true;
-//        return id == this.active;
+//        return true;
+        return id == this.active;
       }, 
       yay: function(id){
         this.problemsRight.push(id);
@@ -1390,6 +1406,7 @@ function makeComponent(component_name){
         return this.problemsRight.indexOf(id) > -1;
       },
       set: async function(id, optionalDelay){
+        console.log('setting: ' + id);
         // do the animationss
         // this.avatarState.showRainbow = true;
         // this.avatarState.showFall = true;
@@ -1413,14 +1430,28 @@ function makeComponent(component_name){
       delay: async function(fn, ms){
         await wait(ms);
         fn();
-      }
+      },
+      pointStyle: function(point){
+        if (this.got(point.key)){
+          return {
+            'background-image' : "url('images/rainbow.png')",
+            'background-size': 'cover'
+          };
+        } 
+      },
     },
-    template: '#' + component_name + '-template'
+    template: '#' + componentName + '-template'
   });
 }
 makeComponent('coin-flips'); // joint prob with independence
 makeComponent('chain-rule'); // conditional prob + join prob with chain rule
-makeComponent('risk-reward'); // EV
+makeComponent('risk-reward', [
+  { key: 'intro', name: 'Intro', },
+  { key: 'ev', name: 'EV', },
+  { key: '100', name: 'EV 100', },
+  { key: '100-chart', name: 'EV 100', },
+  { key: 'congrats', name: 'EV 100', },
+]); // EV
 
 
 
@@ -1568,8 +1599,8 @@ new Vue({
     roundTo: roundTo,
 
     // Changes tabs.
-    setStoryPoint: function(component_name){
-      var story_point = _.filter(storyPoints, {component: component_name});
+    setStoryPoint: function(componentName){
+      var story_point = _.filter(storyPoints, {component: componentName});
       if (story_point.length !== 1){
         console.error('must match exactly one story point');
         debugger;
