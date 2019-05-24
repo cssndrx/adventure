@@ -240,7 +240,7 @@ button{
 }
 
 .point-container{
-  width: 40%; 
+  width: 350px;
   display:flex; 
   justify-content:space-between; 
   margin: 0 auto;
@@ -316,6 +316,19 @@ button{
   opacity: 0;
 }
 
+
+.story-point-silhouette{
+  -webkit-filter: contrast(0%) brightness(50%);
+  filter: contrast(0%) brightness(50%);
+  cursor: pointer;
+}
+
+.story-point-silhouette:hover{
+  -webkit-filter: none;
+  filter: none;
+}
+
+
 </style>
 
 <body>
@@ -372,10 +385,6 @@ You are going to bring us into this new world of <span class="animated infinite 
 </div>-->
 
 
-
-<div>
-
-
 <!-- <div style="width: 150px; position:absolute; left: 0px; text-align: left; padding-left: 16px">
 
   <div v-for="storyPoint in storyPoints"
@@ -393,14 +402,32 @@ You are going to bring us into this new world of <span class="animated infinite 
 </keep-alive>
 
 
-</div> <!-- end centering box -->
-
+<div class="handwriting">
+  The story:
+  <img v-for="storyPoint in storyPoints"
+      @click="currentStoryPoint = storyPoint"
+      :class="{'story-point-silhouette': currentStoryPoint !== storyPoint}"
+      :style="storyPointStyle(storyPoint)"
+      :src="'images/' + storyPoint.image" style="width:50px">
+</div>
 
 
 </div> <!-- end #app -->
 
 <script type="text/x-template" id="coin-flips-template">
-  <div>
+<div>
+
+<!-- jump to a diferent problem -->
+<div class="point-container">
+  <div v-for="point in points" 
+  @click="set(point.key)" 
+  class="point" 
+  :class="{'active-point': point.key == active}"
+  :style="pointStyle(point)">
+    <span>{{point.name}}</span>
+  </div>
+</div>
+
 <!-- <transition name="fade" mode="out-in">-->
 
 <avatar key="intro"
@@ -587,7 +614,7 @@ You are going to bring us into this new world of <span class="animated infinite 
 <avatar key="100H"
   v-if="show('100H')"
   image="monster.png" 
-  text="Before you go, I have one final question... the other day I tossed a coin 100 times and it landed heads all 100 times! What do you think it will land on the 101st time?"
+  text="Before you go, I have one final question... the other day I tossed a coin 100 times and it landed heads all 100 times! What do you think it will land on the 101-st time?"
   :state="avatarState">
   <buton>H</buton>
   <buton>T</buton>
@@ -628,6 +655,17 @@ You are going to bring us into this new world of <span class="animated infinite 
 <script type="text/x-template" id="chain-rule-template">
 
 <div>
+
+<!-- jump to a diferent problem -->
+<div class="point-container">
+  <div v-for="point in points" 
+  @click="set(point.key)" 
+  class="point" 
+  :class="{'active-point': point.key == active}"
+  :style="pointStyle(point)">
+    <span>{{point.name}}</span>
+  </div>
+</div>
 
 <transition name="fade" mode="out-in">
 
@@ -1232,6 +1270,16 @@ Vue.component('input-box', {
   template: '#input-box-template'
 });
 
+function firstAncestorOfComponent(node, componentName){
+  while(node !== undefined){
+    node = node.$parent;
+    if (node.$options.name === componentName){
+      return node;
+    }
+  }
+  return undefined;
+}
+
 function isDescendant(ancestor, maybeChild){
   var node = maybeChild.$parent;
   while(node !== undefined){
@@ -1379,7 +1427,12 @@ function makeComponent(componentName, points){
       bus.$on('buton-clicked', async function(buton){
         // Have avatar react based on buton attributes.
         if ('yay' in buton.$attrs){
-          this_.avatarState.showRainbow = true;        
+          this_.avatarState.showRainbow = true; 
+
+          // Automatically call the 'yay' fn.
+          var avatar = firstAncestorOfComponent(buton, 'avatar');
+          var key = avatar.$vnode.key;
+          this_.yay(key);
         }
         if (buton.nope !== undefined){
           this_.avatarState.showFall = true;
@@ -1443,15 +1496,39 @@ function makeComponent(componentName, points){
     template: '#' + componentName + '-template'
   });
 }
-makeComponent('coin-flips'); // joint prob with independence
-makeComponent('chain-rule'); // conditional prob + join prob with chain rule
+
+// Joint prob with independence
+makeComponent('coin-flips', [
+  { key: 'intro', name: 'Intro', },
+  { key: 'HHHHH', name: '5 heads', },
+  { key: 'HH', name: 'Probability of 2 heads', },
+  { key: 'HHH', name: 'Probability of 3 heads', },
+  { key: '10H', name: 'Probability of 10 heads', },
+  { key: '10HT', name: 'Probability of 10 heads and tails', },
+  { key: '100H', name: '100 heads', },
+  { key: 'congrats', name: 'Congrats', },
+]); 
+
+// Conditional prob + join prob with chain rule
+makeComponent('chain-rule', [
+  { key: 'intro', name: 'Intro', },
+  { key: 'problem0', name: 'Independence', },
+  { key: 'problem1', name: 'Conditional probability', },
+  { key: 'problem2', name: 'Tattoos', },
+  { key: 'problem3', name: 'Chain Rule', },
+  { key: 'problem4', name: 'Chain Rule 5', },
+  { key: 'not-many', name: 'Aww', },
+  { key: 'congrats', name: 'Congrats', },
+  ]); 
+
+// EV
 makeComponent('risk-reward', [
   { key: 'intro', name: 'Intro', },
   { key: 'ev', name: 'EV', },
   { key: '100', name: 'EV 100', },
-  { key: '100-chart', name: 'EV 100', },
-  { key: 'congrats', name: 'EV 100', },
-]); // EV
+  { key: '100-chart', name: 'Binomial distribution', },
+  { key: 'congrats', name: 'Congrats', },
+]); 
 
 
 
@@ -1554,17 +1631,21 @@ Vue.component('live-text', {
 
 var storyPoints = [
 {
-  name: 'Risk Reward',
-  component: 'risk-reward',
-},
-{
   name: 'Coin Flips',
   component: 'coin-flips',
+  image: 'monster.png',
 },
 {
   name: 'Chain Rule',
   component: 'chain-rule',
+  image: 'girl0.png',
 },
+{
+  name: 'Risk Reward',
+  component: 'risk-reward',
+  image: 'bear.png',
+},
+
 ];
 
 // Gotchas:
