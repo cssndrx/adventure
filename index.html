@@ -81,7 +81,7 @@ img{
   width:350px;
 }
 
-.explanation *{
+.centered *{
   font-size: 22px;
 }
 
@@ -106,14 +106,14 @@ button{
   font-weight: 900;
 }
 
-.explanation{
+.centered{
   display: grid;
   grid-template-columns: 1fr 500px 1fr;
   grid-template-rows: 1fr auto 1fr;
   height: 500px;
 }
 
-.explanation button{
+.centered button{
   margin: 0 auto;
   margin-bottom: 8px;
 }
@@ -122,6 +122,35 @@ button{
 .hidden-at-first{
   opacity: 0;
   transition: opacity 1s;
+}
+
+.spin-and-pulse{
+  position: absolute;
+  animation: spin-and-pulse 5s ease 0s infinite;
+}
+
+@keyframes spin-and-pulse {
+  0% {
+    transform: rotate(1turn);
+  }
+  5% {
+    transform: rotate(0turn);
+  }
+  7% {
+    transform: scale(1);
+  }
+  10% {
+    transform: scale(1.2);
+  }
+  13% {
+    transform: scale(1);
+  }
+  15% {
+    transform: scale(1.1);
+  }
+  18% {
+    transform: scale(1);
+  }
 }
 
 .wobble{
@@ -864,16 +893,17 @@ You are going to bring us into this new world of <span class="animated infinite 
 </script>
 
 <script type="text/x-template" id="risk-reward-template">
-<transition name="fade" mode="out-in">
+
+<!-- <transition name="fade" mode="out-in"> -->
+<div>
 
 <avatar key="ev"
-  v-if="show('intro')"
+  v-if="show('ev')"
   image="bear.png" 
   text="What would you rather? (a) I pay you 1 coin or (b) I pay you 4 coins with 20% certainty. 80% of the time you get nothing."
   :state="avatarState">
   <buton @click="set('ev-right')">(a) 1 coin with certainty</buton>
   <buton @click="set('ev-wrong'); delay(() => avatarState.showOverlay=true, 3000)">(b) 4 coins with 20% certainty</buton>
-
 </avatar>
 
 <avatar key="ev-right"
@@ -895,6 +925,7 @@ You are going to bring us into this new world of <span class="animated infinite 
   v-if="show('ev-wrong')"
   image="bear_money.png" 
   text="Heh heh ."
+  animation="spin-and-pulse"
   :state="avatarState">
 
   <template v-slot:overlay>
@@ -922,191 +953,64 @@ You are going to bring us into this new world of <span class="animated infinite 
   </template>
 </avatar>
 
-
-<avatar key="userSaidT"
-  v-if="show('userSaidT')"
-  image="monster_wahh.png" 
-  text="I also said T and they diagnosed me with..."
+<avatar key="100"
+  v-if="show('100')"
+  image="bear.png" 
+  text="What I offered you the chance to pick one choice and play 100 times? Which would you pick?"
   :state="avatarState">
-
-  <div style="position:absolute; top:-200px; left:-300px; white-space: nowrap; font-size:64px" class="handwriting">GAMBLER'S FALLACY</div>
-
-  <div>The Gambler's Fallacy is a common misconception that events that haven't occured are more likely to occur.</div>
-
-  <div>Coins have no memory, so just because H came up a lot, doesn't mean that T is more likely to come up in the future.</div>
-
-  <buton @click="set('HHHHH-finale')">Next</buton>
+  <buton @click="set('ev-right')">(a) 1 coin with certainty</buton>
+  <buton @click="set('ev-wrong'); delay(() => avatarState.showOverlay=true, 3000)">(b) 4 coins with 20% certainty</buton>
 </avatar>
 
 
-<avatar key="userSaidH"
-  v-if="show('userSaidH')"
-  image="monster_wahh.png" 
-  text="I also said H and they diagnosed me with..."
+<avatar key="100-right"
+  v-if="show('100-right')"
+  image="bear.png" 
+  text="Yeah, that's correct."
   :state="avatarState">
 
-  <div style="position:absolute; top:-200px; left:-300px; white-space: nowrap; font-size:64px" class="handwriting">HOT HAND FALLACY</div>
-
-  <div>Hot Hand Fallacy is a common misconception that events that have occurred recently are "hot" and more likely to come up.</div>
-
-  <div>Coins have no memory, so just because H came up a lot, doesn't mean that H is any more likely to come up in the future.</div>
-
-  <buton @click="set('HHHHH-finale')">Next</buton>
-</avatar>
-
-<avatar key="HHHHH-finale"
-  v-if="show('HHHHH-finale')"
-  image="monster.png" 
-  text="Wow, yeah! The correct answer is that there's no way to tell. You want another question?"
-  :state="avatarState">
-  <buton @click="set('HH')">Sure</buton>
-</avatar>
-
-
-<avatar key="HH"
-  v-if="show('HH')"
-  image="monster.png" 
-  text="What is the probability that I toss a coin twice and get HH?"
-  :state="avatarState">
-  <buton @click="avatarState.showOverlay=true">1/2</buton>
-  <buton @click="set('HHH')" yay>1/4</buton>
-  <buton @click="avatarState.showOverlay=true">Can't say</buton>
-
-  <template v-slot:overlay>
+  <template v-slot:question>
     <div>
-      Coin flips are independent events (i.e. a result doesn't affect the next result). The probabilities of the joint event: seeing X AND Y can be combined with multiplication. The chance of getting HH is 1/2 x 1/2.
+     Playing 100 times doesn't change the fact that 4 coins with 20% probability has the lower expected value.
     </div>
 
-    <div>
-      Another way to see this is that there are 4 possible outcomes:
-
-      HH
-      HT
-      TH
-      TT.
-
-      If we only care about the HH outcome, our probability of getting it is 1/4.
-    </div>
-
-    <buton @click="set('HHH')">Next</buton>
+    <buton @click="set('100-chart')">Next</buton>
   </template>
 </avatar>
 
-
-<avatar key="HHH"
-  v-if="show('HHH')"
-  image="monster.png" 
-  text="What is the probability that I toss a coin three times and get HHH?"
+<avatar key="100-wrong"
+  v-if="show('100-wrong')"
+  image="bear_money.png" 
+  text="Heh. Wrong."
+  animation="spin-and-pulse"
   :state="avatarState">
-  <buton @click="avatarState.showOverlay=true">1/2</buton>
-  <buton @click="avatarState.showOverlay=true">1/3</buton>
-  <buton @click="set('10H')" yay>1/8</buton>
-  <buton @click="avatarState.showOverlay=true">Can't say</buton>
 
-  <template v-slot:overlay>
+  <template v-slot:question>
     <div>
-      By the same logic as before, coin flips are independent events (i.e. a result doesn't affect the next result). The probabilities of the joint event: seeing X AND Y can be combined with multiplication. The chance of getting HHH is 1/2 x 1/2 x 1/2.
+     Playing 100 times doesn't change the fact that 4 coins with 20% probability has the lower expected value.
     </div>
 
-    <div>
-      Another way to see this is that there are 8 possible outcomes:
-
-      HHH
-      HHT
-      HTH
-      HTT
-      THH
-      THT
-      TTH
-      TTT
-
-      If we only care about the HHH outcome, our probability of getting it is 1/8.
-    </div>
-
-    <buton @click="set('10H')">Next</buton>
+    <buton @click="set('100-chart')">Next</buton>
   </template>
 </avatar>
 
+<centered key="100-chart"
+  v-if="show('100-chart')">
+  <div>
+  Running a simulation where a computer really executes the 4 coins with 20% probability deal 100 times, yields... (chart)
+  </div>
+  
+  <div>
+    We see the average result is near 80, although random variation resulted in totals near 60 and 100. But in __% of casses, taking the guaranteed 100 coins would have been a better choice.
+  </div>
 
-<avatar key="10H"
-  v-if="show('10H')"
-  image="monster.png" 
-  text="What is the probability that I toss a coin 10 times and get HHHHHHHHHH?"
-  :state="avatarState">
-  <buton @click="set('10HT')" yay>1/(2^10)</buton>
-  <buton @click="avatarState.showOverlay=true">1/2</buton>
-  <buton @click="avatarState.showOverlay=true">1/10</buton>
-  <buton @click="avatarState.showOverlay=true">1/20</buton>
-  <buton @click="avatarState.showOverlay=true">Can't say</buton>
+  <div>
+    This is a sneak peak of the Binomial Distribution which you will see later in this adventure. Statisticians have invented distributions to model many common scenarios. 
+  </div>
 
-  <template v-slot:overlay>
-    <div>
-      Remember that independent events can be combined with multiplication.
-    </div>
-
-    <div>
-      So the chance of getting HHHHHHHHHH is ....
-
-      (big fraction) approx .01%
-    </div>
-
-    <buton @click="set('10HT')">Next</buton>
-  </template>
-</avatar>
-
-<!-- or should we have the blocking ones?? -->
-<avatar key="10HT"
-  v-if="show('10HT')"
-  image="monster.png" 
-  text="What is the probability that I toss a coin 10 times and get HHHTHHTTTT?"
-  :state="avatarState">
-  <buton @click="set('10HT')" yay>1/(2^10)</buton>
-  <buton @click="avatarState.showOverlay=true">1/2</buton>
-  <buton @click="avatarState.showOverlay=true">1/10</buton>
-  <buton @click="avatarState.showOverlay=true">1/20</buton>
-  <buton @click="avatarState.showOverlay=true">Can't say</buton>
-
-  <template v-slot:overlay>
-    <div>
-      This problem is just like before. The chance of getting HHHTHHTTTT is the same as the probability of getting HHHHHHHHHH.
-    </div>
-
-    <buton @click="set('goodbye')">Next</buton>
-  </template>
-</avatar>
-
-
-<avatar key="goodbye"
-        v-if="show('goodbye')"
-        image="monster.png" text="Ha ha! Isn't it cool that it's the same probability as before?">
-
-  <buton @click="set('100H')">Next</buton>
-</avatar>
-
-
-<avatar key="100H"
-  v-if="show('100H')"
-  image="monster.png" 
-  text="Before you go, I have one final question... the other day I tossed a coin 100 times and it landed heads all 100 times! What do you think it will land on the 101st time?"
-  :state="avatarState">
-  <buton>H</buton>
-  <buton>T</buton>
-  <buton>I don't know</buton>
-
-  <template v-slot:overlay>
-
-    <div>
-      Har-har! This is a trick question but you got it!! The probability that this would happen on a fair coin is, 1/2^100... which ____. number of atoms in the universe. So the coin must not be fair.
-    </div>
-
-    <div>
-      Teehee thanks for playing with me!
-    </div>
-
-    <buton @click="set('congrats')">Next</buton>
-  </template>
-</avatar>
-
+  <buton>Stats is cool</buton>
+  
+</centered>
 
 <centered key="congrats"
   v-if="show('congrats')">
@@ -1115,13 +1019,13 @@ You are going to bring us into this new world of <span class="animated infinite 
   </div>
   
   <ul>
-    <li>You learned about independent events (two events that don't affect each other)</li>
-    <li>You learned how to calculate the joint probability of multiple independent events (you multiply)</li>
-    <li>You even got the monster's trick question!</li>
+    <li>You learned about expected value (the average)</li>
+    <li>You got a sneak peak of the usefulness statistical distributions</li>
   </ul> 
 </centered>
 
-</transition>
+<!--</transition>-->
+</div>
 </script>
 
 
@@ -1269,7 +1173,7 @@ You are going to bring us into this new world of <span class="animated infinite 
 
 <script>
 
-const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
+const wait = ms => new Promise(resolve => setTimeout(resolve, 0));
 
 // https://alligator.io/vuejs/global-event-bus/
 const bus = new Vue();
@@ -1476,8 +1380,8 @@ function makeComponent(component_name){
         console.log('special clicked');
       },
       show: function(id){
-//        return true;
-        return id == this.active;
+        return true;
+//        return id == this.active;
       }, 
       yay: function(id){
         this.problemsRight.push(id);
@@ -1551,7 +1455,6 @@ Vue.component('live-text', {
 
   render: function (createElement) {
     var data = [];
-//    debugger;
 
     for (var i=0; i<this.$slots.default.length; i++){
       var vnode = this.$slots.default[i];
@@ -1590,38 +1493,28 @@ Vue.component('live-text', {
 
   mounted: async function(){
     var elts = _.values(this.$refs);
-    var lastSentence = [];
-    var currentSentence = [];
+
+    function pauseDuration(text){
+      const short = 100;
+      const med = 500;
+      const long = 1000;
+      if (!text){
+        return short;
+      }
+      if (text.includes('.') || text.includes('?')){
+        return long;
+      }
+      if (text.includes(')')){
+        return med;
+      }
+      return short;
+    }
 
     for (var i=0; i<elts.length; i++){
       var elt = elts[i];
-      currentSentence.push(elt);
       elt.style.opacity = 1;
-
-      const isEndOfSentence = elt.textContent && elt.textContent.includes('.');
-      const duration = isEndOfSentence ? 1000 : 100;
-      await wait(duration);
-
-// Fading by words.
-//      elt.style.opacity = 0.5;
-
-// Fading by sentences.
-      // console.log('i: ' + i + ' len ' + elts.length);
-      if (isEndOfSentence){
-        lastSentence = currentSentence;
-        currentSentence = [];
-        // Fade the lastSentence away.
-        await(2000);
-        // for (var j=0; j<lastSentence.length; j++){
-        //   elt.classList.remove('hidden-at-first');
-        //   elt.classList.add('become-dull');
-        //   lastSentence[j].style.opacity = 0.5;
-        //   await wait(50);
-        // }          
-      }
+      await wait(pauseDuration(elt.textContent));
     }
-
-    // I think sticking this here should work.
     this.$emit('live-text-complete');
   },
 
