@@ -75,6 +75,10 @@ img{
   font-size: 10px; 
 }
 
+.handwriting{
+  font-family: 'Dokdo', cursive;    
+}
+
 .dialog-text *{
   font-family: 'Dokdo', cursive;  
   font-size: 32px;
@@ -377,13 +381,50 @@ You are going to bring us into this new world of <span class="animated infinite 
 -->
 
 
-{{avatarState}}
-<transition-group name="fade" mode="out-in">
+<transition name="fade" mode="out-in">
+
+
+<!-- <avatar key="monster-intro"
+  v-if="show('monster-intro')"
+  image="monster.png" 
+  text="Hey player, come over here!"
+  :state="avatarState">
+  <buton @click="set('problem0')">Oblige</buton>
+</avatar>
+
+<avatar key="monster-intro"
+  v-if="show('monster-intro')"
+  image="monster.png" 
+  text="I tossed a coin 5 times and it landed HHHHH. What do you think it will land the 6th time?"
+  :state="avatarState">
+
+  <buton-group :onClick="() => avatarState.showExplanation=true">
+    <buton>H</buton>
+    <buton>T</buton>
+    <buton>I don't know</buton>
+  </buton-group>
+</avatar>
+
+
+<avatar key="monster-intro"
+  v-if="show('monster-intro')"
+  image="monster_wahh.png" 
+  text="That's what I said and they diagnosed me with..."
+  :state="avatarState">
+
+  <div style="position:absolute; top:-200px; left:-300px; white-space: nowrap; font-size:64px" class="handwriting">GAMBLER'S FALLACY</div>
+
+  <div>The Gambler's Fallacy is a common misconception that events that haven't occured are more likely to occur.</div>
+
+  <div>While this might make sense for ___, in coin tosses, there is no systematic cause for why ___.</div>
+</avatar> -->
+
+
 
 <avatar key="intro"
   v-if="show('intro')"
   image="girl0.png" 
-  text="I only date tall monsters with great hair."
+  text="Hello! I'm Veronica and I only date monsters that are tall and have great hair."
   :state="avatarState">
   <buton @click="set('problem0')">Next</buton>
 </avatar>
@@ -410,11 +451,15 @@ You are going to bring us into this new world of <span class="animated infinite 
     </div>
 
     <div>
-    Multiplying probabilities implies that the two events are independent.
+      P(tall AND great hair) ≠ P(tall) * P(great hair) in general.
     </div>
 
     <div>
-      Being tall must provide <span class="strong">no information</span> on whether a monster has great hair.
+      It is valid to multiply only when tallness and having great hair are <span class="strong">independent</span>. 
+    </div>
+
+    <div>
+      Independence occurs when a monster's height provides <span class="strong">no information</span> on the monster's greatness of hair.
     </div>
 
     <buton @click="set('problem1')">Next</buton>
@@ -538,7 +583,7 @@ You are going to bring us into this new world of <span class="animated infinite 
       P(tattoo AND great hair AND tall) = <span style="color:magenta">P(tall)</span> * <span style="color:green">P(great hair | tall)</span> * <span style="color:blue">P(tattoo | great hair AND tall)</span>
     </div>
 
-    <buton>Try it</buton>
+    <buton @click="set('problem3')">Try it</buton>
 
   </template>
 
@@ -568,7 +613,7 @@ You are going to bring us into this new world of <span class="animated infinite 
     P(tall, great hair, tattooed) =
     </div>
 
-    1/<input-box :right="42" />
+    1/<input-box :right="42" :onRight="() => set('problem4')"/>
 </avatar>
 
 
@@ -597,7 +642,7 @@ You are going to bring us into this new world of <span class="animated infinite 
     P(tall, great hair, tattooed, around her age, single) =
     </div>
 
-    1/<input-box :right="420" />
+    1/<input-box :right="420" :onRight="() => set('not-many')"/>
 </avatar>
 
 
@@ -607,8 +652,10 @@ You are going to bring us into this new world of <span class="animated infinite 
         image="girl_mad.png" text="That's not very many people!">
 
   What will you say to Veronica? 
-  <buton class="smaller-children">I know you'll find someone soon.</buton>
-  <buton class="smaller-children">Even though each individual criteria may not seem picky, requiring that a monster have all those traits leaves you with a very small dating pool.</buton>
+  <buton-group :onClick="() => set('congrats')">
+    <buton class="smaller-children">I know you'll find someone soon.</buton>
+    <buton class="smaller-children">Even though each individual criteria may not seem picky, requiring that a monster have all those traits leaves you with a very small dating pool.</buton>
+  </buton-group>
 </avatar>
 
 
@@ -626,7 +673,7 @@ You are going to bring us into this new world of <span class="animated infinite 
   </ul> 
 </explanation>
 
-</transition-group>
+</transition>
 
 </div>
 
@@ -776,7 +823,7 @@ You are going to bring us into this new world of <span class="animated infinite 
 
 <script>
 
-const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
+const wait = ms => new Promise(resolve => setTimeout(resolve, 0));
 
 // https://alligator.io/vuejs/global-event-bus/
 const bus = new Vue();
@@ -981,8 +1028,8 @@ Vue.component('chain-rule', {
       console.log('special clicked');
     },
     show: function(id){
-      return true;
-//      return id == this.active;
+//      return true;
+      return id == this.active;
     }, 
     yay: function(id){
       this.problemsRight.push(id);
