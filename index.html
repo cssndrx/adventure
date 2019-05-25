@@ -84,6 +84,10 @@ img{
   width:350px;
 }
 
+.smaller-dialog-text *{
+  font-size: 24px;
+}
+
 .centered *{
   font-size: 22px;
 }
@@ -472,6 +476,7 @@ You are going to bring us into this new world of <span class="animated infinite 
 
   <buton @click="set('HHHHH-finale')">Next</buton>
 </avatar>
+
 
 
 <avatar key="userSaidH"
@@ -1141,7 +1146,8 @@ You are going to bring us into this new world of <span class="animated infinite 
 <!-- Dialog box -->
 <div style="position:absolute; left: 300px; top:0px;">
   <img src="images/dialog.png" >
-  <div style="position: absolute; left:40px; top:23px;" class="dialog-text">
+  <div style="position: absolute; left:40px; top:23px;" class="dialog-text"
+  :class="{'smaller-dialog-text': text.length > 140}">
     <live-text @live-text-complete="showQuestionAndExtra()">
       {{text}}
     </live-text>
