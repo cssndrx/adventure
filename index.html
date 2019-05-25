@@ -1,7 +1,8 @@
 <!doctype html>
-<meta charset="utf-8" />
+
 
 <head>
+<meta charset="utf-8" />
 <!--<link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:200,400,700,900" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css?family=Gloria+Hallelujah" rel="stylesheet">-->
 
@@ -29,7 +30,6 @@ font-family: 'Cormorant Garamond', serif;
 <script src="js/vue.js"></script>
 
 <script src="js/utils.js"></script>
-<script src="js/forest.js"></script>
 
 <style>
 
@@ -258,8 +258,11 @@ button{
   background-color: #333;
 }
 
+.has-tooltip{
+  position: relative;
+}
 
-.point span{
+.has-tooltip span{
   display: none;
   position:absolute;
   font-size: 10px;
@@ -272,7 +275,7 @@ button{
   color: white;
 }
 
-.point:hover span{
+.has-tooltip:hover span{
   display: inline-block;
 }
 
@@ -333,11 +336,23 @@ button{
 
 <body>
 
+<div class="handwriting normal-div" style="font-size:48px; text-align:center">The story so far</div>
+
 
 <div id="app" style="position:relative">
 
 
-
+  <div style="text-align: center">
+    <div v-for="(storyPoint, ind) in storyPoints"
+         @click="storyPointInd = ind"
+         class="has-tooltip"
+         style="display:inline-block;">
+      <img :class="{'story-point-silhouette': currentStoryPoint !== storyPoint}"
+          :src="'images/' + storyPoint.image" 
+          style="width:50px">
+      <span style="top:60px;">{{storyPoint.name}}</span>
+    </div>
+  </div>
 <!--
 
 <transition name="slide-fade">
@@ -402,14 +417,7 @@ You are going to bring us into this new world of <span class="animated infinite 
 </keep-alive>
 
 
-<div class="handwriting">
-  The story:
-  <img v-for="storyPoint in storyPoints"
-      @click="currentStoryPoint = storyPoint"
-      :class="{'story-point-silhouette': currentStoryPoint !== storyPoint}"
-      :style="storyPointStyle(storyPoint)"
-      :src="'images/' + storyPoint.image" style="width:50px">
-</div>
+
 
 
 </div> <!-- end #app -->
@@ -421,7 +429,7 @@ You are going to bring us into this new world of <span class="animated infinite 
 <div class="point-container">
   <div v-for="point in points" 
   @click="set(point.key)" 
-  class="point" 
+  class="point has-tooltip" 
   :class="{'active-point': point.key == active}"
   :style="pointStyle(point)">
     <span>{{point.name}}</span>
@@ -587,7 +595,7 @@ You are going to bring us into this new world of <span class="animated infinite 
   image="monster.png" 
   text="What is the probability that I toss a coin 10 times and get HHHTHHTTTT?"
   :state="avatarState">
-  <buton @click="set('10HT')" yay>1/(2^10)</buton>
+  <buton @click="set('goodbye')" yay>1/(2^10)</buton>
   <buton @click="avatarState.showOverlay=true">1/2</buton>
   <buton @click="avatarState.showOverlay=true">1/10</buton>
   <buton @click="avatarState.showOverlay=true">1/20</buton>
@@ -616,9 +624,9 @@ You are going to bring us into this new world of <span class="animated infinite 
   image="monster.png" 
   text="Before you go, I have one final question... the other day I tossed a coin 100 times and it landed heads all 100 times! What do you think it will land on the 101-st time?"
   :state="avatarState">
-  <buton>H</buton>
-  <buton>T</buton>
-  <buton>I don't know</buton>
+  <buton @click="avatarState.showOverlay=true">H</buton>
+  <buton @click="avatarState.showOverlay=true">T</buton>
+  <buton @click="avatarState.showOverlay=true">I don't know</buton>
 
   <template v-slot:overlay>
 
@@ -646,6 +654,8 @@ You are going to bring us into this new world of <span class="animated infinite 
     <li>You learned how to calculate the joint probability of multiple independent events (you multiply)</li>
     <li>You even got the monster's trick question!</li>
   </ul> 
+
+  <buton @click="$root.nextStory()">Next section</buton>
 </centered>
 
 <!-- </transition> -->
@@ -660,7 +670,7 @@ You are going to bring us into this new world of <span class="animated infinite 
 <div class="point-container">
   <div v-for="point in points" 
   @click="set(point.key)" 
-  class="point" 
+  class="point has-tooltip" 
   :class="{'active-point': point.key == active}"
   :style="pointStyle(point)">
     <span>{{point.name}}</span>
@@ -919,6 +929,8 @@ You are going to bring us into this new world of <span class="animated infinite 
     <li>You learned about Chain Rule</li>
     <li>You befriended Veronica ❤️</li>
   </ul> 
+
+  <buton @click="$root.nextStory()">Next section</buton>
 </centered>
 
 </transition>
@@ -931,10 +943,10 @@ You are going to bring us into this new world of <span class="animated infinite 
 <div>
 
 <!-- jump to a diferent problem -->
-<div class="point-container">
+<div class="point-container" style="width:220px">
   <div v-for="point in points" 
   @click="set(point.key)" 
-  class="point" 
+  class="point has-tooltip" 
   :class="{'active-point': point.key == active}"
   :style="pointStyle(point)">
     <span>{{point.name}}</span>
@@ -1076,12 +1088,13 @@ You are going to bring us into this new world of <span class="animated infinite 
     <li>You learned about expected value (the average)</li>
     <li>You got a sneak peak of the usefulness statistical distributions</li>
   </ul> 
+
+  <buton @click="$root.nextStory()">Next section</buton>
 </centered>
 
 <!--</transition>-->
 </div>
 </script>
-
 
 
 <!-- begin templates -->
@@ -1104,7 +1117,7 @@ You are going to bring us into this new world of <span class="animated infinite 
 
 
 <script type="text/x-template" id="avatar-template">
-<div style="position: relative; height: 500px;">
+<div style="position: relative; height: 500px; width:800px; margin:0 auto; margin-top:16px">
 
 
 <!-- overlay-->
@@ -1657,7 +1670,7 @@ new Vue({
   data: {
 
     storyPoints: storyPoints,
-    currentStoryPoint: storyPoints[0],
+    storyPointInd: 0,
 
     // Obj property additions do not update DOM, so prepopulate all the keys in the object. Or use lists.
     soundNameToCount: {},
@@ -1665,6 +1678,11 @@ new Vue({
     show: false,
   },
 
+  computed: {
+    currentStoryPoint: function(){
+      return this.storyPoints[this.storyPointInd];
+    }
+  },
   watch: {
     currentStoryPoint: function(){
       this.$root.play('swish');
@@ -1678,50 +1696,43 @@ new Vue({
     // round_to(2.777777, 0) -> 3
     // round_to(2.777777, 2) -> 2.78
     roundTo: roundTo,
-
-    // Changes tabs.
-    setStoryPoint: function(componentName){
-      var story_point = _.filter(storyPoints, {component: componentName});
-      if (story_point.length !== 1){
-        console.error('must match exactly one story point');
-        debugger;
-      }
-      this.currentStoryPoint = story_point[0];
-      this.play('achievement0');
+    nextStory: function(){
+      this.storyPointInd = Math.min(this.storyPoints.length-1, this.storyPointInd+1);
     },
 
-    // Given 0.8 --> returns {}
-    paramsFromCertainty: function(certainty){
-      if (certainty == 1.0){
-        return {
-          numLoseIfWrong: 10000000, 
-          numWinIfRight: 1,
-          certainty: certainty,
-          percent: '100%',
-        };
-      }
-      return {
-        numWinIfRight: 1, 
-        numLoseIfWrong: this.roundTo(certainty/(1-certainty), 1),
-        certainty: certainty,
-        percent: this.renderAsPercent(certainty)
-      };      
-    },
+    // // Changes tabs.
+    // setStoryPoint: function(componentName){
+    //   var story_point = _.filter(storyPoints, {component: componentName});
+    //   if (story_point.length !== 1){
+    //     console.error('must match exactly one story point');
+    //     debugger;
+    //   }
+    //   this.currentStoryPoint = story_point[0];
+    //   this.play('achievement0');
+    // },
 
-    paramsFromBet: function(num_win_if_right, num_lose_if_wrong){
-      var certainty = num_lose_if_wrong/(num_win_if_right+num_lose_if_wrong);
-      return this.paramsFromCertainty(certainty);
-    },
+    // // Given 0.8 --> returns {}
+    // paramsFromCertainty: function(certainty){
+    //   if (certainty == 1.0){
+    //     return {
+    //       numLoseIfWrong: 10000000, 
+    //       numWinIfRight: 1,
+    //       certainty: certainty,
+    //       percent: '100%',
+    //     };
+    //   }
+    //   return {
+    //     numWinIfRight: 1, 
+    //     numLoseIfWrong: this.roundTo(certainty/(1-certainty), 1),
+    //     certainty: certainty,
+    //     percent: this.renderAsPercent(certainty)
+    //   };      
+    // },
 
-    storyPointStyle: function(storyPoint){
-      if (storyPoint.nest === undefined){
-        return {};
-      }
-      return {
-        'margin-left': storyPoint.nest * 8 + 'px',
-        'font-size': '12px'
-      };
-    },
+    // paramsFromBet: function(num_win_if_right, num_lose_if_wrong){
+    //   var certainty = num_lose_if_wrong/(num_win_if_right+num_lose_if_wrong);
+    //   return this.paramsFromCertainty(certainty);
+    // },
 
     play: function(soundName){
       console.log('playing ' + soundName);
@@ -1738,6 +1749,5 @@ new Vue({
     }
   } // end methods
 });
-
 
 </script>
