@@ -78,17 +78,18 @@ img{
   font-family: 'Dokdo', cursive;    
 }
 
-.dialog-text *{
+.dialog-text, .dialog-text *{
   font-family: 'Dokdo', cursive;  
   font-size: 32px;
   width:350px;
 }
 
-.smaller-dialog-text *{
+.smaller-dialog-text, .smaller-dialog-text *{
+  font-family: 'Dokdo', cursive;  
   font-size: 24px;
 }
 
-.centered *{
+.centered, .centered *{
   font-size: 22px;
 }
 
@@ -97,10 +98,11 @@ button{
   background-color: white;
   border-radius: 4px;
 
-  font-size: 20px;
+  font-size: 28px;
   font-weight: 900;
   margin-bottom: 8px; 
-  padding: 4px 8px;
+  padding: 8px 16px;
+  margin: 8px;
 }
 
 .question button:hover, .question .clicked-button{
@@ -178,13 +180,13 @@ button{
     transform: rotate(0turn);
   }
   5% {
-    transform: rotate(0.005turn);
+    transform: rotate(0.003turn);
   }
   10% {
     transform: rotate(0turn);
   }
   12% {
-    transform: rotate(0.005turn);
+    transform: rotate(0.003turn);
   }
   15% {
     transform: rotate(0turn);
@@ -442,13 +444,13 @@ You are going to bring us into this new world of <span class="animated infinite 
   <div v-for="point in points" 
   @click="set(point.key)" 
   class="point has-tooltip" 
-  :class="{'active-point': point.key == active}"
+  :class="{'active-point': point.key == activeOrLastKnownPoint}"
   :style="pointStyle(point)">
     <span>{{point.name}}</span>
   </div>
 </div>
 
-<!-- <transition name="fade" mode="out-in">-->
+<transition name="fade" mode="out-in">
 
 <avatar key="intro"
   v-if="show('intro')"
@@ -482,9 +484,8 @@ You are going to bring us into this new world of <span class="animated infinite 
 
   <div>Coins have no memory, so just because H came up a lot, doesn't mean that T is more likely to come up in the future.</div>
 
-  <buton @click="set('HHHHH-finale')">Next</buton>
+  <buton @click="set('HHHHH')">Try again</buton>
 </avatar>
-
 
 
 <avatar key="userSaidH"
@@ -495,11 +496,13 @@ You are going to bring us into this new world of <span class="animated infinite 
 
   <div style="position:absolute; top:-200px; left:-300px; white-space: nowrap; font-size:64px" class="handwriting">HOT HAND FALLACY</div>
 
-  <div>Hot Hand Fallacy is a common misconception that events that have occurred recently are "hot" and more likely to come up.</div>
+  <delay :ms="2000">
+    <div>Hot Hand Fallacy is a common misconception that events that have occurred recently are "hot" and more likely to come up.</div>
 
-  <div>Coins have no memory, so just because H came up a lot, doesn't mean that H is any more likely to come up in the future.</div>
+    <div>Coins have no memory, so just because H came up a lot, doesn't mean that H is any more likely to come up in the future.</div>
 
-  <buton @click="set('HHHHH-finale')">Next</buton>
+    <buton @click="set('HHHHH')">Try again</buton>
+  </delay>
 </avatar>
 
 <avatar key="HHHHH-finale"
@@ -516,37 +519,36 @@ You are going to bring us into this new world of <span class="animated infinite 
   image="monster.png" 
   text="What is the probability that I toss a coin twice and get HH?"
   :state="avatarState">
-  <buton @click="avatarState.showOverlay=true">1/2</buton>
+  <buton nope="1/2 is the probability of tossing a single coin and getting H. Getting two heads in a row is a rarer event.">1/2</buton>
   <buton @click="set('HHH')" yay>1/4</buton>
-  <buton @click="avatarState.showOverlay=true">Can't say</buton>
+  <buton nope="It is possible to say if you assume it is  a fair coin.">Can't say</buton>
 
-  <template v-slot:overlay>
-    <div>
-      Coin flips are independent events (i.e. a result doesn't affect the next result). The probabilities of the joint event: seeing X AND Y can be combined with multiplication. The chance of getting HH is 1/2 x 1/2.
-    </div>
-
-    <div>
-      Another way to see this is that there are 4 possible outcomes:
-
-      HH
-      HT
-      TH
-      TT.
-
-      If we only care about the HH outcome, our probability of getting it is 1/4.
-    </div>
-
-    <buton @click="set('HHH')">Next</buton>
-  </template>
 </avatar>
 
+<centered key="HH-explanation" v-if="show('HH-explanation')">
+  <div>
+    Right. Coin flips are independent events (i.e. a result doesn't affect the next result). The probabilities of the joint event: seeing X AND Y can be combined with multiplication. The chance of getting HH is 1/2 x 1/2.
+  </div>
+
+  <div>
+    Another way to see this is that there are 4 possible outcomes:
+
+    HH
+    HT
+    TH
+    TT.
+
+    If we only care about the HH outcome, our probability of getting it is 1/4.
+  </div>
+  <buton @click="set('HHH')">Next</buton>
+</centered> 
 
 <avatar key="HHH"
   v-if="show('HHH')"
   image="monster.png" 
   text="What is the probability that I toss a coin three times and get HHH?"
   :state="avatarState">
-  <buton @click="avatarState.showOverlay=true">1/2</buton>
+  <buton @click="avatarState.showOverlay=true" say="Hm...">1/2</buton>
   <buton @click="avatarState.showOverlay=true">1/3</buton>
   <buton @click="set('10H')" yay>1/8</buton>
   <buton @click="avatarState.showOverlay=true">Can't say</buton>
@@ -671,7 +673,8 @@ You are going to bring us into this new world of <span class="animated infinite 
   <buton @click="$root.nextStory()">Next section</buton>
 </centered>
 
-<!-- </transition> -->
+</transition>
+
 </div>
 </script>
 
@@ -684,7 +687,7 @@ You are going to bring us into this new world of <span class="animated infinite 
   <div v-for="point in points" 
   @click="set(point.key)" 
   class="point has-tooltip" 
-  :class="{'active-point': point.key == active}"
+  :class="{'active-point': point.key == activeOrLastKnownPoint}"
   :style="pointStyle(point)">
     <span>{{point.name}}</span>
   </div>
@@ -960,14 +963,14 @@ You are going to bring us into this new world of <span class="animated infinite 
   <div v-for="point in points" 
   @click="set(point.key)" 
   class="point has-tooltip" 
-  :class="{'active-point': point.key == active}"
+  :class="{'active-point': point.key == activeOrLastKnownPoint}"
   :style="pointStyle(point)">
     <span>{{point.name}}</span>
   </div>
 </div>
 
 
-<!-- <transition name="fade" mode="out-in"> -->
+<transition name="fade" mode="out-in">
 
 <avatar key="intro"
   v-if="show('intro')"
@@ -1036,7 +1039,7 @@ You are going to bring us into this new world of <span class="animated infinite 
 <avatar key="100"
   v-if="show('100')"
   image="bear.png" 
-  text="What I offered you the chance to pick one choice and play 100 times? Which would you pick?"
+  text="What if I offered you the chance to pick one choice and play 100 times? Which would you pick?"
   :state="avatarState">
   <buton @click="set('100-right'); yay('100')">(a) 1 coin with certainty</buton>
   <buton @click="set('100-wrong'); delay(() => avatarState.showOverlay=true, 3000)">(b) 4 coins with 20% certainty</buton>
@@ -1105,7 +1108,7 @@ You are going to bring us into this new world of <span class="animated infinite 
   <buton @click="$root.nextStory()">Next section</buton>
 </centered>
 
-<!--</transition>-->
+</transition>
 </div>
 </script>
 
@@ -1120,7 +1123,6 @@ You are going to bring us into this new world of <span class="animated infinite 
 
 <script type="text/x-template" id="avatar-template">
 <div style="position: relative; height: 500px; width:800px; margin:0 auto; margin-top:16px">
-
 
 <!-- overlay-->
 <transition name="slide-fade">
@@ -1148,6 +1150,14 @@ You are going to bring us into this new world of <span class="animated infinite 
     <live-text @live-text-complete="showQuestionAndExtra()">
       {{text}}
     </live-text>
+  </div>
+</div>
+
+<!-- Mini dialog -->
+<div v-if="showMiniDialog" style="position:absolute; left: 100px; top:300px;">
+  <img src="images/mini_dialog.png" style="width:150px">
+  <div style="position: absolute; left:40px; top:40px;" class="smaller-dialog-text">
+    Yep!
   </div>
 </div>
 
@@ -1242,7 +1252,7 @@ You are going to bring us into this new world of <span class="animated infinite 
 
 <script>
 
-const wait = ms => new Promise(resolve => setTimeout(resolve, 0));
+const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 // https://alligator.io/vuejs/global-event-bus/
 const bus = new Vue();
@@ -1333,6 +1343,7 @@ Vue.component('avatar', {
       // Internally triggered events.
       showQuestion: false,
       showExtra: false,
+      showMiniDialog: false,
     };
   },
 
@@ -1341,6 +1352,7 @@ Vue.component('avatar', {
       return !!this.$slots[ name ] || !!this.$scopedSlots[ name ];
     },
     showQuestionAndExtra: async function(){
+      console.log('show question and extra');
       this.showQuestion=true; 
       await wait(1000);
       this.showExtra=true;
@@ -1384,9 +1396,11 @@ Vue.component('buton', {
       console.log('buton clicked');
       bus.$emit('buton-clicked', this);
 
+      // debugger;
+      // yes, we can just traverse up and make stuff happen on the avatar.
+
       if (this.nope){
         this.showNopeText = true;
-        this.$emit('nope-clicked');
         // Early return.
         return;
       }
@@ -1425,6 +1439,7 @@ function makeComponent(componentName, points){
     data: function(){
       return {
         active: 'intro',
+        lastActive: 'intro',
 
         points: points, 
         problemsRight: [], // 'problem0' (use string key)
@@ -1438,6 +1453,14 @@ function makeComponent(componentName, points){
         },
       };
     },
+    computed: {
+      activeOrLastKnownPoint: function(){
+        if (points.map(d => d.key).indexOf(this.active) > -1){
+          return this.active;
+        }  
+        return this.lastActive;
+      }
+    },
     mounted: async function(){
       var this_ = this;
       bus.$on('buton-clicked', async function(buton){
@@ -1447,7 +1470,8 @@ function makeComponent(componentName, points){
 
           // Automatically call the 'yay' fn.
           var avatar = firstAncestorOfComponent(buton, 'avatar');
-          var key = avatar.$vnode.key;
+          //debugger;
+          var key = avatar.$vnode.data.key;
           this_.yay(key);
         }
         if (buton.nope !== undefined){
@@ -1469,13 +1493,15 @@ function makeComponent(componentName, points){
         return id == this.active;
       }, 
       yay: function(id){
+        console.log('yay: ' + id);
         this.problemsRight.push(id);
       },
       got: function(id){
         return this.problemsRight.indexOf(id) > -1;
       },
       set: async function(id, optionalDelay){
-        console.log('setting: ' + id);
+        this.lastActive = this.active;
+        // console.log('setting: ' + id);
         // do the animationss
         // this.avatarState.showRainbow = true;
         // this.avatarState.showFall = true;
@@ -1489,7 +1515,7 @@ function makeComponent(componentName, points){
 
         this.active = id;
         // Reset avatar state.
-        console.log('reseting state');
+        // console.log('reseting state');
         this.avatarState = {
           showRainbow: false,
           showFall: false,
@@ -1546,6 +1572,28 @@ makeComponent('risk-reward', [
   { key: 'congrats', name: 'Congrats', },
 ]); 
 
+
+
+// Can be used to delay logic
+// <delay></delay>
+Vue.component('delay', {
+  props: {
+    ms: {type: Number, default: 500},
+    hidden: {type: Boolean, default: false},
+  },
+  data: function(){
+    return {
+      shouldShow: false,
+    }
+  },
+  mounted: function(){
+    var this_ = this;
+    setTimeout(function(){
+      this_.shouldShow = true;
+    }, this.ms);
+  },
+  template: `<span v-if="shouldShow"><slot></slot></span>`,
+});
 
 
 // Hides content until it is revealed as part of the story.
