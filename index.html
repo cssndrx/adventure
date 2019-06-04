@@ -355,6 +355,7 @@ button{
 
 <div id="app" style="position:relative">
 
+<button @click="play()">click me</button>
 
   <div style="text-align: center">
     <div v-for="(storyPoint, ind) in storyPoints"
@@ -480,6 +481,7 @@ You are going to bring us into this new world of <span class="animated infinite 
 <avatar key="userSaidT"
   v-if="show('userSaidT')"
   image="monster_blob.png" 
+  sound="wrong"
   text="I also said T and they diagnosed me with..."
   :state="avatarState">
 
@@ -497,6 +499,7 @@ You are going to bring us into this new world of <span class="animated infinite 
   v-if="show('userSaidH')"
   image="monster_cry.png" 
   text="When I said H and they diagnosed me with..."
+  sound="wrong"
   :state="avatarState">
 
   <div style="position:absolute; top:-200px; left:0px; white-space: nowrap; font-size:64px" class="handwriting">HOT HAND FALLACY</div>
@@ -513,6 +516,7 @@ You are going to bring us into this new world of <span class="animated infinite 
 <avatar key="HHHHH-finale"
   v-if="show('HHHHH-finale')"
   image="monster_yay.png" 
+  sound="right"
   text="Yeah! The correct answer is that there's no way to tell. You want another question?"
   :state="avatarState">
   <buton @click="set('HH')">Sure</buton>
@@ -1147,7 +1151,8 @@ You are going to bring us into this new world of <span class="animated infinite 
 
 
 <!-- Dialog box -->
-<div style="position:absolute; left: 300px; top:0px;">
+<div style="position:absolute; left: 300px; top:0px;"
+  v-if="showLiveText">
   <img src="images/dialog.png" >
   <div style="position: absolute; left:40px; top:23px;" class="dialog-text"
   :class="{'smaller-dialog-text': text.length > 140}">
@@ -1261,6 +1266,13 @@ const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
 // https://alligator.io/vuejs/global-event-bus/
 const bus = new Vue();
 
+var sounds = {
+  'speech': {clip: new Audio('sounds/speech.wav')},
+  'buton': {clip: new Audio('sounds/button.wav')},
+  'wrong': {clip: new Audio('sounds/wrong.wav')},
+  'right': {clip: new Audio('sounds/right.wav'), duration: 1000},
+};
+
 Vue.component('input-box', {
   props: {
     right: {type: Number, default: 0},
@@ -1326,6 +1338,7 @@ Vue.component('avatar', {
     image: {type: String}, // 'girl.png'
     text: {type: String},
     animation: {type: String, default: 'wobble'},
+    sound: {type: String},
 
     // Events that get triggered from parent.
     state: {type: Object, default: function() { 
@@ -1334,18 +1347,39 @@ Vue.component('avatar', {
       }
     },
   },
+  data: function(){
+    return {
+      // Internally triggered events.
+      showQuestion: false,
+      showExtra: false,
+      showMiniDialog: false,
+      showLiveText: false,
 
-  // mounted: function(){
-  //   // Add a blink
-  //   var this_ = this;
-  //   setInterval(async function(){
-  //     // change it to the blink
-  //     console.log('blinking');
-  //     this_.reactionImage = 'monster_blink.png';
-  //     await wait(100);
-  //     this_.reactionImage = null;
-  //   }, 3000);
-  // },
+      reactionImage: null,
+    };
+  },
+
+  mounted: async function(){
+    // Add a blink
+    var this_ = this;
+
+    if (this.sound){
+      this.$root.play(this.sound);
+      await wait(sounds[this.sound].duration || 500);
+    }
+
+    setInterval(function(){
+      this_.showLiveText = true;
+    }, 500);
+
+    // setInterval(async function(){
+    //   // change it to the blink
+    //   console.log('blinking');
+    //   this_.reactionImage = 'monster_blink.png';
+    //   await wait(100);
+    //   this_.reactionImage = null;
+    // }, 3000);
+  },
   computed: {
     imgClasses: function(){
       var classes = {fallover: this.state.showFall};
@@ -1355,16 +1389,6 @@ Vue.component('avatar', {
     imgSrc: function(){
       return 'images/'+ (this.reactionImage || this.image);
     }
-  },
-  data: function(){
-    return {
-      // Internally triggered events.
-      showQuestion: false,
-      showExtra: false,
-      showMiniDialog: false,
-
-      reactionImage: null,
-    };
   },
 
   methods: {
@@ -1413,6 +1437,8 @@ Vue.component('buton', {
 
   methods: {
     butonClicked: async function(){
+      this.$root.play('buton');
+
       console.log('buton clicked');
       bus.$emit('buton-clicked', this);
 
@@ -1530,6 +1556,7 @@ function makeComponent(componentName, points){
       yay: function(id){
         console.log('yay: ' + id);
         this.problemsRight.push(id);
+        this.$root.play('right');
       },
       got: function(id){
         return this.problemsRight.indexOf(id) > -1;
@@ -1711,6 +1738,9 @@ Vue.component('live-text', {
         return short;
       }
       if (text.includes('.') || text.includes('?')){
+
+    //   audio.pause();
+    // audio.currentTime = 0;
         return long;
       }
       if (text.includes(')')){
@@ -1719,11 +1749,22 @@ Vue.component('live-text', {
       return short;
     }
 
+    this.$root.play('speech');
     for (var i=0; i<elts.length; i++){
       var elt = elts[i];
       elt.style.opacity = 1;
-      await wait(pauseDuration(elt.textContent));
+
+      // Pause.
+      var duration = pauseDuration(elt.textContent);
+      if (duration == 1000){
+        this.$root.pause('speech');
+      }
+      await wait(duration);
+      if (duration == 1000){
+        this.$root.play('speech');
+      }
     }
+    this.$root.pause('speech');
     this.$emit('live-text-complete');
   },
 
@@ -1765,10 +1806,15 @@ new Vue({
     storyPoints: storyPoints,
     storyPointInd: 0,
 
+    sounds: {
+       'text-blip-high': new Audio('sounds/text-blip-high.ogg')
+    },
+
     // Obj property additions do not update DOM, so prepopulate all the keys in the object. Or use lists.
-    soundNameToCount: {},
+    //soundNameToCount: {},
 
     show: false,
+    isPlaying: false,
   },
 
   computed: {
@@ -1829,16 +1875,13 @@ new Vue({
 
     play: function(soundName){
       console.log('playing ' + soundName);
-
-      var audio;
-      if (isNaN(soundName[soundName.length-1])){ // is string last char
-        const count = this.soundNameToCount[soundName] || 0;
-        this.soundNameToCount[soundName] = count+1;
-        audio = new Audio('sounds/' + soundName + (count % 2) + '.wav');
-      } else { // is number last char
-        audio = new Audio('sounds/' + soundName + '.wav');
-      }
-      audio.play();      
+      var sound = sounds[soundName].clip;
+      sound.play();
+    },
+    pause: function(soundName){
+      var sound = sounds[soundName].clip;
+      sound.pause();
+      sound.currentTime = 0;      
     }
   } // end methods
 });
