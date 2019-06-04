@@ -71,7 +71,7 @@ img{
 
 .nope{
   color:red; 
-  font-size: 10px; 
+  font-size: 12px; 
 }
 
 .handwriting{
@@ -143,7 +143,7 @@ button{
 
 .spin-and-pulse{
   position: absolute;
-  animation: spin-and-pulse 5s ease 0s infinite;
+  animation: spin-and-pulse 5s ease 0s 1;
 }
 
 @keyframes spin-and-pulse {
@@ -220,22 +220,22 @@ button{
   0% {
     transform: translateY(20px);
   }
-  10% {
+  1% {
     transform: translateY(-30px);
   }
-  20% {
+  2% {
     transform: translateY(10px);
   }
-  30% {
+  3% {
     transform: translateY(-10px);
   }
-  40% {
+  4% {
     transform: translateY(0px);
   }
 }
 .mad-bounce{
   position: absolute;
-  animation: bounce 1.5s ease 0s infinite;  
+  animation: bounce 4s ease 0s infinite;  
 }
 
 @keyframes fallover{
@@ -295,7 +295,7 @@ button{
 
 
 .extra-info, .extra-info *{
-  font-size: 12px;
+  font-size: 14px;
 }
 
 .smaller-children, .smaller-children *{
@@ -346,6 +346,15 @@ button{
 }
 
 
+.cropcircle{
+    width: 100px;
+    height: 100px;
+    border-radius: 100%;
+    background: #000 no-repeat center;
+    background-size: cover;
+}
+
+
 </style>
 
 <body>
@@ -354,9 +363,6 @@ button{
 
 
 <div id="app" style="position:relative">
-
-<button @click="play()">click me</button>
-
   <div style="text-align: center">
     <div v-for="(storyPoint, ind) in storyPoints"
          @click="storyPointInd = ind"
@@ -481,10 +487,11 @@ You are going to bring us into this new world of <span class="animated infinite 
 <avatar key="userSaidT"
   v-if="show('userSaidT')"
   image="monster_blob.png" 
-  sound="wrong"
+  sound="curious"
   text="I also said T and they diagnosed me with..."
   :state="avatarState">
 
+<!--  <delay>{{$root.play('curious')}}</delay>-->
   <div style="position:absolute; top:-200px; left:0px; white-space: nowrap; font-size:64px" class="handwriting">GAMBLER'S FALLACY</div>
 
   <div>The Gambler's Fallacy is a common misconception that events that haven't occured are more likely to occur.</div>
@@ -499,7 +506,7 @@ You are going to bring us into this new world of <span class="animated infinite 
   v-if="show('userSaidH')"
   image="monster_cry.png" 
   text="When I said H and they diagnosed me with..."
-  sound="wrong"
+  sound="curious"
   :state="avatarState">
 
   <div style="position:absolute; top:-200px; left:0px; white-space: nowrap; font-size:64px" class="handwriting">HOT HAND FALLACY</div>
@@ -556,12 +563,12 @@ You are going to bring us into this new world of <span class="animated infinite 
   image="monster.png" 
   text="What is the probability that I toss a coin three times and get HHH?"
   :state="avatarState">
-  <buton @click="avatarState.showOverlay=true" say="Hm...">1/2</buton>
-  <buton @click="avatarState.showOverlay=true">1/3</buton>
+  <buton nope>1/2</buton>
+  <buton nope>1/3</buton>
   <buton @clik="set('10H')" yay>1/8</buton>
-  <buton @click="avatarState.showOverlay=true">Can't say</buton>
+  <buton nope>Can't say</buton>
 
-  <template v-slot:overlay>
+  <template v-slot:hint>
     <div>
       By the same logic as before, coin flips are independent events (i.e. a result doesn't affect the next result). The probabilities of the joint event: seeing X AND Y can be combined with multiplication. The chance of getting HHH is 1/2 x 1/2 x 1/2.
     </div>
@@ -580,8 +587,6 @@ You are going to bring us into this new world of <span class="animated infinite 
 
       If we only care about the HHH outcome, our probability of getting it is 1/8.
     </div>
-
-    <buton @click="set('10H')">Next</buton>
   </template>
 </avatar>
 
@@ -592,12 +597,12 @@ You are going to bring us into this new world of <span class="animated infinite 
   text="What is the probability that I toss a coin 10 times and get HHHHHHHHHH?"
   :state="avatarState">
   <buton @clik="set('10HT')" yay>1/(2^10)</buton>
-  <buton @click="avatarState.showOverlay=true">1/2</buton>
-  <buton @click="avatarState.showOverlay=true">1/10</buton>
-  <buton @click="avatarState.showOverlay=true">1/20</buton>
-  <buton @click="avatarState.showOverlay=true">Can't say</buton>
+  <buton nope>1/2</buton>
+  <buton nope>1/10</buton>
+  <buton nope>1/20</buton>
+  <buton nope>Can't say</buton>
 
-  <template v-slot:overlay>
+  <template v-slot:hint>
     <div>
       Remember that independent events can be combined with multiplication.
     </div>
@@ -612,57 +617,61 @@ You are going to bring us into this new world of <span class="animated infinite 
   </template>
 </avatar>
 
-<!-- or should we have the blocking ones?? -->
+
 <avatar key="10HT"
   v-if="show('10HT')"
   image="monster.png" 
   text="What is the probability that I toss a coin 10 times and get HHHTHHTTTT?"
   :state="avatarState">
-  <buton @clik="set('goodbye')" yay>1/(2^10)</buton>
-  <buton @click="avatarState.showOverlay=true">1/2</buton>
-  <buton @click="avatarState.showOverlay=true">1/10</buton>
-  <buton @click="avatarState.showOverlay=true">1/20</buton>
-  <buton @click="avatarState.showOverlay=true">Can't say</buton>
-
-  <template v-slot:overlay>
-    <div>
-      This problem is just like before. The chance of getting HHHTHHTTTT is the same as the probability of getting HHHHHHHHHH.
-    </div>
-
-    <buton @click="set('goodbye')">Next</buton>
-  </template>
+  <buton @clik="set('10T-interstitial')" yay>1/(2^10)</buton>
+  <buton nope>1/2</buton>
+  <buton nope>1/10</buton>
+  <buton nope>1/20</buton>
+  <buton nope>Can't say</buton>
 </avatar>
 
+<interstitial 
+    image="monster.png"
+    key="10HT-interstitial" 
+    v-if="show('10HT-interstitial')">
+  <div>
+    This problem is just like before. The chance of getting HHHTHHTTTT is the same as the probability of getting HHHHHHHHHH.
+  </div>
 
-<avatar key="goodbye"
-        v-if="show('goodbye')"
-        image="monster.png" text="Ha ha! Isn't it cool that it's the same probability as before?">
+  <div>
+    Isn't it cool that it's the same probability as before?
+  </div>
 
   <buton @click="set('100H')">Next</buton>
-</avatar>
+</interstitial>
 
 
 <avatar key="100H"
   v-if="show('100H')"
   image="monster.png" 
-  text="Before you go, I have one final question... the other day I tossed a coin 100 times and it landed heads all 100 times! What do you think it will land on the 101-st time?"
+  text="I have one final question. The other day I was tossed a coin 100 times and it landed heads all 100 times! What do you think it will land on the 101-st time?"
   :state="avatarState">
-  <buton @click="avatarState.showOverlay=true">H</buton>
-  <buton @click="avatarState.showOverlay=true">T</buton>
-  <buton @click="avatarState.showOverlay=true">I don't know</buton>
+  <buton @click="set('100H-right')">H</buton>
+  <buton @click="set('100H-wrong')">T</buton>
+  <buton @click="set('100H-wrong')">I don't know</buton>
+</avatar>
 
-  <template v-slot:overlay>
 
-    <div>
-      Har-har! This is a trick question but you got it!! The probability that this would happen on a fair coin is, 1/2^100... which ____. number of atoms in the universe. So the coin must not be fair.
-    </div>
+<avatar key="100H-right"
+  v-if="show('100H')"
+  image="monster.png" 
+  text="Har-har! This was a trick question but you got it! The probability of this happening on a fair coin is 1/2^100. If all the 2^80 atoms in the universe were flipping coins, this probably wouldn't happen. So the coin must not be fair. Teehee thanks for playing with me!"
+  :state="avatarState">
+  <buton @click="set('congrats')">Next</buton>
+</avatar>
 
-    <div>
-      Teehee thanks for playing with me!
-    </div>
 
-    <buton @click="set('congrats')">Next</buton>
-  </template>
+<avatar key="100H-wrong"
+  v-if="show('100H')"
+  image="monster.png" 
+  text="Har-har! This was a trick question. The probability of this happening on a fair coin is 1/2^100. If all the 2^80 atoms in the universe were flipping coins, this probably wouldn't happen. So the coin must not be fair. Teehee thanks for playing with me!"
+  :state="avatarState">
+  <buton @click="set('congrats')">Next</buton>
 </avatar>
 
 
@@ -675,7 +684,7 @@ You are going to bring us into this new world of <span class="animated infinite 
   <ul>
     <li>You learned about independent events (two events that don't affect each other)</li>
     <li>You learned how to calculate the joint probability of multiple independent events (you multiply)</li>
-    <li>You even got the monster's trick question!</li>
+    <li>You learned that there are 2^80 atoms in the universe.</li>
   </ul> 
 
   <buton @click="$root.nextStory()">Next section</buton>
@@ -701,7 +710,7 @@ You are going to bring us into this new world of <span class="animated infinite 
   </div>
 </div>
 
-<transition name="fade" mode="out-in">
+<!--<transition name="fade" mode="out-in">-->
 
 <avatar key="intro"
   v-if="show('intro')"
@@ -756,16 +765,16 @@ You are going to bring us into this new world of <span class="animated infinite 
         text="Yeah! I guess being tall and having great hair are slightly correlated. About 1/3 of tall monsters have great hair."
         :state="avatarState">
 
-  <template v-slot:extra>
-    Facts from before:
+  <template v-slot:question>
+    <div>What is the probability that a random monster is datable?, i.e. Is tall AND has great hair?</div>
+
+    <div class="extra-info">Facts from before:
     <ul>
       <li>1/2 of all monsters are tall</li>
       <li>1/4 of all monsters have great hair</li>
     </ul>
-  </template>
+    </div>
 
-  <template v-slot:question>
-    <div>What is the probability that a random monster is datable?, i.e. Is tall AND has great hair?</div>
 
     <buton-group :onClick="() => avatarState.showOverlay=true">
       <buton @click="yay('problem1')" yay>1/6</buton>
@@ -808,21 +817,20 @@ You are going to bring us into this new world of <span class="animated infinite 
         :state="avatarState">
   <div>What is P(tall, great hair, tattoos)?</div>
 
+  <div class="extra-info">Facts from before:
+    <ul>
+      <li>P(tall) = 1/2</li>
+      <li>P(great hair) = 1/4</li>
+      <li>P(great hair|tall) = 1/3</li>
+    </ul>
+  </div>
+
   <buton-group :onClick="() => avatarState.showOverlay=true">
     <buton>1/30</buton>
     <buton nope="Remember, we want to use P(great hair|tall), not P(tall).">1/40</buton>
     <buton nope="Wait, are you just blindly multiplying numbers? Stop that.">1/120</buton>
     <buton @click="yay('problem2')" yay>Can't say</buton>
   </buton-group>
-
-  <template v-slot:extra>
-    Facts from before:
-    <ul>
-      <li>P(tall) = 1/2</li>
-      <li>P(great hair) = 1/4</li>
-      <li>P(great hair|tall) = 1/3</li>
-    </ul>
-  </template>
 
   <template v-slot:overlay>
     <div>
@@ -892,10 +900,9 @@ You are going to bring us into this new world of <span class="animated infinite 
     </div>
 
     <div>
-    P(tall, great hair, tattooed) =
+    P(tall, great hair, tattooed) =  1/<input-box :right="42" :onRight="() => set('problem4')"/>
     </div>
 
-    1/<input-box :right="42" :onRight="() => set('problem4')"/>
 </avatar>
 
 
@@ -933,11 +940,11 @@ You are going to bring us into this new world of <span class="animated infinite 
         animation="mad-bounce"
         image="girl_mad.png" text="That's not very many people!">
 
-  What will you say to Veronica? 
-  <buton-group :onClick="() => set('congrats')">
-    <buton class="smaller-children">I know you'll find someone soon.</buton>
-    <buton class="smaller-children">Even though each individual criteria may not seem picky, requiring that a monster have all those traits leaves you with a very small dating pool.</buton>
-  </buton-group>
+  <div>
+    Even though each individual criteria may not seem picky, requiring that a monster have all those traits leaves Veronica with a very small dating pool.
+  </div>
+
+  <buton @click="set('congrats')">Next</buton>
 </avatar>
 
 
@@ -978,7 +985,7 @@ You are going to bring us into this new world of <span class="animated infinite 
 </div>
 
 
-<transition name="fade" mode="out-in">
+<!--<transition name="fade" mode="out-in">-->
 
 <avatar key="intro"
   v-if="show('intro')"
@@ -1116,12 +1123,20 @@ You are going to bring us into this new world of <span class="animated infinite 
   <buton @click="$root.nextStory()">Next section</buton>
 </centered>
 
-</transition>
+<!--</transition> -->
 </div>
 </script>
 
 
 <!-- begin templates -->
+<script type="text/x-template" id="interstitial-template">
+<centered>
+   <div class="cropcircle" style="margin:0 auto; margin-bottom:16px" :style="cropCircleStyle"></div>
+  <slot></slot>
+</centered>
+</script>
+
+
 <script type="text/x-template" id="centered-template">
 <div class="centered">
   <div class="centered-content"><slot></slot></div> 
@@ -1156,7 +1171,7 @@ You are going to bring us into this new world of <span class="animated infinite 
   <img src="images/dialog.png" >
   <div style="position: absolute; left:40px; top:23px;" class="dialog-text"
   :class="{'smaller-dialog-text': text.length > 140}">
-    <live-text @live-text-complete="showQuestionAndExtra()">
+    <live-text @live-text-complete="showQuestion=true">
       {{text}}
     </live-text>
   </div>
@@ -1173,15 +1188,9 @@ You are going to bring us into this new world of <span class="animated infinite 
 <!-- Bottom right -->
 <transition name="fade">
   <div v-if="showQuestion" class="question" style="position:absolute; left: 100px; top: 300px; width: 500px;">
+    <div v-if="helperText" class="nope" style="margin-top:24px">{{helperText}}</div>
     <slot name="question"></slot>
     <slot></slot> <!-- todo: consider removing default slot -->
-  </div>
-</transition>
-
-<!-- Bottom left -->
-<transition name="fade">
-  <div v-if="showExtra" style="position:absolute; top: 400px; left: 50px; width:250px;" class="extra-info">
-    <slot name="extra"></slot>
   </div>
 </transition>
 
@@ -1231,13 +1240,16 @@ You are going to bring us into this new world of <span class="animated infinite 
 
 <script type="text/x-template" id="buton-template">
 <span style="margin-bottom:0px; position:relative;">
+  <div v-if="showX" 
+       class="handwriting" 
+       style="position:absolute; color:red; font-size: 64px; left: calc(50% - 20px); top:-30px">X</div>
   <button @click="butonClicked()" v-on="$listeners" :class="{'rainbow-text': showRainbowText, 'clicked-button': clickedButton}"><slot></slot>
   </button>
-  <transition name="fade">
+<!--  <transition name="fade">
     <div v-if="showNopeText" class="nope" style="margin-bottom:8px; position:relative; top:-4px;">
       {{nope}}
     </div>
-  </transition>
+  </transition>-->
 </span>
 </script>
 
@@ -1270,7 +1282,10 @@ var sounds = {
   'speech': {clip: new Audio('sounds/speech.wav')},
   'buton': {clip: new Audio('sounds/button.wav')},
   'wrong': {clip: new Audio('sounds/wrong.wav')},
-  'right': {clip: new Audio('sounds/right.wav'), duration: 1000},
+  // 'right': {clip: new Audio('sounds/right_soft.wav'), duration: 1000},
+  'right': {clip: new Audio('sounds/swish1.wav')},
+
+  'curious': {clip: new Audio('sounds/curious.wav')},
 };
 
 Vue.component('input-box', {
@@ -1351,11 +1366,11 @@ Vue.component('avatar', {
     return {
       // Internally triggered events.
       showQuestion: false,
-      showExtra: false,
       showMiniDialog: false,
       showLiveText: false,
 
       reactionImage: null,
+      helperText: null,
     };
   },
 
@@ -1368,9 +1383,20 @@ Vue.component('avatar', {
       await wait(sounds[this.sound].duration || 500);
     }
 
-    setInterval(function(){
-      this_.showLiveText = true;
-    }, 500);
+    await wait(500);
+    this_.showLiveText = true;
+
+
+    bus.$on('buton-clicked', async function(buton){
+      // <buton nope="why not">
+      if (buton.nope !== undefined){  
+        this_.helperText = buton.nope;        
+        // this_.avatarState.showFall = true;
+        // await wait(3000);
+        // this_.avatarState.showFall = false;
+        //avatar.reactionImage = 'monster_cry.png';
+      }
+    });
 
     // setInterval(async function(){
     //   // change it to the blink
@@ -1394,12 +1420,6 @@ Vue.component('avatar', {
   methods: {
     hasSlot: function(name){
       return !!this.$slots[ name ] || !!this.$scopedSlots[ name ];
-    },
-    showQuestionAndExtra: async function(){
-      console.log('show question and extra');
-      this.showQuestion=true; 
-      await wait(1000);
-      this.showExtra=true;
     },
   },
   template: '#avatar-template'
@@ -1431,6 +1451,7 @@ Vue.component('buton', {
     return {
       showNopeText: false,
       showRainbowText: false,
+      showX: false,
       clickedButton: false,
     }
   },
@@ -1445,11 +1466,6 @@ Vue.component('buton', {
       // debugger;
       // yes, we can just traverse up and make stuff happen on the avatar.
 
-      if (this.nope){
-        this.showNopeText = true;
-        // Early return.
-        return;
-      }
 
       this.clickedButton = true;
       // if ('yay' in this.$attrs){
@@ -1461,6 +1477,14 @@ Vue.component('buton', {
       this.$emit('clik');
       // Add delay so any custom handlers on the buton execute before the generic buton-group executes.
       await wait(1000);
+
+
+      if (this.nope){
+        this.showX = true;
+//        this.showNopeText = true;
+        // Early return so we don't trigger the buton-group.
+        return;
+      }
 
       if (this.$parent.onClick !== undefined){
         this.$parent.onClick();        
@@ -1482,6 +1506,18 @@ Vue.component('buton-group', {
 
 Vue.component('centered', {
   template: '#centered-template'
+});
+
+Vue.component('interstitial', {
+  props: {
+    image: {type: String, default: 'monster.png'}, 
+  },
+  computed: {
+    cropCircleStyle: function(){
+      return {'background-image': 'url("images/' + this.image + '")'};
+    }
+  },
+  template: '#interstitial-template'
 });
 
 function makeComponent(componentName, points){
@@ -1533,13 +1569,12 @@ function makeComponent(componentName, points){
           avatar.reactionImage = 'monster_cry.png';          
         } 
         // <buton nope="why not">
-        else if (buton.nope !== undefined){
+        else if (buton.nope !== undefined){          
           // this_.avatarState.showFall = true;
           // await wait(3000);
           // this_.avatarState.showFall = false;
           avatar.reactionImage = 'monster_cry.png';
         }
-
       });
     },
     methods: {
@@ -1550,8 +1585,8 @@ function makeComponent(componentName, points){
         console.log('special clicked');
       },
       show: function(id){
-//        return true;
-        return id == this.active;
+        return true;
+//        return id == this.active;
       }, 
       yay: function(id){
         console.log('yay: ' + id);
@@ -1822,11 +1857,11 @@ new Vue({
       return this.storyPoints[this.storyPointInd];
     }
   },
-  watch: {
-    currentStoryPoint: function(){
-      this.$root.play('swish');
-    },
-  },
+  // watch: {
+  //   currentStoryPoint: function(){
+  //     this.$root.play('swish');
+  //   },
+  // },
 
   methods: {
 //    show: show, 
