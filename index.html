@@ -439,14 +439,7 @@ You are going to bring us into this new world of <span class="animated infinite 
 
 
 
-
-
 </div> <!-- end #app -->
-
-<script type="text/x-template" id="demo-template">
-<div>
-</div>
-</script>
 
 <script type="text/x-template" id="coin-flips-template">
 <div>
@@ -478,8 +471,8 @@ You are going to bring us into this new world of <span class="animated infinite 
   text="I tossed a coin 5 times and it landed HHHHH. What do you think it will land the 6th time?"
   :state="avatarState">
 
-  <buton @click="set('userSaidH')">H</buton>
-  <buton @click="set('userSaidT')">T</buton>
+  <buton @click="set('userSaidH')" nope>H</buton>
+  <buton @click="set('userSaidT')" nope>T</buton>
   <buton @click="set('HHHHH-finale')" yay>I don't know</buton>
 </avatar>
 
@@ -612,8 +605,6 @@ You are going to bring us into this new world of <span class="animated infinite 
 
       (big fraction) approx .01%
     </div>
-
-    <buton @click="set('10HT')">Next</buton>
   </template>
 </avatar>
 
@@ -649,11 +640,11 @@ You are going to bring us into this new world of <span class="animated infinite 
 <avatar key="100H"
   v-if="show('100H')"
   image="monster.png" 
-  text="I have one final question. The other day I was tossed a coin 100 times and it landed heads all 100 times! What do you think it will land on the 101-st time?"
+  text="I have one final question. The other day I tossed a coin 100 times and it landed heads all 100 times! What do you think it will land on the 101-st time?"
   :state="avatarState">
-  <buton @click="set('100H-right')">H</buton>
-  <buton @click="set('100H-wrong')">T</buton>
-  <buton @click="set('100H-wrong')">I don't know</buton>
+  <buton @click="set('100H-right')" yay>H</buton>
+  <buton @click="set('100H-wrong')" nope>T</buton>
+  <buton @click="set('100H-wrong')" nope>I don't know</buton>
 </avatar>
 
 
@@ -730,7 +721,7 @@ You are going to bring us into this new world of <span class="animated infinite 
     <buton>1/8</buton>
     <buton nope="Why 1/3? Try again.">1/3</buton>
     <buton nope="That doesn't make sense. 3/4 is more than the number of monsters that are tall. Try again.">3/4</buton>
-    <buton @click="yay('problem0')" yay>Can't say</buton>
+    <buton yay>Can't say</buton>
   </buton-group>
 
   <template v-slot:overlay>
@@ -777,7 +768,7 @@ You are going to bring us into this new world of <span class="animated infinite 
 
 
     <buton-group :onClick="() => avatarState.showOverlay=true">
-      <buton @click="yay('problem1')" yay>1/6</buton>
+      <buton yay>1/6</buton>
       <buton nope="We said that being tall and having great hair are not independent, so we cannot multiply 1/2 x 1/4.">1/8</buton>
       <buton nope="Are you just multiplying things together? Try again.">1/24</buton>
       <buton nope="The answer isn't always 'Can't say'...">Can't say</buton>
@@ -826,10 +817,10 @@ You are going to bring us into this new world of <span class="animated infinite 
   </div>
 
   <buton-group :onClick="() => avatarState.showOverlay=true">
-    <buton>1/30</buton>
+    <buton nope>1/30</buton>
     <buton nope="Remember, we want to use P(great hair|tall), not P(tall).">1/40</buton>
     <buton nope="Wait, are you just blindly multiplying numbers? Stop that.">1/120</buton>
-    <buton @click="yay('problem2')" yay>Can't say</buton>
+    <buton yay>Can't say</buton>
   </buton-group>
 
   <template v-slot:overlay>
@@ -1000,8 +991,8 @@ You are going to bring us into this new world of <span class="animated infinite 
   image="bear.png" 
   text="What would you rather? (a) I pay you 1 coin or (b) I pay you 4 coins with 20% certainty, and 80% of the time you get nothing."
   :state="avatarState">
-  <buton @click="set('ev-right'); yay('ev')">(a) 1 coin with certainty</buton>
-  <buton @click="set('ev-wrong'); delay(() => avatarState.showOverlay=true, 3000)">(b) 4 coins with 20% certainty</buton>
+  <buton @click="set('ev-right')" yay>(a) 1 coin with certainty</buton>
+  <buton @click="set('ev-wrong'); delay(() => avatarState.showOverlay=true, 3000)" nope>(b) 4 coins with 20% certainty</buton>
 </avatar>
 
 <avatar key="ev-right"
@@ -1056,8 +1047,8 @@ You are going to bring us into this new world of <span class="animated infinite 
   image="bear.png" 
   text="What if I offered you the chance to pick one choice and play 100 times? Which would you pick?"
   :state="avatarState">
-  <buton @click="set('100-right'); yay('100')">(a) 1 coin with certainty</buton>
-  <buton @click="set('100-wrong'); delay(() => avatarState.showOverlay=true, 3000)">(b) 4 coins with 20% certainty</buton>
+  <buton @click="set('100-right'); yay>(a) 1 coin with certainty</buton>
+  <buton @click="set('100-wrong'); delay(() => avatarState.showOverlay=true, 3000)" nope>(b) 4 coins with 20% certainty</buton>
 </avatar>
 
 
@@ -1188,7 +1179,16 @@ You are going to bring us into this new world of <span class="animated infinite 
 <!-- Bottom right -->
 <transition name="fade">
   <div v-if="showQuestion" class="question" style="position:absolute; left: 100px; top: 300px; width: 500px;">
-    <div v-if="helperText" class="nope" style="margin-top:24px">{{helperText}}</div>
+
+    <!-- Show hint via nopeText or nope slot -->
+    <div v-if="nopeText" 
+         class="nope" style="margin-top:24px">{{nopeText}}</div>
+    <transition name="fade">
+      <div v-if="showHint" class="nope">
+        <slot name="hint"></slot>
+      </div>
+    </transition>
+
     <slot name="question"></slot>
     <slot></slot> <!-- todo: consider removing default slot -->
   </div>
@@ -1239,10 +1239,10 @@ You are going to bring us into this new world of <span class="animated infinite 
 
 
 <script type="text/x-template" id="buton-template">
-<span style="margin-bottom:0px; position:relative;">
+<span style="margin-bottom:0px; position:relative; display:inline-block">
   <div v-if="showX" 
        class="handwriting" 
-       style="position:absolute; color:red; font-size: 64px; left: calc(50% - 20px); top:-30px">X</div>
+       style="display:inline-block; position:absolute; color:red; font-size: 64px; left: calc(50% - 20px); top:-4px">X</div>
   <button @click="butonClicked()" v-on="$listeners" :class="{'rainbow-text': showRainbowText, 'clicked-button': clickedButton}"><slot></slot>
   </button>
 <!--  <transition name="fade">
@@ -1368,9 +1368,10 @@ Vue.component('avatar', {
       showQuestion: false,
       showMiniDialog: false,
       showLiveText: false,
+      showHint: false,
 
       reactionImage: null,
-      helperText: null,
+      nopeText: null,
     };
   },
 
@@ -1389,13 +1390,7 @@ Vue.component('avatar', {
 
     bus.$on('buton-clicked', async function(buton){
       // <buton nope="why not">
-      if (buton.nope !== undefined){  
-        this_.helperText = buton.nope;        
-        // this_.avatarState.showFall = true;
-        // await wait(3000);
-        // this_.avatarState.showFall = false;
-        //avatar.reactionImage = 'monster_cry.png';
-      }
+      this_.handleNopeButon(buton);
     });
 
     // setInterval(async function(){
@@ -1421,6 +1416,17 @@ Vue.component('avatar', {
     hasSlot: function(name){
       return !!this.$slots[ name ] || !!this.$scopedSlots[ name ];
     },
+    handleNopeButon: function(buton){
+      // when the player clicks on a nope button, if the button has nope text, that is rendered.
+      // otherwise, if the avatar has a hint slot that is shown. 
+
+      if (buton.nopeText){  
+        this.nopeText = buton.nopeText;        
+      } else if(buton.isNope && this.hasSlot('hint')){
+        this.showHint = true;
+      }
+
+    }
   },
   template: '#avatar-template'
 });
@@ -1434,9 +1440,9 @@ Vue.component('avatar', {
 //   <buton @click="doSomethingFirst">Click me</buton>
 // </buton-group>
 
-// Unless the buton has nope text nope="something", in which case the buton-group does not get triggered.
-// e.g.
+// However, if the buton is a nope buton the buton-group does not get triggered.
 // <buton nope="stop and think">Tricked ya</buton>
+// <buton nope>Tricked ya</buton>
 
 // Buttons may also have a yay attribute.
 // Which causes the button to turn rainbow-text after it gets clicked.
@@ -1455,38 +1461,38 @@ Vue.component('buton', {
       clickedButton: false,
     }
   },
-
+  computed: {
+    nopeText: function(){
+      return this.nope;
+    },
+    // Returns true for: <buton nope> or <buton nope="why not">
+    isNope: function(){
+      return this.nope || this.nope==="";
+    },
+    isYay: function(){
+      return 'yay' in this.$attrs;
+    },
+  },
   methods: {
     butonClicked: async function(){
       this.$root.play('buton');
-
-      console.log('buton clicked');
-      bus.$emit('buton-clicked', this);
-
-      // debugger;
-      // yes, we can just traverse up and make stuff happen on the avatar.
-
-
       this.clickedButton = true;
-      // if ('yay' in this.$attrs){
-      //   console.log('yay that was a good button');
-      //   this.showRainbowText = true;        
-      // }
+
+      // Mark the buton as wrong.
+      if (this.isNope){
+        this.showX = true;
+      }
+
+      // Tell those listening on the bus that the buton has been clicked.
+      bus.$emit('buton-clicked', this);
 
       await wait(1000);
       this.$emit('clik');
-      // Add delay so any custom handlers on the buton execute before the generic buton-group executes.
-      await wait(1000);
 
 
-      if (this.nope){
-        this.showX = true;
-//        this.showNopeText = true;
-        // Early return so we don't trigger the buton-group.
-        return;
-      }
-
-      if (this.$parent.onClick !== undefined){
+      if (!this.isNope && this.$parent.onClick !== undefined){
+        // Add delay so any custom handlers on the buton execute before the generic buton-group executes.
+        await wait(1000);
         this.$parent.onClick();        
       }
 
@@ -1527,8 +1533,10 @@ function makeComponent(componentName, points){
         active: 'intro',
         lastActive: 'intro',
 
-        points: points, 
-        problemsRight: [], // 'problem0' (use string key)
+        points: points, // jump points in the story
+
+        problemsRight: new Set(), // 'problem0' (use string key)
+        problemsWrong: new Set(),
 
         memory: null, // A variable for dumping short term component state.
 
@@ -1552,49 +1560,37 @@ function makeComponent(componentName, points){
       bus.$on('buton-clicked', async function(buton){
         // Have avatar react based on buton attributes.
         var avatar = firstAncestorOfComponent(buton, 'avatar');
+        var problemKey = avatar.$vnode.data.key;
 
         // If there's a yay.
-        if ('yay' in buton.$attrs){
+        if (buton.isYay){
           avatar.reactionImage = 'monster_yay.png';          
-          this_.avatarState.showRainbow = true; 
+          this_.problemsRight.add(problemKey);
+          this_.$root.play('right');
 
-          // Automatically call the 'yay' fn.
-          //debugger;
-          var key = avatar.$vnode.data.key;
-          this_.yay(key);
+          // If the user got it on their first try, show a rainbow.
+          if (!this_.problemsWrong.has(problemKey)){
+            this_.avatarState.showRainbow = true; 
+          }
         }
         
         // just a naked <buton nope>
-        if (buton.nope === ""){
+        if (buton.isNope){
           avatar.reactionImage = 'monster_cry.png';          
+          this_.problemsWrong.add(problemKey);
         } 
-        // <buton nope="why not">
-        else if (buton.nope !== undefined){          
-          // this_.avatarState.showFall = true;
-          // await wait(3000);
-          // this_.avatarState.showFall = false;
-          avatar.reactionImage = 'monster_cry.png';
-        }
       });
     },
     methods: {
       print: function(thing){
         console.log(thing);
       },
-      specialClicked: function(){
-        console.log('special clicked');
-      },
       show: function(id){
-        return true;
-//        return id == this.active;
+//        return true;
+        return id == this.active;
       }, 
-      yay: function(id){
-        console.log('yay: ' + id);
-        this.problemsRight.push(id);
-        this.$root.play('right');
-      },
       got: function(id){
-        return this.problemsRight.indexOf(id) > -1;
+        return this.problemsRight.has(id);
       },
       set: async function(id, optionalDelay){
         this.lastActive = this.active;
@@ -1604,7 +1600,6 @@ function makeComponent(componentName, points){
         // this.avatarState.showFall = true;
         // this.avatarState.showOverlay = true;
         if (optionalDelay !== undefined){
-  //        debugger;
           console.log('started waiting');
           await wait(optionalDelay);        
           console.log('done waiting');
@@ -1624,7 +1619,7 @@ function makeComponent(componentName, points){
         fn();
       },
       pointStyle: function(point){
-        if (this.got(point.key)){
+        if (this.problemsRight.has(point.key) && !this.problemsWrong.has(point.key)){
           return {
             'background-image' : "url('images/rainbow.png')",
             'background-size': 'cover'
@@ -1773,9 +1768,6 @@ Vue.component('live-text', {
         return short;
       }
       if (text.includes('.') || text.includes('?')){
-
-    //   audio.pause();
-    // audio.currentTime = 0;
         return long;
       }
       if (text.includes(')')){
@@ -1807,11 +1799,6 @@ Vue.component('live-text', {
 });
 
 var storyPoints = [
-// {
-//   name: 'Demo',
-//   component: 'demo',
-//   image: 'monster.png'
-// },
 {
   name: 'Coin Flips',
   component: 'coin-flips',
