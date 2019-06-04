@@ -71,7 +71,7 @@ img{
 
 .nope{
   color:red; 
-  font-size: 12px; 
+  font-size: 14px; 
 }
 
 .handwriting{
@@ -471,46 +471,25 @@ You are going to bring us into this new world of <span class="animated infinite 
   text="I tossed a coin 5 times and it landed HHHHH. What do you think it will land the 6th time?"
   :state="avatarState">
 
-  <buton @click="set('userSaidH')" nope>H</buton>
-  <buton @click="set('userSaidT')" nope>T</buton>
+  <template v-slot:hint>
+    <div v-if="memory == 'userSaidT'">
+      <div>Nope, that's the Gambler's Fallacy... a common misconception that events that haven't occured are more likely to occur.</div>
+
+      <div>Coins have no memory, so just because H came up a lot, doesn't mean that T is more likely to come up in the future.</div>
+    </div>
+
+    <div v-if="memory == 'userSaidH'">
+      <div>Nope, that's the Hot Hand Fallacy... a common misconception that events that have occurred recently are "hot" and more likely to come up.</div>
+
+      <div>Coins have no memory, so just because H came up a lot, doesn't mean that H is any more likely to come up in the future.</div>
+    </div>
+
+  </template>
+
+
+  <buton @click="memory='userSaidH'" nope>H</buton>
+  <buton @click="memory='userSaidT'" nope>T</buton>
   <buton @click="set('HHHHH-finale')" yay>I don't know</buton>
-</avatar>
-
-
-<avatar key="userSaidT"
-  v-if="show('userSaidT')"
-  image="monster_blob.png" 
-  sound="curious"
-  text="I also said T and they diagnosed me with..."
-  :state="avatarState">
-
-<!--  <delay>{{$root.play('curious')}}</delay>-->
-  <div style="position:absolute; top:-200px; left:0px; white-space: nowrap; font-size:64px" class="handwriting">GAMBLER'S FALLACY</div>
-
-  <div>The Gambler's Fallacy is a common misconception that events that haven't occured are more likely to occur.</div>
-
-  <div>Coins have no memory, so just because H came up a lot, doesn't mean that T is more likely to come up in the future.</div>
-
-  <buton @click="set('HHHHH')">Try again</buton>
-</avatar>
-
-
-<avatar key="userSaidH"
-  v-if="show('userSaidH')"
-  image="monster_cry.png" 
-  text="When I said H and they diagnosed me with..."
-  sound="curious"
-  :state="avatarState">
-
-  <div style="position:absolute; top:-200px; left:0px; white-space: nowrap; font-size:64px" class="handwriting">HOT HAND FALLACY</div>
-
-  <delay :ms="2000">
-    <div>Hot Hand Fallacy is a common misconception that events that have occurred recently are "hot" and more likely to come up.</div>
-
-    <div>Coins have no memory, so just because H came up a lot, doesn't mean that H is any more likely to come up in the future.</div>
-
-    <buton @click="set('HHHHH')">Try again</buton>
-  </delay>
 </avatar>
 
 <avatar key="HHHHH-finale"
@@ -528,7 +507,7 @@ You are going to bring us into this new world of <span class="animated infinite 
   image="monster.png" 
   text="What is the probability that I toss a coin twice and get HH?"
   :state="avatarState">
-  <buton nope="1/2 is the probability of tossing a single coin and getting H. Getting two heads in a row is a rarer event.">1/2</buton>
+  <buton nope="1/2 is the probability of tossing a single coin and getting H. Getting two heads in a row must be less than that.">1/2</buton>
   <buton @clik="set('HHH')" yay>1/4</buton>
   <buton nope="It is possible to say if you assume it is  a fair coin.">Can't say</buton>
 </avatar>
@@ -614,7 +593,7 @@ You are going to bring us into this new world of <span class="animated infinite 
   image="monster.png" 
   text="What is the probability that I toss a coin 10 times and get HHHTHHTTTT?"
   :state="avatarState">
-  <buton @clik="set('10T-interstitial')" yay>1/(2^10)</buton>
+  <buton @clik="set('10HT-interstitial')" yay>1/(2^10)</buton>
   <buton nope>1/2</buton>
   <buton nope>1/10</buton>
   <buton nope>1/20</buton>
@@ -642,30 +621,24 @@ You are going to bring us into this new world of <span class="animated infinite 
   image="monster.png" 
   text="I have one final question. The other day I tossed a coin 100 times and it landed heads all 100 times! What do you think it will land on the 101-st time?"
   :state="avatarState">
-  <buton @click="set('100H-right')" yay>H</buton>
-  <buton @click="set('100H-wrong')" nope>T</buton>
-  <buton @click="set('100H-wrong')" nope>I don't know</buton>
+
+  <buton-group :onClick="() => avatarState.showNewText=true">
+    <buton yay>H</buton>
+    <buton>T</buton>
+    <buton>I don't know</buton>
+  </buton-group>
+
+  <template v-slot:new-text>
+    Har-har! That was a trick question{{got('100H') ? ' but you got it!': '.'}} The probability of this happening on a fair coin is 1/2^100. If all the 2^80 atoms in the universe were flipping coins, this still probably wouldn't happen. So the coin must not be fair. 
+  </template>
+
+  <template v-slot:new-question>
+    <buton @click="set('congrats')">Next</buton>
+  </template>
 </avatar>
 
 
-<avatar key="100H-right"
-  v-if="show('100H')"
-  image="monster.png" 
-  text="Har-har! This was a trick question but you got it! The probability of this happening on a fair coin is 1/2^100. If all the 2^80 atoms in the universe were flipping coins, this probably wouldn't happen. So the coin must not be fair. Teehee thanks for playing with me!"
-  :state="avatarState">
-  <buton @click="set('congrats')">Next</buton>
-</avatar>
-
-
-<avatar key="100H-wrong"
-  v-if="show('100H')"
-  image="monster.png" 
-  text="Har-har! This was a trick question. The probability of this happening on a fair coin is 1/2^100. If all the 2^80 atoms in the universe were flipping coins, this probably wouldn't happen. So the coin must not be fair. Teehee thanks for playing with me!"
-  :state="avatarState">
-  <buton @click="set('congrats')">Next</buton>
-</avatar>
-
-
+<! -- Teehee thanks for playing with me! -->
 <centered key="congrats"
   v-if="show('congrats')">
   <div style="font-size: 48px; letter-spacing:4px;">
@@ -874,7 +847,7 @@ You are going to bring us into this new world of <span class="animated infinite 
 <avatar key="problem3" 
         v-if="show('problem3')"
         image="girl1.png" 
-        text="Ooh yeah I've heard of the Chain Rule. Here are more than enough numbers to get you through."
+        text="Ooh yeah I've heard of the Chain Rule. Here are some numbers."
         :state="avatarState">
 
     <div class="extra-info">
@@ -989,7 +962,7 @@ You are going to bring us into this new world of <span class="animated infinite 
 <avatar key="ev"
   v-if="show('ev')"
   image="bear.png" 
-  text="What would you rather? (a) I pay you 1 coin or (b) I pay you 4 coins with 20% certainty, and 80% of the time you get nothing."
+  text="What would you rather? (a) I pay you 1 coin or... (b) I pay you 4 coins with 20% certainty, and 80% of the time you get nothing."
   :state="avatarState">
   <buton @click="set('ev-right')" yay>(a) 1 coin with certainty</buton>
   <buton @click="set('ev-wrong'); delay(() => avatarState.showOverlay=true, 3000)" nope>(b) 4 coins with 20% certainty</buton>
@@ -1047,7 +1020,7 @@ You are going to bring us into this new world of <span class="animated infinite 
   image="bear.png" 
   text="What if I offered you the chance to pick one choice and play 100 times? Which would you pick?"
   :state="avatarState">
-  <buton @click="set('100-right'); yay>(a) 1 coin with certainty</buton>
+  <buton @click="set('100-right');" yay>(a) 1 coin with certainty</buton>
   <buton @click="set('100-wrong'); delay(() => avatarState.showOverlay=true, 3000)" nope>(b) 4 coins with 20% certainty</buton>
 </avatar>
 
@@ -1162,8 +1135,17 @@ You are going to bring us into this new world of <span class="animated infinite 
   <img src="images/dialog.png" >
   <div style="position: absolute; left:40px; top:23px;" class="dialog-text"
   :class="{'smaller-dialog-text': text.length > 140}">
-    <live-text @live-text-complete="showQuestion=true">
+    <live-text  
+        key="initial-text"
+        v-if="!state.showNewText" @live-text-complete="showQuestion=true">
       {{text}}
+    </live-text> 
+
+    <live-text 
+        key="new-text"
+        v-if="state.showNewText"
+        @live-text-complete="showNewQuestion=true">
+        <slot name="new-text"></slot>
     </live-text>
   </div>
 </div>
@@ -1177,8 +1159,7 @@ You are going to bring us into this new world of <span class="animated infinite 
 </div>
 
 <!-- Bottom right -->
-<transition name="fade">
-  <div v-if="showQuestion" class="question" style="position:absolute; left: 100px; top: 300px; width: 500px;">
+  <div class="question" style="position:absolute; left: 100px; top: 300px; width: 500px;">
 
     <!-- Show hint via nopeText or nope slot -->
     <div v-if="nopeText" 
@@ -1189,10 +1170,17 @@ You are going to bring us into this new world of <span class="animated infinite 
       </div>
     </transition>
 
-    <slot name="question"></slot>
-    <slot></slot> <!-- todo: consider removing default slot -->
+
+  <transition name="fade" mode="out-in">  
+    <div v-if="showQuestion && !showNewQuestion">  
+      <slot name="question"></slot>
+      <slot></slot> <!-- todo: consider removing default slot -->
+    </div>
+
+    <slot v-if="showNewQuestion" name="new-question"></slot>
+  </transition>
+
   </div>
-</transition>
 
 </div>
 </script>
@@ -1330,7 +1318,7 @@ Vue.component('input-box', {
 function firstAncestorOfComponent(node, componentName){
   while(node !== undefined){
     node = node.$parent;
-    if (node.$options.name === componentName){
+    if (node !== undefined && node.$options.name === componentName){
       return node;
     }
   }
@@ -1358,7 +1346,7 @@ Vue.component('avatar', {
     // Events that get triggered from parent.
     state: {type: Object, default: function() { 
       return {
-        showOverlay: false, showRainbow: false, showFall: false}; 
+        showOverlay: false, showRainbow: false, showFall: false, showNewText: false}; 
       }
     },
   },
@@ -1366,6 +1354,8 @@ Vue.component('avatar', {
     return {
       // Internally triggered events.
       showQuestion: false,
+      showNewQuestion: false,
+      
       showMiniDialog: false,
       showLiveText: false,
       showHint: false,
@@ -1543,7 +1533,8 @@ function makeComponent(componentName, points){
         avatarState: {
           showRainbow: false,
           showFall: false,
-          showOverlay: true,        
+          showOverlay: true, 
+          showNewText: false,       
         },
       };
     },
@@ -1611,7 +1602,8 @@ function makeComponent(componentName, points){
         this.avatarState = {
           showRainbow: false,
           showFall: false,
-          showOverlay: false,        
+          showOverlay: false,
+          showNewText: false,        
         };
       },
       delay: async function(fn, ms){
@@ -1758,6 +1750,7 @@ Vue.component('live-text', {
   },
 
   mounted: async function(){
+    console.log('mounting live text');
     var elts = _.values(this.$refs);
 
     function pauseDuration(text){
@@ -1767,7 +1760,7 @@ Vue.component('live-text', {
       if (!text){
         return short;
       }
-      if (text.includes('.') || text.includes('?')){
+      if (text.includes('.') || text.includes('?') || text.includes('!')){
         return long;
       }
       if (text.includes(')')){
@@ -1791,6 +1784,7 @@ Vue.component('live-text', {
         this.$root.play('speech');
       }
     }
+
     this.$root.pause('speech');
     this.$emit('live-text-complete');
   },
@@ -1901,6 +1895,7 @@ new Vue({
       sound.play();
     },
     pause: function(soundName){
+      console.log('pausing');
       var sound = sounds[soundName].clip;
       sound.pause();
       sound.currentTime = 0;      
