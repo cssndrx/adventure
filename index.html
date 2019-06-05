@@ -461,16 +461,14 @@ You are going to bring us into this new world of <span class="animated infinite 
 <avatar key="intro"
   v-if="show('intro')"
   image="monster.png" 
-  text="Hey player, come over here!"
-  :state="avatarState">
+  text="Hey player, come over here!">
   <buton @click="set('HHHHH')">Oblige</buton>
 </avatar>
 
 <avatar key="HHHHH"
   v-if="show('HHHHH')"
   image="monster.png" 
-  text="I tossed a coin 5 times and it landed HHHHH. What do you think it will land the 6th time?"
-  :state="avatarState">
+  text="I tossed a coin 5 times and it landed HHHHH. What do you think it will land the 6th time?">
 
   <template v-slot:hint>
     <div v-if="memory == 'userSaidT'">
@@ -497,8 +495,7 @@ You are going to bring us into this new world of <span class="animated infinite 
   v-if="show('HHHHH-finale')"
   image="monster_yay.png" 
   sound="right"
-  text="Yeah! The correct answer is that there's no way to tell."
-  :state="avatarState">
+  text="Yeah! The correct answer is that there's no way to tell.">
   <buton @click="set('HH')">Next</buton>
 </avatar>
 
@@ -523,8 +520,7 @@ You are going to bring us into this new world of <span class="animated infinite 
 <avatar key="HH"
   v-if="show('HH')"
   image="monster.png" 
-  text="What is the probability that I toss a coin twice and get HH?"
-  :state="avatarState">
+  text="What is the probability that I toss a coin twice and get HH?">
   <buton nope="1/2 is the probability of tossing a single coin and getting H. Getting two heads in a row must be less than that.">1/2</buton>
   <buton @clik="set('HHH')" yay>1/4</buton>
   <buton nope="It is possible to say if you assume it is a fair coin.">Can't say</buton>
@@ -555,8 +551,7 @@ You are going to bring us into this new world of <span class="animated infinite 
 <avatar key="HHH"
   v-if="show('HHH')"
   image="monster.png" 
-  text="What is the probability that I toss a coin three times and get HHH?"
-  :state="avatarState">
+  text="What is the probability that I toss a coin three times and get HHH?">
   <buton nope>1/2</buton>
   <buton nope>1/3</buton>
   <buton @clik="set('10H')" yay>1/8</buton>
@@ -588,8 +583,7 @@ You are going to bring us into this new world of <span class="animated infinite 
 <avatar key="10H"
   v-if="show('10H')"
   image="monster.png" 
-  text="What is the probability that I toss a coin 10 times and get HHHHHHHHHH?"
-  :state="avatarState">
+  text="What is the probability that I toss a coin 10 times and get HHHHHHHHHH?">
   <buton @clik="set('10HT')" yay>1/(2^10)</buton>
   <buton nope>1/2</buton>
   <buton nope>1/10</buton>
@@ -613,8 +607,7 @@ You are going to bring us into this new world of <span class="animated infinite 
 <avatar key="10HT"
   v-if="show('10HT')"
   image="monster.png" 
-  text="What is the probability that I toss a coin 10 times and get HHHTHHTTTT?"
-  :state="avatarState">
+  text="What is the probability that I toss a coin 10 times and get HHHTHHTTTT?">
   <buton @clik="set('10HT-interstitial')" yay>1/(2^10)</buton>
   <buton nope>1/2</buton>
   <buton nope>1/10</buton>
@@ -641,10 +634,9 @@ You are going to bring us into this new world of <span class="animated infinite 
 <avatar key="100H"
   v-if="show('100H')"
   image="monster.png" 
-  text="I have one final question. The other day I tossed a coin 100 times and it landed heads all 100 times! What do you think it will land on the 101-st time?"
-  :state="avatarState">
+  text="I have one final question. The other day I tossed a coin 100 times and it landed heads all 100 times! What do you think it will land on the 101-st time?">
 
-  <buton-group :onClick="() => avatarState.showNewText=true">
+  <buton-group :onClick="() => react('showNewText', true)">
     <buton yay>H</buton>
     <buton>T</buton>
     <buton>I don't know</buton>
@@ -701,17 +693,14 @@ You are going to bring us into this new world of <span class="animated infinite 
 <avatar key="intro"
   v-if="show('intro')"
   image="girl.png" 
-  text="Hello! I'm Veronica and I only date monsters that are tall and have great hair."
-  :state="avatarState">
+  text="Hello! I'm Veronica and I only date monsters that are tall and have great hair.">
   <buton @click="set('fakeout1')">Next</buton>
 </avatar>
 
 <avatar key="fakeout1"
   v-if="show('fakeout1')" 
   image="girl.png" 
-  text="If 1/2 of all monsters are tall, and 1/4 of monsters have great hair, what is the probability that a random monster is datable?"
-  :state="avatarState">
-
+  text="If 1/2 of all monsters are tall and 1/4 of monsters have great hair... What is the probability that a random monster is datable?">
 
   <div>
     In math language, P(tall) = 1/2. P(great hair) = 1/4. What is P(tall AND great hair)?
@@ -755,15 +744,14 @@ You are going to bring us into this new world of <span class="animated infinite 
 <avatar key="conditional1" 
         v-if="show('conditional1')"
         image="girl.png" 
-        text="It turns out that being tall and having great hair are slightly correlated. About 1/3 of tall monsters have great hair."
-        :state="avatarState">
+        text="It turns out that being tall and having great hair are slightly correlated. About 1/3 of tall monsters have great hair.">
 
   <div>
     In math language, Veronica just told us a conditional probability. 
   </div>
 
   <div>
-    This is exactly what we need to calculate P(tall AND great hair).
+    We can use this information to calculate P(tall AND great hair).
   </div>
 
   <buton @click="set('conditional2')">Next</buton>
@@ -816,8 +804,7 @@ You are going to bring us into this new world of <span class="animated infinite 
 <avatar key="tall-hair" 
         v-if="show('tall-hair')"
         image="girl.png" 
-        text="Okay so what is the probability that a random monster is datable?"
-        :state="avatarState">
+        text="Okay so what is the probability that a random monster is datable?">
 
   <div>What is P(tall AND great hair)?</div>
 
@@ -856,8 +843,7 @@ todo: add a review slot.
 <avatar key="fakeout2"
         v-if="show('fakeout2')"
         image="girl.png"
-        text="Oh thank you for your help so far. But I forgot... I also want them to have tattoos. 1/5 of monsters have tattoos."
-        :state="avatarState">
+        text="Oh thank you for your help so far. But I forgot... I also want them to have tattoos. 1/5 of monsters have tattoos.">
 
   <div>In math speak, P(tattoos) = 1/5.</div>
   <div>What is P(tall, great hair, tattoos)?</div>
@@ -942,8 +928,7 @@ todo: add a review slot.
 <avatar key="problem3" 
         v-if="show('problem3')"
         image="girl.png" 
-        text="Ooh yes, I've heard of the Chain Rule. Here are the numbers that you'll need."
-        :state="avatarState">
+        text="Ooh yes, I've heard of the Chain Rule. Here are the numbers that you'll need.">
 
   <div>
   What is P(tall, great hair, tattoos)?
@@ -981,8 +966,7 @@ todo: add a review slot.
 <avatar key="problem4" 
         v-if="show('problem4')"
         image="girl.png" 
-        text="Yes, thank you! But silly us! We forgot to include that these tall, great hair, tattoos monsters also need to be... around my age and single."
-        :state="avatarState">
+        text="Yes, thank you! But silly us! We forgot to include that these tall, great hair, tattoos monsters also need to be... around my age and single.">
 
     <div class="extra-info">
     Facts from before:
@@ -1093,25 +1077,22 @@ todo: add a review slot.
 <avatar key="intro"
   v-if="show('intro')"
   image="bear.png" 
-  text="Do you dare play with a bear???"
-  :state="avatarState">
+  text="Do you dare play with a bear???">
   <buton @click="set('ev')">Yes</buton>
 </avatar>
 
 <avatar key="ev"
   v-if="show('ev')"
   image="bear.png" 
-  text="What would you rather? (a) I pay you 1 coin or... (b) I pay you 4 coins with 20% certainty, and 80% of the time you get nothing."
-  :state="avatarState">
+  text="What would you rather? (a) I pay you 1 coin or... (b) I pay you 4 coins with 20% certainty, and 80% of the time you get nothing.">
   <buton @click="set('ev-right')" yay>(a) 1 coin with certainty</buton>
-  <buton @click="set('ev-wrong'); delay(() => avatarState.showOverlay=true, 3000)" nope>(b) 4 coins with 20% certainty</buton>
+  <buton @click="set('ev-wrong')" nope>(b) 4 coins with 20% certainty</buton>
 </avatar>
 
 <avatar key="ev-right"
   v-if="show('ev-right')"
   image="bear.png" 
-  text="Well, that's correct."
-  :state="avatarState">
+  text="Well, that's correct.">
 
   <template v-slot:question>
     <div>
@@ -1126,8 +1107,7 @@ todo: add a review slot.
   v-if="show('ev-wrong')"
   image="bear_money.png" 
   text="Heh heh ."
-  animation="spin-and-pulse"
-  :state="avatarState">
+  animation="spin-and-pulse">
 
   <template v-slot:overlay>
     <div>
@@ -1157,18 +1137,16 @@ todo: add a review slot.
 <avatar key="100"
   v-if="show('100')"
   image="bear.png" 
-  text="What if I offered you the chance to pick one choice and play 100 times? Which would you pick?"
-  :state="avatarState">
+  text="What if I offered you the chance to pick one choice and play 100 times? Which would you pick?">
   <buton @click="set('100-right');" yay>(a) 1 coin with certainty</buton>
-  <buton @click="set('100-wrong'); delay(() => avatarState.showOverlay=true, 3000)" nope>(b) 4 coins with 20% certainty</buton>
+  <buton @click="set('100-wrong')" nope>(b) 4 coins with 20% certainty</buton>
 </avatar>
 
 
 <avatar key="100-right"
   v-if="show('100-right')"
   image="bear.png" 
-  text="Yeah, that's correct."
-  :state="avatarState">
+  text="Yeah, that's correct.">
 
   <template v-slot:question>
     <div>
@@ -1183,8 +1161,7 @@ todo: add a review slot.
   v-if="show('100-wrong')"
   image="bear_money.png" 
   text="Heh. Wrong."
-  animation="spin-and-pulse"
-  :state="avatarState">
+  animation="spin-and-pulse">
 
   <template v-slot:question>
     <div>
@@ -1254,18 +1231,19 @@ todo: add a review slot.
 <script type="text/x-template" id="avatar-template">
 <div style="position: relative; height: 500px; width:800px; margin:0 auto; margin-top:16px">
 
-<!-- overlay-->
+
+<!--
 <transition name="slide-fade">
-<div v-if="state.showOverlay && hasSlot('overlay')"
+ <div v-if="showOverlay && hasSlot('overlay')"
      style="position:absolute; z-index:1; height: 500px; width:100%; opacity:0.9; background-color: white; color:black;">
   <centered>
       <slot name="overlay"></slot>
   </centered>
 </div>
-</transition>
+</transition> -->
 
 
-<img v-if="state.showRainbow" src="images/rainbow.png">
+<img v-if="showRainbow" src="images/rainbow.png">
 
 <img :src="imgSrc" 
      :class="imgClasses"
@@ -1280,13 +1258,13 @@ todo: add a review slot.
   :class="{'smaller-dialog-text': text.length > 140}">
     <live-text  
         key="initial-text"
-        v-if="!state.showNewText" @live-text-complete="showQuestion=true">
+        v-if="!showNewText" @live-text-complete="showQuestion=true">
       {{text}}
     </live-text> 
 
     <live-text 
         key="new-text"
-        v-if="state.showNewText"
+        v-if="showNewText"
         @live-text-complete="showNewQuestion=true">
         <slot name="new-text"></slot>
     </live-text>
@@ -1420,6 +1398,7 @@ var sounds = {
   'right': {clip: new Audio('sounds/swish1.wav')},
 
   'curious': {clip: new Audio('sounds/curious.wav')},
+  'achievement': {clip: new Audio('sounds/achievement.wav')},
 };
 
 Vue.component('input-box', {
@@ -1488,13 +1467,6 @@ Vue.component('avatar', {
     text: {type: String},
     animation: {type: String, default: 'wobble'},
     sound: {type: String},
-
-    // Events that get triggered from parent.
-    state: {type: Object, default: function() { 
-      return {
-        showOverlay: false, showRainbow: false, showFall: false, showNewText: false}; 
-      }
-    },
   },
   data: function(){
     return {
@@ -1505,6 +1477,10 @@ Vue.component('avatar', {
       showMiniDialog: false,
       showLiveText: false,
       showHint: false,
+
+      showRainbow: false,
+      showFall: false,
+      showNewText: false,
 
       reactionImage: null,
       nopeText: null,
@@ -1523,6 +1499,10 @@ Vue.component('avatar', {
     await wait(500);
     this_.showLiveText = true;
 
+    bus.$on('avatar-react', function(params){
+//      debugger;
+      this_[params.key] = params.value;
+    });
 
     bus.$on('buton-clicked', async function(buton){
       // <buton nope="why not">
@@ -1539,7 +1519,7 @@ Vue.component('avatar', {
   },
   computed: {
     imgClasses: function(){
-      var classes = {fallover: this.state.showFall};
+      var classes = {fallover: this.showFall};
       classes[this.animation] = true;
       return classes;
     },
@@ -1682,13 +1662,6 @@ function makeComponent(componentName, points, reactions){
         problemsWrong: new Set(),
 
         memory: null, // A variable for dumping short term component state.
-
-        avatarState: {
-          showRainbow: false,
-          showFall: false,
-          showOverlay: true, 
-          showNewText: false,       
-        },
       };
     },
     computed: {
@@ -1702,8 +1675,14 @@ function makeComponent(componentName, points, reactions){
     mounted: async function(){
       var this_ = this;
       bus.$on('buton-clicked', async function(buton){
+        // Respond only if the buton is in the current component.
+        if (!isDescendant(this_, buton)){
+          return;
+        }
+
         // Have avatar react based on buton attributes.
         var avatar = firstAncestorOfComponent(buton, 'avatar');
+
         if (!avatar){
           // The buton was not used within an avatar, but something else.
           return;
@@ -1718,7 +1697,7 @@ function makeComponent(componentName, points, reactions){
 
           // If the user got it on their first try, show a rainbow.
           if (!this_.problemsWrong.has(problemKey)){
-            this_.avatarState.showRainbow = true; 
+            this_.react('showRainbow', true);
           }
         }
         
@@ -1735,6 +1714,9 @@ function makeComponent(componentName, points, reactions){
       });
     },
     methods: {
+      react: function(k, v){
+        bus.$emit('avatar-react', {key: k, value: v});
+      },
       print: function(thing){
         console.log(thing);
       },
@@ -1748,25 +1730,13 @@ function makeComponent(componentName, points, reactions){
       set: async function(id, optionalDelay){
         this.lastActive = this.active;
         console.log('setting: ' + id);
-        // do the animationss
-        // this.avatarState.showRainbow = true;
-        // this.avatarState.showFall = true;
-        // this.avatarState.showOverlay = true;
         if (optionalDelay !== undefined){
-          console.log('started waiting');
+//          console.log('started waiting');
           await wait(optionalDelay);        
-          console.log('done waiting');
+ //         console.log('done waiting');
         }
 
         this.active = id;
-        // Reset avatar state.
-        // console.log('reseting state');
-        this.avatarState = {
-          showRainbow: false,
-          showFall: false,
-          showOverlay: false,
-          showNewText: false,        
-        };
       },
       delay: async function(fn, ms){
         await wait(ms);
@@ -1786,8 +1756,6 @@ function makeComponent(componentName, points, reactions){
 }
 
 // Joint prob with independence
-//makeComponent('demo', []);
-
 makeComponent('coin-flips', 
 
 [
@@ -2030,7 +1998,9 @@ new Vue({
     // round_to(2.777777, 0) -> 3
     // round_to(2.777777, 2) -> 2.78
     roundTo: roundTo,
-    nextStory: function(){
+    nextStory: async function(){
+      this.play('achievement');
+      await wait(1500);
       this.storyPointInd = Math.min(this.storyPoints.length-1, this.storyPointInd+1);
     },
 
@@ -2069,12 +2039,12 @@ new Vue({
     // },
 
     play: function(soundName){
-      console.log('playing ' + soundName);
+//      console.log('playing ' + soundName);
       var sound = sounds[soundName].clip;
       sound.play();
     },
     pause: function(soundName){
-      console.log('pausing');
+ //     console.log('pausing');
       var sound = sounds[soundName].clip;
       sound.pause();
       sound.currentTime = 0;      
