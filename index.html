@@ -111,7 +111,7 @@ button{
 }
 
 
-.strong{
+.bold{
   font-weight: 900;
 }
 
@@ -350,8 +350,9 @@ button{
     width: 100px;
     height: 100px;
     border-radius: 100%;
-    background: #000 no-repeat center;
+/*    background: #000 no-repeat center;*/
     background-size: cover;
+    border: 4px solid black;
 }
 
 
@@ -496,11 +497,29 @@ You are going to bring us into this new world of <span class="animated infinite 
   v-if="show('HHHHH-finale')"
   image="monster_yay.png" 
   sound="right"
-  text="Yeah! The correct answer is that there's no way to tell. You want another question?"
+  text="Yeah! The correct answer is that there's no way to tell."
   :state="avatarState">
-  <buton @click="set('HH')">Sure</buton>
+  <buton @click="set('HH')">Next</buton>
 </avatar>
 
+<interstitial 
+    image="monster.png"
+    key="independence" 
+    v-if="show('independence')">
+  <div>
+    Coin flips are <bold>independent events</bold>.
+  </div>
+
+  <div>
+    Meaning that knowing the result of one event does not give you information about the other events. Which of these is another example of an independent event?
+  </div>
+
+  <buton nope>Applying to jobs</buton>
+  <buton @click="set('HH')" yay>Rolling dice</buton>
+  <buton nope>Winning a lottery</buton>
+  <buton nope>Drawing a nice picture</buton>
+
+</interstitial>
 
 <avatar key="HH"
   v-if="show('HH')"
@@ -512,23 +531,27 @@ You are going to bring us into this new world of <span class="animated infinite 
   <buton nope="It is possible to say if you assume it is  a fair coin.">Can't say</buton>
 </avatar>
 
-<centered key="HH-explanation" v-if="show('HH-explanation')">
+<interstitial 
+  key="HH-explanation" 
+  v-if="show('HH-explanation')">
   <div>
-    Right. Coin flips are independent events (i.e. a result doesn't affect the next result). The probabilities of the joint event: seeing X AND Y can be combined with multiplication. The chance of getting HH is 1/2 x 1/2.
+    The probability of multiple independent events all occuring can be calculated by multiplication. This is called the probability of the <bold>joint event</bold>. So, the chance of getting HH is 1/2 x 1/2.
   </div>
 
   <div>
     Another way to see this is that there are 4 possible outcomes:
 
-    HH
-    HT
-    TH
-    TT.
+    <div style="margin-top:16px">
+    HH<br>
+    HT<br>
+    TH<br>
+    TT<br>
+    </div>
 
     If we only care about the HH outcome, our probability of getting it is 1/4.
   </div>
   <buton @click="set('HHH')">Next</buton>
-</centered> 
+</interstitial> 
 
 <avatar key="HHH"
   v-if="show('HHH')"
@@ -605,7 +628,7 @@ You are going to bring us into this new world of <span class="animated infinite 
     key="10HT-interstitial" 
     v-if="show('10HT-interstitial')">
   <div>
-    This problem is just like before. The chance of getting HHHTHHTTTT is the same as the probability of getting HHHHHHHHHH.
+    The chance of getting HHHTHHTTTT is the same as the probability of getting HHHHHHHHHH.
   </div>
 
   <div>
@@ -646,8 +669,8 @@ You are going to bring us into this new world of <span class="animated infinite 
   </div>
   
   <ul>
-    <li>You learned about independent events (two events that don't affect each other)</li>
-    <li>You learned how to calculate the joint probability of multiple independent events (you multiply)</li>
+    <li>You learned about <bold>independent events</bold> (two events that don't affect each other)</li>
+    <li>You learned how to calculate the <bold>joint probability</bold> of independent events (you multiply)</li>
     <li>You learned that there are 2^80 atoms in the universe.</li>
   </ul> 
 
@@ -710,11 +733,11 @@ You are going to bring us into this new world of <span class="animated infinite 
     </div>
 
     <div>
-      It is valid to multiply only when tallness and having great hair are <span class="strong">independent</span>. 
+      It is valid to multiply only when tallness and having great hair are <bold>independent</bold>. 
     </div>
 
     <div>
-      Independence occurs when a monster's height provides <span class="strong">no information</span> on the monster's greatness of hair.
+      Independence occurs when a monster's height provides <bold>no information</bold> on the monster's greatness of hair.
     </div>
 
     <buton @click="set('problem1')">Next</buton>
@@ -808,7 +831,7 @@ You are going to bring us into this new world of <span class="animated infinite 
     <buton>How to do this properly?</buton>
  -->
     <div>
-      To do this properly, use the logic in the <span class="strong">Chain Rule</span>:
+      To do this properly, use the logic in the <bold>Chain Rule</bold>:
     </div>
 
     <div class="smaller-children" style="margin-left: 16px;">
@@ -1107,6 +1130,10 @@ You are going to bring us into this new world of <span class="animated infinite 
 </div>
 </script>
 
+<script type="text/x-template" id="bold-template">
+<span class="bold"><slot></slot></span> 
+</script>
+
 
 <script type="text/x-template" id="avatar-template">
 <div style="position: relative; height: 500px; width:800px; margin:0 auto; margin-top:16px">
@@ -1270,6 +1297,8 @@ var sounds = {
   'speech': {clip: new Audio('sounds/speech.wav')},
   'buton': {clip: new Audio('sounds/button.wav')},
   'wrong': {clip: new Audio('sounds/wrong.wav')},
+  'chimes': {clip: new Audio('sounds/chimes.wav')},
+
   // 'right': {clip: new Audio('sounds/right_soft.wav'), duration: 1000},
   'right': {clip: new Audio('sounds/swish1.wav')},
 
@@ -1355,7 +1384,7 @@ Vue.component('avatar', {
       // Internally triggered events.
       showQuestion: false,
       showNewQuestion: false,
-      
+
       showMiniDialog: false,
       showLiveText: false,
       showHint: false,
@@ -1504,6 +1533,10 @@ Vue.component('centered', {
   template: '#centered-template'
 });
 
+Vue.component('bold', {
+  template: '#bold-template'
+});
+
 Vue.component('interstitial', {
   props: {
     image: {type: String, default: 'monster.png'}, 
@@ -1512,6 +1545,9 @@ Vue.component('interstitial', {
     cropCircleStyle: function(){
       return {'background-image': 'url("images/' + this.image + '")'};
     }
+  },
+  mounted: function(){
+    this.$root.play('chimes');
   },
   template: '#interstitial-template'
 });
@@ -1551,6 +1587,10 @@ function makeComponent(componentName, points){
       bus.$on('buton-clicked', async function(buton){
         // Have avatar react based on buton attributes.
         var avatar = firstAncestorOfComponent(buton, 'avatar');
+        if (!avatar){
+          // The buton was not used within an avatar, but something else.
+          return;
+        }
         var problemKey = avatar.$vnode.data.key;
 
         // If there's a yay.
@@ -1577,8 +1617,8 @@ function makeComponent(componentName, points){
         console.log(thing);
       },
       show: function(id){
-//        return true;
-        return id == this.active;
+        return true;
+//        return id == this.active;
       }, 
       got: function(id){
         return this.problemsRight.has(id);
