@@ -518,7 +518,6 @@ You are going to bring us into this new world of <span class="animated infinite 
   <buton @click="set('HH')" yay>Rolling dice</buton>
   <buton nope>Winning a lottery</buton>
   <buton nope>Drawing a nice picture</buton>
-
 </interstitial>
 
 <avatar key="HH"
@@ -528,7 +527,7 @@ You are going to bring us into this new world of <span class="animated infinite 
   :state="avatarState">
   <buton nope="1/2 is the probability of tossing a single coin and getting H. Getting two heads in a row must be less than that.">1/2</buton>
   <buton @clik="set('HHH')" yay>1/4</buton>
-  <buton nope="It is possible to say if you assume it is  a fair coin.">Can't say</buton>
+  <buton nope="It is possible to say if you assume it is a fair coin.">Can't say</buton>
 </avatar>
 
 <interstitial 
@@ -701,91 +700,148 @@ You are going to bring us into this new world of <span class="animated infinite 
 
 <avatar key="intro"
   v-if="show('intro')"
-  image="girl0.png" 
+  image="girl.png" 
   text="Hello! I'm Veronica and I only date monsters that are tall and have great hair."
   :state="avatarState">
-  <buton @click="set('problem0')">Next</buton>
+  <buton @click="set('fakeout1')">Next</buton>
 </avatar>
 
-<avatar key="problem0"
-  v-if="show('problem0')" 
-  image="girl1.png" 
+<avatar key="fakeout1"
+  v-if="show('fakeout1')" 
+  image="girl.png" 
   text="If 1/2 of all monsters are tall, and 1/4 of monsters have great hair, what is the probability that a random monster is datable?"
   :state="avatarState">
 
-  <buton-group :onClick="() => avatarState.showOverlay=true">
+
+  <div>
+    In math language, P(tall) = 1/2. P(great hair) = 1/4. What is P(tall AND great hair)?
+  </div>
+
+  <buton-group :onClick="() => set('fakeout1-inter')">
     <buton>1/8</buton>
     <buton nope="Why 1/3? Try again.">1/3</buton>
     <buton nope="That doesn't make sense. 3/4 is more than the number of monsters that are tall. Try again.">3/4</buton>
     <buton yay>Can't say</buton>
   </buton-group>
 
-  <template v-slot:overlay>
-    <div v-if="got('problem0')">
-      Right! It's not possible to say. 
-    </div>
-    <div v-else>
-      It's actually not possible to say.
-    </div>
-
-    <div>
-      P(tall AND great hair) ≠ P(tall) * P(great hair) in general.
-    </div>
-
-    <div>
-      It is valid to multiply only when tallness and having great hair are <bold>independent</bold>. 
-    </div>
-
-    <div>
-      Independence occurs when a monster's height provides <bold>no information</bold> on the monster's greatness of hair.
-    </div>
-
-    <buton @click="set('problem1')">Next</buton>
-  </template>
-
 </avatar>
 
 
-<avatar key="problem1" 
-        v-if="show('problem1')"
+<interstitial 
+    image="girl.png"
+    key="fakeout1-inter" 
+    v-if="show('fakeout1-inter')">
+
+  <div v-if="got('fakeout1')">
+    Right! It's not possible to say. 
+  </div>
+  <div v-else>
+    It's actually not possible to say.
+  </div>
+
+  <div>
+    It is only valid to compute P(tall AND great hair) by multiplying P(tall) and P(great hair) if being tall and having great hair are independent -- like coin flips.
+  </div>
+
+  <div>
+     Put another way, independence occurs if a monster's height does not provide any information on the greatness of a monsters hair. 
+  </div>
+
+  <buton @click="set('correlated')">Next</buton>
+</interstitial>
+
+
+
+<avatar key="conditional1" 
+        v-if="show('conditional1')"
         image="girl0.png" 
-        text="Yeah! I guess being tall and having great hair are slightly correlated. About 1/3 of tall monsters have great hair."
+        text="It turns out that being tall and having great hair are slightly correlated. About 1/3 of tall monsters have great hair."
         :state="avatarState">
 
-  <template v-slot:question>
-    <div>What is the probability that a random monster is datable?, i.e. Is tall AND has great hair?</div>
+  <div>
+    In math language, Veronica just told just a conditional probability. 
+  </div>
 
-    <div class="extra-info">Facts from before:
-    <ul>
-      <li>1/2 of all monsters are tall</li>
-      <li>1/4 of all monsters have great hair</li>
-    </ul>
-    </div>
+  <div>
+    And this is exactly what we need to calculate P(tall AND great hair).
+  </div>
+
+  <buton @click="set('conditional2')">Next</buton>
+</avatar>
 
 
-    <buton-group :onClick="() => avatarState.showOverlay=true">
-      <buton yay>1/6</buton>
-      <buton nope="We said that being tall and having great hair are not independent, so we cannot multiply 1/2 x 1/4.">1/8</buton>
-      <buton nope="Are you just multiplying things together? Try again.">1/24</buton>
-      <buton nope="The answer isn't always 'Can't say'...">Can't say</buton>
-    </buton-group>
-  </template>
+
+<interstitial 
+    image="girl.png"
+    key="conditional2" 
+    v-if="show('conditional2')">
+
+  <div>
+    A conditional probability tells us the probability of something, if we know something else to be true.
+  </div>
+
+  <div>
+    For instance, Veronica told us that the probability that a tall monster would have great hair is 1/3. 
+  </div>
+
+  <div>
+    In math speak she told us P(great hair|tall) (which is read as "the probability of great hair GIVEN the monster is tall").
+  </div>
+
+  <buton @click="set('conditional3')">Next</buton>
+
+</interstitial>
+
+
+<interstitial 
+    image="girl.png"
+    key="conditional3" 
+    v-if="show('conditional3')">
+  <div>
+    Using a conditional probability, we can calculate P(tall AND great hair) without assuming independence.
+  </div>
+
+  <div>
+    P(tall AND great hair) = P(tall) x P(great hair|tall)
+  </div>
+
+  <div>
+    The formula makes logical sense. It says, first consider the chance that the monster is tall. Then multiply by the chance that a random tall monster would have great hair.
+  </div>
+
+  <buton @click="set('tall-hair')">Try it</buton>
+</interstitial>
+
+
+<avatar key="tall-hair" 
+        v-if="show('tall-hair')"
+        image="girl0.png" 
+        text="Okay so what is the probability that a random monster is datable?"
+        :state="avatarState">
+
+  <div>What is P(tall AND great hair)?</div>
+
+  <div class="extra-info">Facts from before:
+  <ul>
+    <li>P(tall) = 1/2</li>
+    <li>P(great hair) = 1/4</li>
+    <li>P(great hair | tall) = 1/3</li>
+  </ul>
+  </div>
+
+  <buton-group :onClick="() => avatarState.showOverlay=true">
+    <buton yay>1/6</buton>
+    <buton nope="We said that being tall and having great hair are not independent, so we can't just multiply 1/2 x 1/4.">1/8</buton>
+    <buton nope="Are you just multiplying things together? Try again.">1/24</buton>
+    <buton nope="The answer isn't always 'Can't say'...">Can't say</buton>
+  </buton-group>
+
+<!--  
+todo: add a review slot.
 
   <template v-slot:overlay>
     <div>
-      {{ got('problem1') ? 'Right.': 'Not quite.' }}
-    </div>
-
-    <div>
-      The probability that a monster has great hair AND is tall, combines:
-    </div>
-
-    <div>
-      (1) The probability the monster is tall: P(tall)
-    </div>
-
-    <div>
-      (2) The probability the monster has great hair, given that the monster is tall: P(great hair | tall)
+      Right!
     </div>
 
     <div>
@@ -793,15 +849,17 @@ You are going to bring us into this new world of <span class="animated infinite 
     </div>
 
     <buton @click="set('problem2')">Next</buton>
-  </template>
+  </template> -->
 </avatar>
 
 
-<avatar key="problem2"
-        v-if="show('problem2')"
+<avatar key="fakeout2"
+        v-if="show('fakeout2')"
         image="girl0.png"
         text="Oh thank you for your help so far. But I forgot... I also want them to have tattoos. 1/5 of monsters have tattoos."
         :state="avatarState">
+
+  <div>In math speak, P(tattoos) = 1/5.</div>
   <div>What is P(tall, great hair, tattoos)?</div>
 
   <div class="extra-info">Facts from before:
@@ -818,60 +876,77 @@ You are going to bring us into this new world of <span class="animated infinite 
     <buton nope="Wait, are you just blindly multiplying numbers? Stop that.">1/120</buton>
     <buton yay>Can't say</buton>
   </buton-group>
+</avatar>
 
-  <template v-slot:overlay>
-    <div>
-      {{ got('problem2') ? 'Right.': 'Not quite.' }} Again, it's not possible to say!
+
+<interstitial 
+    image="girl.png"
+    key="chainruleinter1" 
+    v-if="show('chainruleinter1')">
+
+  <div>
+    {{ got('fakeout2') ? 'Right.': 'Not quite.' }} Again, it's not possible to say!
+  </div>
+
+  <div>
+    To get P(tattoo AND great hair AND tall), we can't just multiply
+    P(tattoo) * P(great hair AND tall) without assuming independence.
+  </div>
+
+  <div>
+    We need another conditional probability.
+  </div>
+
+  <buton @click="">Next</buton>
+</interstitial>
+
+<interstitial 
+    image="girl.png"
+    key="chainruleinter2" 
+    v-if="show('chainruleinter2')">
+  <div>
+    This is called the Chain Rule of probability.
+  </div>
+
+  <div class="smaller-children">
+    P(tattoo AND great hair AND tall) = <span style="color:magenta">P(tall)</span> * <span style="color:green">P(great hair | tall)</span> * <span style="color:blue">P(tattoo | great hair AND tall)</span>
+  </div>
+
+  <div class="smaller-children" style="margin-left: 16px;">
+    <div style="color:magenta">
+      First, consider the probability of the monster being tall.
     </div>
 
-<!--     <div> assumed independence
-      Blindly multiplying P(tall) * P(great hair) * P(tattoos) assumes the events are independent. It doesn't work if any of the variables are very positively or negatively correlated.
+    <div style="color:green">
+      Then, consider the probability of a tall monster having great hair.
     </div>
 
-    <buton>How to do this properly?</buton>
- -->
-    <div>
-      To do this properly, use the logic in the <bold>Chain Rule</bold>:
-    </div>
-
-    <div class="smaller-children" style="margin-left: 16px;">
-      <div style="color:magenta">
-        First, consider the probability of the monster being tall.
-      </div>
-
-      <div style="color:green">
-        Then, consider the probability of a tall monster having great hair.
-      </div>
-
-      <div style="color:blue">
-        Then, consider the probability that a tall monster with great hair... would have a tattoo.
-      </div>
+    <div style="color:blue">
+      Then, consider the probability that a tall monster with great hair... would have a tattoo.
     </div>
 
     <div>
       Multiply together to filter down to monsters that are tall and have great hair and have tattoos.
     </div>
+  </div>
 
-    <div>
-      Mathematically, this is written out as:
-    </div>
+  <div>
+    Basically, the Chain Rule says that when adding a new item to the joint probability, condition on all the events that already exist.
+  </div>
 
-    <div class="smaller-children">
-      P(tattoo AND great hair AND tall) = <span style="color:magenta">P(tall)</span> * <span style="color:green">P(great hair | tall)</span> * <span style="color:blue">P(tattoo | great hair AND tall)</span>
-    </div>
-
-    <buton @click="set('problem3')">Try it</buton>
-
-  </template>
-
-</avatar>
+  <buton @click="set('problem3')">Try it</buton>
+</interstitial>
 
 
 <avatar key="problem3" 
         v-if="show('problem3')"
         image="girl1.png" 
-        text="Ooh yeah I've heard of the Chain Rule. Here are some numbers."
+        text="Ooh yeah I've heard of the Chain Rule. Here are the numbers that you'll need."
         :state="avatarState">
+
+  <div>
+  What is P(tall, great hair, tattooed)?
+  </div>
 
     <div class="extra-info">
     Facts from before:
@@ -890,6 +965,16 @@ You are going to bring us into this new world of <span class="animated infinite 
     P(tall, great hair, tattooed) =  1/<input-box :right="42" :onRight="() => set('problem4')"/>
     </div>
 
+  <template v-slot:hint>
+    <div>
+      Recall the Chain Rule says that everything must be conditioned on what came before. 
+    </div>
+    <div>
+      So P(tall, great hair, tattooed) = P(tall) * P(great hair | tall) * P(tattoos | great hair AND tall). 
+    </div>
+  </template>
+
+    <!-- todo: add hint -->
 </avatar>
 
 
@@ -931,10 +1016,43 @@ You are going to bring us into this new world of <span class="animated infinite 
     Even though each individual criteria may not seem picky, requiring that a monster have all those traits leaves Veronica with a very small dating pool.
   </div>
 
+  <div>
+    But hey, at least Veronica's pickiness taught you the Chain Rule.
+  </div>
+
   <buton @click="set('congrats')">Next</buton>
 </avatar>
 
+<interstitial 
+    image="girl.png"
+    key="problem1-result" 
+    v-if="show('problem1-result')">
+  <div>
+    One quick thing that may really blow your mind.
+  </div>
 
+  <div>
+    We had been decomposing:
+  </div>
+
+  <div>
+    P(tall AND great hair and tattoos) = P(tall) * P(great hair|tall) * P(tattoos | tall AND great hair).
+  </div>
+
+  <div>
+    But notice... that we can also decompose it as:
+  </div>
+
+  <div>
+    P(tall AND great hair and tattoos) = P(great hair) * P(tattoos | great hair) * P(tall | tattoos AND great hair).
+  </div>
+
+  <div>
+    We can decompose it in any way we choose to, depending on what information we have on hand.
+  </div>
+
+  <buton @click="set('congrats')">OK mind blown</buton>
+</interstitial>
 
 <centered key="congrats"
   v-if="show('congrats')">
@@ -1561,7 +1679,7 @@ function makeComponent(componentName, points){
 
         points: points, // jump points in the story
 
-        problemsRight: new Set(), // 'problem0' (use string key)
+        problemsRight: new Set(), // 'fakeout1' (use string key)
         problemsWrong: new Set(),
 
         memory: null, // A variable for dumping short term component state.
@@ -1680,7 +1798,7 @@ makeComponent('coin-flips', [
 // Conditional prob + join prob with chain rule
 makeComponent('chain-rule', [
   { key: 'intro', name: 'Intro', },
-  { key: 'problem0', name: 'Independence', },
+  { key: 'fakeout1', name: 'Independence', },
   { key: 'problem1', name: 'Conditional probability', },
   { key: 'problem2', name: 'Tattoos', },
   { key: 'problem3', name: 'Chain Rule', },
@@ -1860,7 +1978,7 @@ new Vue({
   data: {
 
     storyPoints: storyPoints,
-    storyPointInd: 0,
+    storyPointInd: 1,
 
     sounds: {
        'text-blip-high': new Audio('sounds/text-blip-high.ogg')
