@@ -930,26 +930,6 @@ todo: add a review slot.
         image="girl.png" 
         text="Ooh yes, I've heard of the Chain Rule. Here are the numbers that you'll need.">
 
-  <div>
-  What is P(tall, great hair, tattoos)?
-  </div>
-
-    <div class="extra-info">
-    Facts from before:
-    <ul>
-      <li>P(tall) = 1/2</li>
-      <li>P(great hair) = 1/4</li>
-      <li>P(great hair|tall) = 1/3</li>
-      <li>P(tattoos) = 1/5</li>
-      <li>P(tattoos|tall) = 1/6</li>
-      <li>P(tattoos|tall AND great hair) = 1/7</li>
-    </ul>
-    </div>
-
-    <div>
-    P(tall, great hair, tattoos) =  1/<input-box :right="42" :onRight="() => set('problem4')"/>
-    </div>
-
   <template v-slot:hint>
     <div>
       Recall the Chain Rule says that everything must be conditioned on what came before. 
@@ -959,7 +939,26 @@ todo: add a review slot.
     </div>
   </template>
 
-    <!-- todo: add hint -->
+  <div>
+  What is P(tall, great hair, tattoos)?
+  </div>
+
+  <div class="extra-info">
+  Facts from before:
+  <ul>
+    <li>P(tall) = 1/2</li>
+    <li>P(great hair) = 1/4</li>
+    <li>P(great hair|tall) = 1/3</li>
+    <li>P(tattoos) = 1/5</li>
+    <li>P(tattoos|tall) = 1/6</li>
+    <li>P(tattoos|tall AND great hair) = 1/7</li>
+  </ul>
+  </div>
+
+  <div>
+  P(tall, great hair, tattoos) =  1/<input-box :right="42" :onRight="() => set('problem4')"/>
+  </div>
+
 </avatar>
 
 
@@ -981,6 +980,19 @@ todo: add a review slot.
       <li>P(single|tall AND great hair AND tattoos AND around her age) = 1/2</li>
     </ul>
     </div>
+
+
+    <template v-slot:hint>
+      <div>
+        Recall the Chain Rule says that everything must be conditioned on what came before. 
+      </div>
+      <div>
+        So in the case of three events, P(tall, great hair, tattoos) = P(tall) * P(great hair | tall) * P(tattoos | great hair AND tall). 
+      </div>
+      <div>
+        What is it for five events?
+      </div>
+    </template>
 
     <div>
     P(tall, great hair, tattoos, around her age, single) =
@@ -1370,7 +1382,7 @@ todo: add a review slot.
   
     <transition name="fade">
       <span v-if="showNopeText" class="nope" style="position:absolute; bottom: -8px; margin-bottom:0px">
-        {{nopeText}}
+        {{feedback}}
       </span>
     </transition>
   </div>
@@ -1414,22 +1426,31 @@ Vue.component('input-box', {
     },
   },
   computed: {
-    nopeText: function(){
+    feedback: function(){
       return this.hints[Math.min(this.numWrong, this.hints.length-1)];
+    },
+    isYay: function(){
+      return this.val === this.right;
+    },
+    isNope: function(){
+      return !this.isYay;
     }
   },
   data: function(){
     return {
       val: null,
       showNopeText: false,
-      numWrong: 0,
+      // numWrong: 0,
     }
   },
   methods: {
-    answerSubmit: function(){
+    answerSubmit: async function(){
+      bus.$emit('answer-submitted', this);
+
       // look at the value in the input.
       if (this.val == this.right){
         this.showNopeText = false;
+        await wait(1000);
         this.onRight();
       } else {
         this.numWrong++;
@@ -1500,13 +1521,11 @@ Vue.component('avatar', {
     this_.showLiveText = true;
 
     bus.$on('avatar-react', function(params){
-//      debugger;
       this_[params.key] = params.value;
     });
 
-    bus.$on('buton-clicked', async function(buton){
-      // <buton nope="why not">
-      this_.handleNopeButon(buton);
+    bus.$on('answer-submitted', function(input){
+      this_.reactToInput(input);
     });
 
     // setInterval(async function(){
@@ -1532,16 +1551,19 @@ Vue.component('avatar', {
     hasSlot: function(name){
       return !!this.$slots[ name ] || !!this.$scopedSlots[ name ];
     },
-    handleNopeButon: function(buton){
+
+    // For some reason, this need to be a separate fn, rather than inside the bus.
+    // when the player clicks on a nope button, if the button has nope text, that is rendered.
+    // otherwise, if the avatar has a hint slot that is shown.     
+    reactToInput: function(input){
       // when the player clicks on a nope button, if the button has nope text, that is rendered.
       // otherwise, if the avatar has a hint slot that is shown. 
 
-      if (buton.nopeText){  
-        this.nopeText = buton.nopeText;        
-      } else if(buton.isNope && this.hasSlot('hint')){
+      if (input.nopeText){  
+        this.nopeText = input.nopeText;        
+      } else if(input.isNope && this.hasSlot('hint')){
         this.showHint = true;
       }
-
     }
   },
   template: '#avatar-template'
@@ -1599,8 +1621,10 @@ Vue.component('buton', {
         this.showX = true;
       }
 
-      // Tell those listening on the bus that the buton has been clicked.
-      bus.$emit('buton-clicked', this);
+      // Tell those listening on the bus that the buton has been clicked... unless it's a buton within an input-box.
+      if(!firstAncestorOfComponent(this, 'input-box')){
+        bus.$emit('answer-submitted', this);        
+      }
 
       await wait(1000);
       this.$emit('clik');
@@ -1674,14 +1698,14 @@ function makeComponent(componentName, points, reactions){
     },
     mounted: async function(){
       var this_ = this;
-      bus.$on('buton-clicked', async function(buton){
-        // Respond only if the buton is in the current component.
-        if (!isDescendant(this_, buton)){
+      bus.$on('answer-submitted', async function(input){
+        // Respond only if the input is within the current component.
+        if (!isDescendant(this_, input)){
           return;
         }
 
         // Have avatar react based on buton attributes.
-        var avatar = firstAncestorOfComponent(buton, 'avatar');
+        var avatar = firstAncestorOfComponent(input, 'avatar');
 
         if (!avatar){
           // The buton was not used within an avatar, but something else.
@@ -1690,7 +1714,7 @@ function makeComponent(componentName, points, reactions){
         var problemKey = avatar.$vnode.data.key;
 
         // If there's a yay.
-        if (buton.isYay){
+        if (input.isYay){
           avatar.reactionImage = reactions.yay; //'monster_yay.png';          
           this_.problemsRight.add(problemKey);
           this_.$root.play('right');
@@ -1702,12 +1726,12 @@ function makeComponent(componentName, points, reactions){
         }
         
         // just a naked <buton nope>
-        if (buton.isNope){
+        if (input.isNope){
           avatar.reactionImage = reactions.nope; //'monster_cry.png';          
           this_.problemsWrong.add(problemKey);
         } 
 
-        if ('coy' in buton.$attrs){
+        if ('coy' in input.$attrs){
           avatar.reactionImage = reactions.coy;
           this_.$root.play('coy');
         }
