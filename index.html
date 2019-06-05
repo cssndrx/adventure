@@ -299,7 +299,7 @@ button{
 }
 
 .smaller-children, .smaller-children *{
-  font-size: 12px;
+  font-size: 16px;
 }
 
 /* https://w3bits.com/rainbow-text/ */
@@ -773,7 +773,7 @@ You are going to bring us into this new world of <span class="animated infinite 
   </div>
 
   <div>
-    In math speak she told us P(great hair|tall) (which is read as "the probability of great hair GIVEN the monster is tall").
+    In math speak, she told us P(great hair|tall) -- the probability of great hair GIVEN the monster is tall.
   </div>
 
   <buton @click="set('conditional3')">Next</buton>
@@ -896,24 +896,25 @@ todo: add a review slot.
   </div>
 
   <div class="smaller-children">
-    P(tattoo AND great hair AND tall) = <span style="color:magenta">P(tall)</span> * <span style="color:green">P(great hair | tall)</span> * <span style="color:blue">P(tattoo | great hair AND tall)</span>
+    P(tattoo AND great hair AND tall) = <br>
+    <span style="color:magenta">P(tall)</span> * <span style="color:green">P(great hair | tall)</span> * <span style="color:blue">P(tattoo | great hair AND tall)</span>
   </div>
 
   <div class="smaller-children" style="margin-left: 16px;">
-    <div style="color:magenta">
-      First, consider the probability of the monster being tall.
-    </div>
-
-    <div style="color:green">
-      Then, consider the probability of a tall monster having great hair.
-    </div>
-
-    <div style="color:blue">
-      Then, consider the probability that a tall monster with great hair... would have a tattoo.
+    <div>
+      First, consider the <span style="color:magenta">probability of the monster being tall</span>.
     </div>
 
     <div>
-      Multiply together to filter down to monsters that are tall and have great hair and have tattoos.
+      Then, consider the <span style="color:green">probability of a tall monster having great hair</span>.
+    </div>
+
+    <div>
+      Then, consider the <span style="color:blue">probability that a tall monster with great hair, would have a tattoo</span>.
+    </div>
+
+    <div>
+      Multiply together to get monsters that are tall and have great hair and have tattoos.
     </div>
   </div>
 
@@ -987,7 +988,7 @@ todo: add a review slot.
         Recall the Chain Rule says that everything must be conditioned on what came before. 
       </div>
       <div>
-        So in the case of three events, P(tall, great hair, tattoos) = P(tall) * P(great hair | tall) * P(tattoos | great hair AND tall). 
+        So in the case of four events, P(tall, great hair, tattoos, single) = P(tall) * P(great hair | tall) * P(tattoos | great hair AND tall) * P(great hair AND tall AND tattoos | single). 
       </div>
       <div>
         What is it for five events?
@@ -1029,7 +1030,7 @@ todo: add a review slot.
     We had been decomposing:
   </div>
 
-  <div>
+  <div style="font-size:16px">
     P(tall AND great hair and tattoos) = P(tall) * P(great hair|tall) * P(tattoos | tall AND great hair).
   </div>
 
@@ -1037,12 +1038,12 @@ todo: add a review slot.
     But notice... that we can also decompose it as:
   </div>
 
-  <div>
+  <div style="font-size:16px">
     P(tall AND great hair and tattoos) = P(great hair) * P(tattoos | great hair) * P(tall | tattoos AND great hair).
   </div>
 
   <div>
-    We can decompose it in any way we choose to, depending on what information we have on hand.
+    We can decompose it in any order we choose to, depending on what information we have on hand.
   </div>
 
   <buton @click="set('congrats')">OK mind blown</buton>
@@ -1241,7 +1242,7 @@ todo: add a review slot.
 
 
 <script type="text/x-template" id="avatar-template">
-<div style="position: relative; height: 500px; width:800px; margin:0 auto; margin-top:16px">
+<div style="position: relative; height: 700px; width:800px; margin:0 auto; margin-top:16px">
 
 
 <!--
@@ -1412,6 +1413,7 @@ var sounds = {
   'curious': {clip: new Audio('sounds/curious.wav')},
   'achievement': {clip: new Audio('sounds/achievement.wav')},
 };
+
 
 Vue.component('input-box', {
   props: {
@@ -1991,11 +1993,7 @@ new Vue({
   data: {
 
     storyPoints: storyPoints,
-    storyPointInd: 1,
-
-    sounds: {
-       'text-blip-high': new Audio('sounds/text-blip-high.ogg')
-    },
+    storyPointInd: 0,
 
     // Obj property additions do not update DOM, so prepopulate all the keys in the object. Or use lists.
     //soundNameToCount: {},
@@ -2063,9 +2061,12 @@ new Vue({
     // },
 
     play: function(soundName){
-//      console.log('playing ' + soundName);
+      console.log('playing ' + soundName);
       var sound = sounds[soundName].clip;
-      sound.play();
+      sound.play().catch(function(error){
+        console.log(error.toString());
+//        debugger;
+      });    
     },
     pause: function(soundName){
  //     console.log('pausing');
