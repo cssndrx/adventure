@@ -996,7 +996,7 @@ todo: add a review slot.
 <avatar key="problem4" 
         v-if="show('problem4')"
         image="girl.png" 
-        text="Yes, thank you! But silly us! We forgot to include that these tall, great hair, tattoos monsters also need to be... around my age and single.">
+        text="Yes, thank you! But silly us! We forgot to include that these tall, great hair, tattooed monsters also need to be... around my age and single.">
 
     <div class="extra-info">
     Facts from before:
@@ -1715,9 +1715,7 @@ function makeComponent(componentName, points, reactions){
 
         points: points, // jump points in the story
 
-        problemsRight: new Set(), // 'fakeout1' (use string key)
-        problemsWrong: new Set(),
-
+        problemToCorrectness: {}, // 'fakeout1': [false, true]
         memory: null, // A variable for dumping short term component state.
       };
     },
@@ -1748,20 +1746,20 @@ function makeComponent(componentName, points, reactions){
 
         // If there's a yay.
         if (input.isYay){
-          avatar.reactionImage = reactions.yay; //'monster_yay.png';          
-          this_.problemsRight.add(problemKey);
+          avatar.reactionImage = reactions.yay;
+          this_.addCorrectness(problemKey, true);          
           this_.$root.play('right');
 
           // If the user got it on their first try, show a rainbow.
-          if (!this_.problemsWrong.has(problemKey)){
+          if (this_.perfect(problemKey)){
             this_.react('showRainbow', true);
           }
         }
         
         // just a naked <buton nope>
         if (input.isNope){
-          avatar.reactionImage = reactions.nope; //'monster_cry.png';          
-          this_.problemsWrong.add(problemKey);
+          avatar.reactionImage = reactions.nope;
+          this_.addCorrectness(problemKey, false);  
         } 
 
         if ('coy' in input.$attrs){
@@ -1771,6 +1769,12 @@ function makeComponent(componentName, points, reactions){
       });
     },
     methods: {
+      addCorrectness(key, isCorrect){
+        if(!(key in this.problemToCorrectness)){
+          this.problemToCorrectness[key] = [];
+        }
+        this.problemToCorrectness[key].push(isCorrect);
+      },
       isKnownPoint: function(point){
         return points.map(d => d.key).indexOf(point) > -1;
       },
@@ -1780,34 +1784,47 @@ function makeComponent(componentName, points, reactions){
       print: function(thing){
         console.log(thing);
       },
-      show: function(id){
+      show: function(key){
 //        return true;
-        return id == this.active;
+        return key == this.active;
       }, 
-      got: function(id){
-        return this.problemsRight.has(id);
+      got: function(key){
+        // Return the latest value
+        if (this.problemToCorrectness[key]){
+          var answers = this.problemToCorrectness[key];
+          return answers[answers.length-1];
+        } else {
+          console.warn('checking for correctness of ' + key + ' which did not exist');
+          return false;
+        }
       },
-      set: async function(id, optionalDelay){
-
+      set: async function(key, optionalDelay){
         // Only update the lastActive point if the point is a known point.
         if (this.isKnownPoint(this.active)){
           this.lastActive = this.active;          
         }
-        console.log('setting: ' + id);
+        console.log('setting: ' + key);
         if (optionalDelay !== undefined){
 //          console.log('started waiting');
           await wait(optionalDelay);        
  //         console.log('done waiting');
         }
 
-        this.active = id;
+        this.active = key;
       },
       delay: async function(fn, ms){
         await wait(ms);
         fn();
       },
+      perfect: function(key){
+        // All answers to this problem were correct.
+        if(this.problemToCorrectness[key] && _.every(this.problemToCorrectness[key])){
+          return true;
+        }
+        return false;
+      },
       pointStyle: function(point){
-        if (this.problemsRight.has(point.key) && !this.problemsWrong.has(point.key)){
+        if (this.perfect(point.key)){
           return {
             'background-image' : "url('images/rainbow.png')",
             'background-size': 'cover'
