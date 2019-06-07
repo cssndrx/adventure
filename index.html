@@ -460,9 +460,35 @@ You are going to bring us into this new world of <span class="animated infinite 
 
 <avatar key="intro"
   v-if="show('intro')"
+  text="Please help me, I've been cursed!"
+  image="monster.png" >
+  <buton @click="set('intro2')">Oblige</buton>
+
+  <template v-slot:dialog>
+    Oh my goodness.
+  </template>
+</avatar>
+
+<avatar key="intro2"
+  v-if="show('intro2')"
   image="monster.png" 
-  text="Hey player, come over here!">
-  <buton @click="set('HHHHH')">Oblige</buton>
+  text="I'm stuck here giving math problems until someone can answer them all correctly.">
+  <buton @click="set('intro3')">I'll help</buton>
+</avatar>
+
+<avatar key="intro3"
+  v-if="show('intro3')"
+  image="monster.png" 
+  text="Are you sure? If you answer wrong, you might get cursed too.">
+  <buton @clik="set('HHHHH')" yay>Yes</buton>
+  <buton @click="set('police-help')" nope>No</buton>
+</avatar>
+
+<avatar key="police-help"
+  v-if="show('police-help')"
+  image="police.png" 
+  text="Kid, you can do it. I'll help you if you get stuck.">
+  <buton @click="set('HHHHH')">Next</buton>
 </avatar>
 
 <avatar key="HHHHH"
@@ -488,7 +514,7 @@ You are going to bring us into this new world of <span class="animated infinite 
 
   <buton @click="memory='userSaidH'" nope>H</buton>
   <buton @click="memory='userSaidT'" nope>T</buton>
-  <buton @click="set('HHHHH-finale')" yay>I don't know</buton>
+  <buton @click="set('HHHHH-finale')" yay>It's 50-50</buton>
 </avatar>
 
 <avatar key="HHHHH-finale"
@@ -496,7 +522,7 @@ You are going to bring us into this new world of <span class="animated infinite 
   image="monster_yay.png" 
   sound="right"
   text="Yeah! The correct answer is that there's no way to tell.">
-  <buton @click="set('HH')">Next</buton>
+  <buton @click="set('independence')">Next</buton>
 </avatar>
 
 <interstitial 
@@ -511,10 +537,10 @@ You are going to bring us into this new world of <span class="animated infinite 
     Meaning that knowing the result of one event does not give you information about the other events. Which of these is another example of an independent event?
   </div>
 
-  <buton nope>Applying to jobs</buton>
+  <buton nope>Landing a job</buton>
   <buton @click="set('HH')" yay>Rolling dice</buton>
-  <buton nope>Winning a lottery</buton>
-  <buton nope>Drawing a nice picture</buton>
+  <buton nope>Winning at games</buton>
+  <buton nope>Having a good day</buton>
 </interstitial>
 
 <avatar key="HH"
@@ -522,7 +548,7 @@ You are going to bring us into this new world of <span class="animated infinite 
   image="monster.png" 
   text="What is the probability that I toss a coin twice and get HH?">
   <buton nope="1/2 is the probability of tossing a single coin and getting H. Getting two heads in a row must be less than that.">1/2</buton>
-  <buton @clik="set('HHH')" yay>1/4</buton>
+  <buton @clik="set('HH-explanation')" yay>1/4</buton>
   <buton nope="It is possible to say if you assume it is a fair coin.">Can't say</buton>
 </avatar>
 
@@ -621,6 +647,10 @@ You are going to bring us into this new world of <span class="animated infinite 
     v-if="show('10HT-interstitial')">
   <div>
     The chance of getting HHHTHHTTTT is the same as the probability of getting HHHHHHHHHH.
+  </div>
+
+  <div>
+    Because both involve computing the probability of 10 independent coin flips.
   </div>
 
   <div>
@@ -1272,6 +1302,7 @@ todo: add a review slot.
     <live-text  
         key="initial-text"
         v-if="!showNewText" @live-text-complete="showQuestion=true">
+        <slot name="dialog"></slot>
       {{text}}
     </live-text> 
 
@@ -1378,7 +1409,7 @@ todo: add a review slot.
 
 <script type="text/x-template" id="input-box-template">
   <div style="display:inline-block; position:relative;">
-    <input v-model="val" placeholder="?" style="width:50px; display:inline">
+    <input v-model="val" placeholder="?" style="width:50px; display:inline" v-on:keyup.enter="answerSubmit">
     <buton style="display:inline" @click="answerSubmit">Go</buton>
   
     <transition name="fade">
@@ -1432,7 +1463,7 @@ Vue.component('input-box', {
       return this.hints[Math.min(this.numWrong, this.hints.length-1)];
     },
     isYay: function(){
-      return this.val === this.right;
+      return this.val == this.right;
     },
     isNope: function(){
       return !this.isYay;
@@ -1450,7 +1481,7 @@ Vue.component('input-box', {
       bus.$emit('answer-submitted', this);
 
       // look at the value in the input.
-      if (this.val == this.right){
+      if (this.isYay){
         this.showNopeText = false;
         await wait(1000);
         this.onRight();
@@ -1487,7 +1518,7 @@ function isDescendant(ancestor, maybeChild){
 Vue.component('avatar', {
   props: {
     image: {type: String}, // 'girl.png'
-    text: {type: String},
+    text: {type: String, default: ''},
     animation: {type: String, default: 'wobble'},
     sound: {type: String},
   },
@@ -1692,7 +1723,7 @@ function makeComponent(componentName, points, reactions){
     },
     computed: {
       activeOrLastKnownPoint: function(){
-        if (points.map(d => d.key).indexOf(this.active) > -1){
+        if (this.isKnownPoint(this.active)){
           return this.active;
         }  
         return this.lastActive;
@@ -1740,6 +1771,9 @@ function makeComponent(componentName, points, reactions){
       });
     },
     methods: {
+      isKnownPoint: function(point){
+        return points.map(d => d.key).indexOf(point) > -1;
+      },
       react: function(k, v){
         bus.$emit('avatar-react', {key: k, value: v});
       },
@@ -1754,7 +1788,11 @@ function makeComponent(componentName, points, reactions){
         return this.problemsRight.has(id);
       },
       set: async function(id, optionalDelay){
-        this.lastActive = this.active;
+
+        // Only update the lastActive point if the point is a known point.
+        if (this.isKnownPoint(this.active)){
+          this.lastActive = this.active;          
+        }
         console.log('setting: ' + id);
         if (optionalDelay !== undefined){
 //          console.log('started waiting');
@@ -1787,6 +1825,7 @@ makeComponent('coin-flips',
 [
   { key: 'intro', name: 'Intro', },
   { key: 'HHHHH', name: '5 heads', },
+  { key: 'independence', name: 'Independence'},
   { key: 'HH', name: 'Probability of 2 heads', },
   { key: 'HHH', name: 'Probability of 3 heads', },
   { key: '10H', name: 'Probability of 10 heads', },
