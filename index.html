@@ -467,7 +467,7 @@ You are going to bring us into this new world of <span class="animated infinite 
 </script>
 
 <script type="text/x-template" id="intro-scene-template">
-<div style="width:100%; height:200px; border-bottom: 4px solid black; margin-bottom: 100px; position:relative;" class="normal-div" >
+<div style="width:700px; height:200px; margin-bottom: 100px; position:relative; margin:0 auto;" class="normal-div" >
 
   <div v-if="showCop" style="position:absolute; bottom:0px; left:0px;" ref="cop">
     <img src="images/cop.png" style="width:100px" >
@@ -508,8 +508,6 @@ You are going to bring us into this new world of <span class="animated infinite 
   </div>
 </div>
 
-<!-- <intro-scene key="intro" v-if="show('intro')" @scene-complete="set('intro1')">
-</intro-scene> -->
 
 <!-- <transition name="fade" mode="out-in">-->
 <avatar key="intro"
@@ -731,8 +729,10 @@ You are going to bring us into this new world of <span class="animated infinite 
     <buton>I don't know</buton>
   </buton-group>
 
+<!-- <exp base="2" pow="100"></exp> -->
+<!-- <exp base="2" pow="80"></exp>-->
   <template v-slot:new-text>
-   {{got('100H') ? 'That was a trick question but you got it!': 'Har-har! That was a trick question.'}} The probability of this happening on a fair coin is 1/<exp base="2" pow="100"></exp>. If all the <exp base="2" pow="80"></exp> atoms in the universe were flipping coins, this still probably wouldn't happen. So the coin must not be fair. 
+   {{got('100H') ? 'That was a trick question but you got it!': 'Har-har! That was a trick question.'}} The probability of this happening on a fair coin is 1/2^100. If all the 2^80 atoms in the universe were flipping coins, this still probably wouldn't happen. So the coin must not be fair. 
   </template>
 
   <template v-slot:new-question>
@@ -754,7 +754,7 @@ You are going to bring us into this new world of <span class="animated infinite 
     <li>You learned that there are <exp base="2" pow="80"></exp> atoms in the universe.</li>
   </ul> 
 
-  <buton @click="$root.nextStory()">Next section</buton>
+  <buton @click="finish()">Next section</buton>
 </centered>
 
 <!-- </transition> -->
@@ -1150,7 +1150,7 @@ todo: add a review slot.
     <li>You learned to not be too picky ❤️</li>
   </ul> 
 
-  <buton @click="$root.nextStory()">Next section</buton>
+  <buton @click="finish()">Next section</buton>
 </centered>
 
 </transition>
@@ -1302,7 +1302,7 @@ todo: add a review slot.
     <li>You got a sneak peak of the usefulness statistical distributions</li>
   </ul> 
 
-  <buton @click="$root.nextStory()">Next section</buton>
+  <buton @click="finish()">Next section</buton>
 </centered>
 
 <!--</transition> -->
@@ -1332,7 +1332,6 @@ todo: add a review slot.
 
 <script type="text/x-template" id="avatar-template">
 <div style="position: relative; height: 700px; width:800px; margin:0 auto; margin-top:16px">
-
 
 <!--
 <transition name="slide-fade">
@@ -1368,7 +1367,7 @@ todo: add a review slot.
     <live-text 
         key="new-text"
         v-if="state.showNewText"
-        @live-text-complete="state.showNewQuestion=true">
+        @live-text-complete="react('showNewQuestion',true)"
         <slot name="new-text"></slot>
     </live-text>
   </div>
@@ -1512,6 +1511,7 @@ const store = new Vuex.Store({
       state.answerSubmittedComponent = component;
     },
     avatarReaction(state, params){
+      console.log('@store ' + params.key + ' ' + params.value);
       state.avatarState[params.key] = params.value;
     },
     resetAvatar(state){
@@ -1529,7 +1529,7 @@ const store = new Vuex.Store({
 const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 // https://alligator.io/vuejs/global-event-bus/
-// const bus = new Vue();
+//const bus = new Vue();
 
 var sounds = {
   'speech': {clip: new Audio('sounds/speech.wav')},
@@ -1571,10 +1571,10 @@ Vue.component('intro-scene', {
     },
     copDialog: function(){
       if (this.state == 'trainee'){
-        return "Hey you! You're the new trainee with the statistics force, right?";
+        return "Hey you! You're the new trainee, right?";
       }
       else if (this.state == 'understaffed'){
-        return "Good thing you're here. We're massively understaffed. And some weird --";              
+        return "Glad you're here. The Statistics Police is massively understaffed. And some weird --";              
       }
       return "";
     },
@@ -1629,7 +1629,8 @@ Vue.component('intro-scene', {
       } 
 
       if (this.state == 'fin'){
-        this.$emit('scene-complete');
+        this.$root.nextStory();
+        // this.$emit('scene-complete');
       }
     },
     liveTextComplete: async function(){
@@ -1964,14 +1965,17 @@ function makeComponent(componentName, points, reactions){
     },
     watch: {
       answerSubmittedComponent: function(input){
-        if (!isDescendant(this, input)){
-          return;
-        }
         this.reactOnAnswer(input);
       }
     },
     methods: {
       reactOnAnswer: function(input){
+        if (!isDescendant(this, input)){
+          return;
+        }
+
+        //store.commit('resetAvatar');
+
         // Have avatar react based on buton attributes.
         var avatar = firstAncestorOfComponent(input, 'avatar');
 
@@ -1986,11 +1990,14 @@ function makeComponent(componentName, points, reactions){
           avatar.reactionImage = reactions.yay;
           this.addCorrectness(problemKey, true);          
           this.$root.play('right');
+        }
 
-          // If the user got it on their first try, show a rainbow.
-          if (this.perfect(problemKey)){
-            this.react('showRainbow', true);
-          }
+
+        // If the user got it on their first try, show a rainbow.
+        if (this.perfect(problemKey)){
+          this.react('showRainbow', true);
+        }  else {
+          this.react('showRainbow', false);
         }
         
         // just a naked <buton nope>
@@ -2064,6 +2071,11 @@ function makeComponent(componentName, points, reactions){
           };
         } 
       },
+      finish: async function(){
+        this.play('achievement');
+        await wait(1500);
+        this.$root.nextStory();
+      }
     },
     template: '#' + componentName + '-template'
   });
@@ -2267,7 +2279,15 @@ Vue.component('live-text', {
   template: '#live-text-template'
 });
 
+// <intro-scene key="intro" v-if="show('intro')" @scene-complete="set('intro1')">
+// </intro-scene>
+
 var storyPoints = [
+{
+  name: 'Intro',
+  component: 'intro-scene',
+  image: 'cop.png',
+},
 {
   name: 'Coin Flips',
   component: 'coin-flips',
@@ -2278,11 +2298,11 @@ var storyPoints = [
   component: 'chain-rule',
   image: 'girl.png',
 },
-{
-  name: 'Risk Reward',
-  component: 'risk-reward',
-  image: 'bear.png',
-},
+// {
+//   name: 'Risk Reward',
+//   component: 'risk-reward',
+//   image: 'bear.png',
+// },
 
 ];
 
@@ -2329,8 +2349,8 @@ console.log('hitting reset');
     // round_to(2.777777, 2) -> 2.78
     roundTo: roundTo,
     nextStory: async function(){
-      this.play('achievement');
-      await wait(1500);
+      // this.play('achievement');
+      // await wait(1500);
       this.storyPointInd = Math.min(this.storyPoints.length-1, this.storyPointInd+1);
     },
 
@@ -2358,7 +2378,7 @@ console.log('hitting reset');
     // },
 
     play: function(soundName){
-      console.log('playing ' + soundName);
+//      console.log('playing ' + soundName);
       var sound = sounds[soundName].clip;
       sound.play().catch(function(error){
         console.log(error.toString());
