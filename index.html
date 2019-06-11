@@ -33,89 +33,72 @@ font-family: 'Cormorant Garamond', serif;
 <script src="js/utils.js"></script>
 
 <style>
-
 *{
   font-family: 'Fira Sans', sans-serif;
   font-size: 18px;
   font-weight: 300;
 }
-
 div{
   margin-bottom: 16px;
 }
 .normal-div, .normal-div div{
   margin-bottom: 0px;
 }
-
 /* font-family: 'Gaegu', cursive; -- cute child like handwriting */
 /* font-family: 'Dokdo', cursive; -- funky */
 /* font-family: 'Bungee Shade', cursive; -- pop art caps */
-
 ul{
   margin-top: 0px;
 }
-
 h4{
   font-size: 18px;
   font-weight: 500;
 }
-
 a{
   color: #337ab7; /* boostrap blue */
   text-decoration: none;
   cursor: pointer;
 }
-
 img{
   max-width: 400px;
 }
-
 .nope{
   color:red; 
   font-size: 14px; 
+  text-align: left;
 }
-
 .handwriting, .handwriting *{
   font-family: 'Dokdo', cursive;    
 }
-
 .dialog-text, .dialog-text *{
   font-family: 'Dokdo', cursive;  
   font-size: 32px;
   width:350px;
 }
-
 .smaller-dialog-text, .smaller-dialog-text *{
   font-family: 'Dokdo', cursive;  
   font-size: 24px;
 }
-
 .centered, .centered *{
   font-size: 22px;
 }
-
 button{
   cursor: pointer;
   background-color: white;
   border-radius: 4px;
-
   font-size: 28px;
   font-weight: 900;
   margin-bottom: 8px; 
   padding: 8px 16px;
   margin: 8px;
 }
-
 .question button:hover, .question .clicked-button{
   color: white;
   background-color: black;
 }
-
-
 .bold{
   font-weight: 900;
 }
-
 .centered{
   display: grid;
   grid-template-columns: 1fr 500px 1fr;
@@ -126,27 +109,21 @@ button{
     ". . .";
   height: 500px;
 }
-
 .centered-content {
   grid-area: centered-content;
 }
-
 .centered button{
   margin: 0 auto;
   margin-bottom: 8px;
 }
-
-
 .hidden-at-first{
   opacity: 0;
   transition: opacity 1s;
 }
-
 .spin-and-pulse{
   position: absolute;
   animation: spin-and-pulse 5s ease 0s 1;
 }
-
 @keyframes spin-and-pulse {
   0% {
     transform: rotate(1turn);
@@ -170,12 +147,10 @@ button{
     transform: scale(1);
   }
 }
-
 .wobble{
   position: absolute;
   animation: wobble 5s ease 0s infinite;
 }
-
 @keyframes wobble {
   0% {
     transform: rotate(0turn);
@@ -193,12 +168,10 @@ button{
     transform: rotate(0turn);
   }
 }
-
 .bounce{
   position: absolute;
   animation: bounce 5s ease 0s infinite;
 }
-
 @keyframes bounce {
   0% {
     transform: translateY(20px);
@@ -216,7 +189,6 @@ button{
     transform: translateY(0px);
   }
 }
-
 @keyframes mad-bounce {
   0% {
     transform: translateY(20px);
@@ -238,17 +210,14 @@ button{
   position: absolute;
   animation: bounce 4s ease 0s infinite;  
 }
-
 .walk-drift{
   position: absolute;
   transition: left 3s;
 }
-
 .walk-bounce{
   position: absolute;
   animation: walk-bounce 0.8s ease 0s infinite;
 }
-
 @keyframes walk-bounce {
   0% {
     transform: translateY(0px);
@@ -266,29 +235,24 @@ button{
     transform: translateY(0px);
   }
 }
-
 @keyframes fallover{
   100% {
     transform: rotate(0.3turn);
   }
 }
-
 .fallover{
   position: absolute;
   animation: fallover 1s ease-in 0s 1; /* to not stand back up:  normal forwards;  */
 }
-
 .active-point{
   background-color: black;
 }
-
 .point-container{
   width: 350px;
   display:flex; 
   justify-content:space-between; 
   margin: 0 auto;
 }
-
 .point{
   display: inline-block;
   width: 30px;
@@ -296,41 +260,32 @@ button{
   border-radius: 50%;
   border: 2px solid black;
 }
-
 .point:hover{
   background-color: #333;
 }
-
 .has-tooltip{
   position: relative;
 }
-
 .has-tooltip span{
   display: none;
   position:absolute;
   font-size: 10px;
   top: 24px;
   white-space: nowrap;
-
   background-color: rgba(0,0,0,0.5);
   padding: 8px;
   border-radius: 8px;
   color: white;
 }
-
 .has-tooltip:hover span{
   display: inline-block;
 }
-
-
 .extra-info, .extra-info *{
 /*  font-size: 14px;*/
 }
-
 .smaller-children, .smaller-children *{
   font-size: 16px;
 }
-
 /* https://w3bits.com/rainbow-text/ */
 .rainbow-text {
   background-image: repeating-linear-gradient(45deg, violet, indigo, blue, green, orange, red, violet);
@@ -340,20 +295,17 @@ button{
   -webkit-text-fill-color: transparent;
   animation: rainbow 4s ease infinite;
 }
-
 @keyframes rainbow { 
     0%{background-position:0% 50%}
     50%{background-position:100% 25%}
     100%{background-position:0% 50%}
 }
-
 .fade-enter-active, .fade-leave-active {
   transition: opacity 1s;
 }
 .fade-enter, .fade-leave-to {
   opacity: 0;
 }
-
 .slide-fade-enter-active, .slide-fade-leave-active {
   transition: all .3s ease;
 }
@@ -361,20 +313,15 @@ button{
   transform: translateY(-300px);
   opacity: 0;
 }
-
-
 .story-point-silhouette{
   -webkit-filter: contrast(0%) brightness(50%);
   filter: contrast(0%) brightness(50%);
   cursor: pointer;
 }
-
 .story-point-silhouette:hover{
   -webkit-filter: none;
   filter: none;
 }
-
-
 .cropcircle{
     width: 100px;
     height: 100px;
@@ -383,13 +330,11 @@ button{
     background-size: cover;
     border: 4px solid black;
 }
-
-
 </style>
 
 <body>
 
-<div class="handwriting normal-div" style="font-size:48px; text-align:center">The story so far</div>
+<div class="handwriting normal-div" style="font-size:48px; text-align:center">The Great Statistics Mystery</div>
 
 
 <div id="app" style="position:relative">
@@ -405,46 +350,31 @@ button{
     </div>
   </div>
 <!--
-
 <transition name="slide-fade">
 <div v-if="show" style="background-color: blue; width:200px; height:200px;"></div>
 </transition>
-
   <button @click="show = !show">
     Toggle render
   </button>
-
-
 <button class="rainbow-text">Test</button>
-
-
 <story :visible="true">
 Are you here?
-
 If so, you are in the <a @click="show('waiting')">right place</a>.
-
 What is the probability that you will succeed?
 </story>
-
 <once-group>
 <once-button>1/2</once-button>
 <once-button>1/4</once-button>
 <once-button>1/8</once-button>
 </once-group>
-
-
 <story ref="waiting">
 I have been <a @click="show('changing')">waiting</a> for you. 
 </story>
-
 <story ref="changing">
 The times are changing.
-
 The prophecies are unclear, but the times are changing.
-
 This planet is <a @click="show('new-world')">changing</a>.
 </story>
-
 <story ref="new-world">
 <div>
 You are going to bring us into this new world of <span class="animated infinite jello" style="display:inline-block">uncertainty</span>.
@@ -452,14 +382,12 @@ You are going to bring us into this new world of <span class="animated infinite 
 
 
 <!-- <div style="width: 150px; position:absolute; left: 0px; text-align: left; padding-left: 16px">
-
   <div v-for="storyPoint in storyPoints"
       @click="currentStoryPoint = storyPoint"
       style="margin-bottom: 4px;"
       :style="storyPointStyle(storyPoint)">
     <a :class="[storyPoint === currentStoryPoint ? 'active-tab': 'inactive-tab']">{{storyPoint.name}}</a>
   </div>
-
 </div> -->
 
 
@@ -503,6 +431,8 @@ You are going to bring us into this new world of <span class="animated infinite 
     ref="wizard" :src="'images/' + wizardImg" class="walk-drift" style="width:100px;position:absolute;left:0px;">
 
   <glitch ref="monster" v-if="showMonster" start="monster.png" end="monster_fuzzy.png" style="width:80px; position:absolute; left: 200px;bottom:0px;" ></glitch>
+
+  <glitch ref="girl" v-if="showMonster" start="girl.png" end="girl_fuzzy.png" style="width:80px; position:absolute; left: 280px;bottom:0px;" ></glitch>  
 </div>
 </script>
 
@@ -520,16 +450,9 @@ You are going to bring us into this new world of <span class="animated infinite 
   </div>
 </div>
 
-<<<<<<< HEAD
-=======
-<intro-scene key="intro" v-if="show('intro')" @scene-complete="set('intro1')">
-</intro-scene>
-
->>>>>>> parent of 231cb36... Removed bus in favor of vuex
-
 <!-- <transition name="fade" mode="out-in">-->
-<avatar key="intro1"
-  v-if="show('intro1')"
+<avatar key="intro"
+  v-if="show('intro')"
   image="monster_fuzzy.png"
   text="Please help me, I think I've been cursed!">
 
@@ -544,11 +467,11 @@ You are going to bring us into this new world of <span class="animated infinite 
 <avatar key="intro2"
   v-if="show('intro2')"
   image="monster_fuzzy.png" 
-  text="I'm stuck here giving math problems until someone can answer them all correctly.">
-  <buton @click="set('intro3')">I'll help</buton>
+  text="I'm stuck here giving math problems until someone can answer them all correctly. And somehow I'm fuzzy too!">
+  <buton @click="set('HHHHH')">I'll help</buton>
 </avatar>
 
-<avatar key="intro3"
+<!--<avatar key="intro3"
   v-if="show('intro3')"
   image="monster_fuzzy.png" 
   text="Are you sure? If you answer wrong, you might get cursed too.">
@@ -561,7 +484,7 @@ You are going to bring us into this new world of <span class="animated infinite 
   image="cop.png" 
   text="Kid, you can do it. I'll help you if you get stuck.">
   <buton @click="set('HHHHH')">Next</buton>
-</avatar>
+</avatar>-->
 
 <avatar key="HHHHH"
   v-if="show('HHHHH')"
@@ -606,13 +529,17 @@ You are going to bring us into this new world of <span class="animated infinite 
   </div>
 
   <div>
-    Meaning that knowing the result of one event does not give you information about the other events. Which of these is another example of an independent event?
+    Meaning that knowing the result of one event does not give you information about the other events. 
   </div>
 
+<!--Which of these is another example of an independent event?
   <buton nope>Landing a job</buton>
   <buton @click="set('HH')" yay>Rolling dice</buton>
   <buton nope>Winning at games</buton>
-  <buton nope>Having a good day</buton>
+  <buton nope>Having a good day</buton> -->
+
+  <buton @click="set('HH')">Next</buton>
+
 </interstitial>
 
 <avatar key="HH"
@@ -796,7 +723,7 @@ You are going to bring us into this new world of <span class="animated infinite 
 
 <avatar key="intro"
   v-if="show('intro')"
-  image="girl_fuzzy.png" 
+  image="girl.png" 
   text="Hello! I'm Veronica and I only date monsters that are tall and have great hair.">
   <buton @click="set('fakeout1')">Next</buton>
 </avatar>
@@ -929,16 +856,13 @@ You are going to bring us into this new world of <span class="animated infinite 
 
 <!--  
 todo: add a review slot.
-
   <template v-slot:overlay>
     <div>
       Right!
     </div>
-
     <div>
       P(great hair AND tall) = P(tall) * P (great hair | tall)
     </div>
-
     <buton @click="set('problem2')">Next</buton>
   </template> -->
 </avatar>
@@ -1381,13 +1305,8 @@ todo: add a review slot.
 
     <live-text 
         key="new-text"
-<<<<<<< HEAD
-        v-if="state.showNewText"
-        @live-text-complete="react('showNewQuestion',true)"
-=======
         v-if="showNewText"
         @live-text-complete="showNewQuestion=true">
->>>>>>> parent of 231cb36... Removed bus in favor of vuex
         <slot name="new-text"></slot>
     </live-text>
   </div>
@@ -1402,7 +1321,7 @@ todo: add a review slot.
 </div>
 
 <!-- Bottom right -->
-  <div class="question" style="position:absolute; left: 100px; top: 300px; width: 500px;">
+  <div class="question" style="position:absolute; left: 100px; top: 300px; width: 600px; text-align:right">
 
     <!-- Show hint via nopeText or nope slot -->
     <div v-if="nopeText" 
@@ -1507,74 +1426,23 @@ todo: add a review slot.
 
 <script>
 
-<<<<<<< HEAD
-// https://www.youtube.com/watch?v=LW9yIR4GoVU
-// store.state.message.
-var initAvatarState = {
-      showQuestion: false,
-      showNewQuestion: false,
-      showMiniDialog: false,
-      showLiveText: false,
-      showRainbow: false,
-      showFall: false,
-      showNewText: false,
-      reactionImage: null,
-    };
-
-const store = new Vuex.Store({
-  state: {
-    answerSubmittedComponent: null,
-    avatarState: _.cloneDeep(initAvatarState),  
-  },
-  // sync // store.commit('name', payload)
-  mutations: {
-    answerSubmitted(state, component){
-      state.answerSubmittedComponent = component;
-    },
-    avatarReaction(state, params){
-      console.log('@store ' + params.key + ' ' + params.value);
-      state.avatarState[params.key] = params.value;
-    },
-    resetAvatar(state){
-      state.avatarState = _.cloneDeep(initAvatarState);
-    }
-  },
-  // async  // state.dispatch('name', payload);
-  actions: {
-  }, 
-  // Put shared logic 
-  getters: {
-  }
-});
-
 const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
-
-// https://alligator.io/vuejs/global-event-bus/
-//const bus = new Vue();
-=======
-const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
-
 // https://alligator.io/vuejs/global-event-bus/
 const bus = new Vue();
->>>>>>> parent of 231cb36... Removed bus in favor of vuex
 
 var sounds = {
-  'speech': {clip: new Audio('sounds/speech.wav')},
+  'speech': {clip: new Audio('sounds/speech_louder.wav')},
   'buton': {clip: new Audio('sounds/button.wav')},
   'wrong': {clip: new Audio('sounds/wrong.wav')},
   'chimes': {clip: new Audio('sounds/chimes.wav')},
-
   // 'right': {clip: new Audio('sounds/right_soft.wav'), duration: 1000},
   'glitch': {clip: new Audio('sounds/glitch.wav')},
   'spell': {clip: new Audio('sounds/spell.wav')},
-
   'coy': {clip: new Audio('sounds/laugh.wav')},
   'right': {clip: new Audio('sounds/swish1.wav')},
-
   'curious': {clip: new Audio('sounds/curious.wav')},
   'achievement': {clip: new Audio('sounds/achievement.wav')},
 };
-
 
 // pull the dialog into a new component?? 
 Vue.component('intro-scene', {
@@ -1588,7 +1456,6 @@ Vue.component('intro-scene', {
       showMonster: false,
       showExclamation: false,
       states: ['trainee', 'understaffed', 'chase', 'fin'],
-
       wizardImg: 'wizard_run.png',
     }
   },
@@ -1630,31 +1497,27 @@ Vue.component('intro-scene', {
         this.showCop = false;
         this.showMonster = true;
         this.showWizard = true;
-
         // Wizard runs to the middle
         this.$refs['wizard'].classList.remove('walk-drift');
         this.$refs['wizard'].style.left = '0%';
         await wait(100);
         this.$refs['wizard'].classList.add('walk-drift');
         this.$refs['wizard'].style.left = '60%';
-
         // Wizard casts spell.
         await wait(1500);
         this.wizardImg = 'wizard.png';
         this.$root.play('spell');  
-
         // Monster begins to glitch.
         this.$refs['monster'].glitch();
+        this.$refs['girl'].glitch();
 
         // Wizard runs off.
         await wait(800);      
         this.wizardImg = 'wizard_run.png';
         this.$refs['wizard'].style.left = '105%';
-
         await wait(1000);
         this.showButons = true;
       } 
-
       if (this.state == 'fin'){
         this.$root.nextStory();
         // this.$emit('scene-complete');
@@ -1671,7 +1534,6 @@ Vue.component('intro-scene', {
         await wait(200);
         this.showDialog = false;
         this.showWizard = true;
-
         // https://michaelnthiessen.com/force-re-render
         // this.$nextTick(() => {
         //   debugger;
@@ -1679,7 +1541,6 @@ Vue.component('intro-scene', {
         // });
         await wait(100);
         this.$refs['wizard'].style.left = '105%';
-
         await wait(2000);
         this.showButons = true;        
       } 
@@ -1689,12 +1550,9 @@ Vue.component('intro-scene', {
   },
   template: '#intro-scene-template'
 });
-
 // You're the trainee right?
 // This causes the buttons to show up
 // User clicking the buton advances the state -- 
-
-
 Vue.component('glitch', {
   props: {
     start: {type: String},
@@ -1710,13 +1568,11 @@ Vue.component('glitch', {
       await wait(1000);
       this.showStart = false;
       this.$root.play('glitch');
-
       await wait(200);
       this.showStart = true;
       await wait(200);
       this.showStart = false;
       this.$root.play('glitch');
-
       await wait(200);
       this.showStart = true;
       await wait(200);
@@ -1726,7 +1582,6 @@ Vue.component('glitch', {
   },
   template: '#glitch-template'
 });
-
 Vue.component('input-box', {
   props: {
     right: {type: Number, default: 0},
@@ -1760,7 +1615,6 @@ Vue.component('input-box', {
   methods: {
     answerSubmit: async function(){
       bus.$emit('answer-submitted', this);
-
       // look at the value in the input.
       if (this.isYay){
         this.showNopeText = false;
@@ -1774,7 +1628,6 @@ Vue.component('input-box', {
   },
   template: '#input-box-template'
 });
-
 function firstAncestorOfComponent(node, componentName){
   while(node !== undefined){
     node = node.$parent;
@@ -1784,7 +1637,6 @@ function firstAncestorOfComponent(node, componentName){
   }
   return undefined;
 }
-
 function isDescendant(ancestor, maybeChild){
   var node = maybeChild.$parent;
   while(node !== undefined){
@@ -1795,7 +1647,6 @@ function isDescendant(ancestor, maybeChild){
   }
   return false;
 }
-
 Vue.component('avatar', {
   props: {
     image: {type: String}, // 'girl.png'
@@ -1808,40 +1659,31 @@ Vue.component('avatar', {
       // Internally triggered events.
       showQuestion: false,
       showNewQuestion: false,
-
       showMiniDialog: false,
       showLiveText: false,
       showHint: false,
-
       showRainbow: false,
       showFall: false,
       showNewText: false,
-
       reactionImage: null,
       nopeText: null,
     };
   },
-
   mounted: async function(){
     // Add a blink
     var this_ = this;
-
     if (this.sound){
       this.$root.play(this.sound);
       await wait(sounds[this.sound].duration || 500);
     }
-
     await wait(500);
     this_.showLiveText = true;
-
     bus.$on('avatar-react', function(params){
       this_[params.key] = params.value;
     });
-
     bus.$on('answer-submitted', function(input){
       this_.reactToInput(input);
     });
-
     // setInterval(async function(){
     //   // change it to the blink
     //   console.log('blinking');
@@ -1860,19 +1702,16 @@ Vue.component('avatar', {
       return 'images/'+ (this.reactionImage || this.image);
     }
   },
-
   methods: {
     hasSlot: function(name){
       return !!this.$slots[ name ] || !!this.$scopedSlots[ name ];
     },
-
     // For some reason, this need to be a separate fn, rather than inside the bus.
     // when the player clicks on a nope button, if the button has nope text, that is rendered.
     // otherwise, if the avatar has a hint slot that is shown.     
     reactToInput: function(input){
       // when the player clicks on a nope button, if the button has nope text, that is rendered.
       // otherwise, if the avatar has a hint slot that is shown. 
-
       if (input.nopeText){  
         this.nopeText = input.nopeText;        
       } else if(input.isNope && this.hasSlot('hint')){
@@ -1882,8 +1721,6 @@ Vue.component('avatar', {
   },
   template: '#avatar-template'
 });
-
-
 // Just like a button, but with some special abilities.
 // When clicked it looks at it's parent to see if it's a buton-group.
 // Executes the onClick event if so.
@@ -1891,17 +1728,14 @@ Vue.component('avatar', {
 // <buton-group onClick="doSomethingSecond">
 //   <buton @click="doSomethingFirst">Click me</buton>
 // </buton-group>
-
 // However, if the buton is a nope buton the buton-group does not get triggered.
 // <buton nope="stop and think">Tricked ya</buton>
 // <buton nope>Tricked ya</buton>
-
 // Buttons may also have a yay attribute.
 // Which causes the button to turn rainbow-text after it gets clicked.
 Vue.component('buton', {
   props: {
     nope: {type: String}, // Text for why the answer is wrong. Blocks progression.
-
     // moved to attr
     //yay: {type: Boolean, default:false}, // Causes cool animation to happen when clicked.
   },
@@ -1929,32 +1763,25 @@ Vue.component('buton', {
     butonClicked: async function(){
       this.$root.play('buton');
       this.clickedButton = true;
-
       // Mark the buton as wrong.
       if (this.isNope){
         this.showX = true;
       }
-
       // Tell those listening on the bus that the buton has been clicked... unless it's a buton within an input-box.
       if(!firstAncestorOfComponent(this, 'input-box')){
         bus.$emit('answer-submitted', this);        
       }
-
       await wait(1000);
       this.$emit('clik');
-
-
       if (!this.isNope && this.$parent.onClick !== undefined){
         // Add delay so any custom handlers on the buton execute before the generic buton-group executes.
         await wait(1000);
         this.$parent.onClick();        
       }
-
     },
   },
   template: '#buton-template'
 });
-
 Vue.component('exp', {
   props: {
     base: {type: String },
@@ -1962,7 +1789,6 @@ Vue.component('exp', {
   },
   template: '#exp-template'
 });
-
 Vue.component('buton-group', {
   props: {
     onClick: {type: Function, 
@@ -1970,16 +1796,12 @@ Vue.component('buton-group', {
   },
   template: '<div><slot></slot></div>'
 });
-
-
 Vue.component('centered', {
   template: '#centered-template'
 });
-
 Vue.component('bold', {
   template: '#bold-template'
 });
-
 Vue.component('interstitial', {
   props: {
     image: {type: String, default: 'monster.png'}, 
@@ -1994,16 +1816,13 @@ Vue.component('interstitial', {
   },
   template: '#interstitial-template'
 });
-
 function makeComponent(componentName, points, reactions){
   Vue.component(componentName, {
     data: function(){
       return {
         active: 'intro',
         lastActive: 'intro',
-
         points: points, // jump points in the story
-
         problemToCorrectness: {}, // 'fakeout1': [false, true]
         memory: null, // A variable for dumping short term component state.
       };
@@ -2016,21 +1835,7 @@ function makeComponent(componentName, points, reactions){
         return this.lastActive;
       }
     },
-<<<<<<< HEAD
-    watch: {
-      answerSubmittedComponent: function(input){
-        this.reactOnAnswer(input);
-      }
-    },
-    methods: {
-      reactOnAnswer: function(input){
-        if (!isDescendant(this, input)){
-          return;
-        }
 
-        //store.commit('resetAvatar');
-
-=======
     mounted: async function(){
       var this_ = this;
       bus.$on('answer-submitted', async function(input){
@@ -2038,40 +1843,21 @@ function makeComponent(componentName, points, reactions){
         if (!isDescendant(this_, input)){
           return;
         }
-
->>>>>>> parent of 231cb36... Removed bus in favor of vuex
         // Have avatar react based on buton attributes.
         var avatar = firstAncestorOfComponent(input, 'avatar');
-
         if (!avatar){
           // The buton was not used within an avatar, but something else.
           return;
         }
         var problemKey = avatar.$vnode.data.key;
-
         // If there's a yay.
         if (input.isYay){
           avatar.reactionImage = reactions.yay;
-<<<<<<< HEAD
-          this.addCorrectness(problemKey, true);          
-          this.$root.play('right');
-        }
-
-
-        // If the user got it on their first try, show a rainbow.
-        if (this.perfect(problemKey)){
-          this.react('showRainbow', true);
-        }  else {
-          this.react('showRainbow', false);
-=======
           this_.addCorrectness(problemKey, true);          
-          this_.$root.play('right');
-
           // If the user got it on their first try, show a rainbow.
           if (this_.perfect(problemKey)){
             this_.react('showRainbow', true);
           }
->>>>>>> parent of 231cb36... Removed bus in favor of vuex
         }
         
         // just a naked <buton nope>
@@ -2079,7 +1865,6 @@ function makeComponent(componentName, points, reactions){
           avatar.reactionImage = reactions.nope;
           this_.addCorrectness(problemKey, false);  
         } 
-
         if ('coy' in input.$attrs){
           avatar.reactionImage = reactions.coy;
           this_.$root.play('coy');
@@ -2127,7 +1912,6 @@ function makeComponent(componentName, points, reactions){
           await wait(optionalDelay);        
  //         console.log('done waiting');
         }
-
         this.active = key;
       },
       delay: async function(fn, ms){
@@ -2150,7 +1934,7 @@ function makeComponent(componentName, points, reactions){
         } 
       },
       finish: async function(){
-        this.play('achievement');
+        this.$root.play('achievement');
         await wait(1500);
         this.$root.nextStory();
       }
@@ -2158,10 +1942,8 @@ function makeComponent(componentName, points, reactions){
     template: '#' + componentName + '-template'
   });
 }
-
 // Joint prob with independence
 makeComponent('coin-flips', 
-
 [
   { key: 'intro', name: 'Intro', },
   { key: 'HHHHH', name: '5 heads', },
@@ -2173,13 +1955,11 @@ makeComponent('coin-flips',
   { key: '100H', name: '100 heads', },
   { key: 'congrats', name: 'Congrats', },
 ],
-
 {
   'yay': 'monster_fuzzy_happy.png',
   'nope': 'monster_fuzzy_sad.png'
 }
 ); 
-
 // Conditional prob + join prob with chain rule
 makeComponent('chain-rule', [
   { key: 'intro', name: 'Intro', },
@@ -2193,14 +1973,12 @@ makeComponent('chain-rule', [
   { key: 'mind-blown', name: 'Mind blown', },
   { key: 'congrats', name: 'Congrats', },
   ],
-
 {
     'yay': 'girl_happy.png',
     'nope': 'girl_upset.png',
     'coy': 'girl_coy.png'
 }
 ); 
-
 // EV
 makeComponent('risk-reward', [
   { key: 'intro', name: 'Intro', },
@@ -2209,9 +1987,6 @@ makeComponent('risk-reward', [
   { key: '100-chart', name: 'Binomial distribution', },
   { key: 'congrats', name: 'Congrats', },
 ]); 
-
-
-
 // Can be used to delay logic
 // <delay></delay>
 Vue.component('delay', {
@@ -2241,8 +2016,6 @@ Vue.component('delay', {
   },
   template: `<span v-if="shouldTrigger" style="compStyle"><slot></slot></span>`,
 });
-
-
 // Hides content until it is revealed as part of the story.
 Vue.component('story', {
   props: {
@@ -2258,10 +2031,7 @@ Vue.component('story', {
   },
   template: '#story-template'
 });
-
-
 /*
-
 How should this work:
 - split the text into words
 - inject the words in via setinterval
@@ -2271,13 +2041,10 @@ Vue.component('live-text', {
   props: {
     interval: {type: Number, default: 1000},
   },
-
   render: function (createElement) {
     var data = [];
-
     for (var i=0; i<this.$slots.default.length; i++){
       var vnode = this.$slots.default[i];
-
       if (vnode.tag){
         data.push([vnode.tag, vnode.data, vnode.children])
       } else if (vnode.text){
@@ -2285,7 +2052,6 @@ Vue.component('live-text', {
         data = _.concat(data, tokens.map(token => ['span', {}, token + ' ']));
       }
     }
-
     var vnodes = data.map(function(tuple, i){
       const tag = tuple[0];
       const nodeData = tuple[1];
@@ -2294,22 +2060,18 @@ Vue.component('live-text', {
         ref: i, 
         class: { 'hidden-at-first': true }
       };
-
       return createElement(tag, _.merge(meta, nodeData), children);
     });
-
     return createElement(
       'div',   // tag name
       vnodes, 
     )
   },
-
   data: function(){
     return {
       visibleTokens: [],
     };
   },
-
   mounted: function(){
     console.log('mounting live text');
     this.render();
@@ -2317,7 +2079,6 @@ Vue.component('live-text', {
   methods: {
     render: async function(){
       var elts = _.values(this.$refs);
-
       function pauseDuration(text){
         const short = 100;
         const med = 500;
@@ -2333,12 +2094,10 @@ Vue.component('live-text', {
         }
         return short;
       }
-
       this.$root.play('speech');
       for (var i=0; i<elts.length; i++){
         var elt = elts[i];
         elt.style.opacity = 1;
-
         // Pause.
         var duration = pauseDuration(elt.textContent);
         if (duration == 1000){
@@ -2349,17 +2108,14 @@ Vue.component('live-text', {
           this.$root.play('speech');
         }
       }
-
       this.$root.pause('speech');
       this.$emit('live-text-complete');
     },
   },
   template: '#live-text-template'
 });
-
 // <intro-scene key="intro" v-if="show('intro')" @scene-complete="set('intro1')">
 // </intro-scene>
-
 var storyPoints = [
 {
   name: 'Intro',
@@ -2381,9 +2137,7 @@ var storyPoints = [
 //   component: 'risk-reward',
 //   image: 'bear.png',
 // },
-
 ];
-
 // Gotchas:
 // DOM does not update for new property additions.
 // DOM does not update for direct assignments within arrays.
@@ -2391,17 +2145,13 @@ var storyPoints = [
 new Vue({
   el: '#app',
   data: {
-
     storyPoints: storyPoints,
     storyPointInd: 0,
-
     // Obj property additions do not update DOM, so prepopulate all the keys in the object. Or use lists.
     //soundNameToCount: {},
-
     show: false,
     isPlaying: false,
   },
-
   computed: {
     currentStoryPoint: function(){
       return this.storyPoints[this.storyPointInd];
@@ -2412,11 +2162,9 @@ new Vue({
   //     this.$root.play('swish');
   //   },
   // },
-
   methods: {
 //    show: show, 
     renderAsPercent: renderAsPercent,
-
     // round_to(2.777777, 0) -> 3
     // round_to(2.777777, 2) -> 2.78
     roundTo: roundTo,
@@ -2425,7 +2173,6 @@ new Vue({
       // await wait(1500);
       this.storyPointInd = Math.min(this.storyPoints.length-1, this.storyPointInd+1);
     },
-
     // // Given 0.8 --> returns {}
     // paramsFromCertainty: function(certainty){
     //   if (certainty == 1.0){
@@ -2443,12 +2190,10 @@ new Vue({
     //     percent: this.renderAsPercent(certainty)
     //   };      
     // },
-
     // paramsFromBet: function(num_win_if_right, num_lose_if_wrong){
     //   var certainty = num_lose_if_wrong/(num_win_if_right+num_lose_if_wrong);
     //   return this.paramsFromCertainty(certainty);
     // },
-
     play: function(soundName){
 //      console.log('playing ' + soundName);
       var sound = sounds[soundName].clip;
@@ -2465,5 +2210,4 @@ new Vue({
     }
   } // end methods
 });
-
 </script>
