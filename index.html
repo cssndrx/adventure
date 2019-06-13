@@ -414,25 +414,31 @@ You are going to bring us into this new world of <span class="animated infinite 
 
     <span v-if="showExclamation" style="font-size:48px; position:absolute; bottom:110px; left:50px">!</span>
 
-    <div v-if="showDialog" style="position:absolute; width:200px; left: 100px; top:20px;">
-      <img src="images/dialog.png" style="width:200px; height:100px;">
+    <div v-if="showDialog" style="position:absolute; width:340px; left: 100px; top:20px;">
+      <img src="images/dialog.png" style="width:340px; height:100px;">
 
-      <live-text ref="cop-dialog" :key="state" class="handwriting" style="position:absolute; left:16px; top:4px;" @live-text-complete="liveTextComplete()">
+      <live-text ref="cop-dialog" :key="state" class="handwriting" style="position:absolute; left:24px; top:8px;" @live-text-complete="liveTextComplete()">
         {{copDialog}}
       </live-text>
     </div>
   </div>
 
-  <div v-if="showButons" style="position:absolute; left: 400px; bottom:0px">
+  <div v-if="showButons" style="position:absolute; left: 450px; bottom:0px">
     <buton v-for="butonValue in butonValues" :key="butonValue" @click="advance()">{{butonValue}}</buton>
   </div>
 
   <img v-if="showWizard" 
-    ref="wizard" :src="'images/' + wizardImg" class="walk-drift" style="width:100px;position:absolute;left:0px;">
+    ref="wizard" :src="'images/' + wizardImg" class="walk-drift" style="width:100px;position:absolute;left:0px;z-index:-1">
 
   <glitch ref="monster" v-if="showMonster" start="monster.png" end="monster_fuzzy.png" style="width:80px; position:absolute; left: 200px;bottom:0px;" ></glitch>
 
-  <glitch ref="girl" v-if="showMonster" start="girl.png" end="girl_fuzzy.png" style="width:80px; position:absolute; left: 280px;bottom:0px;" ></glitch>  
+  <glitch ref="girl" v-if="showMonster" start="girl.png" end="girl_fuzzy.png" style="width:80px; position:absolute; left: 280px;bottom:0px;" ></glitch> 
+
+  <div style="position:absolute; bottom:-100px; margin: 32px;">
+    <live-text :key="narration">
+      {{narration}}
+    </live-text>
+  </div>
 </div>
 </script>
 
@@ -454,13 +460,7 @@ You are going to bring us into this new world of <span class="animated infinite 
 <avatar key="intro"
   v-if="show('intro')"
   image="monster_fuzzy.png"
-  text="Please help me, I think I've been cursed!">
-
-
-  <template v-slot:dialog>
-    Oh my goodness.
-  </template>
-
+  text="Oh my goodness. Please help me, I think I've been cursed!">
   <buton @click="set('intro2')">Next</buton>
 </avatar>
 
@@ -668,7 +668,7 @@ You are going to bring us into this new world of <span class="animated infinite 
   <buton-group :onClick="() => react('showNewText', true)">
     <buton yay>H</buton>
     <buton>T</buton>
-    <buton>I don't know</buton>
+    <buton>It's 50-50</buton>
   </buton-group>
 
 <!-- <exp base="2" pow="100"></exp> -->
@@ -740,6 +740,7 @@ You are going to bring us into this new world of <span class="animated infinite 
   <buton-group :onClick="() => set('fakeout1-inter')">
     <buton coy>1/8</buton>
     <buton nope="Why 1/3? Try again.">1/3</buton>
+    <buton nope>1/4</buton> <!-- todo: add -->
     <buton nope="That doesn't make sense. 3/4 is more than the number of monsters that are tall. Try again.">3/4</buton>
     <buton yay>Can't say</buton>
   </buton-group>
@@ -1445,6 +1446,21 @@ var sounds = {
 };
 
 // pull the dialog into a new component?? 
+const copIntro = {
+  'trainee': {
+    dialog: "Hey! You're the new trainee, right?",
+    buttons: ['Er...', 'Yes'],
+  },
+'honor': {
+    dialog: "I still remember my first day with the Statistics Police... What an honor to be chosen to help people with their statistics problems.",
+    buttons: ['Next'],
+  },
+'understaffed': {
+    dialog: "Anyways, I'm glad you're here. We are massively understaffed. And there are reports of some mysterious --",
+    buttons: ['Chase'],  
+  }
+};
+
 Vue.component('intro-scene', {
   data: function(){
     return {
@@ -1455,8 +1471,9 @@ Vue.component('intro-scene', {
       showWizard: false,
       showMonster: false,
       showExclamation: false,
-      states: ['trainee', 'understaffed', 'chase', 'fin'],
+      states: ['trainee', 'honor', 'understaffed', 'chase', 'fin'],
       wizardImg: 'wizard_run.png',
+      narration: '',
     }
   },
   computed: {
@@ -1464,22 +1481,15 @@ Vue.component('intro-scene', {
       return this.states[Math.min(this.stateInd, this.states.length-1)];
     },
     copDialog: function(){
-      if (this.state == 'trainee'){
-        return "Hey you! You're the new trainee, right?";
+      if (copIntro[this.state]){
+        return copIntro[this.state].dialog;        
       }
-      else if (this.state == 'understaffed'){
-        return "Glad you're here. The Statistics Police is massively understaffed. And some weird --";              
-      }
-      return "";
     },
     butonValues: function(){
-      if (this.state == 'trainee'){
-        return ['Er...', 'Yes'];
-      } else if (this.state == 'understaffed'){
-        return ['Chase'];
-      } if (this.state == 'chase'){
-        return ['Next'];
+      if (copIntro[this.state]){
+        return copIntro[this.state].buttons;        
       }
+      return ['Next'];
     },
   },
   mounted: async function(){
@@ -1515,7 +1525,10 @@ Vue.component('intro-scene', {
         await wait(800);      
         this.wizardImg = 'wizard_run.png';
         this.$refs['wizard'].style.left = '105%';
-        await wait(1000);
+        await wait(1500);
+        this.narration = 'The mysterious figure cast a spell! The victims are now fuzzy.';
+
+        await wait(1500);
         this.showButons = true;
       } 
       if (this.state == 'fin'){
@@ -1524,15 +1537,12 @@ Vue.component('intro-scene', {
       }
     },
     liveTextComplete: async function(){
-      if (this.state == 'trainee'){
-        this.showButons = true;
-      } 
-      else if (this.state == 'understaffed'){
-        await wait(200);
+      if (this.state == 'understaffed'){
+        await wait(500);
         this.showExclamation = true;
  
         await wait(200);
-        this.showDialog = false;
+        // this.showDialog = false;
         this.showWizard = true;
         // https://michaelnthiessen.com/force-re-render
         // this.$nextTick(() => {
@@ -1542,10 +1552,11 @@ Vue.component('intro-scene', {
         await wait(100);
         this.$refs['wizard'].style.left = '105%';
         await wait(2000);
-        this.showButons = true;        
       } 
-      // else if (this.state == 'chase'){
-      // }
+
+      if (this.state in copIntro){
+        this.showButons = true;
+      }
     },
   },
   template: '#intro-scene-template'
