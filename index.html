@@ -33,9 +33,6 @@ font-family: 'Cormorant Garamond', serif;
 <script src="js/utils.js"></script>
 
 <style>
-  .narration, .narration *{
-    font-size: 22px;
-  }
 *{
   font-family: 'Fira Sans', sans-serif;
   font-size: 18px;
@@ -1274,59 +1271,6 @@ todo: add a review slot.
 
 
 <script type="text/x-template" id="avatar-template">
-<div style="position: relative; height: 700px; width:800px; margin:0 auto; margin-top:16px; text-align:center;">
-
-
-<img v-if="showRainbow" src="images/rainbow.png">
-
-<div style="display:inline-block; margin:0 auto; width: 400px;">
-    <img :src="imgSrc" style="height:300px; margin-bottom: 16px"> <!--      :class="imgClasses"-->
-
-    <div class="narration">
-      <live-text  
-          key="initial-text"
-          v-if="!showNewText" @live-text-complete="showQuestion=true">
-          <slot name="dialog"></slot>
-        {{text}}
-      </live-text> 
-
-      <live-text 
-          key="new-text"
-          v-if="showNewText"
-          @live-text-complete="showNewQuestion=true">
-          <slot name="new-text"></slot>
-      </live-text>
-    </div>
-  </div>
-
-
-<!-- Bottom right -->
-  <div class="question">
-    <!-- Show hint via nopeText or nope slot -->
-    <div v-if="nopeText" 
-         class="nope" style="margin-top:24px">{{nopeText}}</div>
-    <transition name="fade">
-      <div v-if="showHint" class="nope">
-        <slot name="hint"></slot>
-      </div>
-    </transition>
-
-
-  <transition name="fade" mode="out-in">  
-    <div v-if="showQuestion && !showNewQuestion">  
-      <slot name="question"></slot>
-      <slot></slot> <!-- todo: consider removing default slot -->
-    </div>
-
-    <slot v-if="showNewQuestion" name="new-question"></slot>
-  </transition>
-
-  </div>
-
-</div>
-</script>
-
-<script type="text/x-template" id="old-avatar-template">
 <div style="position: relative; height: 700px; width:800px; margin:0 auto; margin-top:16px">
 
 <!--
@@ -2213,7 +2157,7 @@ new Vue({
   el: '#app',
   data: {
     storyPoints: storyPoints,
-    storyPointInd: 1,
+    storyPointInd: 0,
     // Obj property additions do not update DOM, so prepopulate all the keys in the object. Or use lists.
     //soundNameToCount: {},
     show: false,
