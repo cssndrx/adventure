@@ -830,35 +830,13 @@ The characters you gotta know:
   </template>
 </avatar>
 
-
-
-<!-- wizard laughs
-
-  HAHAHAHAHAHAHAHHAHAHAHAHAAHAHAHAHAHAH 
-
-  HAHAHAHAHAHAAHAHAHAHAHAHA -- maybe these are coin flips?
-HHHAHHAHAHAHA
-
-
-HAHAHAHAHA looks like you ___.
-Ah you foiled me.
-
--->
-
-
 <avatar key="interactive"
   v-if="show('interactive')"
   image="wizard.png" >
 
-<template v-slot:dialog>
-  <div v-if="perfect('3coins')">
-    Oh HA. You got me.
-  </div>
-  <div v-else>
-    HAAAHHAA! It's pretty hard to find the biased coin, right? And that was when the coin was biased to land on A, 70% of the time! Wanna play with my awesome coin biasing machine?
-  </div>
+  <template v-slot:dialog>
+    {{ perfect('3coins') ? 'Oh HA. You got me. That coin was biased to land on H, 70% of the time.' : "HAAAHHAA! It's pretty hard to find the biased coin, right? And that was when the coin was biased to land on H, 70% of the time!"}} Wanna play with my awesome coin biasing machine?
   </template>
-
 
   <biased-coin-machine></biased-coin-machine>
   <buton @click="set('3coins2')">Done with this</buton> 
@@ -1000,10 +978,14 @@ Ah you foiled me.
 <avatar key="fakeout1"
   v-if="show('fakeout1')" 
   image="girl.png" 
-  text="If 1/2 of all monsters are tall and 1/4 of monsters have great hair... What is the probability that a random monster is datable?">
+  text="If 1/2 of all monsters are tall and 1/4 of monsters have great hair... What is the probability that a random monster is datable (i.e., is tall and has great hair)?">
 
   <div>
-    In math language, P(tall) = 1/2. P(great hair) = 1/4. What is P(tall AND great hair)?
+    In math language, P(tall) = 1/2. P(great hair) = 1/4. 
+  </div>
+
+  <div>
+    What is P(tall AND great hair)?
   </div>
 
   <buton-group :onClick="() => set('fakeout1-inter')">
@@ -2205,6 +2187,7 @@ Vue.component('interstitial', {
   template: '#interstitial-template'
 });
 function makeComponent(componentName, points, reactions){
+  var reactions = reactions || {};
   Vue.component(componentName, {
     data: function(){
       return {
@@ -2343,10 +2326,11 @@ makeComponent('coin-flips',
   { key: '100H', name: '100 heads', },
   { key: 'quest', name: 'Quest', },
 ],
-{
-  'yay': 'monster_yay.png',
-  'nope': 'monster_cry.png'
-});
+// {
+//   'yay': 'monster_yay.png',
+//   'nope': 'monster_cry.png'
+// }
+);
 
 makeComponent('wizard-flips',
 [
@@ -2371,11 +2355,11 @@ makeComponent('chain-rule', [
   { key: 'mind-blown', name: 'Mind blown', },
   { key: 'congrats', name: 'Congrats', },
   ],
-{
-    'yay': 'girl_happy.png',
-    'nope': 'girl_upset.png',
-    'coy': 'girl_coy.png'
-}
+// {
+//     'yay': 'girl_happy.png',
+//     'nope': 'girl_upset.png',
+//     'coy': 'girl_coy.png'
+// }
 ); 
 // EV
 makeComponent('risk-reward', [
@@ -2553,7 +2537,7 @@ new Vue({
   el: '#app',
   data: {
     storyPoints: storyPoints,
-    storyPointInd: 2,
+    storyPointInd: 3,
     // Obj property additions do not update DOM, so prepopulate all the keys in the object. Or use lists.
     //soundNameToCount: {},
     show: false,
