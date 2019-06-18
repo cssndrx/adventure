@@ -21,7 +21,7 @@ font-family: 'Cormorant Garamond', serif;
 -->
 
 <!-- todo: strip and remove the unused -->
-<link href="https://fonts.googleapis.com/css?family=Dokdo|Fira+Sans:300,800,900" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Schoolbell|Dokdo|Fira+Sans:300,800,900" rel="stylesheet">
 
 <link href="css/animate.css" rel="stylesheet" type="text/css">
 <script src="js/lodash.min.js"></script>
@@ -37,6 +37,10 @@ font-family: 'Cormorant Garamond', serif;
   font-family: 'Fira Sans', sans-serif;
   font-size: 18px;
   font-weight: 300;
+}
+
+ul{
+  list-style-type:none;    
 }
 div{
   margin-bottom: 16px;
@@ -68,16 +72,19 @@ img{
   text-align: left;
 }
 .handwriting, .handwriting *{
-  font-family: 'Dokdo', cursive;    
+/* font-family: 'Dokdo', cursive; */   
+  font-family: 'Schoolbell', cursive;
 }
 .dialog-text, .dialog-text *{
-  font-family: 'Dokdo', cursive;  
-  font-size: 32px;
+/*  font-family: 'Dokdo', cursive;  */
+  font-family: 'Schoolbell', cursive;
+  font-size: 28px;
   width:350px;
 }
 .smaller-dialog-text, .smaller-dialog-text *{
-  font-family: 'Dokdo', cursive;  
-  font-size: 24px;
+/*  font-family: 'Dokdo', cursive;  */
+  font-family: 'Schoolbell', cursive;
+  font-size: 20px;
 }
 .centered, .centered *{
   font-size: 22px;
@@ -330,15 +337,116 @@ button{
     background-size: cover;
     border: 4px solid black;
 }
+
+.small-avatar{
+  width: 80px;
+}
+.coin{
+  display: inline-block;
+  width:100px;
+  cursor: pointer;
+  vertical-align: top;
+  word-wrap: break-word;
+}
+
+
+
+/* http://danielstern.ca/range.css/#/ magic unicorn journey */
+input[type=range] {
+  -webkit-appearance: none;
+  width: 100%;
+  margin: 13.8px 0;
+}
+input[type=range]:focus {
+  outline: none;
+}
+input[type=range]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 8.4px;
+  cursor: pointer;
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+  background: #3071a9;
+  border-radius: 1.3px;
+  border: 0.2px solid #010101;
+}
+input[type=range]::-webkit-slider-thumb {
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+  border: 1px solid #000000;
+  height: 36px;
+  width: 16px;
+  border-radius: 3px;
+  background: #ffffff;
+  cursor: pointer;
+  -webkit-appearance: none;
+  margin-top: -14px;
+}
+input[type=range]:focus::-webkit-slider-runnable-track {
+  background: #367ebd;
+}
+input[type=range]::-moz-range-track {
+  width: 100%;
+  height: 8.4px;
+  cursor: pointer;
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+  background: #3071a9;
+  border-radius: 1.3px;
+  border: 0.2px solid #010101;
+}
+input[type=range]::-moz-range-thumb {
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+  border: 1px solid #000000;
+  height: 36px;
+  width: 16px;
+  border-radius: 3px;
+  background: #ffffff;
+  cursor: pointer;
+}
+input[type=range]::-ms-track {
+  width: 100%;
+  height: 8.4px;
+  cursor: pointer;
+  background: transparent;
+  border-color: transparent;
+  color: transparent;
+}
+input[type=range]::-ms-fill-lower {
+  background: #2a6495;
+  border: 0.2px solid #010101;
+  border-radius: 2.6px;
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+}
+input[type=range]::-ms-fill-upper {
+  background: #3071a9;
+  border: 0.2px solid #010101;
+  border-radius: 2.6px;
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+}
+input[type=range]::-ms-thumb {
+  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+  border: 1px solid #000000;
+  height: 36px;
+  width: 16px;
+  border-radius: 3px;
+  background: #ffffff;
+  cursor: pointer;
+  height: 8.4px;
+}
+input[type=range]:focus::-ms-fill-lower {
+  background: #3071a9;
+}
+input[type=range]:focus::-ms-fill-upper {
+  background: #367ebd;
+}
+
+
 </style>
 
 <body>
 
-<div class="handwriting normal-div" style="font-size:48px; text-align:center">The Great Statistics Mystery</div>
 
 
-<div id="app" style="position:relative">
-  <div style="text-align: center">
+<div id="app" style="position:relative;left: 60px;width:calc(100% - 60px);">
+  <div style="width:60px;background-color: #eee; height: 100%; position: fixed; top:0px; left:0px; padding: 4px;">
     <div v-for="(storyPoint, ind) in storyPoints"
          @click="storyPointInd = ind"
          class="has-tooltip"
@@ -407,6 +515,69 @@ You are going to bring us into this new world of <span class="animated infinite 
 </script>
 
 <script type="text/x-template" id="intro-scene-template">
+<div style="width:600px; margin: 0 auto;">
+
+<div key="intro"
+  v-if="show('intro')">
+<div class="handwriting" style="font-size:48px; text-align:center">The Great Statistics Mystery</div>
+
+<div>
+In a distant land and serene land, knowledge of statistics and probability was widespread. The people were kind and loving. 
+</div>
+
+<div>
+Until one day, a dark statistics wizard set out to ruin probability for everyone. He would tamper with its mechanics. And terrorize the citizens. 
+</div>
+
+<div>
+You have been chosen to join the Statistics Police. You are the final line of defense for holding the dark forces in check. 
+</div>
+
+<div>
+The characters you gotta know:
+</div>
+
+<div>
+<img src="images/cop.png" class="small-avatar"> <bold>Commando Gauss</bold> — Here to show you the ropes. A veteran of the Statistics Police. A bit of a hardass.
+</div>
+
+<div>
+<img src="images/wizard.png" class="small-avatar"> <bold>Bad Wizard</bold> — Causes damage that you have to undo. Likes mischief. Motives not yet known.
+</div>
+
+<buton @click="set('1')">Play</buton>
+</div>
+
+<avatar key="1"
+  v-if="show('1')"
+  image="cop.png"
+  text="Hey! You're the new trainee, right?">
+  <buton @click="set('2')">Er...</buton>
+  <buton @click="set('2')">Yes</buton>
+
+</avatar>
+
+
+<avatar key="2"
+  v-if="show('2')"
+  image="cop.png"
+  text="I still remember my first day with the Statistics Police... What an honor to be chosen to help people with their statistics problems.">
+  <buton @click="set('3')">Next</buton>
+</avatar>
+
+
+<avatar key="3"
+  v-if="show('3')"
+  image="cop.png"
+  text="I'm going to make a fine officer out of you. Let's go back to headquarters and see if anyone needs help.">
+  <buton @click="$root.nextStory()">To headquarters</buton>
+</avatar>
+
+
+</div>
+</script>
+
+<script type="text/x-template" id="cut-scene-template">
 <div style="width:700px; height:200px; margin-bottom: 100px; position:relative; margin:0 auto;" class="normal-div" >
 
   <div v-if="showCop" style="position:absolute; bottom:0px; left:0px;" ref="cop">
@@ -430,7 +601,7 @@ You are going to bring us into this new world of <span class="animated infinite 
   <img v-if="showWizard" 
     ref="wizard" :src="'images/' + wizardImg" class="walk-drift" style="width:100px;position:absolute;left:0px;z-index:-1">
 
-  <glitch ref="monster" v-if="showMonster" start="monster.png" end="monster_fuzzy.png" style="width:80px; position:absolute; left: 200px;bottom:0px;" ></glitch>
+  <glitch ref="monster" v-if="showMonster" start="monster.png" end="monster.png" style="width:80px; position:absolute; left: 200px;bottom:0px;" ></glitch>
 
   <glitch ref="girl" v-if="showMonster" start="girl.png" end="girl_fuzzy.png" style="width:80px; position:absolute; left: 280px;bottom:0px;" ></glitch> 
 
@@ -456,95 +627,32 @@ You are going to bring us into this new world of <span class="animated infinite 
   </div>
 </div>
 
+<centered key="intro"
+  v-if="show('intro')">
+  <div>
+    A curious green creature walks into the statistics police headquarters.
+  </div>
+
+</centered>
+
 <!-- <transition name="fade" mode="out-in">-->
-<avatar key="intro"
-  v-if="show('intro')"
-  image="monster_fuzzy.png"
-  text="Oh my goodness. Please help me, I think I've been cursed!">
-  <buton @click="set('intro2')">Next</buton>
+<avatar key="something-wrong"
+  v-if="show('something-wrong')"
+  image="monster.png"
+  text="I think something is wrong with my coins. I wonder if this is the Bad Wizard's doing?">
+  <buton @click="set('50-50')">What's wrong?</buton>
 </avatar>
 
-<avatar key="intro2"
-  v-if="show('intro2')"
-  image="monster_fuzzy.png" 
-  text="I'm stuck here giving math problems until someone can answer them all correctly. And somehow I'm fuzzy too!">
-  <buton @click="set('HHHHH')">I'll help</buton>
+<avatar key="50-50"
+  v-if="show('50-50')"
+  image="monster.png" 
+  text="You know how when you toss a fair coin, it's supposed to land H with 50% probability? And T with 50% probability?">
+  <buton @click="set('HH')">Yeah</buton>
 </avatar>
-
-<!--<avatar key="intro3"
-  v-if="show('intro3')"
-  image="monster_fuzzy.png" 
-  text="Are you sure? If you answer wrong, you might get cursed too.">
-  <buton @clik="set('HHHHH')" yay>Yes</buton>
-  <buton @click="set('police-help')" nope>No</buton>
-</avatar>
-
-<avatar key="police-help"
-  v-if="show('police-help')"
-  image="cop.png" 
-  text="Kid, you can do it. I'll help you if you get stuck.">
-  <buton @click="set('HHHHH')">Next</buton>
-</avatar>-->
-
-<avatar key="HHHHH"
-  v-if="show('HHHHH')"
-  image="monster_fuzzy.png" 
-  text="I tossed a coin 5 times and it landed HHHHH. What do you think it will land the 6th time?">
-
-  <template v-slot:hint>
-    <div v-if="memory == 'userSaidT'">
-      <div>Nope, that's the Gambler's Fallacy... a common misconception that events that haven't occured are more likely to occur.</div>
-
-      <div>Coins have no memory, so just because H came up a lot, doesn't mean that T is more likely to come up in the future.</div>
-    </div>
-
-    <div v-if="memory == 'userSaidH'">
-      <div>Nope, that's the Hot Hand Fallacy... a common misconception that events that have occurred recently are "hot" and more likely to come up.</div>
-
-      <div>Coins have no memory, so just because H came up a lot, doesn't mean that H is any more likely to come up in the future.</div>
-    </div>
-
-  </template>
-
-
-  <buton @click="memory='userSaidH'" nope>H</buton>
-  <buton @click="memory='userSaidT'" nope>T</buton>
-  <buton @click="set('HHHHH-finale')" yay>It's 50-50</buton>
-</avatar>
-
-<avatar key="HHHHH-finale"
-  v-if="show('HHHHH-finale')"
-  image="monster_fuzzy_happy.png" 
-  sound="right"
-  text="Yeah! The correct answer is that there's no way to tell.">
-  <buton @click="set('independence')">Next</buton>
-</avatar>
-
-<interstitial 
-    image="monster.png"
-    key="independence" 
-    v-if="show('independence')">
-  <div>
-    Coin flips are <bold>independent events</bold>.
-  </div>
-
-  <div>
-    Meaning that knowing the result of one event does not give you information about the other events. 
-  </div>
-
-<!--Which of these is another example of an independent event?
-  <buton nope>Landing a job</buton>
-  <buton @click="set('HH')" yay>Rolling dice</buton>
-  <buton nope>Winning at games</buton>
-  <buton nope>Having a good day</buton> -->
-
-  <buton @click="set('HH')">Next</buton>
-
-</interstitial>
 
 <avatar key="HH"
   v-if="show('HH')"
-  image="monster_fuzzy.png" 
+  image="monster.png" 
   text="What is the probability that I toss a coin twice and get HH?">
   <buton nope="1/2 is the probability of tossing a single coin and getting H. Getting two heads in a row must be less than that.">1/2</buton>
   <buton @clik="set('HH-explanation')" yay>1/4</buton>
@@ -555,7 +663,7 @@ You are going to bring us into this new world of <span class="animated infinite 
   key="HH-explanation" 
   v-if="show('HH-explanation')">
   <div>
-    The probability of multiple independent events all occuring can be calculated by multiplication. This is called the probability of the <bold>joint event</bold>. So, the chance of getting HH is 1/2 x 1/2.
+    Yeah! The probability of multiple independent events all occuring can be calculated by multiplication. This is called the probability of the <bold>joint event</bold>. So, the chance of getting HH is 1/2 x 1/2.
   </div>
 
   <div>
@@ -575,7 +683,7 @@ You are going to bring us into this new world of <span class="animated infinite 
 
 <avatar key="HHH"
   v-if="show('HHH')"
-  image="monster_fuzzy.png" 
+  image="monster.png" 
   text="What is the probability that I toss a coin three times and get HHH?">
   <buton nope>1/2</buton>
   <buton nope>1/3</buton>
@@ -607,7 +715,7 @@ You are going to bring us into this new world of <span class="animated infinite 
 
 <avatar key="10H"
   v-if="show('10H')"
-  image="monster_fuzzy.png" 
+  image="monster.png" 
   text="What is the probability that I toss a coin 10 times and get HHHHHHHHHH?">
   <buton @clik="set('10HT')" yay>1/<exp base="2" pow="10"></exp></buton>
   <buton nope>1/2</buton>
@@ -631,7 +739,7 @@ You are going to bring us into this new world of <span class="animated infinite 
 
 <avatar key="10HT"
   v-if="show('10HT')"
-  image="monster_fuzzy.png" 
+  image="monster.png" 
   text="What is the probability that I toss a coin 10 times and get HHHTHHTTTT?">
   <buton @clik="set('10HT-interstitial')" yay>1/<exp base="2" pow="10"></exp></buton>
   <buton nope>1/2</buton>
@@ -645,51 +753,193 @@ You are going to bring us into this new world of <span class="animated infinite 
     key="10HT-interstitial" 
     v-if="show('10HT-interstitial')">
   <div>
-    The chance of getting HHHTHHTTTT is the same as the probability of getting HHHHHHHHHH.
+    Yeah! The chance of getting HHHTHHTTTT is the same as the probability of getting HHHHHHHHHH.
   </div>
 
   <div>
     Because both involve computing the probability of 10 independent coin flips.
   </div>
 
-  <div>
-    Isn't it cool that it's the same probability as before?
-  </div>
-
-  <buton @click="set('100H')">Next</buton>
+  <buton @click="set('HHHHH')">Next</buton>
 </interstitial>
 
 
+<avatar key="HHHHH"
+  v-if="show('HHHHH')"
+  image="monster.png" 
+  text="If I tossed a fair coin 5 times, and it landed HHHHH all five times... What is it likely to do on the 6th time?">
+
+  <template v-slot:hint>
+    <div v-if="memory == 'userSaidT'">
+      <div>Nope, that's the Gambler's Fallacy... a common misconception that events that haven't occured are more likely to occur.</div>
+
+      <div>Coins have no memory, so just because H came up a lot, doesn't mean that T is more likely to come up in the future.</div>
+    </div>
+
+    <div v-if="memory == 'userSaidH'">
+      <div>Nope, that's the Hot Hand Fallacy... a common misconception that events that have occurred recently are "hot" and more likely to come up.</div>
+
+      <div>Coins have no memory, so just because H came up a lot, doesn't mean that H is any more likely to come up in the future.</div>
+    </div>
+
+  </template>
+
+
+  <buton @click="memory='userSaidH'" nope>H</buton>
+  <buton @click="memory='userSaidT'" nope>T</buton>
+  <buton @click="set('HHHHH-finale')" yay>It's 50-50</buton>
+</avatar>
+
+<avatar key="HHHHH-finale"
+  v-if="show('HHHHH-finale')"
+  image="monster_yay.png" 
+  sound="right"
+  text="Yeah! The correct answer is that there's no way to tell.">
+  <buton @click="set('independence')">Next</buton>
+</avatar>
+
+<interstitial 
+    image="monster.png"
+    key="independence" 
+    v-if="show('independence')">
+  <div>
+    Coin flips are <bold>independent events</bold>.
+  </div>
+
+  <div>
+    Meaning that knowing the result of one event does not give you information about the other events. 
+  </div>
+
+<!--Which of these is another example of an independent event?
+  <buton nope>Landing a job</buton>
+  <buton @click="set('HH')" yay>Rolling dice</buton>
+  <buton nope>Winning at games</buton>
+  <buton nope>Having a good day</buton> -->
+
+  <buton @click="set('100H')">Next</buton>
+
+</interstitial>
+
 <avatar key="100H"
   v-if="show('100H')"
-  image="monster_fuzzy.png" 
-  text="I have one final question. The other day I tossed a coin 100 times and it landed heads all 100 times! What do you think it will land on the 101-st time?">
+  image="monster.png" 
+  text="After I ran into the Dark Wizard the other day, I tossed a coin 100 times and it landed heads all 100 times! What do you think it landed on on the 101-st time?">
 
-  <buton-group :onClick="() => react('showNewText', true)">
+  <buton-group :onClick="() => set('100H-result')">
     <buton yay>H</buton>
     <buton>T</buton>
     <buton>It's 50-50</buton>
   </buton-group>
+</avatar>
 
-<!-- <exp base="2" pow="100"></exp> -->
-<!-- <exp base="2" pow="80"></exp>-->
-  <template v-slot:new-text>
-   {{got('100H') ? 'That was a trick question but you got it!': 'Har-har! That was a trick question.'}} The probability of this happening on a fair coin is 1/2^100. If all the 2^80 atoms in the universe were flipping coins, this still probably wouldn't happen. So the coin must not be fair. 
-  </template>
+<avatar key="100H-result"
+  v-if="show('100H-result')"
+  image="monster.png">
 
-  <template v-slot:new-question>
-    <buton @click="set('congrats')">Next</buton>
-  </template>
+  <template v-slot:dialog>
+   {{got('100H') ? 'Yeah!': 'Not quite.'}} The probability of 100 heads in a row on a fair coin is 1/2^100. If all the 2^80 atoms in the universe were flipping coins, this still probably wouldn't happen. That's why I think the dark wizard did something to my coins, and they are no longer fair.
+ </template>
+
+ <buton @click="set('track')">I see</buton>
 </avatar>
 
 
-<! -- Teehee thanks for playing with me! -->
+<avatar key="track"
+  v-if="show('track')"
+  image="monster.png" 
+  text="Will you please track down the Bad Wizard and fix my coins?">
+  <buton @click="set('wizard')">Accept Quest</buton>
+</avatar>
+
+<avatar key="wizard"
+  v-if="show('wizard')"
+  image="wizard.png" 
+  text="Did somebody say my name?">
+
+  <buton @click="set('wizard2')">Oops</buton>
+</avatar>
+
+<avatar key="wizard2"
+  v-if="show('wizard2')"
+  image="wizard.png" 
+  text="Oh ho! You've noticed that coins have become unfair, have you? Let's see how you do at my new little game.">
+
+  <buton @click="set('3coins')">Next</buton>
+</avatar>
+
+<avatar key="3coins"
+  v-if="show('3coins')"
+  image="wizard.png" 
+  text="I have 3 coins. 2 are fair, 1 is unfair. Let's see if you can find the unfair one.">
+
+  <div>Click the coins to flip them.</div>
+  <div>When you have enough info, submit your guess.</div>
+
+  <coin></coin>
+  <coin></coin>
+  <coin :bias="0.7"></coin>
+
+  <div class="handwriting">The unfair coin is:</div>
+  <buton nope="Nope, that's a fair coin.">A</buton>
+  <buton nope="Nope, this is a fair coin.">B</buton>
+  <buton yay @click="set('interactive')">C</buton>
+</avatar>
+
+
+
+<!-- wizard laughs
+
+  HAHAHAHAHAHAHAHHAHAHAHAHAAHAHAHAHAHAH 
+
+  HAHAHAHAHAHAAHAHAHAHAHAHA -- maybe these are coin flips?
+HHHAHHAHAHAHA
+
+
+HAHAHAHAHA looks like you ___.
+Ah you foiled me.
+
+-->
+
+
+<avatar key="interactive"
+  v-if="show('interactive')"
+  image="wizard.png" >
+
+<template v-slot:dialog>
+  <div v-if="perfect('3coins')">
+    Oh HA. You got me.
+  </div>
+  <div v-else>
+    HAAAHHAA! It's pretty hard to find the biased coin, right? And that was when the coin was biased to land on A, 70% of the time! 
+  </div>
+  </template>
+
+  <div>
+    Wanna play with my awesome coin biasing machine?
+  </div>
+
+  <div>Set the bias and give the coin a few flips.</div>
+  <div>todo: put in some visualization</div>
+
+  <div>Coin bias (50% of the time, it will land H):</div>
+  <input type="range" min="0" max="100">
+  <buton @click="set('something-wrong')">Next</buton> 
+
+</avatar>
+
+
+
 <centered key="congrats"
   v-if="show('congrats')">
+
+  <div>
+    
+  </div>
+
   <div style="font-size: 48px; letter-spacing:4px;">
   CONGRATS
   </div>
-  
+
   <ul>
     <li>You learned about <bold>independent events</bold> (two events that don't affect each other)</li>
     <li>You learned how to calculate the <bold>joint probability</bold> of independent events (you multiply)</li>
@@ -702,6 +952,15 @@ You are going to bring us into this new world of <span class="animated infinite 
 <!-- </transition> -->
 
 </div>
+</script>
+
+<script type="text/x-template" id="coin-template">
+  <div @click="flip" class="coin">
+    <img v-if="isShowingH" src="images/coin_heads.png" style="width:100px">
+    <img v-if="!isShowingH" src="images/coin_tails.png" style="width:100px">
+
+    <div style="font-size:12px">{{flipString}}</div>
+  </div>
 </script>
 
 <script type="text/x-template" id="chain-rule-template">
@@ -1271,7 +1530,7 @@ todo: add a review slot.
 
 
 <script type="text/x-template" id="avatar-template">
-<div style="position: relative; height: 700px; width:800px; margin:0 auto; margin-top:16px">
+<div style="position: relative; height: 700px; width:600px; margin:0 auto; margin-top:16px">
 
 <!--
 <transition name="slide-fade">
@@ -1288,15 +1547,15 @@ todo: add a review slot.
 
 <img :src="imgSrc" 
      :class="imgClasses"
-     style="height: 300px; left: 80px; position:absolute; top:0px;">
+     style="height: 300px; left: 0px; position:absolute; top:0px;">
 
 
 <!-- Dialog box -->
-<div style="position:absolute; left: 300px; top:0px;"
+<div style="position:absolute; left: 200px; top:0px;"
   v-if="showLiveText">
   <img src="images/dialog.png" >
   <div style="position: absolute; left:40px; top:23px;" class="dialog-text"
-  :class="{'smaller-dialog-text': text.length > 140}">
+  :class="dialogClass">
     <live-text  
         key="initial-text"
         v-if="!showNewText" @live-text-complete="showQuestion=true">
@@ -1322,7 +1581,7 @@ todo: add a review slot.
 </div>
 
 <!-- Bottom right -->
-  <div class="question" style="position:absolute; left: 100px; top: 300px; width: 600px; text-align:right">
+  <div class="question" style="position:absolute; left: 0px; top: 300px; width: 600px; text-align:right">
 
     <!-- Show hint via nopeText or nope slot -->
     <div v-if="nopeText" 
@@ -1561,6 +1820,38 @@ Vue.component('intro-scene', {
   },
   template: '#intro-scene-template'
 });
+
+Vue.component('coin', {
+  props: {
+    bias: {type: Number, default: 0.5},
+  },
+  data: function(){
+    return {
+      flips: [], 
+    }
+  },
+  computed: {
+    flipString: function(){
+      return this.flips.map(this.render).join('');
+    },
+    isShowingH: function(){
+      if (this.flips.length == 0){
+        return true;
+      }
+      return this.render(this.flips[this.flips.length-1]) == 'H';
+    }
+  },
+  methods: {
+    render: function(flip){
+      return flip > this.bias ? 'H' : 'A';
+    },
+    flip: function(){
+      this.flips.push(Math.random());
+    }
+  },
+  template: '#coin-template'
+});
+
 // You're the trainee right?
 // This causes the buttons to show up
 // User clicking the buton advances the state -- 
@@ -1593,6 +1884,7 @@ Vue.component('glitch', {
   },
   template: '#glitch-template'
 });
+
 Vue.component('input-box', {
   props: {
     right: {type: Number, default: 0},
@@ -1639,6 +1931,8 @@ Vue.component('input-box', {
   },
   template: '#input-box-template'
 });
+
+
 function firstAncestorOfComponent(node, componentName){
   while(node !== undefined){
     node = node.$parent;
@@ -1711,6 +2005,14 @@ Vue.component('avatar', {
     },
     imgSrc: function(){
       return 'images/'+ (this.reactionImage || this.image);
+    },
+    dialogClass: function(){
+      // if (text.length || (this.)
+      // 
+      const longText = this.text.length > 140;
+      debugger;
+      const longSlotText = this.hasSlot('dialog') && this.$slots['dialog'][0].text.length > 140;
+      return {'smaller-dialog-text': longText || longSlotText};
     }
   },
   methods: {
@@ -1890,7 +2192,7 @@ function makeComponent(componentName, points, reactions){
         this.problemToCorrectness[key].push(isCorrect);
       },
       isKnownPoint: function(point){
-        return points.map(d => d.key).indexOf(point) > -1;
+        return points && points.map(d => d.key).indexOf(point) > -1;
       },
       react: function(k, v){
         bus.$emit('avatar-react', {key: k, value: v});
@@ -1954,21 +2256,23 @@ function makeComponent(componentName, points, reactions){
   });
 }
 // Joint prob with independence
+makeComponent('intro-scene');
 makeComponent('coin-flips', 
 [
   { key: 'intro', name: 'Intro', },
-  { key: 'HHHHH', name: '5 heads', },
-  { key: 'independence', name: 'Independence'},
   { key: 'HH', name: 'Probability of 2 heads', },
   { key: 'HHH', name: 'Probability of 3 heads', },
   { key: '10H', name: 'Probability of 10 heads', },
   { key: '10HT', name: 'Probability of 10 heads and tails', },
+  { key: 'HHHHH', name: '5 heads', },
   { key: '100H', name: '100 heads', },
+  { key: '3coins', name: '3 coins', },
+  { key: 'interactive', name: 'Play with biased coin', },
   { key: 'congrats', name: 'Congrats', },
 ],
 {
-  'yay': 'monster_fuzzy_happy.png',
-  'nope': 'monster_fuzzy_sad.png'
+  'yay': 'monster_yay.png',
+  'nope': 'monster_cry.png'
 }
 ); 
 // Conditional prob + join prob with chain rule
@@ -2057,7 +2361,7 @@ Vue.component('live-text', {
     for (var i=0; i<this.$slots.default.length; i++){
       var vnode = this.$slots.default[i];
       if (vnode.tag){
-        data.push([vnode.tag, vnode.data, vnode.children])
+        data.push([vnode.tag, vnode.data, vnode.children]);
       } else if (vnode.text){
         var tokens = vnode.text.split(' ').filter(token => token);
         data = _.concat(data, tokens.map(token => ['span', {}, token + ' ']));
@@ -2131,7 +2435,7 @@ var storyPoints = [
 {
   name: 'Intro',
   component: 'intro-scene',
-  image: 'cop.png',
+  image: 'scroll.png',
 },
 {
   name: 'Coin Flips',
@@ -2157,7 +2461,7 @@ new Vue({
   el: '#app',
   data: {
     storyPoints: storyPoints,
-    storyPointInd: 0,
+    storyPointInd: 1,
     // Obj property additions do not update DOM, so prepopulate all the keys in the object. Or use lists.
     //soundNameToCount: {},
     show: false,
