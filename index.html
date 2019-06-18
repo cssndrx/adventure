@@ -45,6 +45,7 @@ ul{
 div{
   margin-bottom: 16px;
 }
+
 .normal-div, .normal-div div{
   margin-bottom: 0px;
 }
@@ -69,7 +70,7 @@ img{
 .nope{
   color:red; 
   font-size: 14px; 
-  text-align: left;
+/*  text-align: left;*/
 }
 .handwriting, .handwriting *{
 /* font-family: 'Dokdo', cursive; */   
@@ -81,7 +82,7 @@ img{
   font-size: 28px;
   width:350px;
 }
-.smaller-dialog-text, .smaller-dialog-text *{
+.small-dialog-text, .small-dialog-text *{
 /*  font-family: 'Dokdo', cursive;  */
   font-family: 'Schoolbell', cursive;
   font-size: 20px;
@@ -349,13 +350,25 @@ button{
   word-wrap: break-word;
 }
 
+/* https://forum.vuejs.org/t/add-transitions-to-slide-up/27446/4 */
+.slide-up-enter-active {
+  transition: all .6s ease;
+}
+.slide-up-leave-active {
+  transition: all .6s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+}
+.slide-up-enter, .slide-fade-leave-to {
+  transform: translateY(100vh);
+  opacity: 0;
+}
+
 </style>
 
 <body>
 
 
 
-<div id="app" style="position:relative;left: 60px;width:calc(100% - 60px);">
+<div id="app" style="position:relative;left: 60px;width:calc(100% - 60px); height:100vh;">
   <div style="width:60px;background-color: #eee; height: 100%; position: fixed; top:0px; left:0px; padding: 4px;">
     <div v-for="(storyPoint, ind) in storyPoints"
          @click="storyPointInd = ind"
@@ -479,7 +492,7 @@ The characters you gotta know:
 <avatar key="3"
   v-if="show('3')"
   image="cop.png"
-  text="I'm going to make a fine officer out of you. Let's go back to headquarters and see if anyone needs help.">
+  text="I'm going to make a fine officer out of you. Let's head to headquarters and see if anyone needs help.">
   <buton @click="$root.nextStory()">To headquarters</buton>
 </avatar>
 
@@ -543,6 +556,8 @@ The characters you gotta know:
     A curious green creature walks into the statistics police headquarters.
   </div>
 
+  <buton @click="set('something-wrong')">Talk</buton>
+
 </centered>
 
 <!-- <transition name="fade" mode="out-in">-->
@@ -564,9 +579,9 @@ The characters you gotta know:
   v-if="show('HH')"
   image="monster.png" 
   text="What is the probability that I toss a coin twice and get HH?">
-  <buton nope="1/2 is the probability of tossing a single coin and getting H. Getting two heads in a row must be less than that.">1/2</buton>
+  <buton nope="1/2 is the probability of tossing a single coin and getting H. Getting two heads in a row is rarer than that.">1/2</buton>
   <buton @clik="set('HH-explanation')" yay>1/4</buton>
-  <buton nope="It is possible to say if you assume it is a fair coin.">Can't say</buton>
+  <buton nope="Assume it is a fair coin that lands on heads with 50% probability.">Not enough info</buton>
 </avatar>
 
 <interstitial 
@@ -598,7 +613,7 @@ The characters you gotta know:
   <buton nope>1/2</buton>
   <buton nope>1/3</buton>
   <buton @clik="set('10H')" yay>1/8</buton>
-  <buton nope>Can't say</buton>
+  <buton nope>Not enough info</buton>
 
   <template v-slot:hint>
     <div>
@@ -627,11 +642,11 @@ The characters you gotta know:
   v-if="show('10H')"
   image="monster.png" 
   text="What is the probability that I toss a coin 10 times and get HHHHHHHHHH?">
-  <buton @clik="set('10HT')" yay>1/<exp base="2" pow="10"></exp></buton>
+  <buton @clik="set('10HT')" yay>1/<exp base="2" pow="10"/></buton>
   <buton nope>1/2</buton>
   <buton nope>1/10</buton>
   <buton nope>1/20</buton>
-  <buton nope>Can't say</buton>
+  <buton nope>Not enough info</buton>
 
   <template v-slot:hint>
     <div>
@@ -651,11 +666,11 @@ The characters you gotta know:
   v-if="show('10HT')"
   image="monster.png" 
   text="What is the probability that I toss a coin 10 times and get HHHTHHTTTT?">
-  <buton @clik="set('10HT-interstitial')" yay>1/<exp base="2" pow="10"></exp></buton>
+  <buton @clik="set('10HT-interstitial')" yay>1/<exp base="2" pow="10"/></buton>
   <buton nope>1/2</buton>
   <buton nope>1/10</buton>
   <buton nope>1/20</buton>
-  <buton nope>Can't say</buton>
+  <buton nope>Not enough info</buton>
 </avatar>
 
 <interstitial 
@@ -677,7 +692,7 @@ The characters you gotta know:
 <avatar key="HHHHH"
   v-if="show('HHHHH')"
   image="monster.png" 
-  text="If I tossed a fair coin 5 times, and it landed HHHHH all five times... What is it likely to do on the 6th time?">
+  text="If I tossed a fair coin 5 times, and it landed HHHHH all five times... What is it more likely to land the 6th time?">
 
   <template v-slot:hint>
     <div v-if="memory == 'userSaidT'">
@@ -766,7 +781,7 @@ The characters you gotta know:
   <ul>
     <li>You learned about <bold>independent events</bold> (two events that don't affect each other)</li>
     <li>You learned how to calculate the <bold>joint probability</bold> of independent events (you multiply)</li>
-    <li>You learned that there are <exp base="2" pow="80"></exp> atoms in the universe.</li>
+    <li>You learned that there are <exp base="2" pow="80"/> atoms in the universe.</li>
   </ul> 
 
 
@@ -972,8 +987,10 @@ The characters you gotta know:
   v-if="show('intro')"
   image="girl.png" 
   text="Hello! I'm Veronica and I only date monsters that are tall and have great hair.">
+
   <buton @click="set('fakeout1')">Next</buton>
 </avatar>
+
 
 <avatar key="fakeout1"
   v-if="show('fakeout1')" 
@@ -989,12 +1006,16 @@ The characters you gotta know:
   </div>
 
   <buton-group :onClick="() => set('fakeout1-inter')">
-    <buton coy>1/8</buton>
-    <buton nope="Why 1/3? Try again.">1/3</buton>
-    <buton nope>1/4</buton> <!-- todo: add -->
-    <buton nope="That doesn't make sense. 3/4 is more than the number of monsters that are tall. Try again.">3/4</buton>
-    <buton yay>Can't say</buton>
+    <buton nope>1/8</buton>
+    <buton nope="Hm... 1/3 doesn't make sense. Try again.">1/3</buton>
+    <buton nope="Although 1/4 is the number of monsters have great hair, it's not clear that all great hair monsters are tall. Try again.">1/4</buton>
+    <buton nope="There aren't even that many tall monsters! Try again.">3/4</buton>
+    <buton yay>Not enough info</buton>
   </buton-group>
+
+  <template v-slot:hint>
+    Not quite. It is only valid to compute P(tall AND great hair) by multiplying P(tall) and P(great hair) if being tall and having great hair are <bold>independent</bold> — like coin flips.
+  </template>
 
 </avatar>
 
@@ -1004,19 +1025,16 @@ The characters you gotta know:
     key="fakeout1-inter" 
     v-if="show('fakeout1-inter')">
 
-  <div v-if="got('fakeout1')">
+  <div>
     Right! It's not possible to say. 
   </div>
-  <div v-else>
-    It's actually not possible to say.
+
+  <div>
+    It is only valid to multiply two probabilities to calculate the joint probability if the two events are independent -- like coin flips.
   </div>
 
   <div>
-    It is only valid to compute P(tall AND great hair) by multiplying P(tall) and P(great hair) if being tall and having great hair are independent -- like coin flips.
-  </div>
-
-  <div>
-     Put another way, independence occurs if a monster's height does not provide any information on the greatness of a monsters hair. 
+     In our case, independence occurs if a monster's height <bold>does not provide any information</bold> on the greatness of a monsters hair. 
   </div>
 
   <buton @click="set('conditional1')">Next</buton>
@@ -1027,10 +1045,22 @@ The characters you gotta know:
 <avatar key="conditional1" 
         v-if="show('conditional1')"
         image="girl.png" 
-        text="It turns out that being tall and having great hair are slightly correlated. About 1/3 of tall monsters have great hair.">
+        text="It turns out that being tall and having great hair are slightly correlated, so they're not independent. About 1/3 of tall monsters have great hair.">
 
   <div>
-    In math language, Veronica just told us a conditional probability. 
+    In math language, Veronica just told us a <bold>conditional probability</bold>. 
+  </div>
+
+  <div>
+    A conditional probability is written as P(A | B). It tells us the probability of A, given that we know B to be true.
+  </div>
+
+  <div>
+    Veronica told us P(great hair|tall) = 1/3 -- tthe probability a monster has great hair is 1/3 <bold>given</bold> that we know the monster is tall. 
+  </div>
+
+  <div style="font-size:12px">
+    Note: the "|" is pronounced as "given". Mathematically, you say "the probability of A given B".
   </div>
 
   <div>
@@ -1041,35 +1071,17 @@ The characters you gotta know:
 </avatar>
 
 
-
 <interstitial 
     image="girl.png"
     key="conditional2" 
     v-if="show('conditional2')">
 
   <div>
-    A conditional probability tells us the probability of something, if we know something else to be true.
+    P(great hair|tall) = 1/3. A third of tall monsters have great hair. The probability that a tall monster has great hair is 1/3.
   </div>
 
   <div>
-    For instance, Veronica told us that the probability that a tall monster would have great hair is 1/3. 
-  </div>
-
-  <div>
-    In math speak, she told us P(great hair|tall) -- the probability of great hair GIVEN the monster is tall.
-  </div>
-
-  <buton @click="set('conditional3')">Next</buton>
-
-</interstitial>
-
-
-<interstitial 
-    image="girl.png"
-    key="conditional3" 
-    v-if="show('conditional3')">
-  <div>
-    Using a conditional probability, we can calculate P(tall AND great hair) without assuming independence.
+    We can use this to calculate P(tall AND great hair) without assuming independence.
   </div>
 
   <div>
@@ -1077,7 +1089,7 @@ The characters you gotta know:
   </div>
 
   <div>
-    The formula makes logical sense. It says, first consider the chance that the monster is tall. Then multiply by the chance that a random tall monster would have great hair.
+    The formula makes logical sense. Multiply the fraction of tall monsters with the fraction of tall monsters with great hair.
   </div>
 
   <buton @click="set('tall-hair')">Try it</buton>
@@ -1103,7 +1115,7 @@ The characters you gotta know:
     <buton yay>1/6</buton>
     <buton nope="We said that being tall and having great hair are not independent, so we can't just multiply 1/2 x 1/4.">1/8</buton>
     <buton nope="Are you just multiplying things together? Try again.">1/24</buton>
-    <buton nope="The answer isn't always 'Can't say'...">Can't say</buton>
+    <buton nope="The answer isn't always 'Not enough info'...">Not enough info</buton>
   </buton-group>
 
 <!--  
@@ -1141,7 +1153,7 @@ todo: add a review slot.
     <buton coy>1/30</buton>
     <buton nope="Remember, we want to use P(great hair|tall), not P(tall).">1/40</buton>
     <buton nope="Wait, are you just blindly multiplying numbers? Stop that.">1/120</buton>
-    <buton yay>Can't say</buton>
+    <buton yay>Not enough info</buton>
   </buton-group>
 </avatar>
 
@@ -1326,7 +1338,10 @@ todo: add a review slot.
     We can decompose it in any order we choose to, depending on what information we have on hand.
   </div>
 
-  <buton @click="set('congrats')">OK mind blown</buton>
+  <div>
+    How many different ways are there to decompose this joint probability using the Chain Rule?
+  </div>
+  <input-box :right="6" :onRight="() => set('congrats')"/>
 </interstitial>
 
 <centered key="congrats"
@@ -1387,13 +1402,11 @@ todo: add a review slot.
   image="bear.png" 
   text="Well, that's correct.">
 
-  <template v-slot:question>
-    <div>
-     On average, the 4 coins with 20% probability is only worth 0.8 coins on average, so the 1 coin with certainty is worth more.
-    </div>
+  <div>
+   On average, the 4 coins with 20% probability is only worth 0.8 coins on average, so the 1 coin with certainty is worth more.
+  </div>
 
-    <buton @click="set('100')">Next</buton>
-  </template>
+  <buton @click="set('100')">Next</buton>
 </avatar>
 
 <avatar key="ev-wrong"
@@ -1441,13 +1454,11 @@ todo: add a review slot.
   image="bear.png" 
   text="Yeah, that's correct.">
 
-  <template v-slot:question>
-    <div>
-     Playing 100 times doesn't change the fact that 4 coins with 20% probability has the lower expected value.
-    </div>
+  <div>
+   Playing 100 times doesn't change the fact that 4 coins with 20% probability has the lower expected value.
+  </div>
 
-    <buton @click="set('100-chart')">Next</buton>
-  </template>
+  <buton @click="set('100-chart')">Next</buton>
 </avatar>
 
 <avatar key="100-wrong"
@@ -1456,13 +1467,11 @@ todo: add a review slot.
   text="Heh. Wrong."
   animation="spin-and-pulse">
 
-  <template v-slot:question>
-    <div>
-     Playing 100 times doesn't change the fact that 4 coins with 20% probability has the lower expected value.
-    </div>
+  <div>
+   Playing 100 times doesn't change the fact that 4 coins with 20% probability has the lower expected value.
+  </div>
 
-    <buton @click="set('100-chart')">Next</buton>
-  </template>
+  <buton @click="set('100-chart')">Next</buton>
 </avatar>
 
 <centered key="100-chart"
@@ -1541,7 +1550,6 @@ todo: add a review slot.
      :class="imgClasses"
      style="height: 300px; left: 0px; position:absolute; top:0px;">
 
-
 <!-- Dialog box -->
 <div style="position:absolute; left: 200px; top:0px;"
   v-if="showLiveText">
@@ -1569,34 +1577,50 @@ todo: add a review slot.
 <!-- Mini dialog -->
 <div v-if="showMiniDialog" style="position:absolute; left: 100px; top:300px;">
   <img src="images/mini_dialog.png" style="width:150px">
-  <div style="position: absolute; left:40px; top:40px;" class="smaller-dialog-text">
+  <div style="position: absolute; left:40px; top:40px;" class="small-dialog-text">
     Yep!
   </div>
 </div>
 
 <!-- Bottom right -->
-  <div class="question" style="position:absolute; left: 0px; top: 300px; width: 600px; text-align:right">
+<div class="question" style="position:absolute; left: 0px; top: 300px; width: 600px; text-align:right">
 
-    <!-- Show hint via nopeText or nope slot -->
+  <!-- Show hint via nopeText or nope slot -->
+  <transition name="fade">
     <div v-if="nopeText" 
          class="nope" style="margin-top:24px">{{nopeText}}</div>
-    <transition name="fade">
-      <div v-if="showHint" class="nope">
-        <slot name="hint"></slot>
-      </div>
-    </transition>
-
-
-  <transition name="fade" mode="out-in">  
-    <div v-if="showQuestion && !showNewQuestion">  
-      <slot name="question"></slot>
-      <slot></slot> <!-- todo: consider removing default slot -->
-    </div>
-
-    <slot v-if="showNewQuestion" name="new-question"></slot>
+<!--    <div v-if="showHint" class="nope">
+      <slot name="hint"></slot>
+    </div> -->
   </transition>
 
+
+<transition name="fade" mode="out-in">  
+  <div v-if="showQuestion && !showNewQuestion">  
+    <slot></slot>
   </div>
+
+  <slot v-if="showNewQuestion" name="new-question"></slot>
+</transition>
+</div>
+
+<!-- Cop overlay -->
+<transition name="slide-up">
+<div v-if="showCop" style="position:absolute; top: 200px; left:0px;" @click="showCop=false">
+  <img src="images/cop.png" >
+  <div style="position:absolute; left: 200px; top:0px">
+    <img src="images/up_dialog.png" style="height: 400px">
+    <div class="small-dialog-text" style="position:absolute; left:0px; top:0px; padding:28px">
+
+      <div v-if="showHint">
+        <slot name="hint"></slot>
+      </div>
+
+    <div class="handwriting" style="position:absolute; left:28px; top:280px; font-size:12px">Click to dismiss</div>
+  </div>
+</div>
+</div> 
+</transition>
 
 </div>
 </script>
@@ -1642,7 +1666,13 @@ todo: add a review slot.
 </script>
 
 <script type="text/x-template" id="exp-template">
-  <var>{{base}}<sup>{{pow}}</sup></var>
+<var>{{base}}<sup>{{pow}}</sup></var>
+<!--<span>{{base}}<sup>{{pow}}</sup></span>-->
+</script>
+
+
+<script type="text/x-template" id="frac-template">
+<var><sup>{{num}}</sup>&frasl;<sub>{{den}}</sub></var>
 </script>
 
 <script type="text/x-template" id="buton-template">
@@ -2016,7 +2046,6 @@ Vue.component('avatar', {
   },
   data: function(){
     return {
-      // Internally triggered events.
       showQuestion: false,
       showNewQuestion: false,
       showMiniDialog: false,
@@ -2027,6 +2056,7 @@ Vue.component('avatar', {
       showNewText: false,
       reactionImage: null,
       nopeText: null,
+      showCop: false,
     };
   },
   mounted: async function(){
@@ -2069,7 +2099,7 @@ Vue.component('avatar', {
       const longSlotText = this.hasSlot('dialog') && this.$slots['dialog'][0].text && this.$slots['dialog'][0].text.length > maxLen;
 
       const longSlotWithEltText = this.hasSlot('dialog') && this.$slots['dialog'][0].children && this.$slots['dialog'][0].children[0].text && this.$slots['dialog'][0].children[0].text.length > maxLen;
-      return {'smaller-dialog-text': longText || longSlotText || longSlotWithEltText};
+      return {'small-dialog-text': longText || longSlotText || longSlotWithEltText};
     }
   },
   methods: {
@@ -2083,9 +2113,11 @@ Vue.component('avatar', {
       // when the player clicks on a nope button, if the button has nope text, that is rendered.
       // otherwise, if the avatar has a hint slot that is shown. 
       if (input.nopeText){  
-        this.nopeText = input.nopeText;        
+        this.nopeText = input.nopeText;
+//        this.showCop = true;        
       } else if(input.isNope && this.hasSlot('hint')){
         this.showHint = true;
+        this.showCop = true;        
       }
     }
   },
@@ -2152,6 +2184,7 @@ Vue.component('buton', {
   },
   template: '#buton-template'
 });
+
 Vue.component('exp', {
   props: {
     base: {type: String },
@@ -2159,6 +2192,17 @@ Vue.component('exp', {
   },
   template: '#exp-template'
 });
+
+
+Vue.component('frac', {
+  props: {
+    num: {type: String },
+    den: {type: String },
+  },
+  template: '#frac-template'
+});
+
+
 Vue.component('buton-group', {
   props: {
     onClick: {type: Function, 
@@ -2326,10 +2370,10 @@ makeComponent('coin-flips',
   { key: '100H', name: '100 heads', },
   { key: 'quest', name: 'Quest', },
 ],
-// {
-//   'yay': 'monster_yay.png',
-//   'nope': 'monster_cry.png'
-// }
+{
+  'yay': 'monster_yay.png',
+  // 'nope': 'monster_cry.png'
+}
 );
 
 makeComponent('wizard-flips',
@@ -2355,11 +2399,11 @@ makeComponent('chain-rule', [
   { key: 'mind-blown', name: 'Mind blown', },
   { key: 'congrats', name: 'Congrats', },
   ],
-// {
-//     'yay': 'girl_happy.png',
-//     'nope': 'girl_upset.png',
-//     'coy': 'girl_coy.png'
-// }
+{
+    'yay': 'girl_happy.png',
+    // 'nope': 'girl_upset.png',
+    // 'coy': 'girl_coy.png'
+}
 ); 
 // EV
 makeComponent('risk-reward', [
@@ -2537,7 +2581,7 @@ new Vue({
   el: '#app',
   data: {
     storyPoints: storyPoints,
-    storyPointInd: 3,
+    storyPointInd: 0,
     // Obj property additions do not update DOM, so prepopulate all the keys in the object. Or use lists.
     //soundNameToCount: {},
     show: false,
