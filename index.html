@@ -349,96 +349,6 @@ button{
   word-wrap: break-word;
 }
 
-
-
-/* http://danielstern.ca/range.css/#/ magic unicorn journey */
-input[type=range] {
-  -webkit-appearance: none;
-  width: 100%;
-  margin: 13.8px 0;
-}
-input[type=range]:focus {
-  outline: none;
-}
-input[type=range]::-webkit-slider-runnable-track {
-  width: 100%;
-  height: 8.4px;
-  cursor: pointer;
-  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
-  background: #3071a9;
-  border-radius: 1.3px;
-  border: 0.2px solid #010101;
-}
-input[type=range]::-webkit-slider-thumb {
-  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
-  border: 1px solid #000000;
-  height: 36px;
-  width: 16px;
-  border-radius: 3px;
-  background: #ffffff;
-  cursor: pointer;
-  -webkit-appearance: none;
-  margin-top: -14px;
-}
-input[type=range]:focus::-webkit-slider-runnable-track {
-  background: #367ebd;
-}
-input[type=range]::-moz-range-track {
-  width: 100%;
-  height: 8.4px;
-  cursor: pointer;
-  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
-  background: #3071a9;
-  border-radius: 1.3px;
-  border: 0.2px solid #010101;
-}
-input[type=range]::-moz-range-thumb {
-  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
-  border: 1px solid #000000;
-  height: 36px;
-  width: 16px;
-  border-radius: 3px;
-  background: #ffffff;
-  cursor: pointer;
-}
-input[type=range]::-ms-track {
-  width: 100%;
-  height: 8.4px;
-  cursor: pointer;
-  background: transparent;
-  border-color: transparent;
-  color: transparent;
-}
-input[type=range]::-ms-fill-lower {
-  background: #2a6495;
-  border: 0.2px solid #010101;
-  border-radius: 2.6px;
-  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
-}
-input[type=range]::-ms-fill-upper {
-  background: #3071a9;
-  border: 0.2px solid #010101;
-  border-radius: 2.6px;
-  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
-}
-input[type=range]::-ms-thumb {
-  box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
-  border: 1px solid #000000;
-  height: 36px;
-  width: 16px;
-  border-radius: 3px;
-  background: #ffffff;
-  cursor: pointer;
-  height: 8.4px;
-}
-input[type=range]:focus::-ms-fill-lower {
-  background: #3071a9;
-}
-input[type=range]:focus::-ms-fill-upper {
-  background: #367ebd;
-}
-
-
 </style>
 
 <body>
@@ -840,19 +750,50 @@ The characters you gotta know:
    {{got('100H') ? 'Yeah!': 'Not quite.'}} The probability of 100 heads in a row on a fair coin is 1/2^100. If all the 2^80 atoms in the universe were flipping coins, this still probably wouldn't happen. That's why I think the dark wizard did something to my coins, and they are no longer fair.
  </template>
 
- <buton @click="set('track')">I see</buton>
+ <buton @click="set('quest')">I see</buton>
 </avatar>
 
 
-<avatar key="track"
-  v-if="show('track')"
+<avatar key="quest"
+  v-if="show('quest')"
   image="monster.png" 
   text="Will you please track down the Bad Wizard and fix my coins?">
-  <buton @click="set('wizard')">Accept Quest</buton>
+
+  <div style="font-size: 48px; letter-spacing:4px;">
+  CONGRATS
+  </div>
+
+  <ul>
+    <li>You learned about <bold>independent events</bold> (two events that don't affect each other)</li>
+    <li>You learned how to calculate the <bold>joint probability</bold> of independent events (you multiply)</li>
+    <li>You learned that there are <exp base="2" pow="80"></exp> atoms in the universe.</li>
+  </ul> 
+
+
+  <buton @click="$root.nextStory()">Accept Quest</buton>
 </avatar>
 
-<avatar key="wizard"
-  v-if="show('wizard')"
+<!-- </transition> -->
+
+</div>
+</script>
+
+<script type="text/x-template" id="wizard-flips-template">
+<div>
+
+<!-- jump to a diferent problem -->
+<div class="point-container" style="width: 250px">
+  <div v-for="point in points" 
+  @click="set(point.key)" 
+  class="point has-tooltip" 
+  :class="{'active-point': point.key == activeOrLastKnownPoint}"
+  :style="pointStyle(point)">
+    <span>{{point.name}}</span>
+  </div>
+</div>
+
+<avatar key="intro"
+  v-if="show('intro')"
   image="wizard.png" 
   text="Did somebody say my name?">
 
@@ -880,9 +821,13 @@ The characters you gotta know:
   <coin :bias="0.7"></coin>
 
   <div class="handwriting">The unfair coin is:</div>
-  <buton nope="Nope, that's a fair coin.">A</buton>
-  <buton nope="Nope, this is a fair coin.">B</buton>
+  <buton nope>A</buton>
+  <buton nope>B</buton>
   <buton yay @click="set('interactive')">C</buton>
+
+  <template v-slot:hint>
+    Hint: One coin has a tendency to land on one side more than the other.
+  </template>
 </avatar>
 
 
@@ -910,46 +855,96 @@ Ah you foiled me.
     Oh HA. You got me.
   </div>
   <div v-else>
-    HAAAHHAA! It's pretty hard to find the biased coin, right? And that was when the coin was biased to land on A, 70% of the time! 
+    HAAAHHAA! It's pretty hard to find the biased coin, right? And that was when the coin was biased to land on A, 70% of the time! Wanna play with my awesome coin biasing machine?
   </div>
   </template>
 
-  <div>
-    Wanna play with my awesome coin biasing machine?
-  </div>
 
-  <div>Set the bias and give the coin a few flips.</div>
-  <div>todo: put in some visualization</div>
+  <biased-coin-machine></biased-coin-machine>
+  <buton @click="set('3coins2')">Done with this</buton> 
 
-  <div>Coin bias (50% of the time, it will land H):</div>
-  <input type="range" min="0" max="100">
-  <buton @click="set('something-wrong')">Next</buton> 
+</avatar>
+
+<avatar key="3coins2"
+  v-if="show('3coins2')"
+  image="wizard.png" 
+  text="HAHA this is fun. I again have 3 coins. 2 are fair, 1 is unfair. Find the unfair coin.">
+
+  <div>Click the coins to flip them.</div>
+  <div>When you have enough info, submit your guess.</div>
+
+  <coin></coin>
+  <coin pattern="haha"></coin>
+  <coin></coin>
+
+  <div class="handwriting">The unfair coin is:</div>
+  <buton nope>A</buton>
+  <buton yay @click="set('3coins2-result')">B</buton>
+  <buton nope>C</buton>
+
+  <template v-slot:hint>
+    Hint: The wizard may be having a joke at your expense.
+  </template>
 
 </avatar>
 
 
+<avatar key="3coins2-result"
+  v-if="show('3coins2-result')"
+  image="wizard.png" 
+  text="HAHA yes, that coin always says HAHA. It lands on heads 50% of the time, but it's unfair because I know what's coming next. Genius, isn't it??">
 
-<centered key="congrats"
-  v-if="show('congrats')">
+  <buton @click="set('3coins3')">Next</buton>
+</avatar>
 
-  <div>
-    
-  </div>
+
+<avatar key="3coins3"
+  v-if="show('3coins3')"
+  image="wizard.png" 
+  text="OKOK last one. Find the unfair coin.">
+
+  <div>Click the coins to flip them.</div>
+  <div>When you have enough info, submit your guess.</div>
+
+  <coin></coin>
+  <coin pattern="human"></coin>
+  <coin></coin>
+
+  <div class="handwriting">The unfair coin is:</div>
+  <buton nope>A</buton>
+  <buton yay @click="set('3coins3-result')">B</buton>
+  <buton nope>C</buton>
+
+  <template v-slot:hint>
+    Hint: One of these coins is a bit shy.
+  </template>
+</avatar>
+
+
+<avatar key="3coins3-result"
+  v-if="show('3coins3-result')"
+  image="wizard.png" 
+  text="Interesting isn't it. This coin never has long streaks of one thing or the other. Humans tend to generate 'random' sequences like this. But they aren't random, because nature doesn't mind having long streaks.">
+
+  <buton @click="set('fin')">Next</buton>
+</avatar>
+
+
+<avatar key="fin"
+  v-if="show('fin')"
+  image="wizard.png" 
+  text="HAHAHA. That's it for coins. Literally childs play. If I can do this with coins, imagine what damage I can do with dice. Better level up quickly. You'll be seeing more of me. Toodooaloo~~">
 
   <div style="font-size: 48px; letter-spacing:4px;">
   CONGRATS
   </div>
 
   <ul>
-    <li>You learned about <bold>independent events</bold> (two events that don't affect each other)</li>
-    <li>You learned how to calculate the <bold>joint probability</bold> of independent events (you multiply)</li>
-    <li>You learned that there are <exp base="2" pow="80"></exp> atoms in the universe.</li>
+    <li>You learned about what randomness feels like</li>
   </ul> 
 
-  <buton @click="finish()">Next section</buton>
-</centered>
-
-<!-- </transition> -->
+  <buton @click="$root.nextStory()">Next Story</buton>
+</avatar>
 
 </div>
 </script>
@@ -962,6 +957,21 @@ Ah you foiled me.
     <div style="font-size:12px">{{flipString}}</div>
   </div>
 </script>
+
+
+
+<script type="text/x-template" id="biased-coin-machine-template">
+<div>
+  <div>Adjust the bias, and click coin to flip.</div>
+  <span>Lands H with {{$root.renderAsPercent(bias)}} probability:</span>
+  <input v-model="slider" type="range" min="0" max="100" style="width:200px">
+
+  <div>
+  <coin ref="coin" :bias="bias" style="width:300px"></coin>
+  </div>
+</div>
+</script>
+
 
 <script type="text/x-template" id="chain-rule-template">
 
@@ -1303,13 +1313,13 @@ todo: add a review slot.
     But hey, at least Veronica's pickiness taught you the Chain Rule.
   </div>
 
-  <buton @click="set('congrats')">Next</buton>
+  <buton @click="set('mind-blown')">Next</buton>
 </avatar>
 
 <interstitial 
     image="girl.png"
-    key="problem1-result" 
-    v-if="show('problem1-result')">
+    key="mind-blown" 
+    v-if="show('mind-blown')">
   <div>
     One quick thing that may really blow your mind.
   </div>
@@ -1555,8 +1565,10 @@ todo: add a review slot.
   v-if="showLiveText">
   <img src="images/dialog.png" >
   <div style="position: absolute; left:40px; top:23px;" class="dialog-text"
+  ref="test"
   :class="dialogClass">
     <live-text  
+        ref="initial-text"
         key="initial-text"
         v-if="!showNewText" @live-text-complete="showQuestion=true">
         <slot name="dialog"></slot>
@@ -1691,6 +1703,10 @@ const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
 const bus = new Vue();
 
 var sounds = {
+  'coin': {clip: new Audio('sounds/gold1.wav')},
+  'heads': {clip: new Audio('sounds/gold0.wav')},
+  'tails': {clip: new Audio('sounds/gold1.wav')},
+
   'speech': {clip: new Audio('sounds/speech_louder.wav')},
   'buton': {clip: new Audio('sounds/button.wav')},
   'wrong': {clip: new Audio('sounds/wrong.wav')},
@@ -1824,6 +1840,7 @@ Vue.component('intro-scene', {
 Vue.component('coin', {
   props: {
     bias: {type: Number, default: 0.5},
+    pattern: {type: String},
   },
   data: function(){
     return {
@@ -1838,18 +1855,74 @@ Vue.component('coin', {
       if (this.flips.length == 0){
         return true;
       }
-      return this.render(this.flips[this.flips.length-1]) == 'H';
+      return this.render(this.last) == 'H';
+    },
+    last: function(){
+      return this.flips[this.flips.length-1];
     }
   },
   methods: {
     render: function(flip){
-      return flip > this.bias ? 'H' : 'A';
+      return flip ? 'H' : 'A';
+    },
+    append: function(flip){
+      this.$root.play(flip ? 'heads' : 'tails');
+      this.flips.push(flip);
+    },
+    reset: function(){
+      this.flips = [];
     },
     flip: function(){
-      this.flips.push(Math.random());
+      // Always repeats as HAHA.
+      if (this.pattern == 'haha'){
+        if (this.flips.length == 0){
+          this.append(1);
+        } else {
+          this.append(Math.abs(this.last - 1));
+        }
+
+        // Early return.
+        return;
+      }
+
+      // Prevents long streaks from happening.
+      if (this.pattern == 'human'){
+        const maxStreak = 3;
+        if (this.flips.length > maxStreak){
+          const slice = this.flips.slice(-maxStreak);
+          if(_.every(slice) || _.every(slice, x => !x)){ 
+            // If the last ones have all been of a type, the new one must be opposite.
+            this.append(Math.abs(this.last - 1));
+          } 
+
+          // Fallthrough.
+        }
+      }
+
+      // True coin flip.
+      this.append(Math.random() < this.bias); 
     }
   },
   template: '#coin-template'
+});
+
+Vue.component('biased-coin-machine', {
+  data: function(){
+    return {
+      slider: '50',
+    }
+  },
+  computed: {
+    bias: function(){
+      return +this.slider / 100;
+    },
+  },
+  watch:{
+    bias: function(){
+      this.$refs['coin'].reset();
+    },
+  },
+  template: '#biased-coin-machine-template'
 });
 
 // You're the trainee right?
@@ -2007,12 +2080,14 @@ Vue.component('avatar', {
       return 'images/'+ (this.reactionImage || this.image);
     },
     dialogClass: function(){
-      // if (text.length || (this.)
-      // 
-      const longText = this.text.length > 140;
-      debugger;
-      const longSlotText = this.hasSlot('dialog') && this.$slots['dialog'][0].text.length > 140;
-      return {'smaller-dialog-text': longText || longSlotText};
+      const maxLen = 140;
+      const longText = this.text.length > maxLen;
+
+      // hack. should do this recursively.
+      const longSlotText = this.hasSlot('dialog') && this.$slots['dialog'][0].text && this.$slots['dialog'][0].text.length > maxLen;
+
+      const longSlotWithEltText = this.hasSlot('dialog') && this.$slots['dialog'][0].children && this.$slots['dialog'][0].children[0].text && this.$slots['dialog'][0].children[0].text.length > maxLen;
+      return {'smaller-dialog-text': longText || longSlotText || longSlotWithEltText};
     }
   },
   methods: {
@@ -2266,15 +2341,23 @@ makeComponent('coin-flips',
   { key: '10HT', name: 'Probability of 10 heads and tails', },
   { key: 'HHHHH', name: '5 heads', },
   { key: '100H', name: '100 heads', },
-  { key: '3coins', name: '3 coins', },
-  { key: 'interactive', name: 'Play with biased coin', },
-  { key: 'congrats', name: 'Congrats', },
+  { key: 'quest', name: 'Quest', },
 ],
 {
   'yay': 'monster_yay.png',
   'nope': 'monster_cry.png'
-}
-); 
+});
+
+makeComponent('wizard-flips',
+[
+  { key: 'intro', name: 'Intro', },
+  { key: '3coins', name: '3 coins', },
+  { key: 'interactive', name: 'Play with biased coin', },
+  { key: '3coins2', name: '3 more coins', },
+  { key: '3coins3', name: 'Final 3 coins ', },
+  { key: 'fin', name: 'fin', },
+]); 
+
 // Conditional prob + join prob with chain rule
 makeComponent('chain-rule', [
   { key: 'intro', name: 'Intro', },
@@ -2385,15 +2468,19 @@ Vue.component('live-text', {
   data: function(){
     return {
       visibleTokens: [],
+      length: 0,
     };
   },
   mounted: function(){
     console.log('mounting live text');
-    this.render();
+    this.animate();
   },
   methods: {
-    render: async function(){
+    animate: async function(){
       var elts = _.values(this.$refs);
+
+      this.length = _.sum(elts.map(elt => elt.textContent.length));
+
       function pauseDuration(text){
         const short = 100;
         const med = 500;
@@ -2443,6 +2530,11 @@ var storyPoints = [
   image: 'monster.png',
 },
 {
+  name: 'Bad Wizard',
+  component: 'wizard-flips',
+  image: 'wizard.png',
+},
+{
   name: 'Chain Rule',
   component: 'chain-rule',
   image: 'girl.png',
@@ -2461,7 +2553,7 @@ new Vue({
   el: '#app',
   data: {
     storyPoints: storyPoints,
-    storyPointInd: 1,
+    storyPointInd: 2,
     // Obj property additions do not update DOM, so prepopulate all the keys in the object. Or use lists.
     //soundNameToCount: {},
     show: false,
