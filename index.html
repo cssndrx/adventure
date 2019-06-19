@@ -25,7 +25,8 @@ font-family: 'Cormorant Garamond', serif;
 
 <link href="css/animate.css" rel="stylesheet" type="text/css">
 <script src="js/lodash.min.js"></script>
-<script src="js/d3.v4.min.js"></script>
+<script src="js/d3.v5.min.js"></script>
+<script src="js/d3-array.v2.min.js"></script>
 
 <script src="js/vue.js"></script>
 <script src="js/jquery-1.9.1.js"></script>
@@ -33,6 +34,10 @@ font-family: 'Cormorant Garamond', serif;
 <script src="js/utils.js"></script>
 
 <style>
+
+  text{
+    font-size: 12px;
+  }
 *{
   font-family: 'Fira Sans', sans-serif;
   font-size: 18px;
@@ -961,8 +966,8 @@ The characters you gotta know:
   <div @click="flip" class="coin">
     <img v-if="isShowingH" src="images/coin_heads.png" style="width:100px">
     <img v-if="!isShowingH" src="images/coin_tails.png" style="width:100px">
-    <div style="font-size:12px">{{flipString}}</div>
-<!--    <histogram v-if="flips.length > 0" :hist="hist"></histogram>-->
+    <div style="font-size:12px; min-height: 60px;">{{flipString}}</div>
+    <histogram v-if="flips.length > 0" :hist="hist"></histogram>
   </div>
 </script>
 
@@ -1543,23 +1548,15 @@ The characters you gotta know:
     <g v-if="isCreated" 
       class="container"
       :transform="'translate(' + margin.left + ',' + margin.top + ')'">
-      <rect v-for="(bin, i) in hist.bins"
-          :x="hist.xScale(bin[0])"
-          :y="hist.yScale(bin.length)"
+      <rect v-for="(arr, bin) in hist.bins"
+          :x="hist.xScale(bin)"
+          :y="chartHeight - hist.yScale(arr.length)"
           :width="hist.xScale.bandwidth()"
-          :height="chartHeight-hist.yScale(bin.length)"
-          fill="cyan"/>
-
+          :height="hist.yScale(arr.length)"
+          :key="bin"
+          fill="#E9BE2B"/>
     </g>
 </svg>
-
-        <div v-for="(bin, i) in hist.bins">
-          x: {{hist.xScale(bin[0])}}
-          y:{{hist.yScale(bin.length)}}
-          width:{{hist.xScale.bandwidth()}}
-          height:{{chartHeight-hist.yScale(bin.length)}}
-          </div>
-
 </div>
 </script>
 
@@ -1890,7 +1887,7 @@ Vue.component('coin', {
   },
   data: function(){
     return {
-      flips: [], 
+      flips: [], //true, false, true, true], 
     }
   },
   computed: {
@@ -1907,21 +1904,23 @@ Vue.component('coin', {
       return this.flips[this.flips.length-1];
     },
     hist: function(){
-      const histogram = d3.histogram();
-        // .value(function(d) { return d.changePercent; })
-        // .domain(d3.extent(this.data, d=>d.changePercent));
-      const bins = histogram(this.flips);
-      // const bins = d3.bin()(this.flips);
-      // debugger;
-
-      const yScale = d3.scaleLinear()
-          .domain([0, _.max(_.map(bins, bin => bin.length))]);
-
-      // todo: get rid of range here;
       const xScale = d3.scaleBand()
-          .domain([false, true]).range([0, 100]).paddingInner(.1);
+          .domain(['H', 'A']).paddingInner(.1).range([0, 100]);
 
-   //debugger;
+      // Why would this happen?
+      // histogram([false, true, false, true, false, false])
+      // Probably because d3 adaptive bins.
+      // (5) [Array(4), Array(0), Array(0)], Array(0), Array(2)]
+      // const histogram = d3.histogram()
+      //   .domain(xScale.domain());
+
+      // const bins = histogram(this.flips);
+
+      const bins = _.groupBy(this.flips.map(this.render));
+      const domain = [0, _.sum(_.map(_.values(bins), arr => arr.length))];
+      const yScale = d3.scaleLinear()
+          .domain(domain).range([0, 80]);
+
       return {
         xScale: xScale,
         yScale: yScale,
@@ -2290,7 +2289,7 @@ Vue.component('histogram', {
     margin: {
       type: Object, 
       default: function(){
-        return {top: 10, right: 10, bottom: 20, left: 30};
+        return {top: 0, right: 10, bottom: 20, left: 10};
       }
     },
   },
@@ -2301,18 +2300,17 @@ Vue.component('histogram', {
   },
   created: function(){
     // Add domains
-    this.hist.xScale.range([0, this.chartWidth]);
-    this.hist.yScale.range([this.chartHeight, 0]);
+    // this.hist.xScale.range([0, this.chartWidth]);
+    // this.hist.yScale.range([this.chartHeight, 0]);
     this.isCreated = true;
   },
   mounted: function() {
     // Add the axis
-    var xAxis = d3.axisBottom(this.hist.xScale).ticks(8);
-    var yAxis = d3.axisLeft(this.hist.yScale);
+    var xAxis = d3.axisBottom(this.hist.xScale); //.ticks(8);
+//    var yAxis = d3.axisLeft(this.hist.yScale);
 
-//    debugger;
     const chart = d3.select(this.$el).select('.container');
-    chart.append('g').call(yAxis);
+//    chart.append('g').call(yAxis);
     chart.append('g').attr('transform', 'translate(0,' + this.chartHeight + ')').call(xAxis);
   },
   template: '#histogram-template'
