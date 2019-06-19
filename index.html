@@ -67,11 +67,6 @@ a{
 img{
   max-width: 400px;
 }
-.nope{
-  color:red; 
-  font-size: 14px; 
-/*  text-align: left;*/
-}
 .handwriting, .handwriting *{
 /* font-family: 'Dokdo', cursive; */   
   font-family: 'Schoolbell', cursive;
@@ -348,6 +343,11 @@ button{
   cursor: pointer;
   vertical-align: top;
   word-wrap: break-word;
+
+  -webkit-user-select: none; /* Safari 3.1+ */
+  -moz-user-select: none; /* Firefox 2+ */
+  -ms-user-select: none; /* IE 10+ */
+  user-select: none; /* Standard syntax */
 }
 
 /* https://forum.vuejs.org/t/add-transitions-to-slide-up/27446/4 */
@@ -360,6 +360,10 @@ button{
 .slide-up-enter, .slide-fade-leave-to {
   transform: translateY(100vh);
   opacity: 0;
+}
+.nope{
+  color:red; 
+  font-size: 14px; 
 }
 
 </style>
@@ -430,6 +434,13 @@ You are going to bring us into this new world of <span class="animated infinite 
 
 </div> <!-- end #app -->
 
+<script type="text/x-template" id="note-template">
+<span style="position:relative; top:6px; text-align:center; display:inline-block" class="normal-div">
+  <div><slot></slot></div>
+  <div class="handwriting" style="font-size:10px; white-space:nowrap;">{{title}}<slot name="title"></slot></div>
+</span>
+</script>
+
 <script type="text/x-template" id="glitch-template">
   <div>
     <img v-if="showStart" :src="'images/'+start" style="width:100%">
@@ -444,16 +455,17 @@ You are going to bring us into this new world of <span class="animated infinite 
   v-if="show('intro')">
 <div class="handwriting" style="font-size:48px; text-align:center">The Great Statistics Mystery</div>
 
+
 <div>
 In a distant land and serene land, knowledge of statistics and probability was widespread. The people were kind and loving. 
 </div>
 
 <div>
-Until one day, a dark statistics wizard set out to ruin probability for everyone. He would tamper with its mechanics. And terrorize the citizens. 
+Until one day, a Bad Wizard set out to ruin probability for everyone. He would tamper with its mechanics. And terrorize the citizens. 
 </div>
 
 <div>
-You have been chosen to join the Statistics Police. You are the final line of defense for holding the dark forces in check. 
+You have been chosen to join the Statistics Police. You are the final line of defense for holding the bad forces in check. 
 </div>
 
 <div>
@@ -551,7 +563,10 @@ The characters you gotta know:
 </div>
 
 <centered key="intro"
-  v-if="show('intro')">
+  v-if="show('intro')" style="text-align:center;">
+
+  <img src="images/monster.png" style="width:200px;">
+
   <div>
     A curious green creature walks into the statistics police headquarters.
   </div>
@@ -578,7 +593,7 @@ The characters you gotta know:
 <avatar key="HH"
   v-if="show('HH')"
   image="monster.png" 
-  text="What is the probability that I toss a coin twice and get HH?">
+  text="What is the probability that I toss a fair coin twice and get HH?">
   <buton nope="1/2 is the probability of tossing a single coin and getting H. Getting two heads in a row is rarer than that.">1/2</buton>
   <buton @clik="set('HH-explanation')" yay>1/4</buton>
   <buton nope="Assume it is a fair coin that lands on heads with 50% probability.">Not enough info</buton>
@@ -712,14 +727,14 @@ The characters you gotta know:
 
   <buton @click="memory='userSaidH'" nope>H</buton>
   <buton @click="memory='userSaidT'" nope>T</buton>
-  <buton @click="set('HHHHH-finale')" yay>It's 50-50</buton>
+  <buton @clik="set('HHHHH-finale')" yay>It's 50-50</buton> <!-- needed to use clik, so rainbow would show -->
 </avatar>
 
 <avatar key="HHHHH-finale"
   v-if="show('HHHHH-finale')"
   image="monster_yay.png" 
   sound="right"
-  text="Yeah! The correct answer is that there's no way to tell.">
+  text="Yeah! The correct answer is that it's 50-50, regardless of what has happened before since coins have no memory.">
   <buton @click="set('independence')">Next</buton>
 </avatar>
 
@@ -748,7 +763,7 @@ The characters you gotta know:
 <avatar key="100H"
   v-if="show('100H')"
   image="monster.png" 
-  text="After I ran into the Dark Wizard the other day, I tossed a coin 100 times and it landed heads all 100 times! What do you think it landed on on the 101-st time?">
+  text="After I ran into the Bad Wizard the other day, I tossed a coin 100 times and it landed heads all 100 times! What do you think it landed on the 101-st time?">
 
   <buton-group :onClick="() => set('100H-result')">
     <buton yay>H</buton>
@@ -762,7 +777,7 @@ The characters you gotta know:
   image="monster.png">
 
   <template v-slot:dialog>
-   {{got('100H') ? 'Yeah!': 'Not quite.'}} The probability of 100 heads in a row on a fair coin is 1/2^100. If all the 2^80 atoms in the universe were flipping coins, this still probably wouldn't happen. That's why I think the dark wizard did something to my coins, and they are no longer fair.
+   {{got('100H') ? 'Yeah!': 'Not quite.'}} The probability of 100 heads in a row on a fair coin is 1/2^100. If all the 2^80 atoms in the universe were flipping coins, this still probably wouldn't happen. That's why I think the Bad Wizard did something to my coins, and they are no longer fair.
  </template>
 
  <buton @click="set('quest')">I see</buton>
@@ -774,13 +789,14 @@ The characters you gotta know:
   image="monster.png" 
   text="Will you please track down the Bad Wizard and fix my coins?">
 
+
   <div style="font-size: 48px; letter-spacing:4px;">
   CONGRATS
   </div>
 
   <ul>
-    <li>You learned about <bold>independent events</bold> (two events that don't affect each other)</li>
-    <li>You learned how to calculate the <bold>joint probability</bold> of independent events (you multiply)</li>
+    <li>You learned about <bold>independent events</bold></li>
+    <li>You learned to calculate the <bold>joint probability</bold> of independent events.</li>
     <li>You learned that there are <exp base="2" pow="80"/> atoms in the universe.</li>
   </ul> 
 
@@ -811,7 +827,6 @@ The characters you gotta know:
   v-if="show('intro')"
   image="wizard.png" 
   text="Did somebody say my name?">
-
   <buton @click="set('wizard2')">Oops</buton>
 </avatar>
 
@@ -850,7 +865,7 @@ The characters you gotta know:
   image="wizard.png" >
 
   <template v-slot:dialog>
-    {{ perfect('3coins') ? 'Oh HA. You got me. That coin was biased to land on H, 70% of the time.' : "HAAAHHAA! It's pretty hard to find the biased coin, right? And that was when the coin was biased to land on H, 70% of the time!"}} Wanna play with my awesome coin biasing machine?
+    {{ perfect('3coins') ? 'Oh. You got me. That coin was biased to land on H, 70% of the time.' : "HAAAHHAA! It's pretty hard to find the biased coin, right? And that was when the coin was biased to land on H, 70% of the time!"}} Wanna play with my awesome coin biasing machine?
   </template>
 
   <biased-coin-machine></biased-coin-machine>
@@ -917,7 +932,7 @@ The characters you gotta know:
 <avatar key="3coins3-result"
   v-if="show('3coins3-result')"
   image="wizard.png" 
-  text="Interesting isn't it. This coin never has long streaks of one thing or the other. Humans tend to generate 'random' sequences like this. But they aren't random, because nature doesn't mind having long streaks.">
+  text="You got it. Interesting isn't it. This coin never has long streaks of one thing or the other. Humans tend to generate 'random' sequences like this. But they aren't random, because nature doesn't mind having long streaks.">
 
   <buton @click="set('fin')">Next</buton>
 </avatar>
@@ -946,8 +961,8 @@ The characters you gotta know:
   <div @click="flip" class="coin">
     <img v-if="isShowingH" src="images/coin_heads.png" style="width:100px">
     <img v-if="!isShowingH" src="images/coin_tails.png" style="width:100px">
-
     <div style="font-size:12px">{{flipString}}</div>
+<!--    <histogram v-if="flips.length > 0" :hist="hist"></histogram>-->
   </div>
 </script>
 
@@ -1030,11 +1045,11 @@ The characters you gotta know:
   </div>
 
   <div>
-    It is only valid to multiply two probabilities to calculate the joint probability if the two events are independent -- like coin flips.
+    It is only valid to multiply two probabilities to calculate the joint probability if the two events are independent — like coin flips.
   </div>
 
   <div>
-     In our case, independence occurs if a monster's height <bold>does not provide any information</bold> on the greatness of a monsters hair. 
+     In our case, <bold>independence</bold> occurs if a monster's height <bold>does not provide any information</bold> on the greatness of a monsters hair. 
   </div>
 
   <buton @click="set('conditional1')">Next</buton>
@@ -1045,22 +1060,26 @@ The characters you gotta know:
 <avatar key="conditional1" 
         v-if="show('conditional1')"
         image="girl.png" 
-        text="It turns out that being tall and having great hair are slightly correlated, so they're not independent. About 1/3 of tall monsters have great hair.">
+        text="It turns out that being tall and having great hair are slightly correlated, so they're not independent. I told you before that 1/4 of all monsters have great hair. But about 1/3 of tall monsters have great hair.">
 
   <div>
     In math language, Veronica just told us a <bold>conditional probability</bold>. 
   </div>
 
   <div>
-    A conditional probability is written as P(A | B). It tells us the probability of A, given that we know B to be true.
-  </div>
-
-  <div>
-    Veronica told us P(great hair|tall) = 1/3 -- tthe probability a monster has great hair is 1/3 <bold>given</bold> that we know the monster is tall. 
+    Conditional probabilities are written like P(A|B). This indicates the probability of A, given that we know B to be true.
   </div>
 
   <div style="font-size:12px">
-    Note: the "|" is pronounced as "given". Mathematically, you say "the probability of A given B".
+    Note: The "|" is pronounced as "given". 
+  </div>
+
+  <div>
+    Veronica told us P(great hair|tall) = 1/3.
+  </div>
+
+  <div>
+   The probability a monster has great hair is 1/3 <bold>given</bold> that we know the monster is tall. 
   </div>
 
   <div>
@@ -1101,7 +1120,7 @@ The characters you gotta know:
         image="girl.png" 
         text="Okay so what is the probability that a random monster is datable?">
 
-  <div>What is P(tall AND great hair)?</div>
+  <div>What is P(tall AND greathair)?</div>
 
   <div class="extra-info">Facts from before:
   <ul>
@@ -1117,18 +1136,6 @@ The characters you gotta know:
     <buton nope="Are you just multiplying things together? Try again.">1/24</buton>
     <buton nope="The answer isn't always 'Not enough info'...">Not enough info</buton>
   </buton-group>
-
-<!--  
-todo: add a review slot.
-  <template v-slot:overlay>
-    <div>
-      Right!
-    </div>
-    <div>
-      P(great hair AND tall) = P(tall) * P (great hair | tall)
-    </div>
-    <buton @click="set('problem2')">Next</buton>
-  </template> -->
 </avatar>
 
 
@@ -1138,20 +1145,20 @@ todo: add a review slot.
         text="Oh thank you for your help so far. But I forgot... I also want them to have tattoos. 1/5 of monsters have tattoos.">
 
   <div>In math speak, P(tattoos) = 1/5.</div>
-  <div>What is P(tall, great hair, tattoos)?</div>
+  <div>What is P(tall AND great hair AND tattoos)?</div>
 
   <div class="extra-info">Facts from before:
     <ul>
       <li>P(tall) = 1/2</li>
-      <li>P(great hair) = 1/4</li>
-      <li>P(great hair|tall) = 1/3</li>
-      <li>You calculated P(great hair AND tall) = 1/6</li>
+      <li>P(greathair) = 1/4</li>
+      <li>P(greathair|tall) = 1/3</li>
+      <li>You calculated P(greathair AND tall) = 1/6</li>
     </ul>
   </div>
 
   <buton-group :onClick="() => set('chainruleinter1')">
     <buton coy>1/30</buton>
-    <buton nope="Remember, we want to use P(great hair|tall), not P(tall).">1/40</buton>
+    <buton nope="Remember, we want to use P(greathair|tall), not P(tall).">1/40</buton>
     <buton nope="Wait, are you just blindly multiplying numbers? Stop that.">1/120</buton>
     <buton yay>Not enough info</buton>
   </buton-group>
@@ -1188,7 +1195,7 @@ todo: add a review slot.
   </div>
 
   <div class="smaller-children">
-    P(tattoo AND great hair AND tall) = <br>
+    P(tattoo AND greathair AND tall) = <br>
     <span style="color:magenta">P(tall)</span> * <span style="color:green">P(great hair | tall)</span> * <span style="color:blue">P(tattoo | great hair AND tall)</span>
   </div>
 
@@ -1228,28 +1235,28 @@ todo: add a review slot.
       Recall the Chain Rule says that everything must be conditioned on what came before. 
     </div>
     <div>
-      So P(tall, great hair, tattoos) = P(tall) * P(great hair | tall) * P(tattoos | great hair AND tall). 
+      So P(tall, greathair, tattoos) = P(tall) * P(greathair | tall) * P(tattoos | greathair AND tall). 
     </div>
   </template>
 
   <div>
-  What is P(tall, great hair, tattoos)?
+  What is P(tall, greathair, tattoos)?
   </div>
 
   <div class="extra-info">
   Facts from before:
   <ul>
     <li>P(tall) = 1/2</li>
-    <li>P(great hair) = 1/4</li>
-    <li>P(great hair|tall) = 1/3</li>
+    <li>P(greathair) = 1/4</li>
+    <li>P(greathair|tall) = 1/3</li>
     <li>P(tattoos) = 1/5</li>
     <li>P(tattoos|tall) = 1/6</li>
-    <li>P(tattoos|tall AND great hair) = 1/7</li>
+    <li>P(tattoos|tall AND greathair) = 1/7</li>
   </ul>
   </div>
 
   <div>
-  P(tall, great hair, tattoos) =  1/<input-box :right="42" :onRight="() => set('problem4')"/>
+  P(tall, greathair, tattoos) =  1/<input-box :right="42" :onRight="() => set('problem4')"/>
   </div>
 
 </avatar>
@@ -1264,13 +1271,13 @@ todo: add a review slot.
     Facts from before:
     <ul>
       <li>P(tall) = 1/2</li>
-      <li>P(great hair) = 1/4</li>
-      <li>P(great hair|tall) = 1/3</li>
+      <li>P(greathair) = 1/4</li>
+      <li>P(greathair|tall) = 1/3</li>
       <li>P(tattoos) = 1/5</li>
       <li>P(tattoos|tall) = 1/6</li>
-      <li>P(tattoos|tall AND great hair) = 1/7</li>
-      <li>P(around her age|tall AND great hair AND tattoos) = 1/5</li>
-      <li>P(single|tall AND great hair AND tattoos AND around her age) = 1/2</li>
+      <li>P(tattoos|tall AND greathair) = 1/7</li>
+      <li>P(around her age|tall AND greathair AND tattoos) = 1/5</li>
+      <li>P(single|tall AND greathair AND tattoos AND around her age) = 1/2</li>
     </ul>
     </div>
 
@@ -1280,7 +1287,7 @@ todo: add a review slot.
         Recall the Chain Rule says that everything must be conditioned on what came before. 
       </div>
       <div>
-        So in the case of four events, P(tall, great hair, tattoos, single) = P(tall) * P(great hair | tall) * P(tattoos | great hair AND tall) * P(great hair AND tall AND tattoos | single). 
+        So in the case of four events, P(tall, greathair, tattoos, single) = P(tall) * P(greathair | tall) * P(tattoos | greathair AND tall) * P(greathair AND tall AND tattoos | single). 
       </div>
       <div>
         What is it for five events?
@@ -1288,7 +1295,7 @@ todo: add a review slot.
     </template>
 
     <div>
-    P(tall, great hair, tattoos, around her age, single) =
+    P(tall, greathair, tattoos, around her age, single) =
     </div>
 
     1/<input-box :right="420" :onRight="() => set('not-many')"/>
@@ -1323,7 +1330,7 @@ todo: add a review slot.
   </div>
 
   <div style="font-size:16px">
-    P(tall AND great hair and tattoos) = P(tall) * P(great hair|tall) * P(tattoos | tall AND great hair).
+    P(tall AND greathair and tattoos) = P(tall) * P(greathair|tall) * P(tattoos | tall AND greathair).
   </div>
 
   <div>
@@ -1331,7 +1338,7 @@ todo: add a review slot.
   </div>
 
   <div style="font-size:16px">
-    P(tall AND great hair and tattoos) = P(great hair) * P(tattoos | great hair) * P(tall | tattoos AND great hair).
+    P(tall AND greathair and tattoos) = P(greathair) * P(tattoos | greathair) * P(tall | tattoos AND greathair).
   </div>
 
   <div>
@@ -1339,9 +1346,9 @@ todo: add a review slot.
   </div>
 
   <div>
-    How many different ways are there to decompose this joint probability using the Chain Rule?
+    How many different ways are there to decompose P(tall AND greathair and tattoos) using the Chain Rule?
   </div>
-  <input-box :right="6" :onRight="() => set('congrats')"/>
+  <input-box :right="6" :onRight="() => set('congrats')" :feedback="true"/>
 </interstitial>
 
 <centered key="congrats"
@@ -1529,6 +1536,33 @@ todo: add a review slot.
 <span class="bold"><slot></slot></span> 
 </script>
 
+<script type="text/x-template" id="histogram-template">
+<div>
+<svg :width="chartWidth+margin.left+margin.right" 
+     :height="chartHeight+margin.top+margin.bottom">
+    <g v-if="isCreated" 
+      class="container"
+      :transform="'translate(' + margin.left + ',' + margin.top + ')'">
+      <rect v-for="(bin, i) in hist.bins"
+          :x="hist.xScale(bin[0])"
+          :y="hist.yScale(bin.length)"
+          :width="hist.xScale.bandwidth()"
+          :height="chartHeight-hist.yScale(bin.length)"
+          fill="cyan"/>
+
+    </g>
+</svg>
+
+        <div v-for="(bin, i) in hist.bins">
+          x: {{hist.xScale(bin[0])}}
+          y:{{hist.yScale(bin.length)}}
+          width:{{hist.xScale.bandwidth()}}
+          height:{{chartHeight-hist.yScale(bin.length)}}
+          </div>
+
+</div>
+</script>
+
 
 <script type="text/x-template" id="avatar-template">
 <div style="position: relative; height: 700px; width:600px; margin:0 auto; margin-top:16px">
@@ -1697,8 +1731,8 @@ todo: add a review slot.
     <buton style="display:inline" @click="answerSubmit">Go</buton>
   
     <transition name="fade">
-      <span v-if="showNopeText" class="nope" style="position:absolute; bottom: -8px; margin-bottom:0px">
-        {{feedback}}
+      <span v-if="showFeedback" class="nope" style="position:absolute; bottom: -8px; margin-bottom:0px" :style="feedbackStyle">
+        {{feedbackString}}
       </span>
     </transition>
   </div>
@@ -1871,7 +1905,29 @@ Vue.component('coin', {
     },
     last: function(){
       return this.flips[this.flips.length-1];
-    }
+    },
+    hist: function(){
+      const histogram = d3.histogram();
+        // .value(function(d) { return d.changePercent; })
+        // .domain(d3.extent(this.data, d=>d.changePercent));
+      const bins = histogram(this.flips);
+      // const bins = d3.bin()(this.flips);
+      // debugger;
+
+      const yScale = d3.scaleLinear()
+          .domain([0, _.max(_.map(bins, bin => bin.length))]);
+
+      // todo: get rid of range here;
+      const xScale = d3.scaleBand()
+          .domain([false, true]).range([0, 100]).paddingInner(.1);
+
+   //debugger;
+      return {
+        xScale: xScale,
+        yScale: yScale,
+        bins: bins,
+      };
+    },
   },
   methods: {
     render: function(flip){
@@ -1879,7 +1935,7 @@ Vue.component('coin', {
     },
     append: function(flip){
       this.$root.play(flip ? 'heads' : 'tails');
-      this.flips.push(flip);
+      this.flips.push(!!flip);
     },
     reset: function(){
       this.flips = [];
@@ -1970,21 +2026,38 @@ Vue.component('glitch', {
   template: '#glitch-template'
 });
 
+
+Vue.component('note', {
+  props: {
+    title: {type: String},
+  },
+  template: '#note-template'
+});
+
 Vue.component('input-box', {
   props: {
     right: {type: Number, default: 0},
     hints: {
       type: Array, 
-      default: function(){ return ['Try again']; },
+      default: function(){ return ['Try again', 'Nope']; },
     },
     onRight: {
       type: Function,
       default: function(){},
     },
+
+    // Default to no feedback bc avatar takes care of it, but sometimes we want to use this as a standalone component.
+    feedback: {type: Boolean, default: false},
   },
   computed: {
-    feedback: function(){
-      return this.hints[Math.min(this.numWrong, this.hints.length-1)];
+    feedbackString: function(){
+      if (this.isYay){
+        return 'Yay!';
+      }
+      return this.hints[this.numWrong % this.hints.length];
+    },
+    feedbackStyle: function(){
+      return {'color': this.isYay ? 'green' : 'red'};
     },
     isYay: function(){
       return this.val == this.right;
@@ -1996,22 +2069,26 @@ Vue.component('input-box', {
   data: function(){
     return {
       val: null,
-      showNopeText: false,
-      // numWrong: 0,
+      showFeedback: false,
+      numWrong: 0,
     }
   },
   methods: {
     answerSubmit: async function(){
+      if (this.feedback){
+        this.showFeedback = true;
+        await wait(500);
+      }
+
       bus.$emit('answer-submitted', this);
       // look at the value in the input.
       if (this.isYay){
-        this.showNopeText = false;
         await wait(1000);
         this.onRight();
       } else {
         this.numWrong++;
-        this.showNopeText = true;
       }
+
     }
   },
   template: '#input-box-template'
@@ -2200,6 +2277,45 @@ Vue.component('frac', {
     den: {type: String },
   },
   template: '#frac-template'
+});
+
+
+// histogram example
+// https://bl.ocks.org/d3noob/96b74d0bd6d11427dd797892551a103c
+Vue.component('histogram', {
+  props: {
+    hist: {type: Object }, // data for constructing the histogram {xScale: yScale: bins: }
+    chartHeight: {type: Number, default: 80},
+    chartWidth: {type: Number, default: 120},
+    margin: {
+      type: Object, 
+      default: function(){
+        return {top: 10, right: 10, bottom: 20, left: 30};
+      }
+    },
+  },
+  data: function(){
+    return {
+      isCreated: false,
+    }
+  },
+  created: function(){
+    // Add domains
+    this.hist.xScale.range([0, this.chartWidth]);
+    this.hist.yScale.range([this.chartHeight, 0]);
+    this.isCreated = true;
+  },
+  mounted: function() {
+    // Add the axis
+    var xAxis = d3.axisBottom(this.hist.xScale).ticks(8);
+    var yAxis = d3.axisLeft(this.hist.yScale);
+
+//    debugger;
+    const chart = d3.select(this.$el).select('.container');
+    chart.append('g').call(yAxis);
+    chart.append('g').attr('transform', 'translate(0,' + this.chartHeight + ')').call(xAxis);
+  },
+  template: '#histogram-template'
 });
 
 
@@ -2581,7 +2697,7 @@ new Vue({
   el: '#app',
   data: {
     storyPoints: storyPoints,
-    storyPointInd: 0,
+    storyPointInd: 2,
     // Obj property additions do not update DOM, so prepopulate all the keys in the object. Or use lists.
     //soundNameToCount: {},
     show: false,
