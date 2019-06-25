@@ -29,15 +29,19 @@ font-family: 'Cormorant Garamond', serif;
 <script src="js/d3-array.v2.min.js"></script>
 
 <script src="js/vue.js"></script>
+<script src="js/vuex.js"></script>
+
 <script src="js/jquery-1.9.1.js"></script>
 
 <script src="js/utils.js"></script>
 
 <style>
 
-  text{
-    font-size: 12px;
-  }
+text{
+  font-size: 13px;
+/*  font-family: 'Schoolbell', cursive;*/
+}
+
 *{
   font-family: 'Fira Sans', sans-serif;
   font-size: 18px;
@@ -80,7 +84,7 @@ img{
 /*  font-family: 'Dokdo', cursive;  */
   font-family: 'Schoolbell', cursive;
   font-size: 28px;
-  width:350px;
+  width: 340px;
 }
 .small-dialog-text, .small-dialog-text *{
 /*  font-family: 'Dokdo', cursive;  */
@@ -252,9 +256,6 @@ button{
   position: absolute;
   animation: fallover 1s ease-in 0s 1; /* to not stand back up:  normal forwards;  */
 }
-.active-point{
-  background-color: black;
-}
 .point-container{
   width: 350px;
   display:flex; 
@@ -263,11 +264,35 @@ button{
 }
 .point{
   display: inline-block;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
+  width: 12px;
+  height: 12px;
+/*  border-radius: 50%;*/
   border: 2px solid black;
+  margin-top: 4px;
+  transition: all .5s ease;
 }
+.active-point{
+  background-color: black;
+  width: 20px;
+  height: 20px;
+  margin-top: 0px;
+}
+.circle{
+  border-radius: 50%;
+  width: 14px;
+  height: 14px;
+}
+.circle.active-point{
+  width: 20px;
+  height: 20px;  
+}
+:not(.circle).active-point{
+  width: 18px;
+  height: 18px;
+  margin-top: 1px;
+}
+
+
 .point:hover{
   background-color: #333;
 }
@@ -377,8 +402,8 @@ button{
 
 
 
-<div id="app" style="position:relative;left: 60px;width:calc(100% - 60px); height:100vh;">
-  <div style="width:60px;background-color: #eee; height: 100%; position: fixed; top:0px; left:0px; padding: 4px;">
+<div id="app" style="position:relative;left: 60px;width:calc(100% - 60px); height:calc(100vh - 200px)">
+  <div style="width:60px;background-color: #eee; position: fixed; top:0px; left:0px; padding: 4px; height: 100%;">
     <div v-for="(storyPoint, ind) in storyPoints"
          @click="storyPointInd = ind"
          class="has-tooltip"
@@ -462,7 +487,7 @@ You are going to bring us into this new world of <span class="animated infinite 
 
 
 <div>
-In a distant land and serene land, knowledge of statistics and probability was widespread. The people were kind and loving. 
+In a distant and serene land, knowledge of statistics and probability was widespread. The people were kind and loving. 
 </div>
 
 <div>
@@ -561,7 +586,7 @@ The characters you gotta know:
   <div v-for="point in points" 
   @click="set(point.key)" 
   class="point has-tooltip" 
-  :class="{'active-point': point.key == activeOrLastKnownPoint}"
+  :class="pointClass(point)"
   :style="pointStyle(point)">
     <span>{{point.name}}</span>
   </div>
@@ -693,6 +718,18 @@ The characters you gotta know:
   <buton nope>Not enough info</buton>
 </avatar>
 
+<!-- stopped here: thinking how to phrase this
+
+  <avatar key="10HT"
+  v-if="show('10HT')"
+  image="monster.png" 
+  text="How many different possible outcomes are there for tossing a coin 10 times?">
+  <buton @clik="set('10HT-interstitial')" yay>10</buton>
+  <buton nope>11</buton>
+  <buton nope>20</buton>
+  <buton nope>1024</buton>
+</avatar> -->
+
 <interstitial 
     image="monster.png"
     key="10HT-interstitial" 
@@ -822,7 +859,7 @@ The characters you gotta know:
   <div v-for="point in points" 
   @click="set(point.key)" 
   class="point has-tooltip" 
-  :class="{'active-point': point.key == activeOrLastKnownPoint}"
+  :class="pointClass(point)"
   :style="pointStyle(point)">
     <span>{{point.name}}</span>
   </div>
@@ -856,9 +893,11 @@ The characters you gotta know:
   <coin :bias="0.7"></coin>
 
   <div class="handwriting">The unfair coin is:</div>
-  <buton nope>A</buton>
-  <buton nope>B</buton>
-  <buton yay @click="set('interactive')">C</buton>
+  <div>
+    <buton nope>A</buton>
+    <buton nope>B</buton>
+    <buton yay @click="set('interactive')">C</buton>
+  </div>
 
   <template v-slot:hint>
     Hint: One coin has a tendency to land on one side more than the other.
@@ -963,10 +1002,10 @@ The characters you gotta know:
 </script>
 
 <script type="text/x-template" id="coin-template">
-  <div @click="flip" class="coin">
+  <div @click="flip" class="coin normal-div">
     <img v-if="isShowingH" src="images/coin_heads.png" style="width:100px">
     <img v-if="!isShowingH" src="images/coin_tails.png" style="width:100px">
-    <div style="font-size:12px; min-height: 60px;">{{flipString}}</div>
+    <div ref="flip-string" style="font-size:13px;" :style="flipStringStyle">{{flipString}}</div>
     <histogram v-if="flips.length > 0" :hist="hist"></histogram>
   </div>
 </script>
@@ -976,7 +1015,7 @@ The characters you gotta know:
 <script type="text/x-template" id="biased-coin-machine-template">
 <div>
   <div>Adjust the bias, and click coin to flip.</div>
-  <span>Lands H with {{$root.renderAsPercent(bias)}} probability:</span>
+  <span>Lands H with {{$root.formatPct(bias)}} probability:</span>
   <input v-model="slider" type="range" min="0" max="100" style="width:200px">
 
   <div>
@@ -995,7 +1034,7 @@ The characters you gotta know:
   <div v-for="point in points" 
   @click="set(point.key)" 
   class="point has-tooltip" 
-  :class="{'active-point': point.key == activeOrLastKnownPoint}"
+  :class="pointClass(point)"
   :style="pointStyle(point)">
     <span>{{point.name}}</span>
   </div>
@@ -1065,7 +1104,7 @@ The characters you gotta know:
 <avatar key="conditional1" 
         v-if="show('conditional1')"
         image="girl.png" 
-        text="It turns out that being tall and having great hair are slightly correlated, so they're not independent. I told you before that 1/4 of all monsters have great hair. But about 1/3 of tall monsters have great hair.">
+        text="It turns out that being tall and having great hair are slightly correlated, so they're not independent. I said before that 1/4 of all monsters have great hair. But about 1/3 of tall monsters have great hair.">
 
   <div>
     In math language, Veronica just told us a <bold>conditional probability</bold>. 
@@ -1327,7 +1366,7 @@ The characters you gotta know:
     key="mind-blown" 
     v-if="show('mind-blown')">
   <div>
-    One quick thing that may really blow your mind.
+    One quick thing that may blow your mind.
   </div>
 
   <div>
@@ -1385,7 +1424,7 @@ The characters you gotta know:
   <div v-for="point in points" 
   @click="set(point.key)" 
   class="point has-tooltip" 
-  :class="{'active-point': point.key == activeOrLastKnownPoint}"
+  :class="pointClass(point)"
   :style="pointStyle(point)">
     <span>{{point.name}}</span>
   </div>
@@ -1555,6 +1594,12 @@ The characters you gotta know:
           :height="hist.yScale(arr.length)"
           :key="bin"
           fill="#E9BE2B"/>
+
+      <text v-for="(arr, bin) in hist.bins" 
+        :x="hist.xScale(bin)+12"
+        :y="chartHeight - hist.yScale(arr.length) - 2">
+        {{ label(arr) }}
+      </text>
     </g>
 </svg>
 </div>
@@ -1562,7 +1607,7 @@ The characters you gotta know:
 
 
 <script type="text/x-template" id="avatar-template">
-<div style="position: relative; height: 700px; width:600px; margin:0 auto; margin-top:16px">
+<div style="position: relative; width:600px; margin:0 auto; margin-top:16px">
 
 <!--
 <transition name="slide-fade">
@@ -1640,14 +1685,14 @@ The characters you gotta know:
 <div v-if="showCop" style="position:absolute; top: 200px; left:0px;" @click="showCop=false">
   <img src="images/cop.png" >
   <div style="position:absolute; left: 200px; top:0px">
-    <img src="images/up_dialog.png" style="height: 400px">
+    <img src="images/up_dialog.png" style="height: 500px">
     <div class="small-dialog-text" style="position:absolute; left:0px; top:0px; padding:28px">
 
       <div v-if="showHint">
         <slot name="hint"></slot>
       </div>
 
-    <div class="handwriting" style="position:absolute; left:28px; top:280px; font-size:12px">Click to dismiss</div>
+    <div class="handwriting" style="position:absolute; left:28px; top:360px; font-size:12px">Click to dismiss</div>
   </div>
 </div>
 </div> 
@@ -1744,6 +1789,26 @@ The characters you gotta know:
 const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
 // https://alligator.io/vuejs/global-event-bus/
 const bus = new Vue();
+
+
+const store = new Vuex.Store({
+  state: {
+    flipStringHeight: 20,
+  },
+  // sync // store.commit('name', payload)
+  mutations: {
+    flipStringHeight(state, height){
+      state.flipStringHeight = height;
+    },
+  },
+  // async  // state.dispatch('name', payload);
+  actions: {
+  }, 
+  // Put shared logic 
+  getters: {
+  }
+});
+
 
 var sounds = {
   'coin': {clip: new Audio('sounds/gold1.wav')},
@@ -1887,12 +1952,15 @@ Vue.component('coin', {
   },
   data: function(){
     return {
-      flips: [], //true, false, true, true], 
+      flips: [true, false, true, true], 
     }
   },
   computed: {
     flipString: function(){
       return this.flips.map(this.render).join('');
+    },
+    flipStringStyle: function(){
+      return { 'min-height': store.state.flipStringHeight + 'px'};
     },
     isShowingH: function(){
       if (this.flips.length == 0){
@@ -1917,16 +1985,26 @@ Vue.component('coin', {
       // const bins = histogram(this.flips);
 
       const bins = _.groupBy(this.flips.map(this.render));
-      const domain = [0, _.sum(_.map(_.values(bins), arr => arr.length))];
+      const counts = _.map(_.values(bins), arr => arr.length);
+      // const pcts = _.map(counts, x => this.$root.formatPct(x / _.sum(counts)));
       const yScale = d3.scaleLinear()
-          .domain(domain).range([0, 80]);
-
+          .domain([0, _.sum(counts)]).range([0, 80]);
       return {
         xScale: xScale,
         yScale: yScale,
         bins: bins,
       };
     },
+  },
+  watch: {
+    flipString(){
+      const height = this.$refs['flip-string'].clientHeight;
+//      console.log('height: ' + height);
+      if (height > store.state.flipStringHeight){
+        console.log('updating height to: ' + height);
+//        store.commit('flipStringHeight', height);
+      }
+    }
   },
   methods: {
     render: function(flip){
@@ -2313,6 +2391,13 @@ Vue.component('histogram', {
 //    chart.append('g').call(yAxis);
     chart.append('g').attr('transform', 'translate(0,' + this.chartHeight + ')').call(xAxis);
   },
+  methods: {
+    label: function(arr){
+      const total = _.sum(_.values(this.hist.bins).map(a => a.length));
+//      console.log('length: ' + arr.length + ' total: ' + total);
+      return this.$root.formatPct(arr.length / total);
+    }
+  },
   template: '#histogram-template'
 });
 
@@ -2455,12 +2540,18 @@ function makeComponent(componentName, points, reactions){
         return false;
       },
       pointStyle: function(point){
+        var style = {};
         if (this.perfect(point.key)){
-          return {
-            'background-image' : "url('images/rainbow.png')",
-            'background-size': 'cover'
-          };
-        } 
+          style['background-image'] = "url('images/rainbow.png')";
+          style['background-size'] = 'cover';
+        }
+        return style; 
+      },
+      pointClass: function(point){
+        return {
+          'active-point': point.key == this.activeOrLastKnownPoint,
+          'circle': point.problem
+        };
       },
       finish: async function(){
         this.$root.play('achievement');
@@ -2476,12 +2567,12 @@ makeComponent('intro-scene');
 makeComponent('coin-flips', 
 [
   { key: 'intro', name: 'Intro', },
-  { key: 'HH', name: 'Probability of 2 heads', },
-  { key: 'HHH', name: 'Probability of 3 heads', },
-  { key: '10H', name: 'Probability of 10 heads', },
-  { key: '10HT', name: 'Probability of 10 heads and tails', },
-  { key: 'HHHHH', name: '5 heads', },
-  { key: '100H', name: '100 heads', },
+  { key: 'HH', name: 'Probability of 2 heads', problem: true},
+  { key: 'HHH', name: 'Probability of 3 heads', problem: true},
+  { key: '10H', name: 'Probability of 10 heads', problem: true},
+  { key: '10HT', name: 'Probability of 10 heads and tails', problem: true},
+  { key: 'HHHHH', name: '5 heads', problem: true},
+  { key: '100H', name: '100 heads', problem: true},
   { key: 'quest', name: 'Quest', },
 ],
 {
@@ -2493,23 +2584,23 @@ makeComponent('coin-flips',
 makeComponent('wizard-flips',
 [
   { key: 'intro', name: 'Intro', },
-  { key: '3coins', name: '3 coins', },
+  { key: '3coins', name: '3 coins', problem: true},
   { key: 'interactive', name: 'Play with biased coin', },
-  { key: '3coins2', name: '3 more coins', },
-  { key: '3coins3', name: 'Final 3 coins ', },
+  { key: '3coins2', name: '3 more coins', problem: true},
+  { key: '3coins3', name: 'Final 3 coins ', problem: true},
   { key: 'fin', name: 'fin', },
 ]); 
 
 // Conditional prob + join prob with chain rule
 makeComponent('chain-rule', [
   { key: 'intro', name: 'Intro', },
-  { key: 'fakeout1', name: 'Independence', },
+  { key: 'fakeout1', name: 'Independence', problem: true},
   { key: 'conditional1', name: 'Conditional probability', },
-  { key: 'tall-hair', name: 'P(tall AND great hair)', },
-  { key: 'fakeout2', name: 'Tattoos', },
+  { key: 'tall-hair', name: 'P(tall AND great hair)', problem: true},
+  { key: 'fakeout2', name: 'Tattoos', problem: true},
   { key: 'chainruleinter1', name: 'Chain Rule', },
-  { key: 'problem3', name: 'P(tall AND great hair AND tattoos)', },
-  { key: 'problem4', name: 'They need to be single', },
+  { key: 'problem3', name: 'P(tall AND great hair AND tattoos)', problem: true},
+  { key: 'problem4', name: 'They need to be single', problem: true},
   { key: 'mind-blown', name: 'Mind blown', },
   { key: 'congrats', name: 'Congrats', },
   ],
@@ -2670,16 +2761,19 @@ var storyPoints = [
   name: 'Coin Flips',
   component: 'coin-flips',
   image: 'monster.png',
+  color: '#82A81D',
 },
 {
   name: 'Bad Wizard',
   component: 'wizard-flips',
   image: 'wizard.png',
+  color: '#E9BE2B',
 },
 {
   name: 'Chain Rule',
   component: 'chain-rule',
   image: 'girl.png',
+  color: '#0082B6',
 },
 // {
 //   name: 'Risk Reward',
@@ -2695,7 +2789,7 @@ new Vue({
   el: '#app',
   data: {
     storyPoints: storyPoints,
-    storyPointInd: 2,
+    storyPointInd: 0,
     // Obj property additions do not update DOM, so prepopulate all the keys in the object. Or use lists.
     //soundNameToCount: {},
     show: false,
@@ -2713,7 +2807,7 @@ new Vue({
   // },
   methods: {
 //    show: show, 
-    renderAsPercent: renderAsPercent,
+    formatPct: formatPct,
     // round_to(2.777777, 0) -> 3
     // round_to(2.777777, 2) -> 2.78
     roundTo: roundTo,
@@ -2736,7 +2830,7 @@ new Vue({
     //     numWinIfRight: 1, 
     //     numLoseIfWrong: this.roundTo(certainty/(1-certainty), 1),
     //     certainty: certainty,
-    //     percent: this.renderAsPercent(certainty)
+    //     percent: this.formatPct(certainty)
     //   };      
     // },
     // paramsFromBet: function(num_win_if_right, num_lose_if_wrong){

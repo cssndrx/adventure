@@ -202,7 +202,7 @@ function cumulativeSum(arr){
 // }
 
 
-function renderAsPercent(certainty){
+function formatPct(certainty){
   return roundTo(certainty*100, 0) + '%';
 }
 
