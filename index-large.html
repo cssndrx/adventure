@@ -2059,7 +2059,7 @@ Vue.component('distribution', {
   },
 
   methods: {
-    renderAsPercent: renderAsPercent,
+    renderAsPercent: formatPct,
     barStyle: function(outcome, barIndex){
       return {
         width: this.barWidth + 'px',
@@ -2467,11 +2467,11 @@ var storyPoints = [
 //   name: 'Forest Game',
 //   component: 'forest-game',
 // },
-// {
-//   name: 'Distribution Interlude',
-//   component: 'distribution-interlude',
-//   nest: 1
-// },
+{
+  name: 'Distribution Interlude',
+  component: 'distribution-interlude',
+  nest: 1
+},
 {
   name: 'Cats',
   component: 'cat-forest',
@@ -2503,7 +2503,7 @@ new Vue({
 
   methods: {
     show: show, 
-    renderAsPercent: renderAsPercent,
+    renderAsPercent: formatPct,
 
     // round_to(2.777777, 0) -> 3
     // round_to(2.777777, 2) -> 2.78

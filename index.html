@@ -478,6 +478,214 @@ You are going to bring us into this new world of <span class="animated infinite 
   </div>
 </script>
 
+<script type="text/x-template" id="intro-to-distributions-template">
+<div style="width:600px; margin: 0 auto;">
+
+
+<div class="point-container" style="width: 300px">
+  <div v-for="point in points" 
+  @click="set(point.key)" 
+  class="point has-tooltip" 
+  :class="pointClass(point)"
+  :style="pointStyle(point)">
+    <span>{{point.name}}</span>
+  </div>
+</div>
+
+<avatar key="intro"
+  v-if="show('intro')"
+  image="cop.png"
+  text="I think you're ready for it. The most powerful concept in all statistics.">
+  <buton-group :onClick="() => set('2')">
+    <buton>Ready yourself</buton>
+    <buton>Hold your breath</buton>
+  </buton-group>
+</avatar>
+
+<avatar key="2"
+  v-if="show('2')"
+  image="cop.png"
+  text="It's the idea of distributions. Anything we have uncertainty about can be represented as a distribution.">
+  <buton @click="set('3')">Next</buton>
+</avatar>
+
+<avatar key="3"
+  v-if="show('3')"
+  image="cop.png"
+  text="For instance, these are some of the distributions you have seen so far.">
+
+  todo: put in the distributions here.
+  <buton @click="set('4')">Next</buton>
+</avatar>
+
+<avatar key="4"
+  v-if="show('4')"
+  image="cop.png"
+  text="To make a distribution, put the possible outcomes on the x-axis, and the probabilities on the y-axis. Ensure that the probabilities sum up to 1.">
+  <buton @click="set('5')">Next</buton>
+</avatar>
+
+<avatar key="5"
+  v-if="show('5')"
+  image="cop.png"
+  text="Is this a valid distribution?">
+  picture
+  <buton @clik="set('6')">Yes</buton>
+  <buton>No</buton>
+</avatar>
+
+<avatar key="6"
+  v-if="show('6')"
+  image="wizard.png"
+  text="Oh boy! Is this the lesson on distributions?! Can I play??!">
+  <buton>Yes</buton>
+  <buton>No</buton>
+</avatar>
+
+<avatar key="7"
+  v-if="show('7')"
+  image="wizard.png"
+  text="That sure isn't a way to make friends! I don't need your permission to show you my EVIL PLAN distribution.">
+
+  CHECK THIS OUT:
+
+
+  What is the probability that ____? 
+  How many more times likely is it to ___?
+</avatar>
+
+<avatar key="8"
+  v-if="show('8')"
+  image="wizard.png"
+  text="Now checkout my WORLD CHAOS distribution.">
+
+  What is the average amount of chaos I unleash on the world?
+
+  Pro tip: ___.
+</avatar>
+
+<avatar key="9"
+  v-if="show('9')"
+  image="wizard.png"
+  text="Aren't distributions useful??">
+
+  CONGRATS 
+
+  You learned: ___.
+</avatar>
+
+</div>
+</script>
+
+<script type="text/x-template" id="distribution-template">
+<div class="dist"
+     :style="{ height: chartHeight + 'px', width: chartWidth + 'px'}"
+     style="position:relative; margin-bottom:64px;">
+
+  <!-- add axis containing important points -->
+  <div class="axis" 
+      style="position:relative; bottom: 0px; border-top: 1px solid #F6AB83; font-size:10px; padding-top:8px; text-transform:uppercase"
+      :style="{top: chartHeight + 'px'}">
+    {{xAttr}}</div>
+
+  <div class="bar" v-for="(outcome, index) in outcomes"
+       :key="outcome"
+       :style="barStyle(outcome, index)"
+       style="position:absolute; background-color:#C55A2C; bottom:0px; text-align: center; font-size:10px; color: white; margin-bottom:0px;"
+       >
+       {{renderAsPercent(outcome.certainty)}}
+       
+       <div class="hp-text" style="position:absolute; bottom:-30px; width: 100%; color:black;">{{outcome.hp}}</div>
+  </div>
+
+  <!-- show the mean as a bar -->
+  <div v-if="showMean" style="border-left: 2px solid #74361F; width:0px; height:160px; position:absolute; bottom: 0px; pointer-events:none; font-size:8px; white-space: nowrap; position:relative;"
+       :style="meanStyle">
+
+     <span style="position:absolute;bottom:-12px; color: #74361F; left:-15px; font-weight: bold;">mn {{ $root.roundTo(stats.mean, 1)}}</span>
+
+    <!-- show the std as a horizontal thing -->
+    <div v-if="showStd" style="height: 14px; border-top: 1px solid #F6AB83; 
+    border-bottom: 1px solid #F6AB83; position:absolute; bottom: -52px; color: #F6AB83; text-align: center; padding-top:2px"
+         :style="stdStyle">sd {{$root.roundTo(stats.std, 1)}}</div>
+
+  </div>
+</div>
+</script>
+
+<script type="text/x-template" id="intro-to-samples-template">
+<div style="width:600px; margin: 0 auto;">
+
+
+<div class="point-container" style="width: 300px">
+  <div v-for="point in points" 
+  @click="set(point.key)" 
+  class="point has-tooltip" 
+  :class="pointClass(point)"
+  :style="pointStyle(point)">
+    <span>{{point.name}}</span>
+  </div>
+</div>
+
+
+<distribution></distribution>
+
+<avatar key="intro"
+  v-if="show('intro')"
+  image="wizard.png"
+  text="Distributions are nice for capturing the theory, but *samples* are what you'll encounter in the real world.">
+  <buton @click="set('2')">Er...</buton>
+  <buton @click="set('2')">Yes</buton>
+</avatar>
+
+<avatar key="2"
+  v-if="show('2')"
+  image="wizard.png"
+  text="Let's practice drawing samples from my EVIL PLAN distribution.">
+  <buton @click="set('2')">Draw samples</buton>
+</avatar>
+
+<avatar key="3"
+  v-if="show('3')"
+  image="cop.png"
+  text="I leave you unsupervised for a few moments... and now you're helping the Bad Wizard?">
+</avatar>
+
+<avatar key="4"
+  v-if="show('4')"
+  image="wizard.png"
+  text="Heh. What can I say... I'm a very good teacher. And you have a very eager trainee.">
+</avatar>
+ 
+<avatar key="5"
+  v-if="show('5')"
+  image="wizard.png"
+  text="Well, you can try and stop me... I've set up a little game for you.">
+
+  <div>
+    Guess the distribution that the samples came from to stop the wizard's evil plan.
+  </div>
+
+  Evil Unleashed (num sample): ___
+
+  <buton>Draw sample</buton>
+  <div>
+    Try not to draw too many samples. Each sample you draw unleashes evil on the world.
+  </div>
+
+  Guess:
+  <buton>Plan A</buton>
+  <buton>Plan B</buton>
+  <buton>Plan C</buton>
+
+
+</avatar>
+
+
+
+</div>
+</script>
+
 <script type="text/x-template" id="intro-scene-template">
 <div style="width:600px; margin: 0 auto;">
 
@@ -519,7 +727,6 @@ The characters you gotta know:
   text="Hey! You're the new trainee, right?">
   <buton @click="set('2')">Er...</buton>
   <buton @click="set('2')">Yes</buton>
-
 </avatar>
 
 
@@ -2618,6 +2825,33 @@ makeComponent('risk-reward', [
   { key: '100-chart', name: 'Binomial distribution', },
   { key: 'congrats', name: 'Congrats', },
 ]); 
+makeComponent('intro-to-distributions', [
+  { key: 'intro', name: 'Intro', },
+
+  { key: '2', name: 'Independence'},
+  { key: '3', name: 'Independence'},
+  { key: '4', name: 'Independence'},
+
+  { key: '5', name: 'Independence'},
+  { key: '6', name: 'Independence'},
+  { key: '7', name: 'Independence'},
+  { key: '8', name: 'Independence'},
+
+  ]);
+makeComponent('intro-to-samples', [
+  { key: 'intro', name: 'Intro', },
+
+  { key: '2', name: 'Independence'},
+  { key: '3', name: 'Independence'},
+  { key: '4', name: 'Independence'},
+
+  { key: '5', name: 'Independence'},
+  { key: '6', name: 'Independence'},
+  { key: '7', name: 'Independence'},
+  { key: '8', name: 'Independence'},
+
+  ]);
+
 // Can be used to delay logic
 // <delay></delay>
 Vue.component('delay', {
@@ -2647,6 +2881,7 @@ Vue.component('delay', {
   },
   template: `<span v-if="shouldTrigger" style="compStyle"><slot></slot></span>`,
 });
+
 // Hides content until it is revealed as part of the story.
 Vue.component('story', {
   props: {
@@ -2662,6 +2897,145 @@ Vue.component('story', {
   },
   template: '#story-template'
 });
+
+
+// outcomes = [
+//  {certainty: 0.4, hp: 15, caption: 'warmth'}, 
+//  {certainty: 0.6, hp: 0, caption: 'you fail to start the fire'}
+// ]
+
+// categorical x
+outcomes = [
+  {x: 'tattoos', y: 0.2},
+  {x: 'no tattoos', y: 0.8},
+]
+
+// numerical x
+outcomes = [
+  {x: 1, y: 0.1},
+  {x: 2, y: 0.2},
+  {x: 3, y: 0.3},
+  {x: 4, y: 0.4},
+]
+
+
+Vue.component('distribution', {
+  props: {
+    outcomes: {type: Array, default: function(){
+      return [
+       {certainty: 0.4, hp: 5, caption: 'warmth'}, 
+       {certainty: 0.6, hp: 0, caption: 'you fail to start the fire'}
+      ];
+    }},
+    // barWidth: {type: Number, default: 50},
+
+    chartHeight: {type: Number, default: 160},
+    chartWidth: {type: Number, default: 400},
+
+    xAttr: {type: String, default: 'hp'},
+    yAttr: {type: String, default: 'certainty'},
+
+    // If we want the x-axis to be the same between problems, so
+    // hardcode it here.
+    xMin: {type: Number, default: -10},
+    xMax: {type: Number, default: 10},
+    // Uses xMin and xMax if false, otherwise fits to smallest xMin and xMax.
+    fittedX: {type: Boolean, default: false},
+    showMean: {type: Boolean, default: false},
+    showStd: {type: Boolean, default: false},
+
+    margin: {
+      type: Object, 
+      default: function(){
+        return {top: 0, right: 0, bottom: 0, left: 20};
+      }
+    },
+  },
+  computed: {
+    barWidth: function(){
+      var domain = this.domain;
+      return (this.chartWidth - this.margin.left - this.margin.right) / (domain[1] - domain[0]);
+    },
+    domain: function(){
+      // Note: we adjust for barWidth within barStyle.
+      var xVals = _.map(this.outcomes, outcome => outcome[this.xAttr]);
+      return this.fittedX ? [_.min(xVals), _.max(xVals)] : [this.xMin, this.xMax];
+    },
+    xScale: function(){
+      return d3.scaleLinear()
+        .domain(this.domain)
+        .range([this.margin.left, this.chartWidth-this.margin.right]);
+    },
+
+    yScale: function(){
+      return d3.scaleLinear()
+        .domain([0, 1])
+        .range([this.margin.bottom, this.chartHeight-this.margin.top]);
+    },
+    stats: function(){
+      return {
+        mean: outcomesMean(this.outcomes), 
+        std: outcomesStd(this.outcomes),
+      }      
+    },
+    meanStyle: function(){
+      return {
+        left: this.xScale(this.stats.mean) + 'px',
+      }
+    }, 
+    stdStyle: function(){
+      var width = this.stats.std * this.barWidth; 
+      return {
+        // left: this.meanStyle.left,
+        width: width + 'px',
+      }
+    }
+  },
+
+  data: function(){
+    return {
+      animatedInd: null,
+    }
+  },
+
+  methods: {
+    renderAsPercent: formatPct,
+    barStyle: function(outcome, barIndex){
+      return {
+        width: this.barWidth + 'px',
+        height: this.yScale(outcome[this.yAttr]) + 'px',
+        left: (this.xScale(outcome[this.xAttr]) - this.barWidth / 2) + 'px',
+        'background-color': barIndex === this.animatedInd ? 'blue': 'orange'
+      };
+    },
+
+    // this was for EV forest
+    // drawOutcome: async function(){
+    //   var numCycles = 5;
+    //   var outcomeInd = drawIndFromOutcomes(this.outcomes);
+    //   var numIters = numCycles*this.outcomes.length+outcomeInd -1;
+
+    //   // milliseconds
+    //   var activeTimes = this.outcomes.map(outcome => outcome.certainty * 500);
+
+    //   // Each outcome is active for a different length of time.
+    //   for (var i=0; i<numIters; i++){
+    //     var animatedInd = i % activeTimes.length;
+    //     this.animatedInd = animatedInd;
+    //     await wait(activeTimes[animatedInd]);
+
+    //     // Check if it's the last one and emit an event.
+    //     if (i == numIters-1){
+    //       this.$emit('outcome-drawn', {outcomeInd: outcomeInd});
+    //     }
+    //   }
+    // },
+
+  },
+  template: '#distribution-template'
+});
+
+
 /*
 How should this work:
 - split the text into words
@@ -2775,6 +3149,19 @@ var storyPoints = [
   image: 'girl.png',
   color: '#0082B6',
 },
+{
+  name: 'Distributions',
+  component: 'intro-to-distributions',
+  image: 'cop.png',
+  color: '#0082B6',
+},
+{
+  name: 'Samples',
+  component: 'intro-to-samples',
+  image: 'wizard.png',
+  color: '#0082B6',
+},
+
 // {
 //   name: 'Risk Reward',
 //   component: 'risk-reward',
@@ -2789,7 +3176,7 @@ new Vue({
   el: '#app',
   data: {
     storyPoints: storyPoints,
-    storyPointInd: 0,
+    storyPointInd: 5,
     // Obj property additions do not update DOM, so prepopulate all the keys in the object. Or use lists.
     //soundNameToCount: {},
     show: false,
