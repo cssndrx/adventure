@@ -369,7 +369,7 @@ button{
 }
 .coin{
   display: inline-block;
-  width:100px;
+  width: 150px;
   cursor: pointer;
   vertical-align: top;
   word-wrap: break-word;
@@ -394,6 +394,14 @@ button{
 .nope{
   color:red; 
   font-size: 14px; 
+}
+
+.intro-to-distributions .distribution{
+  display: inline-block;
+}
+
+.intro-to-distributions .icon{
+  width: 50px;
 }
 
 </style>
@@ -479,7 +487,7 @@ You are going to bring us into this new world of <span class="animated infinite 
 </script>
 
 <script type="text/x-template" id="intro-to-distributions-template">
-<div style="width:600px; margin: 0 auto;">
+<div style="width:600px; margin: 0 auto;" class="intro-to-distributions">
 
 
 <div class="point-container" style="width: 300px">
@@ -497,25 +505,38 @@ You are going to bring us into this new world of <span class="animated infinite 
   image="cop.png"
   text="I think you're ready for it. The most powerful concept in all statistics.">
   <buton-group :onClick="() => set('2')">
-    <buton>Ready yourself</buton>
-    <buton>Hold your breath</buton>
+    <buton>*drumroll*</buton>
   </buton-group>
 </avatar>
 
 <avatar key="2"
   v-if="show('2')"
   image="cop.png"
-  text="It's the idea of distributions. Anything we have uncertainty about can be represented as a distribution.">
+  text="It's the idea of distributions. A distribution is a plot where outcomes are on the x-axis, and probabilities are on the y-axis.">
   <buton @click="set('3')">Next</buton>
+
+  <div>
+    For instance, ___. 
+  </div>
 </avatar>
 
 <avatar key="3"
   v-if="show('3')"
   image="cop.png"
-  text="For instance, these are some of the distributions you have seen so far.">
+  text="These are some of the distributions you have seen so far.">
 
-  todo: put in the distributions here.
-  <buton @click="set('4')">Next</buton>
+<div><img class="icon" src="images/monster.png">Green monster's distributions</div>
+<distribution :title="fairCoin.title" :outcomes="fairCoin.outcomes"></distribution>
+<distribution :title="unfairCoin.title" :outcomes="unfairCoin.outcomes"></distribution>
+
+<div><img class="icon" src="images/girl.png">Veronica's distributions</div>
+<distribution :title="greatHair.title" :outcomes="greatHair.outcomes"></distribution>
+<distribution :title="greatHairGivenTall.title" :outcomes="greatHairGivenTall.outcomes"></distribution>
+
+<div>
+<buton @click="set('4')">Next</buton>
+</div>
+
 </avatar>
 
 <avatar key="4"
@@ -538,7 +559,7 @@ You are going to bring us into this new world of <span class="animated infinite 
   v-if="show('6')"
   image="wizard.png"
   text="Oh boy! Is this the lesson on distributions?! Can I play??!">
-  <buton>Yes</buton>
+  <buton yay>Yes</buton>
   <buton>No</buton>
 </avatar>
 
@@ -557,7 +578,7 @@ You are going to bring us into this new world of <span class="animated infinite 
 <avatar key="8"
   v-if="show('8')"
   image="wizard.png"
-  text="Now checkout my WORLD CHAOS distribution.">
+  text="Now checkout my WORLD CHAOS distribution. ">
 
   What is the average amount of chaos I unleash on the world?
 
@@ -577,39 +598,11 @@ You are going to bring us into this new world of <span class="animated infinite 
 </div>
 </script>
 
-<script type="text/x-template" id="distribution-template">
-<div class="dist"
-     :style="{ height: chartHeight + 'px', width: chartWidth + 'px'}"
-     style="position:relative; margin-bottom:64px;">
-
-  <!-- add axis containing important points -->
-  <div class="axis" 
-      style="position:relative; bottom: 0px; border-top: 1px solid #F6AB83; font-size:10px; padding-top:8px; text-transform:uppercase"
-      :style="{top: chartHeight + 'px'}">
-    {{xAttr}}</div>
-
-  <div class="bar" v-for="(outcome, index) in outcomes"
-       :key="outcome"
-       :style="barStyle(outcome, index)"
-       style="position:absolute; background-color:#C55A2C; bottom:0px; text-align: center; font-size:10px; color: white; margin-bottom:0px;"
-       >
-       {{renderAsPercent(outcome.certainty)}}
-       
-       <div class="hp-text" style="position:absolute; bottom:-30px; width: 100%; color:black;">{{outcome.hp}}</div>
-  </div>
-
-  <!-- show the mean as a bar -->
-  <div v-if="showMean" style="border-left: 2px solid #74361F; width:0px; height:160px; position:absolute; bottom: 0px; pointer-events:none; font-size:8px; white-space: nowrap; position:relative;"
-       :style="meanStyle">
-
-     <span style="position:absolute;bottom:-12px; color: #74361F; left:-15px; font-weight: bold;">mn {{ $root.roundTo(stats.mean, 1)}}</span>
-
-    <!-- show the std as a horizontal thing -->
-    <div v-if="showStd" style="height: 14px; border-top: 1px solid #F6AB83; 
-    border-bottom: 1px solid #F6AB83; position:absolute; bottom: -52px; color: #F6AB83; text-align: center; padding-top:2px"
-         :style="stdStyle">sd {{$root.roundTo(stats.std, 1)}}</div>
-
-  </div>
+<script type="text/x-template" id="samples-from-distribution-template">
+<div>
+  <distribution ref="distribution" :outcomes="outcomes"></distribution>
+  <samples-chart v-if="samples.length > 0" :xDomain="xDomain" :samples="samples" :chartWidth="200" :chartHeight="150"></samples-chart>
+  <buton @click="draw">Draw samples</buton>
 </div>
 </script>
 
@@ -628,8 +621,6 @@ You are going to bring us into this new world of <span class="animated infinite 
 </div>
 
 
-<distribution></distribution>
-
 <avatar key="intro"
   v-if="show('intro')"
   image="wizard.png"
@@ -641,14 +632,19 @@ You are going to bring us into this new world of <span class="animated infinite 
 <avatar key="2"
   v-if="show('2')"
   image="wizard.png"
-  text="Let's practice drawing samples from my EVIL PLAN distribution.">
-  <buton @click="set('2')">Draw samples</buton>
+  text="Let's draw samples from my EVIL PLAN distribution.">
+
+  <div>See how the samples may look quite different from the distribution that they came from.</div>
+
+  <!-- little screams from drawing samples -->
+  <samples-from-distribution></samples-from-distribution>
+
 </avatar>
 
 <avatar key="3"
   v-if="show('3')"
   image="cop.png"
-  text="I leave you unsupervised for a few moments... and now you're helping the Bad Wizard?">
+  text="I leave you unsupervised for a few moments... and you're helping the Bad Wizard?">
 </avatar>
 
 <avatar key="4"
@@ -670,7 +666,7 @@ You are going to bring us into this new world of <span class="animated infinite 
 
   <buton>Draw sample</buton>
   <div>
-    Try not to draw too many samples. Each sample you draw unleashes evil on the world.
+    Try not to draw too many samples. Each sample you draw unleashes some evil on the world.
   </div>
 
   Guess:
@@ -1142,7 +1138,7 @@ The characters you gotta know:
   <buton nope>C</buton>
 
   <template v-slot:hint>
-    Hint: The wizard may be having a joke at your expense.
+    Hint: Look at the pattern of coin flips. The wizard may be having a joke at your expense.
   </template>
 
 </avatar>
@@ -1175,7 +1171,7 @@ The characters you gotta know:
   <buton nope>C</buton>
 
   <template v-slot:hint>
-    Hint: One of these coins is a bit shy.
+    Hint: Look at the pattern of coin flips. One of these coins is a bit shy.
   </template>
 </avatar>
 
@@ -1213,10 +1209,9 @@ The characters you gotta know:
     <img v-if="isShowingH" src="images/coin_heads.png" style="width:100px">
     <img v-if="!isShowingH" src="images/coin_tails.png" style="width:100px">
     <div ref="flip-string" style="font-size:13px;" :style="flipStringStyle">{{flipString}}</div>
-    <histogram v-if="flips.length > 0" :hist="hist"></histogram>
+    <samples-chart v-if="flips.length > 0" :xDomain="xDomain" :samples="samples"></samples-chart>
   </div>
 </script>
-
 
 
 <script type="text/x-template" id="biased-coin-machine-template">
@@ -1787,26 +1782,57 @@ The characters you gotta know:
 <span class="bold"><slot></slot></span> 
 </script>
 
-<script type="text/x-template" id="histogram-template">
+<script type="text/x-template" id="distribution-template">
+<div class="distribution">
+<div v-if="title" class="handwriting" style="text-align: center;">{{title}}</div>
+
+<svg :width="chartWidth+margin.left+margin.right" 
+     :height="chartHeight+margin.top+margin.bottom">
+    <g v-if="isCreated" 
+      class="container"
+      :transform="'translate(' + margin.left + ',' + margin.top + ')'">
+      <rect v-for="outcome in outcomes"
+          :x="xScale(outcome.x)"
+          :y="yScale(outcome.y)"
+          :width="xScale.bandwidth()"
+          :height="chartHeight - yScale(outcome.y)"
+          :key="outcome.x"
+          fill="#001681"/>
+
+      <!-- top of bar -->
+      <text v-for="outcome in outcomes" 
+        :x="xScale(outcome.x) + xScale.bandwidth()/2 - 8"
+        :y="yScale(outcome.y) - 2">
+        {{ outcome.y }}
+      </text>
+
+    </g>
+</svg>
+</div>
+</script>
+
+<script type="text/x-template" id="samples-chart-template">
 <div>
 <svg :width="chartWidth+margin.left+margin.right" 
      :height="chartHeight+margin.top+margin.bottom">
     <g v-if="isCreated" 
       class="container"
       :transform="'translate(' + margin.left + ',' + margin.top + ')'">
-      <rect v-for="(arr, bin) in hist.bins"
-          :x="hist.xScale(bin)"
-          :y="chartHeight - hist.yScale(arr.length)"
-          :width="hist.xScale.bandwidth()"
-          :height="hist.yScale(arr.length)"
-          :key="bin"
-          fill="#E9BE2B"/>
+      <rect v-for="(count, x) in counts"
+          :x="xScale(x)"
+          :y="yScale(count)"
+          :width="xScale.bandwidth()"
+          :height="chartHeight - yScale(count)"
+          :key="x"
+          fill="#E9BE2C"/>
 
-      <text v-for="(arr, bin) in hist.bins" 
-        :x="hist.xScale(bin)+12"
-        :y="chartHeight - hist.yScale(arr.length) - 2">
-        {{ label(arr) }}
+      <!-- top of bar -->
+      <text v-for="(count, x) in counts" 
+        :x="xScale(x)+ xScale.bandwidth()/2 - 4"
+        :y="yScale(count) - 2">
+        {{ count }}
       </text>
+
     </g>
 </svg>
 </div>
@@ -2159,14 +2185,15 @@ Vue.component('coin', {
   },
   data: function(){
     return {
-      flips: [true, false, true, true], 
+      flips: [], //true, false, true, true], 
     }
   },
   computed: {
     flipString: function(){
-      return this.flips.map(this.render).join('');
+      return this.samples.join('');
     },
     flipStringStyle: function(){
+      console.log('reading new flipStringHeight in computed: ' + store.state.flipStringHeight);
       return { 'min-height': store.state.flipStringHeight + 'px'};
     },
     isShowingH: function(){
@@ -2178,29 +2205,13 @@ Vue.component('coin', {
     last: function(){
       return this.flips[this.flips.length-1];
     },
-    hist: function(){
-      const xScale = d3.scaleBand()
-          .domain(['H', 'A']).paddingInner(.1).range([0, 100]);
 
-      // Why would this happen?
-      // histogram([false, true, false, true, false, false])
-      // Probably because d3 adaptive bins.
-      // (5) [Array(4), Array(0), Array(0)], Array(0), Array(2)]
-      // const histogram = d3.histogram()
-      //   .domain(xScale.domain());
-
-      // const bins = histogram(this.flips);
-
-      const bins = _.groupBy(this.flips.map(this.render));
-      const counts = _.map(_.values(bins), arr => arr.length);
-      // const pcts = _.map(counts, x => this.$root.formatPct(x / _.sum(counts)));
-      const yScale = d3.scaleLinear()
-          .domain([0, _.sum(counts)]).range([0, 80]);
-      return {
-        xScale: xScale,
-        yScale: yScale,
-        bins: bins,
-      };
+    xDomain(){
+      return ['H', 'A'];
+    },
+    // ['H', 'A', 'H', 'A']
+    samples(){
+      return this.flips.map(this.render);
     },
   },
   watch: {
@@ -2276,6 +2287,7 @@ Vue.component('biased-coin-machine', {
   },
   template: '#biased-coin-machine-template'
 });
+
 
 // You're the trainee right?
 // This causes the buttons to show up
@@ -2453,7 +2465,7 @@ Vue.component('avatar', {
       return 'images/'+ (this.reactionImage || this.image);
     },
     dialogClass: function(){
-      const maxLen = 140;
+      const maxLen = 200;
       const longText = this.text.length > maxLen;
 
       // hack. should do this recursively.
@@ -2564,11 +2576,140 @@ Vue.component('frac', {
 });
 
 
+function drawFromOutcomes(outcomes){
+  var ind = drawIndFromOutcomes(outcomes);
+  return outcomes[ind].x;
+}
+
+function drawIndFromOutcomes(outcomes){
+  var probs = _.map(outcomes, 'y');
+  if (!approx(sum(probs), 1.0)){
+    console.error('certainties for outcomes did not sum to 1: ' + outcomes);
+  }
+
+  var rand = Math.random();
+  var cumsum_probs = cumulativeSum(probs);
+  var cumsum_ind = 0;
+  while (cumsum_probs[cumsum_ind] < rand){
+    cumsum_ind++;
+  }
+  return cumsum_ind;
+}
+
+// // categorical x
+// outcomes = [
+//   {x: 'tattoos', y: 0.2},
+//   {x: 'no tattoos', y: 0.8},
+// ]
+
+// // numerical x
+// outcomes = [
+//   {x: 1, y: 0.1},
+//   {x: 2, y: 0.2},
+//   {x: 3, y: 0.3},
+//   {x: 4, y: 0.4},
+// ]
+
 // histogram example
 // https://bl.ocks.org/d3noob/96b74d0bd6d11427dd797892551a103c
-Vue.component('histogram', {
+Vue.component('distribution', {
   props: {
-    hist: {type: Object }, // data for constructing the histogram {xScale: yScale: bins: }
+
+    title: {type: String},
+    // Pass in outcomes directly.
+    outcomes: {type: Array, default: function(){
+      return [
+        {x: 'tattoos', y: 0.2},
+        {x: 'no tattoos', y: 0.8},
+      ];
+
+      // return [
+      //   {x: 1, y: 0.1},
+      //   {x: 2, y: 0.2},
+      //   {x: 3, y: 0.3},
+      //   {x: 4, y: 0.4},
+      // ];
+    }},
+    chartHeight: {type: Number, default: 150},
+    chartWidth: {type: Number, default: 200},
+    margin: {
+      type: Object, 
+      default: function(){
+        return {top: 10, right: 10, bottom: 20, left: 30};
+      }
+    },
+  },
+  computed: {
+    xScale(){
+      return d3.scaleBand()
+          .domain(this.outcomes.map(d => d.x)).paddingInner(.1).range([0, this.chartWidth]);
+    },
+    yScale(){
+      return d3.scaleLinear()
+          .domain([0, 1]).range([this.chartHeight, 0]);
+    }
+  },
+  data: function(){
+    return {
+      isCreated: false,
+    }
+  },
+  created: function(){
+    // Add domains
+    this.isCreated = true;
+  },
+  mounted: function() {
+    // Add the axis
+    var xAxis = d3.axisBottom(this.xScale); //.ticks(8);
+    var yAxis = d3.axisLeft(this.yScale).ticks(4);
+
+    const chart = d3.select(this.$el).select('.container');
+    chart.append('g').call(yAxis);
+    chart.append('g').attr('transform', 'translate(0,' + this.chartHeight + ')').call(xAxis);
+  },
+  methods: {
+    draw(){
+      return drawFromOutcomes(this.outcomes);
+    }
+  },
+  template: '#distribution-template'
+});
+
+Vue.component('samples-from-distribution', {
+  props: {
+    title: {type: String},
+    outcomes: {type: Array, default: function(){
+      return  [
+          {x: 'Confuse people', y: .3},
+          {x: 'Annoy people', y: .4},
+          {x: 'Scare people', y: .3},
+        ];
+    }},
+  },
+  data(){
+    return {
+      samples: [],
+    };
+  },
+  computed: {
+    xDomain(){
+      return this.outcomes.map(d => d.x);
+    },
+  },
+  methods: {
+    draw(){
+      const outcome = this.$refs['distribution'].draw();
+      this.samples.push(outcome);
+    }
+  },
+  template: '#samples-from-distribution-template'
+});
+
+Vue.component('samples-chart', {
+  props: {
+    xDomain: {type: Array}, // ['H', 'T']
+    samples: {type: Array}, // ['H', 'H', 'H', 'T']
+        
     chartHeight: {type: Number, default: 80},
     chartWidth: {type: Number, default: 120},
     margin: {
@@ -2578,6 +2719,26 @@ Vue.component('histogram', {
       }
     },
   },
+  computed: {
+    xScale(){
+      return d3.scaleBand()
+          .domain(this.xDomain).paddingInner(.1).range([0, this.chartWidth]);
+    },
+    yScale(){
+      const sumCounts = _.sum(_.values(this.counts));
+      // const maxHeight = sumCounts == 1 ? this.xScale.bandwidth() : this.chartHeight;
+      return d3.scaleLinear()
+          .domain([0, sumCounts]).range([this.chartHeight, 0]);
+    },
+    counts(){
+      const bins = _.groupBy(this.samples);
+
+      // {'H': 0, 'T': 10}
+      return _.zipObject(this.xDomain, this.xDomain.map(function(x){
+        return x in bins ? bins[x].length : 0;
+      }));
+    }
+  },
   data: function(){
     return {
       isCreated: false,
@@ -2585,27 +2746,24 @@ Vue.component('histogram', {
   },
   created: function(){
     // Add domains
-    // this.hist.xScale.range([0, this.chartWidth]);
-    // this.hist.yScale.range([this.chartHeight, 0]);
     this.isCreated = true;
   },
   mounted: function() {
     // Add the axis
-    var xAxis = d3.axisBottom(this.hist.xScale); //.ticks(8);
-//    var yAxis = d3.axisLeft(this.hist.yScale);
+    var xAxis = d3.axisBottom(this.xScale); //.ticks(8);
+//    var yAxis = d3.axisLeft(this.yScale);
 
     const chart = d3.select(this.$el).select('.container');
 //    chart.append('g').call(yAxis);
     chart.append('g').attr('transform', 'translate(0,' + this.chartHeight + ')').call(xAxis);
   },
-  methods: {
-    label: function(arr){
-      const total = _.sum(_.values(this.hist.bins).map(a => a.length));
-//      console.log('length: ' + arr.length + ' total: ' + total);
-      return this.$root.formatPct(arr.length / total);
-    }
-  },
-  template: '#histogram-template'
+  // methods: {
+  //   label: function(arr){
+  //     const total = _.sum(_.values(this.hist.bins).map(a => a.length));
+  //     return this.$root.formatPct(arr.length / total);
+  //   }
+  // },
+  template: '#samples-chart-template'
 });
 
 
@@ -2622,6 +2780,7 @@ Vue.component('centered', {
 Vue.component('bold', {
   template: '#bold-template'
 });
+
 Vue.component('interstitial', {
   props: {
     image: {type: String, default: 'monster.png'}, 
@@ -2636,6 +2795,7 @@ Vue.component('interstitial', {
   },
   template: '#interstitial-template'
 });
+
 function makeComponent(componentName, points, reactions){
   var reactions = reactions || {};
   Vue.component(componentName, {
@@ -2646,6 +2806,39 @@ function makeComponent(componentName, points, reactions){
         points: points, // jump points in the story
         problemToCorrectness: {}, // 'fakeout1': [false, true]
         memory: null, // A variable for dumping short term component state.
+
+        fairCoin: {
+          title: 'P(fair coin)',
+          outcomes: [
+            {x: 'H', y: .5},
+            {x: 'T', y: .5},
+          ]
+        },
+
+        unfairCoin: {
+          title: 'P(unfair coin)',
+          outcomes: [
+            {x: 'H', y: .7},
+            {x: 'T', y: .3},
+          ]
+        },
+
+        greatHair: {
+          title: 'P(great hair)',
+          outcomes: [
+            {x: 'great hair', y: .25},
+            {x: 'not so great hair', y: .75},
+          ]
+        },
+
+        greatHairGivenTall: {
+          title: 'P(great hair | tall)',
+          outcomes: [
+            {x: 'great hair', y: .33},
+            {x: 'not so great hair', y: .67},
+          ]
+        },
+
       };
     },
     computed: {
@@ -2679,12 +2872,13 @@ function makeComponent(componentName, points, reactions){
           if (this_.perfect(problemKey)){
             this_.react('showRainbow', true);
           }
+        } else {
+          this_.addCorrectness(problemKey, false);          
         }
         
         // just a naked <buton nope>
         if (input.isNope){
           avatar.reactionImage = reactions.nope;
-          this_.addCorrectness(problemKey, false);  
         } 
         if ('coy' in input.$attrs){
           avatar.reactionImage = reactions.coy;
@@ -2714,6 +2908,7 @@ function makeComponent(componentName, points, reactions){
       }, 
       got: function(key){
         // Return the latest value
+//        debugger;
         if (this.problemToCorrectness[key]){
           var answers = this.problemToCorrectness[key];
           return answers[answers.length-1];
@@ -2898,142 +3093,6 @@ Vue.component('story', {
   template: '#story-template'
 });
 
-
-// outcomes = [
-//  {certainty: 0.4, hp: 15, caption: 'warmth'}, 
-//  {certainty: 0.6, hp: 0, caption: 'you fail to start the fire'}
-// ]
-
-// categorical x
-outcomes = [
-  {x: 'tattoos', y: 0.2},
-  {x: 'no tattoos', y: 0.8},
-]
-
-// numerical x
-outcomes = [
-  {x: 1, y: 0.1},
-  {x: 2, y: 0.2},
-  {x: 3, y: 0.3},
-  {x: 4, y: 0.4},
-]
-
-
-Vue.component('distribution', {
-  props: {
-    outcomes: {type: Array, default: function(){
-      return [
-       {certainty: 0.4, hp: 5, caption: 'warmth'}, 
-       {certainty: 0.6, hp: 0, caption: 'you fail to start the fire'}
-      ];
-    }},
-    // barWidth: {type: Number, default: 50},
-
-    chartHeight: {type: Number, default: 160},
-    chartWidth: {type: Number, default: 400},
-
-    xAttr: {type: String, default: 'hp'},
-    yAttr: {type: String, default: 'certainty'},
-
-    // If we want the x-axis to be the same between problems, so
-    // hardcode it here.
-    xMin: {type: Number, default: -10},
-    xMax: {type: Number, default: 10},
-    // Uses xMin and xMax if false, otherwise fits to smallest xMin and xMax.
-    fittedX: {type: Boolean, default: false},
-    showMean: {type: Boolean, default: false},
-    showStd: {type: Boolean, default: false},
-
-    margin: {
-      type: Object, 
-      default: function(){
-        return {top: 0, right: 0, bottom: 0, left: 20};
-      }
-    },
-  },
-  computed: {
-    barWidth: function(){
-      var domain = this.domain;
-      return (this.chartWidth - this.margin.left - this.margin.right) / (domain[1] - domain[0]);
-    },
-    domain: function(){
-      // Note: we adjust for barWidth within barStyle.
-      var xVals = _.map(this.outcomes, outcome => outcome[this.xAttr]);
-      return this.fittedX ? [_.min(xVals), _.max(xVals)] : [this.xMin, this.xMax];
-    },
-    xScale: function(){
-      return d3.scaleLinear()
-        .domain(this.domain)
-        .range([this.margin.left, this.chartWidth-this.margin.right]);
-    },
-
-    yScale: function(){
-      return d3.scaleLinear()
-        .domain([0, 1])
-        .range([this.margin.bottom, this.chartHeight-this.margin.top]);
-    },
-    stats: function(){
-      return {
-        mean: outcomesMean(this.outcomes), 
-        std: outcomesStd(this.outcomes),
-      }      
-    },
-    meanStyle: function(){
-      return {
-        left: this.xScale(this.stats.mean) + 'px',
-      }
-    }, 
-    stdStyle: function(){
-      var width = this.stats.std * this.barWidth; 
-      return {
-        // left: this.meanStyle.left,
-        width: width + 'px',
-      }
-    }
-  },
-
-  data: function(){
-    return {
-      animatedInd: null,
-    }
-  },
-
-  methods: {
-    renderAsPercent: formatPct,
-    barStyle: function(outcome, barIndex){
-      return {
-        width: this.barWidth + 'px',
-        height: this.yScale(outcome[this.yAttr]) + 'px',
-        left: (this.xScale(outcome[this.xAttr]) - this.barWidth / 2) + 'px',
-        'background-color': barIndex === this.animatedInd ? 'blue': 'orange'
-      };
-    },
-
-    // this was for EV forest
-    // drawOutcome: async function(){
-    //   var numCycles = 5;
-    //   var outcomeInd = drawIndFromOutcomes(this.outcomes);
-    //   var numIters = numCycles*this.outcomes.length+outcomeInd -1;
-
-    //   // milliseconds
-    //   var activeTimes = this.outcomes.map(outcome => outcome.certainty * 500);
-
-    //   // Each outcome is active for a different length of time.
-    //   for (var i=0; i<numIters; i++){
-    //     var animatedInd = i % activeTimes.length;
-    //     this.animatedInd = animatedInd;
-    //     await wait(activeTimes[animatedInd]);
-
-    //     // Check if it's the last one and emit an event.
-    //     if (i == numIters-1){
-    //       this.$emit('outcome-drawn', {outcomeInd: outcomeInd});
-    //     }
-    //   }
-    // },
-
-  },
-  template: '#distribution-template'
-});
 
 
 /*
