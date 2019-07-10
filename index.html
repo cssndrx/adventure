@@ -404,6 +404,10 @@ button{
   width: 50px;
 }
 
+.question-table td:nth-child(2){
+  width: 200px;
+}
+
 </style>
 
 <body>
@@ -503,56 +507,105 @@ You are going to bring us into this new world of <span class="animated infinite 
 <avatar key="intro"
   v-if="show('intro')"
   image="cop.png"
-  text="I think you're ready for it. The most powerful concept in all statistics.">
-  <buton-group :onClick="() => set('2')">
-    <buton>*drumroll*</buton>
-  </buton-group>
+  text="Hm. The Bad Wizard is appearing a lot recently.">
+  <buton @click="set('2')">Next</buton>
 </avatar>
 
 <avatar key="2"
   v-if="show('2')"
   image="cop.png"
-  text="It's the idea of distributions. A distribution is a plot where outcomes are on the x-axis, and probabilities are on the y-axis.">
-  <buton @click="set('3')">Next</buton>
+  text="In the past, I've employed a variety of strategies to handle bad guys.">
 
-  <div>
-    For instance, ___. 
-  </div>
+<pre>
+Professor Grubby was vanquished by nicely asking them to go away.
+Grimy Man was vanquished by nicely asking them to go away.
+Agent Horrible was vanquished by giving them an unsolved math problem.
+Mighty Starlet was vanquished by giving them an unsolved math problem.
+Master Rapid Arsonist was vanquished by challenging them to a duel.
+Ruthless Swan was vanquished by challenging them to a duel.
+</pre>
+
+<buton @click="set('3')">Next</buton>
 </avatar>
 
 <avatar key="3"
   v-if="show('3')"
   image="cop.png"
-  text="These are some of the distributions you have seen so far.">
+  text="If we plot all the methods we used to vanquish bad guys in the past, we get this frequency plot.">
 
-<div><img class="icon" src="images/monster.png">Green monster's distributions</div>
-<distribution :title="fairCoin.title" :outcomes="fairCoin.outcomes"></distribution>
-<distribution :title="unfairCoin.title" :outcomes="unfairCoin.outcomes"></distribution>
+<div class="handwriting">Ways Commando Gauss has vanquished bad guys</div>
 
-<div><img class="icon" src="images/girl.png">Veronica's distributions</div>
-<distribution :title="greatHair.title" :outcomes="greatHair.outcomes"></distribution>
-<distribution :title="greatHairGivenTall.title" :outcomes="greatHairGivenTall.outcomes"></distribution>
+<samples-chart 
+:xDomain="['Ask to go away', 'Give an unsolved math problem', 'Challenge to a duel', 'Reason with them']"
+:samples="['Ask to go away', 'Ask to go away', 'Ask to go away', 'Challenge to a duel', 'Challenge to a duel', 'Challenge to a duel', 'Challenge to a duel', 'Give an unsolved math problem', 'Give an unsolved math problem', 'Reason with them']"
+:chartHeight="150" :chartWidth="600" />
 
 <div>
-<buton @click="set('4')">Next</buton>
+  What was the most likely method of vanquishing? 
 </div>
+
+<table class="question-table">
+  <tr>
+    <td>How many more times more likely is a foe to have been vanquished by "challenging them to a duel" than by "reasoning with them"?</td>
+    <td><input-box :right="4">&nbsp;&nbsp;</input-box></td>
+  </tr>
+
+  <tr>
+    <td>How many times more likely is a foe to have been vanquished by "asking them to go away" than by "giving them an unsolved math problem"?</td>
+    <td><input-box :right="1.5">&nbsp;&nbsp;</input-box></td>
+  </tr>
+
+  <tr>
+    <td>What is the probability that a vanquished foe was vanquished by asking them to go away?</td>
+    <td><input-box :right="30">%</input-box></td>
+  </tr>
+
+  <tr>
+    <td>What is the probability that a vanquished foe was vanquished by challenging them to a duel?</td>
+    <td><input-box :right="40">%</input-box></td>
+  </tr>
+</table>
+
+
 
 </avatar>
 
 <avatar key="4"
   v-if="show('4')"
-  image="cop.png"
-  text="To make a distribution, put the possible outcomes on the x-axis, and the probabilities on the y-axis. Ensure that the probabilities sum up to 1.">
+  image="cop.png">
+  <template v-slot:dialog>
+    An easier way to answer these questions about probabilities, is to convert the frequency chart to create a *distribution*.
+  </template>
+
+
+  <samples-chart 
+:xDomain="['Ask to go away', 'Give an unsolved math problem', 'Challenge to a duel', 'Reason with them']"
+:samples="['Ask to go away', 'Ask to go away', 'Ask to go away', 'Challenge to a duel', 'Challenge to a duel', 'Challenge to a duel', 'Challenge to a duel', 'Give an unsolved math problem', 'Give an unsolved math problem', 'Reason with them']"
+:chartHeight="150" :chartWidth="600" />
+
+  <div>
+    A distribution has:
+    - outcomes on the x-axis.
+    - probabilities on the y-axis.
+  </div>
+
+  <div>
+    To create the distribution, sum up all the counts and divide each value by the sum. 
+  </div>
+
+  <div>
+    // would be great to figure out a way to get people to do this??
+  </div>
+
   <buton @click="set('5')">Next</buton>
 </avatar>
 
 <avatar key="5"
   v-if="show('5')"
   image="cop.png"
-  text="Is this a valid distribution?">
-  picture
-  <buton @clik="set('6')">Yes</buton>
-  <buton>No</buton>
+  text="Once you have a distribution, you can answer questions like ___?">
+
+  Relative probabilities.
 </avatar>
 
 <avatar key="6"
@@ -2003,6 +2056,7 @@ The characters you gotta know:
 <script type="text/x-template" id="input-box-template">
   <div style="display:inline-block; position:relative;">
     <input v-model="val" placeholder="?" style="width:50px; display:inline" v-on:keyup.enter="answerSubmit">
+    <slot></slot>
     <buton style="display:inline" @click="answerSubmit">Go</buton>
   
     <transition name="fade">
@@ -2343,7 +2397,7 @@ Vue.component('input-box', {
     },
 
     // Default to no feedback bc avatar takes care of it, but sometimes we want to use this as a standalone component.
-    feedback: {type: Boolean, default: false},
+    feedback: {type: Boolean, default: true},
   },
   computed: {
     feedbackString: function(){
@@ -3235,7 +3289,7 @@ new Vue({
   el: '#app',
   data: {
     storyPoints: storyPoints,
-    storyPointInd: 5,
+    storyPointInd: 4,
     // Obj property additions do not update DOM, so prepopulate all the keys in the object. Or use lists.
     //soundNameToCount: {},
     show: false,
