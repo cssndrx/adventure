@@ -21,7 +21,7 @@ font-family: 'Cormorant Garamond', serif;
 -->
 
 <!-- todo: strip and remove the unused -->
-<link href="https://fonts.googleapis.com/css?family=Schoolbell|Dokdo|Fira+Sans:300,800,900" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Schoolbell|Dokdo|Fira+Sans:300,700" rel="stylesheet">
 
 <link href="css/animate.css" rel="stylesheet" type="text/css">
 <script src="js/lodash.min.js"></script>
@@ -73,6 +73,9 @@ a{
   text-decoration: none;
   cursor: pointer;
 }
+a:hover{
+  font-weight: bold;
+}
 img{
   max-width: 400px;
 }
@@ -99,7 +102,7 @@ button{
   background-color: white;
   border-radius: 4px;
   font-size: 28px;
-  font-weight: 900;
+  font-weight: 700;
   margin-bottom: 8px; 
   padding: 8px 16px;
   margin: 8px;
@@ -109,7 +112,7 @@ button{
   background-color: black;
 }
 .bold{
-  font-weight: 900;
+  font-weight: 700;
 }
 .centered{
   display: grid;
@@ -415,17 +418,21 @@ button{
 
 
 <div id="app" style="position:relative;left: 60px;width:calc(100% - 60px); height:calc(100vh - 200px)">
+
+
+
   <div style="width:60px;background-color: #eee; position: fixed; top:0px; left:0px; padding: 4px; height: 100%;">
-    <div v-for="(storyPoint, ind) in storyPoints"
-         @click="storyPointInd = ind"
-         class="has-tooltip"
+    <div v-for="(chapter, ind) in chapters"
+         @click="chapterInd = ind"
          style="display:inline-block;">
-      <img :class="{'story-point-silhouette': currentStoryPoint !== storyPoint}"
-          :src="'images/' + storyPoint.image" 
+      <img :class="{'story-point-silhouette': currentChapter !== chapter}"
+          :src="'images/' + chapter.image" 
           style="width:50px">
-      <span style="top:60px;">{{storyPoint.name}}</span>
+      <span style="top:60px;">{{chapter.name}}</span>
     </div>
-  </div>
+  </div> 
+
+
 <!--
 <transition name="slide-fade">
 <div v-if="show" style="background-color: blue; width:200px; height:200px;"></div>
@@ -458,18 +465,8 @@ You are going to bring us into this new world of <span class="animated infinite 
 </div>-->
 
 
-<!-- <div style="width: 150px; position:absolute; left: 0px; text-align: left; padding-left: 16px">
-  <div v-for="storyPoint in storyPoints"
-      @click="currentStoryPoint = storyPoint"
-      style="margin-bottom: 4px;"
-      :style="storyPointStyle(storyPoint)">
-    <a :class="[storyPoint === currentStoryPoint ? 'active-tab': 'inactive-tab']">{{storyPoint.name}}</a>
-  </div>
-</div> -->
-
-
 <keep-alive>
-  <component v-bind:is="currentStoryPoint.component"></component>
+  <component v-bind:is="currentChapter.component"></component>
 </keep-alive>
 
 
@@ -936,36 +933,61 @@ Ruthless Swan was vanquished by challenging them to a duel.
 <div style="width:600px; margin: 0 auto;">
 
 <div key="intro"
-  v-if="show('intro')">
-<div class="handwriting" style="font-size:48px; text-align:center">The Great Statistics Mystery</div>
+  v-if="show('intro')"
+  style="text-align:center;">
+
+  <div class="handwriting" style="font-size:48px;">The Evil Wizard's Guide to Statistics</div>
+
+  <img src="images/wizard.png" style="width:300px">
+
+  <div>
+  Not really motivated by dry tests or stuffy professors, but you'll get out of bed for a little evil fun?
+  </div>
+
+  <div>
+  Learn statistics by helping an evil wizard wreak chaos around town. 
+  </div>
+
+  <buton @click="set('1')">Play</buton>
 
 
-<div>
-In a distant and serene land, knowledge of statistics and probability was widespread. The people were kind and loving. 
-</div>
+  <div style="text-align:left">
 
-<div>
-Until one day, a Bad Wizard set out to ruin probability for everyone. He would tamper with its mechanics. And terrorize the citizens. 
-</div>
+    <div>
+    You found a scroll to jump ahead in the story. 
+    </div>
 
-<div>
-You have been chosen to join the Statistics Police. You are the final line of defense for holding the bad forces in check. 
-</div>
+    <div style="text-align: center">
+    <img src="images/scroll.png" style="width:300px">
+    </div>
 
-<div>
-The characters you gotta know:
-</div>
+    <div>
+      For max evil, start from the beginning. 
+    </div>
 
-<div>
-<img src="images/cop.png" class="small-avatar"> <bold>Commando Gauss</bold> — Here to show you the ropes. A veteran of the Statistics Police. A bit of a hardass.
-</div>
+    <div>
+    <div v-for="(chapter, index) in chapters" v-if="index > 0">
+      <a @click="$root.setChapter(index)">Chapter {{index}}: {{chapter.description}}</a>
+    </div>
+    </div>
 
-<div>
-<img src="images/wizard.png" class="small-avatar"> <bold>Bad Wizard</bold> — Causes damage that you have to undo. Likes mischief. Motives not yet known.
-</div>
+    <div>
+    <bold>Evil hint:</bold> It's okay to explore "wrong" answers to see what the story will say. You won't be penalized. 
+    </div>
 
-<buton @click="set('1')">Play</buton>
-</div>
+    <div>
+    <bold>Evil hint 2:</bold> It's always possible to return to a question and answer it differently by using the jump points that look like:
+    </div>
+
+    <div class="point-container" style="width: 300px; margin-bottom:32px">
+      <div v-for="point in 8" 
+      class="point">
+        <span>{{point.name}}</span>
+      </div>
+    </div>
+  </div>
+
+</div> <!-- end intro -->
 
 <avatar key="1"
   v-if="show('1')"
@@ -3058,6 +3080,7 @@ function makeComponent(componentName, points, reactions){
         problemToCorrectness: {}, // 'fakeout1': [false, true]
         memory: null, // A variable for dumping short term component state.
 
+        chapters: chapters,
         fairCoin: {
           title: 'P(fair coin)',
           outcomes: [
@@ -3451,58 +3474,34 @@ Vue.component('live-text', {
   },
   template: '#live-text-template'
 });
-// <intro-scene key="intro" v-if="show('intro')" @scene-complete="set('intro1')">
-// </intro-scene>
-var storyPoints = [
+
+const chapters = [
 {
-  name: 'Intro',
   component: 'intro-scene',
   image: 'scroll.png',
 },
 {
-  name: 'Coin Flips',
   component: 'coin-flips',
+  description: 'Independent events, the number of atoms in the universe',
   image: 'monster.png',
-  color: '#82A81D',
 },
 {
-  name: 'Bad Wizard',
   component: 'wizard-flips',
+  description: 'What does randomness look like, a guessing game',
   image: 'wizard.png',
-  color: '#E9BE2B',
 },
 {
-  name: 'Chain Rule',
   component: 'chain-rule',
+  description: 'Chain rule of probability, a vignette on dating',
   image: 'girl.png',
-  color: '#0082B6',
 },
 {
-  name: 'P Values',
   component: 'intro-to-pvalues',
+  description: 'P-values and other cruft from frequentist statistics', 
   image: 'cop.png',
-  color: '#0082B6',
 },
-
-// {
-//   name: 'Distributions',
-//   component: 'intro-to-distributions',
-//   image: 'cop.png',
-//   color: '#0082B6',
-// },
-// {
-//   name: 'Samples',
-//   component: 'intro-to-samples',
-//   image: 'wizard.png',
-//   color: '#0082B6',
-// },
-
-// {
-//   name: 'Risk Reward',
-//   component: 'risk-reward',
-//   image: 'bear.png',
-// },
 ];
+
 // Gotchas:
 // DOM does not update for new property additions.
 // DOM does not update for direct assignments within arrays.
@@ -3510,23 +3509,18 @@ var storyPoints = [
 new Vue({
   el: '#app',
   data: {
-    storyPoints: storyPoints,
-    storyPointInd: 4,
+    chapters: chapters,
+    chapterInd: 0,
     // Obj property additions do not update DOM, so prepopulate all the keys in the object. Or use lists.
     //soundNameToCount: {},
     show: false,
     isPlaying: false,
   },
   computed: {
-    currentStoryPoint: function(){
-      return this.storyPoints[this.storyPointInd];
+    currentChapter: function(){
+      return this.chapters[this.chapterInd];
     }
   },
-  // watch: {
-  //   currentStoryPoint: function(){
-  //     this.$root.play('swish');
-  //   },
-  // },
   methods: {
 //    show: show, 
     formatPct: formatPct,
@@ -3536,7 +3530,10 @@ new Vue({
     nextStory: async function(){
       // this.play('achievement');
       // await wait(1500);
-      this.storyPointInd = Math.min(this.storyPoints.length-1, this.storyPointInd+1);
+      this.chapterInd = Math.min(this.chapterInd.length-1, this.chapterInd+1);
+    },
+    setChapter(num){
+      this.chapterInd = num;
     },
     // // Given 0.8 --> returns {}
     // paramsFromCertainty: function(certainty){
