@@ -490,6 +490,203 @@ You are going to bring us into this new world of <span class="animated infinite 
   </div>
 </script>
 
+
+<script type="text/x-template" id="intro-to-pvalues-template">
+<div style="width:600px; margin: 0 auto;">
+
+<div class="point-container" style="width: 400px">
+  <div v-for="point in points" 
+  @click="set(point.key)" 
+  class="point has-tooltip" 
+  :class="pointClass(point)"
+  :style="pointStyle(point)">
+    <span>{{point.name}}</span>
+  </div>
+</div>
+
+<avatar key="intro"
+  v-if="show('intro')"
+  image="cop.png"
+  text="Fancy a magic potion that could teach you statistics?">
+  <buton @click="set('2')">Next</buton>
+</avatar>
+
+<avatar key="2"
+  v-if="show('2')"
+  image="cop.png"
+  text="I've been experimenting with brewing these potions for many years, and you get to pick one to drink. But in order to pick the right brew for you, you'll need to learn about p-values.">
+
+  <buton @click="set('3')">Next</buton>
+</avatar>
+
+<avatar key="3"
+  v-if="show('3')"
+  image="cop.png"
+  text="I ran experiments measuring the change in statistics knowledge after drinking each potion compared with a placebo.
+
+  The default belief is that it's not possible to learn statistics by drinking a potion. In science speak, the default belief is called the *null hypothesis*.
+
+  And, the *p-value* is the probability that you'll see as extreme a result if the null hypothesis is true.">
+
+  <buton @click="set('4')">Next</buton>
+</avatar>
+
+<avatar key="4"
+  v-if="show('4')"
+  image="cop.png"
+  text="I ran the experiment with my first potion and got a p-value of 0.6. What does a p-value of 0.6 mean?">
+
+  <buton-group onClick="() => set('5')">
+    <buton>There's a 60% chance of observing as extreme a result even if the potion didn't work</buton>
+    <buton nope>There's a 60% chance that the potion is better than the placebo</buton>
+    <buton nope>There's a 40% chance that the potion is better than the placebo</buton>
+  </buton-group>
+
+  <template v-slot:hint>
+  P-values only speak about the probability of obtaining the results if the null hypothesis is true. It isn't the probability of the null hypothesis being correct, or the alternative hypothesis being correct.
+  </template>
+</avatar>
+
+<avatar key="5"
+  v-if="show('5')"
+  image="cop.png"
+  text="I ran the same experiment with a different potion and got a p-value of 0.01. What does a p-value of 0.01 mean?">
+
+  <buton-group onClick="() => set('6')">
+    <buton>There's a 1% chance of observing as extreme a result even if the potion didn't work</buton>
+    <buton nope>There's a 1% chance that the placebo is better than the potion</buton>
+    <buton nope>There's a 1% chance that the results are due to chance</buton>
+  </buton-group>
+
+  <template v-slot:hint>
+  P-values only speak about the probability of obtaining the results if the null hypothesis is true. It isn't the probability of the null hypothesis being correct, or the alternative hypothesis being correct.
+  </template>
+</avatar>
+
+<avatar key="6"
+  v-if="show('6')"
+  image="wizard.png"
+  text="For one of our potion experiments, what would be a more exciting result? A p-value of 0.01 or 0.001? ">
+  <buton nope>0.01</buton>
+  <buton yay>0.001</buton>
+
+  <template v-slot:hint>
+  A p-value of 0.01 would mean that there's a 1% chance that we would observe as extreme a result if the potion didn't work. While that's nice, it would be nicer if there were only a 0.1% chance that the result would occur.
+  </template>
+
+  todo: put this in after the yay
+  Yes! We're hoping that the potion is different from the placebo, so a lower p-value is better. 
+
+</avatar>
+
+<avatar key="7"
+  v-if="show('7')"
+  image="wizard.png"
+  text="Scienitific journals usually require a p-value of 0.05 or smaller to publish. If a p-value is less than 0.05, it is called 'statistically significant'. Experimenting with another potion yielded a p-value of 0.24. Which is...">
+
+  <buton nope>Statistically significant</buton>
+  <buton yay @clik="set('8')">Not statistically significant</buton>
+
+  todo: put this in after the yay
+  "Statistically significant" sounds really important, but it's just the scientific name for p-value less than a threshold. It's up to the domain expert to determine if the result is meaningful or not.
+</avatar>
+
+<avatar key="8"
+  v-if="show('8')"
+  image="wizard.png"
+  text="How should a p-value of 0.14 be interpreted?">
+
+  <buton>Weak evidence that the magic potion is the same as the placebo.</buton>
+  <buton>Weak evidence that the magic potion is better than the placebo.</buton>
+  <buton>Strong evidence that the magic potion is the same as the placebo.</buton>
+  <buton>Strong evidence that the magic potion is better than the placebo.</buton>
+
+  Although a p-value of 0.14 does not meet the threshold for "statistical significance", it is still weak evidence that the results may be unusual under the null hypothesis (aka default world view). There was only a 14% chance that we would observe as extreme a result. 
+</avatar>
+
+<avatar key="9"
+  v-if="show('9')"
+  image="wizard.png"
+  text="Ok so for the potion I tested and got a p-value of 0.14, what should I do?">
+
+  <buton nope='Although the p-value in this experiment is insufficient to conclude "statistical significance", it doesn't mean that there is no effect. The power on the experiment may be insufficient.'>Conclude that potion C is no different from the placebo.</buton>
+  <buton nope="If you rerun the experiment, due to random variation it may be possible to get a lower p-value. But this is considered bad science (and p-hacking). See the green jelly beans xkcd.">Rerun the same experiment in hopes of getting a lower p-value</buton>
+  <buton>Rerun the experiment but with a greater number of subjects and ???</buton>
+
+  The p-value is borderline significant so it may be worth tweaking the experiment and rerunning. It is easier to get a signficant p-value with a larger number of samples.
+</avatar>
+
+<avatar key="10"
+  v-if="show('10')"
+  image="wizard.png"
+  text="After a lot of experimentation, I finally arrived at these two potions:
+Potion A: p-value of 0.05
+Potion B: p-value of 0.1
+
+Which one would you want to drink?">
+  <buton>Potion A</buton>
+  <buton>Potion B</buton>
+  <buton>Not enoguh info</buton>
+
+('Correct! There's not enough info.' : 'Good attempt, but not quite')
+Potion A has a lower p-value, but the p-value doesn't say anything about effect size. 
+
+For this reason, scientific journals have started requiring authors report both p-values and confidence intervals. Confidence intervals give an indiciation of effect size.
+
+Given that both p-values are reasonably small, use the effect size given by the confidence interval to choose which potion to drink.
+
+</avatar>
+
+<avatar key="11"
+  v-if="show('11')"
+  image="wizard.png"
+  text="It turns out that the effect sizes were: ">
+
+Potion A
++2% +5% +20% +10% + 3%
+Average effect size: ___
+Standard deviation (a measure of spread): ___
+
+
+Potion B
++10% +0% +40% 
+Average effect size: ___
+Standard deviation: ___
+
+
+(In the same lighter grey color, standard deviation is a measure of spread. A small standard deviation indicates that the numbers are close together. A large standard deviation indicates that the numbers are very different.)
+
+In this case, which potion would you like to drink? 
+
+[[Potion A]] [[Potion B]]
+
+</avatar>
+
+<avatar key="12"
+  v-if="show('12')"
+  image="wizard.png"
+  text="You drink the potion and....">
+  <buton>Next</buton>
+</avatar>
+
+<avatar key="13"
+  v-if="show('13')"
+  image="wizard.png"
+  text="Turns out that the statistics you learn comes from deciding which potion to drink, rather than drinking it">
+  Congrats you learned....
+  - The null hypothesis is __.
+  - p-value is ___.
+  - p-values below are called statisticall significant, but ___.
+  - p-values do not ___.
+
+If you liked this section, you may like ___.  
+</avatar>
+
+
+</div>
+</script>
+
+
 <script type="text/x-template" id="intro-to-distributions-template">
 <div style="width:600px; margin: 0 auto;" class="intro-to-distributions">
 
@@ -2519,7 +2716,7 @@ Vue.component('avatar', {
       return 'images/'+ (this.reactionImage || this.image);
     },
     dialogClass: function(){
-      const maxLen = 200;
+      const maxLen = 180;
       const longText = this.text.length > maxLen;
 
       // hack. should do this recursively.
@@ -3074,7 +3271,7 @@ makeComponent('risk-reward', [
   { key: '100-chart', name: 'Binomial distribution', },
   { key: 'congrats', name: 'Congrats', },
 ]); 
-makeComponent('intro-to-distributions', [
+makeComponent('intro-to-pvalues', [
   { key: 'intro', name: 'Intro', },
 
   { key: '2', name: 'Independence'},
@@ -3085,21 +3282,39 @@ makeComponent('intro-to-distributions', [
   { key: '6', name: 'Independence'},
   { key: '7', name: 'Independence'},
   { key: '8', name: 'Independence'},
+  { key: '9', name: 'Independence'},
+  { key: '10', name: 'Independence'},
+  { key: '11', name: 'Independence'},
+  { key: '12', name: 'Independence'},
 
   ]);
-makeComponent('intro-to-samples', [
-  { key: 'intro', name: 'Intro', },
 
-  { key: '2', name: 'Independence'},
-  { key: '3', name: 'Independence'},
-  { key: '4', name: 'Independence'},
+// makeComponent('intro-to-distributions', [
+//   { key: 'intro', name: 'Intro', },
 
-  { key: '5', name: 'Independence'},
-  { key: '6', name: 'Independence'},
-  { key: '7', name: 'Independence'},
-  { key: '8', name: 'Independence'},
+//   { key: '2', name: 'Independence'},
+//   { key: '3', name: 'Independence'},
+//   { key: '4', name: 'Independence'},
 
-  ]);
+//   { key: '5', name: 'Independence'},
+//   { key: '6', name: 'Independence'},
+//   { key: '7', name: 'Independence'},
+//   { key: '8', name: 'Independence'},
+
+//   ]);
+// makeComponent('intro-to-samples', [
+//   { key: 'intro', name: 'Intro', },
+
+//   { key: '2', name: 'Independence'},
+//   { key: '3', name: 'Independence'},
+//   { key: '4', name: 'Independence'},
+
+//   { key: '5', name: 'Independence'},
+//   { key: '6', name: 'Independence'},
+//   { key: '7', name: 'Independence'},
+//   { key: '8', name: 'Independence'},
+
+//   ]);
 
 // Can be used to delay logic
 // <delay></delay>
@@ -3263,17 +3478,24 @@ var storyPoints = [
   color: '#0082B6',
 },
 {
-  name: 'Distributions',
-  component: 'intro-to-distributions',
+  name: 'P Values',
+  component: 'intro-to-pvalues',
   image: 'cop.png',
   color: '#0082B6',
 },
-{
-  name: 'Samples',
-  component: 'intro-to-samples',
-  image: 'wizard.png',
-  color: '#0082B6',
-},
+
+// {
+//   name: 'Distributions',
+//   component: 'intro-to-distributions',
+//   image: 'cop.png',
+//   color: '#0082B6',
+// },
+// {
+//   name: 'Samples',
+//   component: 'intro-to-samples',
+//   image: 'wizard.png',
+//   color: '#0082B6',
+// },
 
 // {
 //   name: 'Risk Reward',
