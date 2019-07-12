@@ -69,13 +69,26 @@ h4{
   font-weight: 500;
 }
 a{
-  color: #337ab7; /* boostrap blue */
+  color: #337ab7; /* bootstrap blue */
   text-decoration: none;
   cursor: pointer;
 }
 a:hover{
   font-weight: bold;
 }
+
+.note, .note *{
+  color:#999;
+  cursor: pointer;
+}
+.note .word{
+  font-weight: 700;
+}
+.note:hover .word{
+  text-decoration: underline;
+}
+
+
 img{
   max-width: 400px;
 }
@@ -474,12 +487,6 @@ You are going to bring us into this new world of <span class="animated infinite 
 
 </div> <!-- end #app -->
 
-<script type="text/x-template" id="note-template">
-<span style="position:relative; top:6px; text-align:center; display:inline-block" class="normal-div">
-  <div><slot></slot></div>
-  <div class="handwriting" style="font-size:10px; white-space:nowrap;">{{title}}<slot name="title"></slot></div>
-</span>
-</script>
 
 <script type="text/x-template" id="glitch-template">
   <div>
@@ -503,6 +510,7 @@ You are going to bring us into this new world of <span class="animated infinite 
 </div>
 
 
+<note text="a measure of spread">Standard deviation*</note>: 2.3
 
 <avatar key="intro"
   v-if="show('intro')"
@@ -555,8 +563,11 @@ You are going to bring us into this new world of <span class="animated infinite 
 <avatar key="4"
   v-if="show('4')"
   image="scientist.png"
-  text="I ran the experiment with my first potion and got a p-value of 0.6. What does a p-value of 0.6 mean?">
+  text="I ran the experiment with my first potion and got a p-value of 0.6.">
 
+  <div>
+    What does a <note text="The chance of observing as extreme a result if the null hypothesis is right">p-value</note> of 0.6 mean?
+  </div>
   <buton-group>
     <buton yay @clik="set('5')">There's a 60% chance of observing as extreme a result even if the potion didn't work</buton>
     <buton nope>There's a 60% chance that the potion is better than the placebo</buton>
@@ -654,43 +665,51 @@ You are going to bring us into this new world of <span class="animated infinite 
 Potion A: p-value of 0.05
 Potion B: p-value of 0.1
 
-Which one do you want to drink?">
-  <buton>Potion A</buton>
-  <buton>Potion B</buton>
-  <buton>Not enough info</buton>
+Which do you want to drink?">
+  <buton-group :onClick="() => set('11')">
+    <buton>Potion A</buton>
+    <buton nope>Potion B</buton>
+    <buton yay>Not enough info</buton>
+  </buton-group>
 
   <template v-slot:ps>
-  ('Correct! There's not enough info.' : 'Good attempt, but not quite')
-  Potion A has a lower p-value, but the p-value doesn't say anything about effect size. 
+  <div>
+    {{ got('10') ? "Correct! There's not enough info." : 'Good attempt, but not quite.' }} Potion A has a lower p-value, but the p-value doesn't say anything about effect size. 
+  </div>
 
-  For this reason, scientific journals have started requiring authors report both p-values and confidence intervals. Confidence intervals give an indiciation of effect size.
-
-  Given that both p-values are reasonably small, use the effect size given by the confidence interval to choose which potion to drink.
+  <div>
+    You need both the effect size and the p-value to make your decision.
+  </div>
   </template>
 </avatar>
 
 <avatar key="11"
   v-if="show('11')"
   image="scientist.png"
-  text="It turns out that the effect sizes were: ">
+  text="It turns out that the effect sizes were... "
+  class="normal-div">
 
-Potion A
-+2% +5% +20% +10% + 3%
-Average effect size: ___
-Standard deviation (a measure of spread): ___
-
-
-Potion B
-+10% +0% +40% 
-Average effect size: ___
-Standard deviation: ___
+<div style="margin-bottom:16px;">
+<bold>Potion A</bold>
+<div>Change in statistics knowledge: +2% +5% +20% +10% +3%</div>
+<div>Average effect size: ___</div>
+<div>P-value: ___</div>
+</div>
 
 
-(In the same lighter grey color, standard deviation is a measure of spread. A small standard deviation indicates that the numbers are close together. A large standard deviation indicates that the numbers are very different.)
+<div style="margin-bottom: 16px">
+<bold>Potion B</bold>
+<div>Change in statistics knowledge: +10% +0% +40% </div>
+<div>Average effect size: ___</div>
+<div>P-value: ___</div>
+</div>
 
+<div>
 In this case, which potion would you like to drink? 
+</div>
 
-[[Potion A]] [[Potion B]]
+<buton>Potion A</buton>
+<buton>Potion B</buton>
 
 </avatar>
 
@@ -1217,11 +1236,21 @@ Ruthless Swan was vanquished by challenging them to a duel.
   v-if="show('10HT')"
   image="monster.png" 
   text="And what is the probability that I toss a coin 10 times and get HHHTHHTTTT?">
-  <buton @clik="set('10HT-interstitial')" yay>1/<exp base="2" pow="10"/></buton>
+  <buton @clik="set('HHHHH')" yay>1/<exp base="2" pow="10"/></buton>
   <buton nope>1/2</buton>
   <buton nope>1/10</buton>
   <buton nope>1/20</buton>
   <buton nope>Not enough info</buton>
+
+  <template v-slot:ps>
+    <div>
+      Yeah! The chance of getting HHHTHHTTTT is the same as the probability of getting HHHHHHHHHH.
+    </div>
+
+    <div>
+      Because both involve computing the probability of 10 independent coin flips.
+    </div>
+  </template>
 </avatar>
 
 <!-- stopped here: thinking how to phrase this
@@ -1235,20 +1264,6 @@ Ruthless Swan was vanquished by challenging them to a duel.
   <buton nope>20</buton>
   <buton nope>1024</buton>
 </avatar> -->
-
-<interstitial 
-    key="10HT-interstitial" 
-    v-if="show('10HT-interstitial')">
-  <div>
-    Yeah! The chance of getting HHHTHHTTTT is the same as the probability of getting HHHHHHHHHH.
-  </div>
-
-  <div>
-    Because both involve computing the probability of 10 independent coin flips.
-  </div>
-
-  <buton @click="set('HHHHH')">Next</buton>
-</interstitial>
 
 
 <avatar key="HHHHH"
@@ -2266,6 +2281,15 @@ Ruthless Swan was vanquished by challenging them to a duel.
 </div>
 </script>
 
+<script type="text/x-template" id="note-template">
+<span class="note" @click="showExpansion=!showExpansion">
+<span class="word"><slot></slot>
+</span> 
+<span v-if="showExpansion" class="text">({{text}}<slot name="text">)</slot></span>
+</span>
+</script>
+
+
 <script type="text/x-template" id="exp-template">
 <var>{{base}}<sup>{{pow}}</sup></var>
 <!--<span>{{base}}<sup>{{pow}}</sup></span>-->
@@ -2619,14 +2643,6 @@ Vue.component('glitch', {
   template: '#glitch-template'
 });
 
-
-Vue.component('note', {
-  props: {
-    title: {type: String},
-  },
-  template: '#note-template'
-});
-
 Vue.component('input-box', {
   props: {
     right: {type: Number, default: 0},
@@ -2884,6 +2900,18 @@ Vue.component('buton', {
     },
   },
   template: '#buton-template'
+});
+
+Vue.component('note', {
+  props: {
+    text: {type: String },
+  },
+  data(){
+    return {
+      showExpansion: false,
+    }
+  },
+  template: '#note-template'
 });
 
 Vue.component('exp', {
@@ -3352,18 +3380,20 @@ makeComponent('risk-reward', [
 makeComponent('intro-to-pvalues', [
   { key: 'intro', name: 'Intro', },
 
-  { key: '2', name: 'Independence'},
-  { key: '3', name: 'Independence'},
-  { key: '4', name: 'Independence'},
+  { key: '2a', name: 'The experiment'},
+  { key: '3', name: 'Null hypothesis + p-value'},
 
-  { key: '5', name: 'Independence'},
-  { key: '6', name: 'Independence'},
-  { key: '7', name: 'Independence'},
-  { key: '8', name: 'Independence'},
-  { key: '9', name: 'Independence'},
-  { key: '10', name: 'Independence'},
-  { key: '11', name: 'Independence'},
-  { key: '12', name: 'Independence'},
+  { key: '4', name: 'p-value = 0.6', problem:true},
+  { key: '5', name: 'p-value = 0.01', problem: true},
+  { key: '6', name: '0.01 or 0.001?', problem: true},
+  { key: '7', name: 'Statistical significance', problem: true},
+
+  { key: '8', name: 'p-value = 0.14', problem: true},
+  { key: '9', name: 'What to do for borderline significance', problem:true},
+  { key: '10', name: 'Which do you want to drink?', problem:true},
+  { key: '11', name: 'Which do you want to drink? II', problem:true},
+  { key: '12', name: '??'},
+  { key: '13', name: 'Conclusion'},
 
   ]);
 
