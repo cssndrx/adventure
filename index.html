@@ -92,7 +92,7 @@ img{
 .small-dialog-text, .small-dialog-text *{
 /*  font-family: 'Dokdo', cursive;  */
   font-family: 'Schoolbell', cursive;
-  font-size: 20px;
+  font-size: 22px;
 }
 .centered, .centered *{
   font-size: 22px;
@@ -394,6 +394,7 @@ button{
   transform: translateY(100vh);
   opacity: 0;
 }
+
 .nope{
   color:red; 
   font-size: 14px; 
@@ -527,7 +528,7 @@ You are going to bring us into this new world of <span class="animated infinite 
 <avatar key="2"
   v-if="show('2')"
   image="scientist.png"
-  text="You can drink one of my potions. But in order to pick the right brew, you'll need to learn about p-values.">
+  text="I'll let you drink one of my potions. But in order to pick the right brew, you'll need to learn about p-values.">
 
   <buton @click="set('2a')">Next</buton>
 </avatar>
@@ -556,14 +557,18 @@ You are going to bring us into this new world of <span class="animated infinite 
   image="scientist.png"
   text="I ran the experiment with my first potion and got a p-value of 0.6. What does a p-value of 0.6 mean?">
 
-  <buton-group :onClick="() => set('5')">
-    <buton>There's a 60% chance of observing as extreme a result even if the potion didn't work</buton>
+  <buton-group>
+    <buton yay @clik="set('5')">There's a 60% chance of observing as extreme a result even if the potion didn't work</buton>
     <buton nope>There's a 60% chance that the potion is better than the placebo</buton>
     <buton nope>There's a 40% chance that the potion is better than the placebo</buton>
   </buton-group>
 
   <template v-slot:hint>
   P-values only speak about the probability of obtaining the results if the null hypothesis is true. It isn't the probability of the null hypothesis being correct, or the alternative hypothesis being correct.
+  </template>
+
+  <template v-slot:ps>
+    Correct. A P-value assumes the null hypothesis (aka that educational potions don't work) and says how extreme the results are under this assumption.
   </template>
 </avatar>
 
@@ -572,8 +577,8 @@ You are going to bring us into this new world of <span class="animated infinite 
   image="scientist.png"
   text="I ran the same experiment with a different potion and got a p-value of 0.01. What does a p-value of 0.01 mean?">
 
-  <buton-group :onClick="() => set('6')">
-    <buton>There's a 1% chance of observing as extreme a result even if the potion didn't work</buton>
+  <buton-group>
+    <buton yay @clik="set('6')">There's a 1% chance of observing as extreme a result even if the potion didn't work</buton>
     <buton nope>There's a 1% chance that the placebo is better than the potion</buton>
     <buton nope>There's a 1% chance that the results are due to chance</buton>
   </buton-group>
@@ -586,29 +591,31 @@ You are going to bring us into this new world of <span class="animated infinite 
 <avatar key="6"
   v-if="show('6')"
   image="scientist.png"
-  text="For one of our potion experiments, what would be a more exciting result? A p-value of 0.01 or 0.001? ">
+  text="For one of my potion experiments, what would be a more exciting result? A p-value of 0.01 or 0.001? ">
   <buton nope>0.01</buton>
-  <buton yay>0.001</buton>
+  <buton yay @clik="set('7')">0.001</buton>
 
   <template v-slot:hint>
   A p-value of 0.01 would mean that there's a 1% chance that we would observe as extreme a result if the potion didn't work. While that's nice, it would be nicer if there were only a 0.1% chance that the result would occur.
   </template>
 
-  todo: put this in after the yay
+  <template v-slot:ps>
   Yes! We're hoping that the potion is different from the placebo, so a lower p-value is better. 
+  </template>
 
 </avatar>
 
 <avatar key="7"
   v-if="show('7')"
   image="scientist.png"
-  text="Scienitific journals usually require a p-value of 0.05 or smaller to publish. If a p-value is less than 0.05, it is called 'statistically significant'. Experimenting with another potion yielded a p-value of 0.24. Which is...">
+  text="Scienitific journals usually require a p-value of 0.05 or smaller to publish. If a p-value is less than 0.05, it is called 'statistically significant'. Experimenting with another potion yielded a p-value of 0.14. Which is...">
 
   <buton nope>Statistically significant</buton>
   <buton yay @clik="set('8')">Not statistically significant</buton>
 
-  todo: put this in after the yay
-  "Statistically significant" sounds really important, but it's just the scientific name for p-value less than a threshold. It's up to the domain expert to determine if the result is meaningful or not.
+  <template v-slot:ps> 
+  Correct. "Statistically significant" sounds really important, but it's just the scientific name for p-value less than a threshold. It's up to the domain expert to determine if the result is meaningful or not.
+  </template>
 </avatar>
 
 <avatar key="8"
@@ -616,12 +623,14 @@ You are going to bring us into this new world of <span class="animated infinite 
   image="scientist.png"
   text="How should a p-value of 0.14 be interpreted?">
 
-  <buton>Weak evidence that the magic potion is the same as the placebo.</buton>
-  <buton>Weak evidence that the magic potion is better than the placebo.</buton>
-  <buton>Strong evidence that the magic potion is the same as the placebo.</buton>
-  <buton>Strong evidence that the magic potion is better than the placebo.</buton>
+  <buton nope>Weak evidence that the magic potion is the same as the placebo.</buton>
+  <buton yay @clik="set('9')">Weak evidence that the magic potion is better than the placebo.</buton>
+  <buton nope>Strong evidence that the magic potion is the same as the placebo.</buton>
+  <buton nope>Strong evidence that the magic potion is better than the placebo.</buton>
 
-  Although a p-value of 0.14 does not meet the threshold for "statistical significance", it is still weak evidence that the results may be unusual under the null hypothesis (aka default world view). There was only a 14% chance that we would observe as extreme a result. 
+  <template v-slot:ps> 
+  Correct. Although a p-value of 0.14 does not meet the threshold for "statistical significance", it is still weak evidence that the results may be unusual under the null hypothesis (aka default world view). There was only a 14% chance that we would observe as extreme a result.
+  </template> 
 </avatar>
 
 <avatar key="9"
@@ -631,9 +640,11 @@ You are going to bring us into this new world of <span class="animated infinite 
 
   <buton nope='Although the p-value in this experiment is insufficient to conclude "statistical significance", it doesnt mean that there is no effect. The power on the experiment may be insufficient.'>Conclude that potion C is no different from the placebo.</buton>
   <buton nope="If you rerun the experiment, due to random variation it may be possible to get a lower p-value. But this is considered bad science (and p-hacking). See the green jelly beans xkcd.">Rerun the same experiment in hopes of getting a lower p-value</buton>
-  <buton>Rerun the experiment but with a greater number of subjects and ???</buton>
+  <buton yay @clik="set('10')">Rerun the experiment but with a greater number of subjects and ???</buton>
 
-  The p-value is borderline significant so it may be worth tweaking the experiment and rerunning. It is easier to get a signficant p-value with a larger number of samples.
+  <template v-slot:ps>
+  Yes, the p-value is borderline significant so it may be worth tweaking the experiment and rerunning. It is easier to get a signficant p-value with a larger number of samples.
+  </template>
 </avatar>
 
 <avatar key="10"
@@ -643,18 +654,19 @@ You are going to bring us into this new world of <span class="animated infinite 
 Potion A: p-value of 0.05
 Potion B: p-value of 0.1
 
-Which one would you want to drink?">
+Which one do you want to drink?">
   <buton>Potion A</buton>
   <buton>Potion B</buton>
-  <buton>Not enoguh info</buton>
+  <buton>Not enough info</buton>
 
-('Correct! There's not enough info.' : 'Good attempt, but not quite')
-Potion A has a lower p-value, but the p-value doesn't say anything about effect size. 
+  <template v-slot:ps>
+  ('Correct! There's not enough info.' : 'Good attempt, but not quite')
+  Potion A has a lower p-value, but the p-value doesn't say anything about effect size. 
 
-For this reason, scientific journals have started requiring authors report both p-values and confidence intervals. Confidence intervals give an indiciation of effect size.
+  For this reason, scientific journals have started requiring authors report both p-values and confidence intervals. Confidence intervals give an indiciation of effect size.
 
-Given that both p-values are reasonably small, use the effect size given by the confidence interval to choose which potion to drink.
-
+  Given that both p-values are reasonably small, use the effect size given by the confidence interval to choose which potion to drink.
+  </template>
 </avatar>
 
 <avatar key="11"
@@ -1500,7 +1512,7 @@ Ruthless Swan was vanquished by challenging them to a duel.
     <img v-if="isShowingH" src="images/coin_heads.png" style="width:100px">
     <img v-if="!isShowingH" src="images/coin_tails.png" style="width:100px">
     <div ref="flip-string" style="font-size:13px;" :style="flipStringStyle">{{flipString}}</div>
-    <samples-chart v-if="flips.length > 0" :xDomain="xDomain" :samples="samples"></samples-chart>
+    <samples-chart v-if="flips.length > 8" :xDomain="xDomain" :samples="samples"></samples-chart>
   </div>
 </script>
 
@@ -2152,11 +2164,6 @@ Ruthless Swan was vanquished by challenging them to a duel.
 </div>
 </transition> -->
 
-<div style="position:absolute; top:300px; background-color: #372F26; color: white; padding: 16px;">
-  <div class="handwriting"> Yes! We're hoping that the potion is different from the placebo, so a lower p-value is better. 
-  </div>
-</div>
-
 <img v-if="showRainbow" src="images/rainbow.png">
 
 <img :src="imgSrc" 
@@ -2166,10 +2173,11 @@ Ruthless Swan was vanquished by challenging them to a duel.
 <!-- Dialog box -->
 <div style="position:absolute; left: 200px; top:0px;"
   v-if="showLiveText">
-  <img src="images/dialog.png" >
-  <div style="position: absolute; left:40px; top:23px;" class="dialog-text"
-  ref="test"
-  :class="dialogClass">
+  <img src="images/dialog.png" :style="imgStyle" style="width:642px">
+  <div style="position: absolute; left:40px; top:23px;" 
+    class="dialog-text"
+    ref="dialog-text"
+    :class="dialogClass">
     <live-text  
         ref="initial-text"
         key="initial-text"
@@ -2180,45 +2188,40 @@ Ruthless Swan was vanquished by challenging them to a duel.
   </div>
 </div>
 
-<!-- Mini dialog -->
+<!-- Mini dialog 
 <div v-if="showMiniDialog" style="position:absolute; left: 100px; top:300px;">
   <img src="images/mini_dialog.png" style="width:150px">
   <div style="position: absolute; left:40px; top:40px;" class="small-dialog-text">
     Yep!
   </div>
-</div>
+</div>-->
 
-<!-- Bottom right -->
-<div class="question" style="position:absolute; left: 0px; top: 300px; width: 600px; text-align:right">
 
+<!-- bottom -->
+<div style="position:absolute; left: 0px; top: 320px; width: 600px;">
+
+<div v-if="nopeText || showHint || showPS" style="background-color: #372F26; color: white; padding: 16px;" class="handwriting">
   <!-- Show hint via nopeText or nope slot -->
-  <transition name="fade">
-    <div v-if="nopeText" 
-         class="nope" style="margin-top:24px">{{nopeText}}</div>
-<!--    <div v-if="showHint" class="nope">
-      <slot name="hint"></slot>
-    </div> -->
-  </transition>
-
-</div>
-
-<!-- Cop overlay -->
-<transition name="slide-up">
-<div v-if="showCop" style="position:absolute; top: 200px; left:0px;" @click="showCop=false">
-  <img src="images/wizard.png" style="position:absolute; left:-100px;">
-  <div style="position:absolute; left: 200px; top:0px">
-    <img src="images/up_dialog.png" style="height: 500px">
-    <div class="small-dialog-text" style="position:absolute; left:0px; top:0px; padding:28px">
-
-      <div v-if="showHint">
-        <slot name="hint"></slot>
-      </div>
-
-    <div class="handwriting" style="position:absolute; left:28px; top:360px; font-size:12px">Click to dismiss</div>
+  <div v-if="nopeText" style="margin-top:16px">{{nopeText}}</div>
+  <div v-if="showHint && !showPS">
+    <slot name="hint"></slot>
+  </div> 
+  <div v-if="showPS">
+    <div><slot name="ps"></slot></div>
+    <buton @click="clickpsButton">Next</buton>
   </div>
 </div>
-</div> 
-</transition>
+
+<div class="question" style="text-align:right">
+  <transition name="fade" mode="out-in">  
+    <div v-if="showQuestion">  
+      <slot></slot>
+    </div>
+  </transition>
+</div>
+
+</div> <!-- end bottom -->
+
 
 </div>
 </script>
@@ -2721,7 +2724,10 @@ Vue.component('avatar', {
       showFall: false,
       reactionImage: null,
       nopeText: null,
-      showCop: false,
+      showPS: false,
+      psButton: null,
+
+      maxLen: 180,
     };
   },
   mounted: async function(){
@@ -2756,15 +2762,28 @@ Vue.component('avatar', {
     imgSrc: function(){
       return 'images/'+ (this.reactionImage || this.image);
     },
+    imgStyle(){
+      const height = 350;
+      if (this.useSmallFont){
+        return {'height' : _.clamp(lerp(this.textLength, 180, 300, .6, 1), .5, 1) * height + 'px'};
+      }
+      return {'height' : _.clamp(lerp(this.textLength, 60, 180, .5, 1), .5, 1) * height + 'px'};
+    },
+    textLength(){
+      var lengths = [this.text.length];
+      if (this.hasSlot('dialog') && this.$slots['dialog'][0].text){
+        lengths.push(this.$slots['dialog'][0].text.length);
+      }
+      if (this.hasSlot('dialog') && this.$slots['dialog'][0].children && this.$slots['dialog'][0].children[0].text){
+        lengths.push(this.$slots['dialog'][0].children[0].text.length); 
+      }
+      return _.max(lengths);
+    },
+    useSmallFont(){
+      return this.textLength > this.maxLen;
+    }, 
     dialogClass: function(){
-      const maxLen = 180;
-      const longText = this.text.length > maxLen;
-
-      // hack. should do this recursively.
-      const longSlotText = this.hasSlot('dialog') && this.$slots['dialog'][0].text && this.$slots['dialog'][0].text.length > maxLen;
-
-      const longSlotWithEltText = this.hasSlot('dialog') && this.$slots['dialog'][0].children && this.$slots['dialog'][0].children[0].text && this.$slots['dialog'][0].children[0].text.length > maxLen;
-      return {'small-dialog-text': longText || longSlotText || longSlotWithEltText};
+      return {'small-dialog-text': this.useSmallFont};
     }
   },
   methods: {
@@ -2779,11 +2798,12 @@ Vue.component('avatar', {
       // otherwise, if the avatar has a hint slot that is shown. 
       if (input.nopeText){  
         this.nopeText = input.nopeText;
-//        this.showCop = true;        
       } else if(input.isNope && this.hasSlot('hint')){
         this.showHint = true;
-        this.showCop = true;        
       }
+    },
+    clickpsButton(){
+      this.psButton.butonClicked();
     }
   },
   template: '#avatar-template'
@@ -2833,14 +2853,27 @@ Vue.component('buton', {
     butonClicked: async function(){
       this.$root.play('buton');
       this.clickedButton = true;
-      // Mark the buton as wrong.
-      if (this.isNope){
-        this.showX = true;
-      }
+
       // Tell those listening on the bus that the buton has been clicked... unless it's a buton within an input-box.
       if(!firstAncestorOfComponent(this, 'input-box')){
         bus.$emit('answer-submitted', this);        
       }
+
+      // Mark the buton as wrong.
+      if (this.isNope){
+        this.showX = true;
+      } else {
+
+        // Check if it has a PS. Early return if so, we don't want to hit event handling.
+        const avatar = firstAncestorOfComponent(this, 'avatar');
+        if (avatar && avatar.hasSlot('ps') && avatar.showPS === false){
+          avatar.showPS = true;
+          avatar.psButton = this;        
+          return;
+        }
+      }
+
+      // Event handling.
       await wait(1000);
       this.$emit('clik');
       if (!this.isNope && this.$parent.onClick !== undefined){
@@ -3532,7 +3565,7 @@ new Vue({
   el: '#app',
   data: {
     chapters: chapters,
-    chapterInd: 1,
+    chapterInd: 4,
     // Obj property additions do not update DOM, so prepopulate all the keys in the object. Or use lists.
     //soundNameToCount: {},
     show: false,
