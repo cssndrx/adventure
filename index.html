@@ -501,39 +501,62 @@ You are going to bring us into this new world of <span class="animated infinite 
   </div>
 </div>
 
+
+
 <avatar key="intro"
   v-if="show('intro')"
-  image="cop.png"
-  text="Fancy a magic potion that could teach you statistics?">
+  image="wizard.png"
+  text="For my next act of evil, I introduce you to the p-value. P-values are used to describe scientific results, but they are so misunderstood that most people misinterpret scientific results! HAHA!">
+  <buton @click="set('intro2')">Next</buton>
+</avatar>
+
+<avatar key="intro2"
+  v-if="show('intro2')"
+  image="wizard.png"
+  text="Talk to this scientist and see if you can make sense of p-values.">
+  <buton @click="set('0')">Next</buton>
+</avatar>
+
+<avatar key="0"
+  v-if="show('0')"
+  image="scientist.png"
+  text="For many years, I've been trying to brew a magic potion to teach statistics.">
   <buton @click="set('2')">Next</buton>
 </avatar>
 
 <avatar key="2"
   v-if="show('2')"
-  image="cop.png"
-  text="I've been experimenting with brewing these potions for many years, and you get to pick one to drink. But in order to pick the right brew for you, you'll need to learn about p-values.">
+  image="scientist.png"
+  text="You can drink one of my potions. But in order to pick the right brew, you'll need to learn about p-values.">
+
+  <buton @click="set('2a')">Next</buton>
+</avatar>
+
+<avatar key="2a"
+  v-if="show('2a')"
+  image="scientist.png"
+  text="I ran experiments measuring the change in statistics knowledge after drinking each potion compared with a placebo.">
 
   <buton @click="set('3')">Next</buton>
 </avatar>
 
+
 <avatar key="3"
   v-if="show('3')"
-  image="cop.png"
-  text="I ran experiments measuring the change in statistics knowledge after drinking each potion compared with a placebo.
+  image="scientist.png"
+  text="The default belief is that it's not possible to learn statistics by drinking a potion. In science speak, the default belief is called the *null hypothesis*.
 
-  The default belief is that it's not possible to learn statistics by drinking a potion. In science speak, the default belief is called the *null hypothesis*.
-
-  And, the *p-value* is the probability that you'll see as extreme a result if the null hypothesis is true.">
+  The *p-value* is the probability that you'll see as extreme a result if the null hypothesis is true.">
 
   <buton @click="set('4')">Next</buton>
 </avatar>
 
 <avatar key="4"
   v-if="show('4')"
-  image="cop.png"
+  image="scientist.png"
   text="I ran the experiment with my first potion and got a p-value of 0.6. What does a p-value of 0.6 mean?">
 
-  <buton-group onClick="() => set('5')">
+  <buton-group :onClick="() => set('5')">
     <buton>There's a 60% chance of observing as extreme a result even if the potion didn't work</buton>
     <buton nope>There's a 60% chance that the potion is better than the placebo</buton>
     <buton nope>There's a 40% chance that the potion is better than the placebo</buton>
@@ -546,10 +569,10 @@ You are going to bring us into this new world of <span class="animated infinite 
 
 <avatar key="5"
   v-if="show('5')"
-  image="cop.png"
+  image="scientist.png"
   text="I ran the same experiment with a different potion and got a p-value of 0.01. What does a p-value of 0.01 mean?">
 
-  <buton-group onClick="() => set('6')">
+  <buton-group :onClick="() => set('6')">
     <buton>There's a 1% chance of observing as extreme a result even if the potion didn't work</buton>
     <buton nope>There's a 1% chance that the placebo is better than the potion</buton>
     <buton nope>There's a 1% chance that the results are due to chance</buton>
@@ -562,7 +585,7 @@ You are going to bring us into this new world of <span class="animated infinite 
 
 <avatar key="6"
   v-if="show('6')"
-  image="wizard.png"
+  image="scientist.png"
   text="For one of our potion experiments, what would be a more exciting result? A p-value of 0.01 or 0.001? ">
   <buton nope>0.01</buton>
   <buton yay>0.001</buton>
@@ -578,7 +601,7 @@ You are going to bring us into this new world of <span class="animated infinite 
 
 <avatar key="7"
   v-if="show('7')"
-  image="wizard.png"
+  image="scientist.png"
   text="Scienitific journals usually require a p-value of 0.05 or smaller to publish. If a p-value is less than 0.05, it is called 'statistically significant'. Experimenting with another potion yielded a p-value of 0.24. Which is...">
 
   <buton nope>Statistically significant</buton>
@@ -590,7 +613,7 @@ You are going to bring us into this new world of <span class="animated infinite 
 
 <avatar key="8"
   v-if="show('8')"
-  image="wizard.png"
+  image="scientist.png"
   text="How should a p-value of 0.14 be interpreted?">
 
   <buton>Weak evidence that the magic potion is the same as the placebo.</buton>
@@ -603,10 +626,10 @@ You are going to bring us into this new world of <span class="animated infinite 
 
 <avatar key="9"
   v-if="show('9')"
-  image="wizard.png"
+  image="scientist.png"
   text="Ok so for the potion I tested and got a p-value of 0.14, what should I do?">
 
-  <buton nope='Although the p-value in this experiment is insufficient to conclude "statistical significance", it doesn't mean that there is no effect. The power on the experiment may be insufficient.'>Conclude that potion C is no different from the placebo.</buton>
+  <buton nope='Although the p-value in this experiment is insufficient to conclude "statistical significance", it doesnt mean that there is no effect. The power on the experiment may be insufficient.'>Conclude that potion C is no different from the placebo.</buton>
   <buton nope="If you rerun the experiment, due to random variation it may be possible to get a lower p-value. But this is considered bad science (and p-hacking). See the green jelly beans xkcd.">Rerun the same experiment in hopes of getting a lower p-value</buton>
   <buton>Rerun the experiment but with a greater number of subjects and ???</buton>
 
@@ -615,7 +638,7 @@ You are going to bring us into this new world of <span class="animated infinite 
 
 <avatar key="10"
   v-if="show('10')"
-  image="wizard.png"
+  image="scientist.png"
   text="After a lot of experimentation, I finally arrived at these two potions:
 Potion A: p-value of 0.05
 Potion B: p-value of 0.1
@@ -636,7 +659,7 @@ Given that both p-values are reasonably small, use the effect size given by the 
 
 <avatar key="11"
   v-if="show('11')"
-  image="wizard.png"
+  image="scientist.png"
   text="It turns out that the effect sizes were: ">
 
 Potion A
@@ -661,14 +684,14 @@ In this case, which potion would you like to drink?
 
 <avatar key="12"
   v-if="show('12')"
-  image="wizard.png"
+  image="scientist.png"
   text="You drink the potion and....">
   <buton>Next</buton>
 </avatar>
 
 <avatar key="13"
   v-if="show('13')"
-  image="wizard.png"
+  image="scientist.png"
   text="Turns out that the statistics you learn comes from deciding which potion to drink, rather than drinking it">
   Congrats you learned....
   - The null hypothesis is __.
@@ -1067,18 +1090,14 @@ Ruthless Swan was vanquished by challenging them to a duel.
   </div>
 </div>
 
-<centered key="intro"
-  v-if="show('intro')" style="text-align:center;">
 
-  <img src="images/monster.png" style="width:200px;">
+<avatar key="intro"
+  v-if="show('intro')"
+  image="wizard.png"
+  text="For our first act of evil... people expect coins to be fair. I'm going to mess with a fella's coins. You go talk to him and see if he notices.">
+  <buton @click="set('something-wrong')">Talk to fella</buton>
+</avatar>
 
-  <div>
-    A curious green creature walks into the statistics police headquarters.
-  </div>
-
-  <buton @click="set('something-wrong')">Talk</buton>
-
-</centered>
 
 <!-- <transition name="fade" mode="out-in">-->
 <avatar key="something-wrong"
@@ -1108,7 +1127,7 @@ Ruthless Swan was vanquished by challenging them to a duel.
   key="HH-explanation" 
   v-if="show('HH-explanation')">
   <div>
-    Yeah! The probability of multiple independent events all occuring can be calculated by multiplication. This is called the probability of the <bold>joint event</bold>. So, the chance of getting HH is 1/2 x 1/2.
+    Nice work. In math lingo, you just calculated a <bold>joint probability</bold> -- the probability multiple events would occur.  For calculating the probability of independent events like coin tosses, this is done by multiplication. 1/2 x 1/2 = 1/4. 
   </div>
 
   <div>
@@ -1129,7 +1148,7 @@ Ruthless Swan was vanquished by challenging them to a duel.
 <avatar key="HHH"
   v-if="show('HHH')"
   image="monster.png" 
-  text="What is the probability that I toss a coin three times and get HHH?">
+  text="I'm building up to what the problem is... but first, what is the probability that I toss a coin three times and get HHH?">
   <buton nope>1/2</buton>
   <buton nope>1/3</buton>
   <buton @clik="set('10H')" yay>1/8</buton>
@@ -1161,7 +1180,7 @@ Ruthless Swan was vanquished by challenging them to a duel.
 <avatar key="10H"
   v-if="show('10H')"
   image="monster.png" 
-  text="What is the probability that I toss a coin 10 times and get HHHHHHHHHH?">
+  text="Now, what is the probability that I toss a coin 10 times and get HHHHHHHHHH?">
   <buton @clik="set('10HT')" yay>1/<exp base="2" pow="10"/></buton>
   <buton nope>1/2</buton>
   <buton nope>1/10</buton>
@@ -1185,7 +1204,7 @@ Ruthless Swan was vanquished by challenging them to a duel.
 <avatar key="10HT"
   v-if="show('10HT')"
   image="monster.png" 
-  text="What is the probability that I toss a coin 10 times and get HHHTHHTTTT?">
+  text="And what is the probability that I toss a coin 10 times and get HHHTHHTTTT?">
   <buton @clik="set('10HT-interstitial')" yay>1/<exp base="2" pow="10"/></buton>
   <buton nope>1/2</buton>
   <buton nope>1/10</buton>
@@ -1206,7 +1225,6 @@ Ruthless Swan was vanquished by challenging them to a duel.
 </avatar> -->
 
 <interstitial 
-    image="monster.png"
     key="10HT-interstitial" 
     v-if="show('10HT-interstitial')">
   <div>
@@ -1343,14 +1361,14 @@ Ruthless Swan was vanquished by challenging them to a duel.
 <avatar key="intro"
   v-if="show('intro')"
   image="wizard.png" 
-  text="Did somebody say my name?">
-  <buton @click="set('wizard2')">Oops</buton>
+  text="Oh ho! That monster definitely didn't like me messing with his coins. Well done, young evil one.">
+  <buton @click="set('wizard2')">Next</buton>
 </avatar>
 
 <avatar key="wizard2"
   v-if="show('wizard2')"
   image="wizard.png" 
-  text="Oh ho! You've noticed that coins have become unfair, have you? Let's see how you do at my new little game.">
+  text="I have a few more special coins. Let's see how you do at my little game.">
 
   <buton @click="set('3coins')">Next</buton>
 </avatar>
@@ -1360,7 +1378,7 @@ Ruthless Swan was vanquished by challenging them to a duel.
   image="wizard.png" 
   text="I have 3 coins. 2 are fair, 1 is unfair. Let's see if you can find the unfair one.">
 
-  <div>Click the coins to flip them.</div>
+  <div>Click the coins to flip them at least 10 times each.</div>
   <div>When you have enough info, submit your guess.</div>
 
   <coin></coin>
@@ -1460,7 +1478,7 @@ Ruthless Swan was vanquished by challenging them to a duel.
 <avatar key="fin"
   v-if="show('fin')"
   image="wizard.png" 
-  text="HAHAHA. That's it for coins. Literally childs play. If I can do this with coins, imagine what damage I can do with dice. Better level up quickly. You'll be seeing more of me. Toodooaloo~~">
+  text="HAHAHA. That's it for coins. Let's cause more mischief.">
 
   <div style="font-size: 48px; letter-spacing:4px;">
   CONGRATS
@@ -1468,6 +1486,7 @@ Ruthless Swan was vanquished by challenging them to a duel.
 
   <ul>
     <li>You learned about what randomness feels like</li>
+    <li>You got to play with your cool friend, the Bad Wizard</li>
   </ul> 
 
   <buton @click="$root.nextStory()">Next Story</buton>
@@ -1518,6 +1537,15 @@ Ruthless Swan was vanquished by challenging them to a duel.
 
 <avatar key="intro"
   v-if="show('intro')"
+  image="wizard.png" 
+  text="I cast a curse to make the next monster very picky, so you can learn about the Chain Rule of probability.">
+
+  <buton @click="set('veronica')">Next</buton>
+</avatar>
+
+
+<avatar key="veronica"
+  v-if="show('veronica')"
   image="girl.png" 
   text="Hello! I'm Veronica and I only date monsters that are tall and have great hair.">
 
@@ -2124,6 +2152,10 @@ Ruthless Swan was vanquished by challenging them to a duel.
 </div>
 </transition> -->
 
+<div style="position:absolute; top:300px; background-color: #372F26; color: white; padding: 16px;">
+  <div class="handwriting"> Yes! We're hoping that the potion is different from the placebo, so a lower p-value is better. 
+  </div>
+</div>
 
 <img v-if="showRainbow" src="images/rainbow.png">
 
@@ -2141,17 +2173,10 @@ Ruthless Swan was vanquished by challenging them to a duel.
     <live-text  
         ref="initial-text"
         key="initial-text"
-        v-if="!showNewText" @live-text-complete="showQuestion=true">
+        @live-text-complete="showQuestion=true">
         <slot name="dialog"></slot>
       {{text}}
     </live-text> 
-
-    <live-text 
-        key="new-text"
-        v-if="showNewText"
-        @live-text-complete="showNewQuestion=true">
-        <slot name="new-text"></slot>
-    </live-text>
   </div>
 </div>
 
@@ -2175,20 +2200,12 @@ Ruthless Swan was vanquished by challenging them to a duel.
     </div> -->
   </transition>
 
-
-<transition name="fade" mode="out-in">  
-  <div v-if="showQuestion && !showNewQuestion">  
-    <slot></slot>
-  </div>
-
-  <slot v-if="showNewQuestion" name="new-question"></slot>
-</transition>
 </div>
 
 <!-- Cop overlay -->
 <transition name="slide-up">
 <div v-if="showCop" style="position:absolute; top: 200px; left:0px;" @click="showCop=false">
-  <img src="images/cop.png" >
+  <img src="images/wizard.png" style="position:absolute; left:-100px;">
   <div style="position:absolute; left: 200px; top:0px">
     <img src="images/up_dialog.png" style="height: 500px">
     <div class="small-dialog-text" style="position:absolute; left:0px; top:0px; padding:28px">
@@ -2261,7 +2278,11 @@ Ruthless Swan was vanquished by challenging them to a duel.
   <div v-if="showX" 
        class="handwriting" 
        style="display:inline-block; position:absolute; color:red; font-size: 64px; left: calc(50% - 20px); top:-4px">X</div>
-  <button @click="butonClicked()" v-on="$listeners" :class="{'rainbow-text': showRainbowText, 'clicked-button': clickedButton}" class="handwriting"><slot></slot>
+  <button 
+    @click="butonClicked()" v-on="$listeners" 
+    :class="{'rainbow-text': showRainbowText, 'clicked-button': clickedButton}" 
+    class="handwriting"
+    :style="buttonStyle"><slot></slot>
   </button>
 <!--  <transition name="fade">
     <div v-if="showNopeText" class="nope" style="margin-bottom:8px; position:relative; top:-4px;">
@@ -2693,13 +2714,11 @@ Vue.component('avatar', {
   data: function(){
     return {
       showQuestion: false,
-      showNewQuestion: false,
       showMiniDialog: false,
       showLiveText: false,
       showHint: false,
       showRainbow: false,
       showFall: false,
-      showNewText: false,
       reactionImage: null,
       nopeText: null,
       showCop: false,
@@ -2806,6 +2825,9 @@ Vue.component('buton', {
     isYay: function(){
       return 'yay' in this.$attrs;
     },
+    buttonStyle: function(){
+      return {'font-size': this.$slots.default[0].text.length > 40 ? '16px' : '28px'};
+    }
   },
   methods: {
     butonClicked: async function(){
@@ -3056,7 +3078,7 @@ Vue.component('bold', {
 
 Vue.component('interstitial', {
   props: {
-    image: {type: String, default: 'monster.png'}, 
+    image: {type: String, default: 'wizard.png'}, 
   },
   computed: {
     cropCircleStyle: function(){
@@ -3498,7 +3520,7 @@ const chapters = [
 {
   component: 'intro-to-pvalues',
   description: 'P-values and other cruft from frequentist statistics', 
-  image: 'cop.png',
+  image: 'scientist.png',
 },
 ];
 
@@ -3510,7 +3532,7 @@ new Vue({
   el: '#app',
   data: {
     chapters: chapters,
-    chapterInd: 0,
+    chapterInd: 1,
     // Obj property additions do not update DOM, so prepopulate all the keys in the object. Or use lists.
     //soundNameToCount: {},
     show: false,
