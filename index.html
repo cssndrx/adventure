@@ -23,7 +23,7 @@ font-family: 'Cormorant Garamond', serif;
 <!-- todo: strip and remove the unused -->
 <link href="https://fonts.googleapis.com/css?family=Schoolbell|Dokdo|Fira+Sans:300,700" rel="stylesheet">
 
-<link href="css/animate.css" rel="stylesheet" type="text/css">
+<!--<link href="css/animate.css" rel="stylesheet" type="text/css">-->
 <script src="js/lodash.min.js"></script>
 <script src="js/d3.v5.min.js"></script>
 <script src="js/d3-array.v2.min.js"></script>
@@ -73,10 +73,6 @@ a{
   text-decoration: none;
   cursor: pointer;
 }
-a:hover{
-  font-weight: bold;
-}
-
 .note, .note *{
   color:#999;
   cursor: pointer;
@@ -425,6 +421,17 @@ button{
   width: 200px;
 }
 
+.sideways{
+  transform: translateX(-50%) translateY(-50%) rotate(-90deg);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+}
+
+.font16, .font16 *{
+  font-size: 15px;
+}
+
 </style>
 
 <body>
@@ -433,18 +440,22 @@ button{
 
 <div id="app" style="position:relative;left: 60px;width:calc(100% - 60px); height:calc(100vh - 200px)">
 
+  <div 
+  :style="{'background-color': showTOC ? '#777' : '#ddd', 'color': showTOC ? 'white': 'black'}"
+  style="width:60px;position: fixed; top:0px; left:0px; height: 100%; text-align: center; padding-top:8px"
+  :style="{}">
+    <img v-if="!showTOC" src="images/menu.png" style="cursor: pointer" @click="showTOC = !showTOC">
+    <img v-if="showTOC" src="images/x.png" style="cursor: pointer" @click="showTOC = !showTOC">
+    <span class="sideways handwriting" style="white-space: nowrap;">Chapter {{chapterInd}}: {{currentChapter.name}}</span>
 
-
-  <div style="width:60px;background-color: #eee; position: fixed; top:0px; left:0px; padding: 4px; height: 100%; text-align: center;">
-    <img src="images/menu.png" style="cursor: pointer">
-    <div v-for="(chapter, ind) in chapters"
+<!--    <div v-for="(chapter, ind) in chapters"
          @click="chapterInd = ind"
          style="display:inline-block;">
       <img :class="{'story-point-silhouette': currentChapter !== chapter}"
           :src="'images/' + chapter.image" 
           style="width:50px">
       <span style="top:60px;">{{chapter.name}}</span>
-    </div>
+    </div> -->
   </div> 
 
 
@@ -481,7 +492,7 @@ You are going to bring us into this new world of <span class="animated infinite 
 
 
 <keep-alive>
-  <component v-bind:is="currentChapter.component"></component>
+  <component v-bind:is="visibleScreen"></component>
 </keep-alive>
 
 
@@ -984,6 +995,48 @@ Ruthless Swan was vanquished by challenging them to a duel.
 </div>
 </script>
 
+<script type="text/x-template" id="toc-template">
+<div style="background-color: #eee; height: 100%; position:fixed; top:0px; left:60px; width: calc(100% - 60px)" class="font16 handwriting">
+  <div style="width:500px; margin: 0 auto; margin-top: 24px; ">
+
+
+    <div style="font-weight:700; font-size:12px">Chapters</div>
+    <div>
+      You can jump ahead in the story, but the story makes the most sense played through from the beginning.
+    </div>
+
+    <div>
+    <div v-for="(chapter, index) in chapters" v-if="index > 0">
+      <a @click="$root.showTOC = false; $root.chapterInd = index">Chapter {{index}}: {{chapter.description}}</a>
+    </div>
+    </div>
+
+    <div style="font-weight:700; font-size:12px">Your story so far</div>
+
+    <div>
+      You want to learn statistics so you're helping the Bad Wizard cause trouble in a faraway land. 
+    </div>
+
+    <div style="font-weight:700; font-size:12px">Hints</div>
+
+    <div>
+    It's okay to explore "wrong" answers to see what the story will say. You won't be penalized. 
+    </div>
+
+    <div>
+    It's possible to return to a question and answer it differently by using the jump points that look like:
+    </div>
+
+    <div class="point-container" style="width: 300px; margin-bottom:32px">
+      <div v-for="point in 8" 
+      class="point">
+        <span>{{point.name}}</span>
+      </div>
+    </div>
+  </div>
+</div>
+</script>
+
 <script type="text/x-template" id="intro-scene-template">
 <div style="width:600px; margin: 0 auto;">
 
@@ -1004,43 +1057,6 @@ Ruthless Swan was vanquished by challenging them to a duel.
   </div>
 
   <buton @click="set('1')">Play</buton>
-
-
-  <div style="text-align:left">
-
-    <div>
-    You found a scroll to jump ahead in the story. 
-    </div>
-
-    <div style="text-align: center">
-    <img src="images/scroll.png" style="width:300px">
-    </div>
-
-    <div>
-      For max evil, start from the beginning. 
-    </div>
-
-    <div>
-    <div v-for="(chapter, index) in chapters" v-if="index > 0">
-      <a @click="$root.chapterInd = index">Chapter {{index}}: {{chapter.description}}</a>
-    </div>
-    </div>
-
-    <div>
-    <bold>Evil hint:</bold> It's okay to explore "wrong" answers to see what the story will say. You won't be penalized. 
-    </div>
-
-    <div>
-    <bold>Evil hint 2:</bold> It's always possible to return to a question and answer it differently by using the jump points that look like:
-    </div>
-
-    <div class="point-container" style="width: 300px; margin-bottom:32px">
-      <div v-for="point in 8" 
-      class="point">
-        <span>{{point.name}}</span>
-      </div>
-    </div>
-  </div>
 
 </div> <!-- end intro -->
 
@@ -2591,6 +2607,15 @@ Vue.component('coin', {
   template: '#coin-template'
 });
 
+Vue.component('toc', {
+  data: function(){
+    return {
+      chapters: chapters,
+    }
+  },
+  template: '#toc-template'
+});
+
 Vue.component('biased-coin-machine', {
   data: function(){
     return {
@@ -2873,10 +2898,14 @@ Vue.component('buton', {
     butonClicked: async function(){
       this.$root.play('buton');
       this.clickedButton = true;
+      const avatar = firstAncestorOfComponent(this, 'avatar');
 
       // Tell those listening on the bus that the buton has been clicked... unless it's a buton within an input-box.
       if(!firstAncestorOfComponent(this, 'input-box')){
-        bus.$emit('answer-submitted', this);        
+        // Don't emit again if this is the buton inside PS either.
+        if (avatar.psButton !== this){
+          bus.$emit('answer-submitted', this);        
+        }
       }
 
       // Mark the buton as wrong.
@@ -2885,7 +2914,6 @@ Vue.component('buton', {
       } else {
 
         // Check if it has a PS. Early return if so, we don't want to hit event handling.
-        const avatar = firstAncestorOfComponent(this, 'avatar');
         if (avatar && avatar.hasSlot('ps') && avatar.showPS === false){
           avatar.showPS = true;
           avatar.psButton = this;        
@@ -3234,12 +3262,13 @@ function makeComponent(componentName, points, reactions){
             this_.react('showRainbow', true);
           }
         } else {
-          this_.addCorrectness(problemKey, false);          
+          // this_.addCorrectness(problemKey, false);          
         }
         
         // just a naked <buton nope>
         if (input.isNope){
           avatar.reactionImage = reactions.nope;
+          this_.addCorrectness(problemKey, false);          
         } 
         if ('coy' in input.$attrs){
           avatar.reactionImage = reactions.coy;
@@ -3571,21 +3600,25 @@ const chapters = [
 },
 {
   component: 'coin-flips',
+  name: 'Independence',
   description: 'Independent events, the number of atoms in the universe',
   image: 'monster.png',
 },
 {
   component: 'wizard-flips',
+  name: 'Randomness',
   description: 'What does randomness look like, a guessing game',
   image: 'wizard.png',
 },
 {
   component: 'chain-rule',
+  name: 'Chain Rule',
   description: 'Chain rule of probability, a vignette on dating',
   image: 'girl.png',
 },
 {
   component: 'intro-to-pvalues',
+  name: 'P-values',
   description: 'P-values and other cruft from frequentist statistics', 
   image: 'scientist.png',
 },
@@ -3604,10 +3637,14 @@ new Vue({
     //soundNameToCount: {},
     show: false,
     isPlaying: false,
+    showTOC: true,
   },
   computed: {
     currentChapter: function(){
       return this.chapters[this.chapterInd];
+    },
+    visibleScreen: function(){
+      return this.showTOC ? 'toc' : this.currentChapter.component;
     }
   },
   watch:{
