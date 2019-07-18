@@ -3661,12 +3661,12 @@ new Vue({
   el: '#app',
   data: {
     chapters: chapters,
-    chapterInd: 4,
+    chapterInd: 0,
     // Obj property additions do not update DOM, so prepopulate all the keys in the object. Or use lists.
     //soundNameToCount: {},
     show: false,
     isPlaying: false,
-    showTOC: true,
+    showTOC: false,
   },
   computed: {
     currentChapter: function(){
