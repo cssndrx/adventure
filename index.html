@@ -432,13 +432,27 @@ button{
   font-size: 15px;
 }
 
+.toc-chapter{
+  display: grid;
+  grid-template-columns: 50px auto;
+}
+
+.toc-chapter:hover{
+  background-color: #ddd;
+}
+
+.toc-chapter:hover img{
+    -webkit-filter: none;
+  filter: none;
+}
+
 </style>
 
 <body>
 
 
 
-<div id="app" style="position:relative;left: 60px;width:calc(100% - 60px); height:calc(100vh - 200px)">
+<div id="app" style="position:relative;left: 60px;width:calc(100% - 60px);">
 
   <div 
   :style="{'background-color': showTOC ? '#777' : '#ddd', 'color': showTOC ? 'white': 'black'}"
@@ -446,7 +460,8 @@ button{
   :style="{}">
     <img v-if="!showTOC" src="images/menu.png" style="cursor: pointer" @click="showTOC = !showTOC">
     <img v-if="showTOC" src="images/x.png" style="cursor: pointer" @click="showTOC = !showTOC">
-    <span class="sideways handwriting" style="white-space: nowrap;">Chapter {{chapterInd}}: {{currentChapter.name}}</span>
+    <span class="sideways handwriting" style="white-space: nowrap;" v-if="currentChapter.name">Chapter{{chapterInd}}: {{currentChapter.name}}</span>
+
 
 <!--    <div v-for="(chapter, ind) in chapters"
          @click="chapterInd = ind"
@@ -457,6 +472,19 @@ button{
       <span style="top:60px;">{{chapter.name}}</span>
     </div> -->
   </div> 
+  <div v-if="showTOC" class="normal-div" style="position:fixed; z-index:1; width:200px;top:0px; left:60px; top:0;
+    bottom:0;
+overflow-y:scroll;padding-top:8px; background-color: #eee;">
+    <div v-for="(chapter, ind) in chapters"
+         @click="showTOC = false; chapterInd = ind"
+         class="toc-chapter"
+         style="padding:4px">
+      <img :class="{'story-point-silhouette': currentChapter !== chapter}"
+          :src="'images/' + chapter.image" 
+          style="max-width:50px; max-height:100px">
+      <span style="top:60px; font-size:12px; display: inline-block; margin:8px;"><bold style="font-size:12px">Chapter {{ind}}</bold><br> {{chapter.description}}</span>
+    </div>
+  </div>
 
 
 <!--
@@ -1056,7 +1084,7 @@ Ruthless Swan was vanquished by challenging them to a duel.
   Learn statistics by helping an evil wizard wreak chaos around town. 
   </div>
 
-  <buton @click="set('1')">Play</buton>
+  <buton @click="$root.nextChapter()">Play</buton>
 
 </div> <!-- end intro -->
 
@@ -1081,7 +1109,7 @@ Ruthless Swan was vanquished by challenging them to a duel.
   v-if="show('3')"
   image="cop.png"
   text="I'm going to make a fine officer out of you. Let's head to headquarters and see if anyone needs help.">
-  <buton @click="$root.nextStory()">To headquarters</buton>
+  <buton @click="$root.nextChapter()">To headquarters</buton>
 </avatar>
 
 
@@ -1380,7 +1408,7 @@ Ruthless Swan was vanquished by challenging them to a duel.
   </ul> 
 
 
-  <buton @click="$root.nextStory()">Accept Quest</buton>
+  <buton @click="$root.nextChapter()">Accept Quest</buton>
 </avatar>
 
 <!-- </transition> -->
@@ -1533,7 +1561,7 @@ Ruthless Swan was vanquished by challenging them to a duel.
     <li>You got to play with your cool friend, the Bad Wizard</li>
   </ul> 
 
-  <buton @click="$root.nextStory()">Next Story</buton>
+  <buton @click="$root.nextChapter()">Next Story</buton>
 </avatar>
 
 </div>
@@ -2486,7 +2514,7 @@ Vue.component('intro-scene', {
         this.showButons = true;
       } 
       if (this.state == 'fin'){
-        this.$root.nextStory();
+        this.$root.nextChapter();
         // this.$emit('scene-complete');
       }
     },
@@ -2607,14 +2635,14 @@ Vue.component('coin', {
   template: '#coin-template'
 });
 
-Vue.component('toc', {
-  data: function(){
-    return {
-      chapters: chapters,
-    }
-  },
-  template: '#toc-template'
-});
+// Vue.component('toc', {
+//   data: function(){
+//     return {
+//       chapters: chapters,
+//     }
+//   },
+//   template: '#toc-template'
+// });
 
 Vue.component('biased-coin-machine', {
   data: function(){
@@ -2903,7 +2931,7 @@ Vue.component('buton', {
       // Tell those listening on the bus that the buton has been clicked... unless it's a buton within an input-box.
       if(!firstAncestorOfComponent(this, 'input-box')){
         // Don't emit again if this is the buton inside PS either.
-        if (avatar.psButton !== this){
+        if (avatar && avatar.psButton !== this){
           bus.$emit('answer-submitted', this);        
         }
       }
@@ -3348,7 +3376,7 @@ function makeComponent(componentName, points, reactions){
       finish: async function(){
         this.$root.play('achievement');
         await wait(1500);
-        this.$root.nextStory();
+        this.$root.nextChapter();
       }
     },
     template: '#' + componentName + '-template'
@@ -3597,29 +3625,30 @@ const chapters = [
 {
   component: 'intro-scene',
   image: 'scroll.png',
+  description: 'The beginning'
 },
 {
   component: 'coin-flips',
   name: 'Independence',
-  description: 'Independent events, the number of atoms in the universe',
+  description: 'Independent events',
   image: 'monster.png',
 },
 {
   component: 'wizard-flips',
   name: 'Randomness',
-  description: 'What does randomness look like, a guessing game',
+  description: 'What does randomness look like',
   image: 'wizard.png',
 },
 {
   component: 'chain-rule',
   name: 'Chain Rule',
-  description: 'Chain rule of probability, a vignette on dating',
+  description: 'Chain rule of probability',
   image: 'girl.png',
 },
 {
   component: 'intro-to-pvalues',
   name: 'P-values',
-  description: 'P-values and other cruft from frequentist statistics', 
+  description: 'P-values', 
   image: 'scientist.png',
 },
 ];
@@ -3644,7 +3673,7 @@ new Vue({
       return this.chapters[this.chapterInd];
     },
     visibleScreen: function(){
-      return this.showTOC ? 'toc' : this.currentChapter.component;
+      return this.currentChapter.component;
     }
   },
   watch:{
@@ -3659,10 +3688,10 @@ new Vue({
     // round_to(2.777777, 0) -> 3
     // round_to(2.777777, 2) -> 2.78
     roundTo: roundTo,
-    nextStory: async function(){
+    nextChapter: async function(){
       // this.play('achievement');
       // await wait(1500);
-      this.chapterInd = Math.min(this.chapterInd.length-1, this.chapterInd+1);
+      this.chapterInd = Math.min(this.chapters.length-1, this.chapterInd+1);
     },
     // // Given 0.8 --> returns {}
     // paramsFromCertainty: function(certainty){
