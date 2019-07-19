@@ -555,12 +555,19 @@ You are going to bring us into this new world of <span class="animated infinite 
 <avatar key="intro"
   v-if="show('intro')"
   image="wizard.png"
-  text="For my next act of evil, I introduce you to the p-value. P-values are used to describe scientific results, but they are so misunderstood that most people misinterpret scientific results! HAHA!">
+  text="I cannot take credit for this next act of evil... the p-value.">
   <buton @click="set('intro2')">Next</buton>
 </avatar>
 
 <avatar key="intro2"
   v-if="show('intro2')"
+  image="wizard.png"
+  text="P-values are used to describe scientific results, but they are so misunderstood that most people misinterpret scientific results! HAHA!">
+  <buton @click="set('intro3')">Next</buton>
+</avatar>
+
+<avatar key="intro3"
+  v-if="show('intro3')"
   image="wizard.png"
   text="Talk to this scientist and see if you can make sense of p-values.">
   <buton @click="set('0')">Next</buton>
@@ -1076,12 +1083,14 @@ Ruthless Swan was vanquished by challenging them to a duel.
 
   <img src="images/wizard.png" style="width:300px">
 
-  <div>
-  Not really motivated by dry tests or stuffy professors, but you'll get out of bed for a little evil fun?
-  </div>
+  <div style="max-width:500px; margin: 0 auto">
+    <div>
+    Not really motivated by dry tests or stuffy professors, but you'll get out of bed to save the world?
+    </div>
 
-  <div>
-  Learn statistics by helping an evil wizard wreak chaos around town. 
+    <div>
+    Learn statistics to stop the Evil Wizard.
+    </div>
   </div>
 
   <buton @click="$root.nextChapter()">Play</buton>
@@ -1170,8 +1179,8 @@ Ruthless Swan was vanquished by challenging them to a duel.
 <avatar key="intro"
   v-if="show('intro')"
   image="wizard.png"
-  text="For our first act of evil... people expect coins to be fair. I'm going to mess with a fella's coins. You go talk to him and see if he notices.">
-  <buton @click="set('something-wrong')">Talk to fella</buton>
+  text="For my first act of evil... people expect coins to be fair. I'm going to bias some coins and see if anyone notices.">
+  <buton @click="set('something-wrong')">Next</buton>
 </avatar>
 
 
@@ -1269,9 +1278,7 @@ Ruthless Swan was vanquished by challenging them to a duel.
     </div>
 
     <div>
-      So the chance of getting HHHHHHHHHH is ....
-
-      (big fraction) approx .01%
+      So the chance of getting HHHHHHHHHH is .... 1/(2*2*2*2*2*2*2*2*2*2) = approx .01%
     </div>
   </template>
 </avatar>
@@ -1433,14 +1440,14 @@ Ruthless Swan was vanquished by challenging them to a duel.
 <avatar key="intro"
   v-if="show('intro')"
   image="wizard.png" 
-  text="Oh ho! That monster definitely didn't like me messing with his coins. Well done, young evil one.">
+  text="Oh ho! That monster definitely didn't like me messing with his coins.">
   <buton @click="set('wizard2')">Next</buton>
 </avatar>
 
 <avatar key="wizard2"
   v-if="show('wizard2')"
   image="wizard.png" 
-  text="I have a few more special coins. Let's see how you do at my little game.">
+  text="Let's see how you do at my next little game.">
 
   <buton @click="set('3coins')">Next</buton>
 </avatar>
@@ -1474,7 +1481,7 @@ Ruthless Swan was vanquished by challenging them to a duel.
   image="wizard.png" >
 
   <template v-slot:dialog>
-    {{ perfect('3coins') ? 'Oh. You got me. That coin was biased to land on H, 70% of the time.' : "HAAAHHAA! It's pretty hard to find the biased coin, right? And that was when the coin was biased to land on H, 70% of the time!"}} Wanna play with my awesome coin biasing machine?
+    {{ perfect('3coins') ? 'Oh. You got me. That coin was biased to land on H, 70% of the time.' : "HAAAHHAA! It's pretty hard to find the biased coin, right? And that was when the coin was biased to land on H, 70% of the time!"}} What is the weakest bias with which you can easily tell that the coin is biased?
   </template>
 
   <biased-coin-machine></biased-coin-machine>
@@ -1558,7 +1565,6 @@ Ruthless Swan was vanquished by challenging them to a duel.
 
   <ul>
     <li>You learned about what randomness feels like</li>
-    <li>You got to play with your cool friend, the Bad Wizard</li>
   </ul> 
 
   <buton @click="$root.nextChapter()">Next Story</buton>
@@ -1610,7 +1616,7 @@ Ruthless Swan was vanquished by challenging them to a duel.
 <avatar key="intro"
   v-if="show('intro')"
   image="wizard.png" 
-  text="I cast a curse to make the next monster very picky, so you can learn about the Chain Rule of probability.">
+  text="For my next evil deed, I have cast a spell to cause many monsters to have bad hair.">
 
   <buton @click="set('veronica')">Next</buton>
 </avatar>
@@ -1922,10 +1928,11 @@ Ruthless Swan was vanquished by challenging them to a duel.
 
 <avatar key="not-many"
         v-if="show('not-many')"
-        image="girl_shock.png" text="That's not very many people!">
+        image="girl_shock.png"
+        text="That's not very many people!">
 
   <div>
-    Even though each individual criteria may not seem picky, requiring that a monster have all those traits leaves Veronica with a very small dating pool.
+    Even though each individual criteria may not seem picky, requiring that a monster have all the traits leaves Veronica with a very small dating pool.
   </div>
 
   <div>
@@ -1969,8 +1976,12 @@ Ruthless Swan was vanquished by challenging them to a duel.
   <input-box :right="6" :onRight="() => set('congrats')" :feedback="true"/>
 </interstitial>
 
-<centered key="congrats"
-  v-if="show('congrats')">
+
+<avatar key="congrats"
+        v-if="show('congrats')"
+        image="wizard.png"
+        text="Aw... you foiled my plan by showing Veronica how picky she was.">
+
   <div style="font-size: 48px; letter-spacing:4px;">
   CONGRATS
   </div>
@@ -1982,7 +1993,9 @@ Ruthless Swan was vanquished by challenging them to a duel.
   </ul> 
 
   <buton @click="finish()">Next section</buton>
-</centered>
+</avatar>
+
+
 
 </transition>
 
