@@ -23,19 +23,24 @@ font-family: 'Cormorant Garamond', serif;
 <!-- todo: strip and remove the unused -->
 <link href="https://fonts.googleapis.com/css?family=Schoolbell|Dokdo|Fira+Sans:300,700" rel="stylesheet">
 
-<!--<link href="css/animate.css" rel="stylesheet" type="text/css">-->
 <script src="js/lodash.min.js"></script>
 <script src="js/d3.v5.min.js"></script>
 <script src="js/d3-array.v2.min.js"></script>
 
 <script src="js/vue.js"></script>
 <script src="js/vuex.js"></script>
-
-<script src="js/jquery-1.9.1.js"></script>
-
 <script src="js/utils.js"></script>
 
 <style>
+
+
+.dot{
+  border-radius: 50%;
+  width: 12px;
+  height: 12px;
+  background-color: blue;
+  cursor: ns-resize;
+}
 
 text{
   font-size: 13px;
@@ -1089,7 +1094,7 @@ Ruthless Swan was vanquished by challenging them to a duel.
     </div>
 
     <div>
-    Learn statistics to stop the Evil Wizard.
+    Learn statistics and stop the Evil Wizard.
     </div>
   </div>
 
@@ -1573,6 +1578,118 @@ Ruthless Swan was vanquished by challenging them to a duel.
 </div>
 </script>
 
+
+<script type="text/x-template" id="bayes-rule-template">
+<div>
+
+<!-- jump to a diferent problem -->
+<div class="point-container" style="width: 250px">
+  <div v-for="point in points" 
+  @click="set(point.key)" 
+  class="point has-tooltip" 
+  :class="pointClass(point)"
+  :style="pointStyle(point)">
+    <span>{{point.name}}</span>
+  </div>
+</div>
+
+<!--  
+  <samples-chart 
+:xDomain="['Evil', 'Not evil']"
+:samples="['Evil', 'Not evil', 'Not evil', 'Not evil', 'Not evil']"
+:chartHeight="200" :chartWidth="200" /> -->
+
+<avatar key="intro"
+  v-if="show('intro')"
+  image="wizard.png" 
+  text="Now, you can ask me the question you've been meaning to ask me.">
+  <buton @click="set('prior')">Are you really evil?</buton>
+</avatar>
+
+<avatar key="prior"
+  v-if="show('prior')"
+  image="wizard.png" 
+  text="People in story book land are generally nice. Maybe 1 in 5 are evil. So your *prior belief* on my evilness (before knowing anything about me) should look like:">
+
+  <div>Drag the bars to represent the <bold>prior belief</bold>.</div>
+
+  <bayes-chart 
+  :xDomain="['Evil', 'Not evil']"
+  :chartHeight="150" :chartWidth="200"
+  :correct="[1, 4]"
+  @belief-changed="beliefChanged">
+
+    <template v-slot:hint>
+      <div>Hint</div>
+    </template>
+
+    <template v-slot:done>
+      <buton @click="set('evil-name')">Next</buton>
+    </template>
+  </bayes-chart>
+
+// How should we do the triple one??
+// Should we do the triple one first??
+// And then figure out how to split the bayes-chart and samples-chart??
+
+
+</avatar>
+
+<avatar key="evil-name"
+  v-if="show('evil-name')"
+  image="wizard.png" 
+  text="But then you learned my name is 'Evil Wizard', which gave you pause. But not everyone with the name 'evil' is actually evil. How can you reconcile this new information with your prior belief to form your *posterior belief*?">
+
+  <buton @click="set('likelihood')">Use Bayes Rule</buton>
+
+</avatar>
+
+<avatar key="likelihood"
+  v-if="show('likelihood')"
+  image="wizard.png" 
+  text="Bayes Rule says that your posterior belief is proportional to your prior belief * likelihood.">
+
+<div style="text-align:center">
+<big-frac num="P(H1|D)" den="P(H2|D)"></big-frac> =   <big-frac num="P(D|H1)" den="P(D|H2)"></big-frac> *   <big-frac num="P(H1)" den="P(H2)"></big-frac>
+</div>
+
+<div>
+According to Bayes Rule, we should calculate the "likelihood of evidence". How likely is it for a good person to have "evil" in their name. How likely is it for an evil person to have "evil" in their name.
+</div>
+
+<div>
+Let's say 1 in 100 good people have "evil" in their names. 1 in 5 evil people have "evil" in their names. Adjust the plot to show the *likelihood of evidence*.
+</div>
+
+  <samples-chart 
+:xDomain="['Evil', 'Not evil']"
+:samples="['Evil', 'Not evil']"
+:chartHeight="150" :chartWidth="600"
+@belief-changed="beliefChanged" />
+
+</avatar>
+
+<avatar key="bayes-rule"
+  v-if="show('bayes-rule')"
+  image="wizard.png" 
+  text="Bayes Rule says we can multiple these two ratios to get our posterior belief.">
+
+Three figures side by side.
+
+</avatar>
+
+
+<avatar key="vegetarian"
+  v-if="show('vegetarian')"
+  image="wizard.png" 
+  text="Ok so at this point, you think that I am ___X more likely to be good than evil. But wait, I'm ____.">
+
+
+</avatar>
+
+
+</div>
+</script>
 <script type="text/x-template" id="coin-template">
   <div @click="flip" class="coin normal-div">
     <img v-if="isShowingH" src="images/coin_heads.png" style="width:100px">
@@ -2197,32 +2314,99 @@ Ruthless Swan was vanquished by challenging them to a duel.
 </script>
 
 <script type="text/x-template" id="samples-chart-template">
-<div>
+<div style="position:relative" class="samples-chart">
 <svg :width="chartWidth+margin.left+margin.right" 
      :height="chartHeight+margin.top+margin.bottom">
     <g v-if="isCreated" 
       class="container"
       :transform="'translate(' + margin.left + ',' + margin.top + ')'">
-      <rect v-for="(count, x) in counts"
+<!--      <rect v-for="(count, x) in counts"
           :x="xScale(x)"
-          :y="yScale(count)"
+          :y="chartHeight - yScale(count)"
           :width="xScale.bandwidth()"
-          :height="chartHeight - yScale(count)"
+          :height="yScale(count)"
           :key="x"
-          fill="#E9BE2C"/>
+          fill="#E9BE2C"/>  -->
 
-      <!-- top of bar -->
+        <g v-for="(count, x) in counts">
+          <rect v-for="countInd in count"
+          :x="xScale(x)"
+          :y="chartHeight - yScale(count) + yScaleBandwidth*(countInd-1)+2"
+          :width="xScale.bandwidth()"
+          :height="yScaleBandwidth-2"
+          :key="x + countInd"
+          fill="#E9BE2C"/>
+        </g>
+
+
       <text v-for="(count, x) in counts" 
         :x="xScale(x)+ xScale.bandwidth()/2 - 4"
-        :y="yScale(count) - 2">
+        :y="chartHeight - yScale(count) - 8">
         {{ count }}
       </text>
 
     </g>
 </svg>
+
+  <div v-for="(count, x) in counts" class="dot"
+      style="position:absolute"
+      draggable="true"
+      @dragstart="dragstart(x)"
+      @dragend="dragend"
+      @drag="drag(x, $event)"
+      :style="{left: xScale(x)+ xScale.bandwidth()/2+ 4 + 'px', bottom: yScale(count) + 2 + 'px'}"></div>
+
+
 </div>
 </script>
 
+
+<script type="text/x-template" id="bayes-chart-template">
+<div style="position:relative" class="samples-chart">
+<svg :width="chartWidth+margin.left+margin.right" 
+     :height="chartHeight+margin.top+margin.bottom">
+    <g v-if="isCreated" 
+      class="container"
+      :transform="'translate(' + margin.left + ',' + margin.top + ')'">
+<!--      <rect v-for="(count, x) in counts"
+          :x="xScale(x)"
+          :y="chartHeight - yScale(count)"
+          :width="xScale.bandwidth()"
+          :height="yScale(count)"
+          :key="x"
+          fill="#E9BE2C"/>  -->
+
+        <g v-for="(count, x) in counts">
+          <rect v-for="countInd in count"
+          :x="xScale(x)"
+          :y="chartHeight - yScale(count) + yScaleBandwidth*(countInd-1)+2"
+          :width="xScale.bandwidth()"
+          :height="yScaleBandwidth-2"
+          :key="x + countInd"
+          fill="#E9BE2C"/>
+        </g>
+
+
+      <text v-for="(count, x) in counts" 
+        :x="xScale(x)+ xScale.bandwidth()/2 - 4"
+        :y="chartHeight - yScale(count) - 8">
+        {{ count }}
+      </text>
+
+    </g>
+</svg>
+
+  <div v-for="(count, x) in counts" class="dot"
+      style="position:absolute"
+      draggable="true"
+      @dragstart="dragstart(x)"
+      @dragend="dragend"
+      @drag="drag(x, $event)"
+      :style="{left: xScale(x)+ xScale.bandwidth()/2+ 4 + 'px', bottom: yScale(count) + 2 + 'px'}"></div>
+
+
+</div>
+</script>
 
 <script type="text/x-template" id="avatar-template">
 <div style="position: relative; width:600px; margin:0 auto; margin-top:16px">
@@ -2353,6 +2537,14 @@ Ruthless Swan was vanquished by challenging them to a duel.
 <!--<span>{{base}}<sup>{{pow}}</sup></span>-->
 </script>
 
+
+<script type="text/x-template" id="big-frac-template">
+<div style="display: inline-block; text-align:center" class="normal-div">
+    <div style="border-bottom:1px solid">{{num}}<slot name="num"></slot></div>
+    <div>{{den}}<slot name="den"></slot></div>
+  </td>
+</div>
+</script>
 
 <script type="text/x-template" id="frac-template">
 <var><sup>{{num}}</sup>&frasl;<sub>{{den}}</sub></var>
@@ -3005,6 +3197,14 @@ Vue.component('frac', {
 });
 
 
+Vue.component('big-frac', {
+  props: {
+    num: {type: String },
+    den: {type: String },
+  },
+  template: '#big-frac-template'
+});
+
 function drawFromOutcomes(outcomes){
   var ind = drawIndFromOutcomes(outcomes);
   return outcomes[ind].x;
@@ -3147,30 +3347,43 @@ Vue.component('samples-chart', {
         return {top: 0, right: 10, bottom: 20, left: 10};
       }
     },
+
+    isDraggable: {type: Boolean, default: true}, // todo: change to false
+    maxCounts: {type: Number, default: 20},
+
   },
   computed: {
     xScale(){
+      // Can only use for categorical domain.
       return d3.scaleBand()
           .domain(this.xDomain).paddingInner(.1).range([0, this.chartWidth]);
     },
+    sumCounts(){
+      //return _.sum(_.values(this.counts));
+      return this.maxCounts;
+    },
     yScale(){
-      const sumCounts = _.sum(_.values(this.counts));
       // const maxHeight = sumCounts == 1 ? this.xScale.bandwidth() : this.chartHeight;
       return d3.scaleLinear()
-          .domain([0, sumCounts]).range([this.chartHeight, 0]);
+          .domain([0, this.sumCounts]).range([0, this.chartHeight]);
     },
-    counts(){
-      const bins = _.groupBy(this.samples);
+    yScaleBandwidth(){
+      return this.chartHeight / this.sumCounts;
+    },
+    // counts(){
+    //   const bins = _.groupBy(this.samples);
 
-      // {'H': 0, 'T': 10}
-      return _.zipObject(this.xDomain, this.xDomain.map(function(x){
-        return x in bins ? bins[x].length : 0;
-      }));
-    }
+    //   // {'H': 0, 'T': 10}
+    //   return _.zipObject(this.xDomain, this.xDomain.map(function(x){
+    //     return x in bins ? bins[x].length : 0;
+    //   }));
+    // }
   },
   data: function(){
     return {
       isCreated: false,
+      counts: {},
+      draggedDot: null,
     }
   },
   created: function(){
@@ -3185,14 +3398,199 @@ Vue.component('samples-chart', {
     const chart = d3.select(this.$el).select('.container');
 //    chart.append('g').call(yAxis);
     chart.append('g').attr('transform', 'translate(0,' + this.chartHeight + ')').call(xAxis);
+
+
+    const bins = _.groupBy(this.samples);
+    this.counts = _.zipObject(this.xDomain, this.xDomain.map(function(x){
+        return x in bins ? bins[x].length : 0;
+      }));
+
   },
-  // methods: {
-  //   label: function(arr){
-  //     const total = _.sum(_.values(this.hist.bins).map(a => a.length));
-  //     return this.$root.formatPct(arr.length / total);
-  //   }
-  // },
+  watch: {
+    counts(){
+      this.$emit('dist-changed', this.counts);
+    },
+  },
+  methods: {
+    dragstart(x){
+      this.draggedDot = x;
+      console.log('start drag');
+    },
+    dragend(){
+      this.draggedDot = null; 
+      console.log('end drag');
+    },
+    drag(x, event){
+      //console.log('dragging');
+      //debugger;
+      const distanceFromTop = this.getRelativeMouseY(event);
+      if (distanceFromTop < 0){
+        return;
+      }
+      const height = this.chartHeight - distanceFromTop;
+
+      const numBars = Math.max(1, Math.floor(height / this.yScaleBandwidth));
+//      console.log('distanceFromTop: ' + distanceFromTop + ' numBars: ' + numBars);
+
+      this.counts[x] = numBars;
+      // stopped here: figure out what the internal datastructure should be...
+      // 
+
+
+      // calculate the number of bars that should be shown 
+      // show them as new bars
+
+      // but this changes the axis...
+      // todo: add a maxCounts, isDraggable
+      // How does this work for the ones that are really skewed. e.g. 1:100 ? 
+
+      // Now calculate the number of bars as this is dragged.
+    },
+    getRelativeMouseY: function(event){
+      // https://stackoverflow.com/questions/5921413/difference-between-e-target-and-e-currenttarget
+      // e.target is what triggers the event dispatcher to trigger and e.currentTarget is what you assigned your listener to.
+
+      // Find the 'dist' element to compute relative mouse coords.
+      var refElement = event.target;
+      while (refElement.className !== 'samples-chart'){
+        refElement = refElement.parentElement;
+      }
+
+      // console.log(event.target.className + ' ' + event.clientX + '      ' + refElement.className + JSON.stringify(refElement.getBoundingClientRect()));        
+      return event.clientY - refElement.getBoundingClientRect().y;
+    },
+
+  },
   template: '#samples-chart-template'
+});
+
+
+Vue.component('bayes-chart', {
+  props: {
+    xDomain: {type: Array}, // ['H', 'T']
+    samples: {type: Array}, // ['H', 'H', 'H', 'T']
+        
+    chartHeight: {type: Number, default: 80},
+    chartWidth: {type: Number, default: 120},
+    margin: {
+      type: Object, 
+      default: function(){
+        return {top: 0, right: 10, bottom: 20, left: 10};
+      }
+    },
+
+    isDraggable: {type: Boolean, default: true}, // todo: change to false
+    maxCounts: {type: Number, default: 20},
+
+  },
+  computed: {
+    xScale(){
+      // Can only use for categorical domain.
+      return d3.scaleBand()
+          .domain(this.xDomain).paddingInner(.1).range([0, this.chartWidth]);
+    },
+    sumCounts(){
+      //return _.sum(_.values(this.counts));
+      return this.maxCounts;
+    },
+    yScale(){
+      // const maxHeight = sumCounts == 1 ? this.xScale.bandwidth() : this.chartHeight;
+      return d3.scaleLinear()
+          .domain([0, this.sumCounts]).range([0, this.chartHeight]);
+    },
+    yScaleBandwidth(){
+      return this.chartHeight / this.sumCounts;
+    },
+    // counts(){
+    //   const bins = _.groupBy(this.samples);
+
+    //   // {'H': 0, 'T': 10}
+    //   return _.zipObject(this.xDomain, this.xDomain.map(function(x){
+    //     return x in bins ? bins[x].length : 0;
+    //   }));
+    // }
+  },
+  data: function(){
+    return {
+      isCreated: false,
+      counts: {},
+      draggedDot: null,
+    }
+  },
+  created: function(){
+    // Add domains
+    this.isCreated = true;
+  },
+  mounted: function() {
+    // Add the axis
+    var xAxis = d3.axisBottom(this.xScale); //.ticks(8);
+//    var yAxis = d3.axisLeft(this.yScale);
+
+    const chart = d3.select(this.$el).select('.container');
+//    chart.append('g').call(yAxis);
+    chart.append('g').attr('transform', 'translate(0,' + this.chartHeight + ')').call(xAxis);
+
+
+    const bins = _.groupBy(this.samples);
+    this.counts = _.zipObject(this.xDomain, this.xDomain.map(function(x){
+        return x in bins ? bins[x].length : 0;
+      }));
+
+  },
+  watch: {
+    counts(){
+      this.$emit('dist-changed', this.counts);
+    },
+  },
+  methods: {
+    dragstart(x){
+      this.draggedDot = x;
+      console.log('start drag');
+    },
+    dragend(){
+      this.draggedDot = null; 
+      console.log('end drag');
+    },
+    drag(x, event){
+      //console.log('dragging');
+      //debugger;
+      const distanceFromTop = this.getRelativeMouseY(event);
+      if (distanceFromTop < 0){
+        return;
+      }
+      const height = this.chartHeight - distanceFromTop;
+
+      const numBars = Math.max(1, Math.floor(height / this.yScaleBandwidth));
+//      console.log('distanceFromTop: ' + distanceFromTop + ' numBars: ' + numBars);
+
+      this.counts[x] = numBars;
+      // stopped here: figure out what the internal datastructure should be...
+      // 
+
+
+      // calculate the number of bars that should be shown 
+      // show them as new bars
+
+      // but this changes the axis...
+      // todo: add a maxCounts, isDraggable
+      // How does this work for the ones that are really skewed. e.g. 1:100 ? 
+
+      // Now calculate the number of bars as this is dragged.
+    },
+    getRelativeMouseY: function(event){
+      // https://stackoverflow.com/questions/5921413/difference-between-e-target-and-e-currenttarget
+      // e.target is what triggers the event dispatcher to trigger and e.currentTarget is what you assigned your listener to.
+
+      // Find the 'dist' element to compute relative mouse coords.
+      var refElement = event.target;
+      while (refElement.className !== 'samples-chart'){
+        refElement = refElement.parentElement;
+      }
+      return event.clientY - refElement.getBoundingClientRect().y;
+    },
+
+  },
+  template: '#bayes-chart-template'
 });
 
 
@@ -3471,6 +3869,16 @@ makeComponent('intro-to-pvalues', [
 
   ]);
 
+makeComponent('bayes-rule',
+[
+  { key: 'intro', name: 'Intro', },
+  { key: 'prior', name: 'Prior belief', problem: true},
+  { key: 'evil-name', name: 'Evil name', },
+  { key: 'likelihood', name: 'Likelihood ratio', problem: true},
+  { key: 'bayes-rule', name: 'Bayes Rule', problem: true},
+  { key: 'vegetarian', name: 'Vegetarian', problem: true},
+  { key: 'fin', name: 'fin', },
+]); 
 // makeComponent('intro-to-distributions', [
 //   { key: 'intro', name: 'Intro', },
 
@@ -3664,6 +4072,12 @@ const chapters = [
   description: 'P-values', 
   image: 'scientist.png',
 },
+{
+  component: 'bayes-rule',
+  name: 'Bayes Rule',
+  description: 'Bayes Rule', 
+  image: 'wizard.png',
+},
 ];
 
 // Gotchas:
@@ -3674,7 +4088,7 @@ new Vue({
   el: '#app',
   data: {
     chapters: chapters,
-    chapterInd: 0,
+    chapterInd: 5,
     // Obj property additions do not update DOM, so prepopulate all the keys in the object. Or use lists.
     //soundNameToCount: {},
     show: false,
