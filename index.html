@@ -33,7 +33,13 @@ font-family: 'Cormorant Garamond', serif;
 
 <style>
 
-
+.bayes-comp{
+  border: 4px dashed #777;
+  display: inline-block;
+}
+.bayes-comp .label{
+  text-align: center;
+}
 .dot{
   border-radius: 50%;
   width: 12px;
@@ -836,7 +842,7 @@ Ruthless Swan was vanquished by challenging them to a duel.
 <div class="handwriting">Ways Commando Gauss has vanquished bad guys</div>
 
 <samples-chart 
-:xDomain="['Ask to go away', 'Give an unsolved math problem', 'Challenge to a duel', 'Reason with them']"
+:xdomain="['Ask to go away', 'Give an unsolved math problem', 'Challenge to a duel', 'Reason with them']"
 :samples="['Ask to go away', 'Ask to go away', 'Ask to go away', 'Challenge to a duel', 'Challenge to a duel', 'Challenge to a duel', 'Challenge to a duel', 'Give an unsolved math problem', 'Give an unsolved math problem', 'Reason with them']"
 :chartHeight="150" :chartWidth="600" />
 
@@ -879,7 +885,7 @@ Ruthless Swan was vanquished by challenging them to a duel.
 
 
   <samples-chart 
-:xDomain="['Ask to go away', 'Give an unsolved math problem', 'Challenge to a duel', 'Reason with them']"
+:xdomain="['Ask to go away', 'Give an unsolved math problem', 'Challenge to a duel', 'Reason with them']"
 :samples="['Ask to go away', 'Ask to go away', 'Ask to go away', 'Challenge to a duel', 'Challenge to a duel', 'Challenge to a duel', 'Challenge to a duel', 'Give an unsolved math problem', 'Give an unsolved math problem', 'Reason with them']"
 :chartHeight="150" :chartWidth="600" />
 
@@ -954,7 +960,7 @@ Ruthless Swan was vanquished by challenging them to a duel.
 <script type="text/x-template" id="samples-from-distribution-template">
 <div>
   <distribution ref="distribution" :outcomes="outcomes"></distribution>
-  <samples-chart v-if="samples.length > 0" :xDomain="xDomain" :samples="samples" :chartWidth="200" :chartHeight="150"></samples-chart>
+  <samples-chart v-if="samples.length > 0" :xdomain="xDomain" :samples="samples" :chartWidth="200" :chartHeight="150"></samples-chart>
   <buton @click="draw">Draw samples</buton>
 </div>
 </script>
@@ -1593,9 +1599,13 @@ Ruthless Swan was vanquished by challenging them to a duel.
   </div>
 </div>
 
+<triple-bayes 
+  :hypotheses="['Evil', 'Not evil']" 
+  :config="{prior: {dist: [1, 4], isActive: true, isDraggable:true}, likelihood: {dist: [10, 1], isActive: true, isDraggable: true}, posterior: {view: 'auto'}}"></triple-bayes>
+
 <!--  
   <samples-chart 
-:xDomain="['Evil', 'Not evil']"
+:xdomain="['Evil', 'Not evil']"
 :samples="['Evil', 'Not evil', 'Not evil', 'Not evil', 'Not evil']"
 :chartHeight="200" :chartWidth="200" /> -->
 
@@ -1614,10 +1624,9 @@ Ruthless Swan was vanquished by challenging them to a duel.
   <div>Drag the bars to represent the <bold>prior belief</bold>.</div>
 
   <bayes-chart 
-  :xDomain="['Evil', 'Not evil']"
+  :xdomain="['Evil', 'Not evil']"
   :chartHeight="150" :chartWidth="200"
-  :correct="[1, 4]"
-  @belief-changed="beliefChanged">
+  :correct="[1, 4]">
 
     <template v-slot:hint>
       <div>Hint</div>
@@ -1662,10 +1671,9 @@ Let's say 1 in 100 good people have "evil" in their names. 1 in 5 evil people ha
 </div>
 
   <samples-chart 
-:xDomain="['Evil', 'Not evil']"
+:xdomain="['Evil', 'Not evil']"
 :samples="['Evil', 'Not evil']"
-:chartHeight="150" :chartWidth="600"
-@belief-changed="beliefChanged" />
+:chartHeight="150" :chartWidth="600" />
 
 </avatar>
 
@@ -1695,7 +1703,7 @@ Three figures side by side.
     <img v-if="isShowingH" src="images/coin_heads.png" style="width:100px">
     <img v-if="!isShowingH" src="images/coin_tails.png" style="width:100px">
     <div ref="flip-string" style="font-size:13px;" :style="flipStringStyle">{{flipString}}</div>
-    <samples-chart v-if="flips.length > 8" :xDomain="xDomain" :samples="samples"></samples-chart>
+    <samples-chart v-if="flips.length > 8" :xdomain="xDomain" :samples="samples"></samples-chart>
   </div>
 </script>
 
@@ -2284,6 +2292,7 @@ Three figures side by side.
 <span class="bold"><slot></slot></span> 
 </script>
 
+
 <script type="text/x-template" id="distribution-template">
 <div class="distribution">
 <div v-if="title" class="handwriting" style="text-align: center;">{{title}}</div>
@@ -2313,8 +2322,47 @@ Three figures side by side.
 </div>
 </script>
 
+<!-- 
+  <triple-bayes 
+  :hypotheses="['Evil', 'Not evil']" 
+  :config="{prior: {view: 'faded', dist: [1, 4]}, likelihood: {view: 'active', dist: [1, 10]}, posterior: {view: 'auto'}}"></triple-bayes>
+
+-->
+<script type="text/x-template" id="triple-bayes-template">
+  <div>
+
+<div v-if="hasKey('prior')" class="bayes-comp" :style="compStyle('prior')">
+  <div class="label">Prior</div>
+  <samples-chart 
+  :dist="arrToDist(priorArr)"
+  :isDraggable="isDraggable('prior')"
+  :chartHeight="chartHeight" :chartWidth="chartWidth"
+  @dist-changed="priorChanged" /> 
+</div>
+
+<div v-if="hasKey('likelihood')" class="bayes-comp" :style="compStyle('likelihood')">
+  <div class="label">Likelihood</div>
+  <samples-chart
+  :dist="arrToDist(likelihoodArr)"
+  :isDraggable="isDraggable('likelihood')"
+  :chartHeight="chartHeight" :chartWidth="chartWidth"
+  @dist-changed="likelihoodChanged" /> 
+</div>
+
+<div v-if="hasKey('posterior')" class="bayes-comp" :style="compStyle('posterior')">
+  <div class="label">Posterior</div>
+  <samples-chart 
+  :dist="posteriorDist"
+  :chartHeight="chartHeight" :chartWidth="chartWidth"
+  ref="posterior-samples-chart" /> 
+</div>
+
+  </div>
+</script>
+
 <script type="text/x-template" id="samples-chart-template">
-<div style="position:relative" class="samples-chart">
+<div style="position:relative; display:inline-block" class="samples-chart">
+
 <svg :width="chartWidth+margin.left+margin.right" 
      :height="chartHeight+margin.top+margin.bottom">
     <g v-if="isCreated" 
@@ -2341,14 +2389,16 @@ Three figures side by side.
 
       <text v-for="(count, x) in counts" 
         :x="xScale(x)+ xScale.bandwidth()/2 - 4"
-        :y="chartHeight - yScale(count) - 8">
+        :y="chartHeight - yScale(count) - (isDraggable ? 8 : 2)">
         {{ count }}
       </text>
 
     </g>
 </svg>
 
-  <div v-for="(count, x) in counts" class="dot"
+  <div v-for="(count, x) in counts" 
+      v-if="isDraggable"
+      class="dot"
       style="position:absolute"
       draggable="true"
       @dragstart="dragstart(x)"
@@ -3334,25 +3384,99 @@ Vue.component('samples-from-distribution', {
   template: '#samples-from-distribution-template'
 });
 
+// todo: add isActive isDraggable to 
+Vue.component('triple-bayes', {
+  props: {
+
+    hypotheses: {type: Array}, // ['Evil', 'Not evil']
+        
+    chartHeight: {type: Number, default: 160},
+    chartWidth: {type: Number, default: 160},
+
+    // Missing keys from config are not rendered.
+    // {prior: {dist: [1, 4]}, likelihood: {isActive: true, isDraggable: true, dist: [1, 10]}, posterior: {view: 'auto'}}
+    config: {type: Object},
+  },
+  data: function(){
+    return {
+     conf: null,
+    }
+  },
+  computed: {
+    posteriorDist(){
+      const distArr = _.zip(this.priorArr, this.likelihoodArr).map(x => _.reduce(x, _.multiply));
+      return _.zipObject(this.hypotheses, distArr);
+    },
+    priorArr(){
+      const ones = _.range(this.hypotheses.length).map(_ => 1);
+      return this.conf['prior'].dist || ones;
+    },
+
+    likelihoodArr(){
+      const ones = _.range(this.hypotheses.length).map(_ => 1);
+      return this.conf['likelihood'].dist || ones;
+    },
+  },
+  created(){
+    console.log('mounted');
+    this.conf = _.cloneDeep(this.config);
+  },
+  methods: {
+    hasKey(key){
+      return this.conf[key];
+    },
+    isActive(key){
+      return this.conf[key] && this.conf[key].isActive;
+    },
+    isDraggable(key){
+      return this.conf[key] && this.conf[key].isDraggable;      
+    },
+    arrToDist(arr){
+      return _.zipObject(this.hypotheses, arr);
+    },
+    compStyle(key){
+      return {opacity: this.conf[key] && this.conf[key].isActive ? 1 : 0.2};
+    },
+    likelihoodChanged(params){
+      const distArr = this.hypotheses.map(hyp => params.dist[hyp]);
+      Vue.set(this.conf.likelihood, 'dist', distArr);
+      this.$refs['posterior-samples-chart'].countsFromProps();
+    },
+    priorChanged(params){
+      const distArr = this.hypotheses.map(hyp => params.dist[hyp]);
+      Vue.set(this.conf.prior, 'dist', distArr);
+      this.$refs['posterior-samples-chart'].countsFromProps();
+    }
+  },
+  template: '#triple-bayes-template'
+});
+
 Vue.component('samples-chart', {
   props: {
-    xDomain: {type: Array}, // ['H', 'T']
+
+    // Specify either (samples, xdomain) or dist
     samples: {type: Array}, // ['H', 'H', 'H', 'T']
+    xdomain: {type: Array}, // ['H', 'T']
+
+    dist: {type: Object}, // {H: 3, T: 1}
         
-    chartHeight: {type: Number, default: 80},
+    chartHeight: {type: Number, default: 100},
     chartWidth: {type: Number, default: 120},
     margin: {
       type: Object, 
       default: function(){
-        return {top: 0, right: 10, bottom: 20, left: 10};
+        return {top: 10, right: 10, bottom: 20, left: 10};
       }
     },
 
-    isDraggable: {type: Boolean, default: true}, // todo: change to false
-    maxCounts: {type: Number, default: 20},
+    isDraggable: {type: Boolean, default: false}, 
+    maxCounts: {type: Number, default: 30},
 
   },
   computed: {
+    xDomain(){
+      return this.samples ? this.xdomain : _.sortBy(_.keys(this.dist));
+    },
     xScale(){
       // Can only use for categorical domain.
       return d3.scaleBand()
@@ -3370,19 +3494,11 @@ Vue.component('samples-chart', {
     yScaleBandwidth(){
       return this.chartHeight / this.sumCounts;
     },
-    // counts(){
-    //   const bins = _.groupBy(this.samples);
-
-    //   // {'H': 0, 'T': 10}
-    //   return _.zipObject(this.xDomain, this.xDomain.map(function(x){
-    //     return x in bins ? bins[x].length : 0;
-    //   }));
-    // }
   },
   data: function(){
     return {
       isCreated: false,
-      counts: {},
+      counts: null,
       draggedDot: null,
     }
   },
@@ -3398,27 +3514,39 @@ Vue.component('samples-chart', {
     const chart = d3.select(this.$el).select('.container');
 //    chart.append('g').call(yAxis);
     chart.append('g').attr('transform', 'translate(0,' + this.chartHeight + ')').call(xAxis);
-
-
-    const bins = _.groupBy(this.samples);
-    this.counts = _.zipObject(this.xDomain, this.xDomain.map(function(x){
-        return x in bins ? bins[x].length : 0;
-      }));
-
+    this.countsFromProps();
   },
   watch: {
-    counts(){
-      this.$emit('dist-changed', this.counts);
+    dist(){
+      this.countsFromProps();
     },
+    // counts: {
+//       // https://vuejs.org/v2/api/#watch
+//       handler: function(val, oldVal){
+//         if (oldVal && this.isDraggable) { // Don't emit on init.
+// //          console.log('emitting dist-changed');
+//           this.$emit('dist-changed', {dist: this.counts});          
+//         }
+//       },
+//       deep: true
+//     },
   },
   methods: {
     dragstart(x){
       this.draggedDot = x;
-      console.log('start drag');
     },
     dragend(){
       this.draggedDot = null; 
-      console.log('end drag');
+    },
+    countsFromProps(){
+      if (this.dist){
+        this.counts = _.cloneDeep(this.dist);
+      } else {
+        const bins = _.groupBy(this.samples);
+        this.counts = _.zipObject(this.xDomain, this.xDomain.map(function(x){
+            return x in bins ? bins[x].length : 0;
+          }));
+      }
     },
     drag(x, event){
       //console.log('dragging');
@@ -3430,21 +3558,13 @@ Vue.component('samples-chart', {
       const height = this.chartHeight - distanceFromTop;
 
       const numBars = Math.max(1, Math.floor(height / this.yScaleBandwidth));
-//      console.log('distanceFromTop: ' + distanceFromTop + ' numBars: ' + numBars);
 
-      this.counts[x] = numBars;
-      // stopped here: figure out what the internal datastructure should be...
-      // 
+      const isNewNumBars = this.counts[x] && this.counts[x] !== numBars;
+      Vue.set(this.counts, x, numBars);
 
-
-      // calculate the number of bars that should be shown 
-      // show them as new bars
-
-      // but this changes the axis...
-      // todo: add a maxCounts, isDraggable
-      // How does this work for the ones that are really skewed. e.g. 1:100 ? 
-
-      // Now calculate the number of bars as this is dragged.
+      if (isNewNumBars){
+          this.$emit('dist-changed', {dist: this.counts});
+      }
     },
     getRelativeMouseY: function(event){
       // https://stackoverflow.com/questions/5921413/difference-between-e-target-and-e-currenttarget
@@ -3455,8 +3575,6 @@ Vue.component('samples-chart', {
       while (refElement.className !== 'samples-chart'){
         refElement = refElement.parentElement;
       }
-
-      // console.log(event.target.className + ' ' + event.clientX + '      ' + refElement.className + JSON.stringify(refElement.getBoundingClientRect()));        
       return event.clientY - refElement.getBoundingClientRect().y;
     },
 
