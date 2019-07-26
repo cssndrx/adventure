@@ -3699,6 +3699,9 @@ Vue.component('samples-chart', {
     this.countsFromProps();
   },
   watch: {
+    samples(){
+      this.countsFromProps();
+    },
     dist(){
       this.countsFromProps();
     },
@@ -4264,7 +4267,7 @@ new Vue({
   el: '#app',
   data: {
     chapters: chapters,
-    chapterInd: 5,
+    chapterInd: 0,
     // Obj property additions do not update DOM, so prepopulate all the keys in the object. Or use lists.
     //soundNameToCount: {},
     show: false,
