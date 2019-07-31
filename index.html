@@ -36,12 +36,22 @@ font-family: 'Cormorant Garamond', serif;
 .bayes-comp{
   border: 4px dashed #777;
   display: inline-block;
+  position:relative;
+  width: 200px;
+  height: 250px;
+  vertical-align: top;
+  text-align: center;
 }
-.bayes-comp .label{
+.bayes-comp .label *{
   font-size: 14px;
   text-align: center;
-  font-weight: 700;
 }
+.bayes-comp .rainbow{
+  position:absolute; 
+  width:90%; 
+  opacity:0.5
+}
+
 .dot{
   border-radius: 50%;
   width: 12px;
@@ -1611,14 +1621,9 @@ Ruthless Swan was vanquished by challenging them to a duel.
   </div>
 </div>
 
-
-<div>
-<div style="color:red; width:500px; margin:0 auto;">this chapter is a WIP. not all the buttons are wired to the correct answers, so you may need to use the jump points up top to navigate.</div>
-</div>
-
-<!-- <triple-bayes 
+<triple-bayes 
   :hypotheses="['Evil', 'Not evil']" 
-  :config="{prior: {dist: [1, 4], correct: [1, 4], isActive: true, isDraggable:true}, likelihood: {dist: [10, 1], isActive: true, isDraggable: true}, posterior: {}}"></triple-bayes> -->
+  :config="{prior: {dist: [1, 4], correct: [1, 4], isActive: true, isDraggable:true}, likelihood: {dist: [10, 1], isActive: true, isDraggable: true}, posterior: {}}"></triple-bayes> 
 
 <avatar key="intro"
   v-if="show('intro')"
@@ -1630,32 +1635,28 @@ Ruthless Swan was vanquished by challenging them to a duel.
 <avatar key="prior"
   v-if="show('prior')"
   image="wizard.png" 
-  text="People in story book land are generally nice. Maybe 1 in 6 are evil. So your *prior belief* on my evilness (before knowing anything about me) should look like:">
+  text="People in story book land are generally nice. Maybe 1 in 6 are evil. So your belief about a random character's evilness should look like:">
 
-  <div>Drag the bars to represent the <bold>prior belief</bold>.</div>
-
-  <div>
-    <note text="If 1 in 6 people are evil, that means 5 in 6 people are not evil.">Show hint</note>
+  <div>Drag the bars to represent the odds that a random character being evil. This is called your <bold>prior belief</bold>. <br><note text="If 1 in 6 people are evil, that means 5 in 6 people are not evil.">Hint</note>
   </div>
-
 
   <triple-bayes 
     :hypotheses="['Evil', 'Not evil']" 
     :config="{prior: {dist: [1, 1], correct: [1, 5], isActive: true, isDraggable:true}}">
-
-    <template v-slot:yay>
-      <div>You believe a random character to be evil with what probability? (round to the nearest percent)</div>
-
-      <input-box right="5" :onRight="() => set('evil-name')">%</input-box>
-    </template>
+    @right="memory='prior-followup'"
   </triple-bayes>
+
+  <div v-if="memory=='prior-followup'">
+    <div>In other words, what is the probability that a random character is evil?</div>
+    <input-box :right="5" :onRight="() => set('scary-name')">%</input-box>
+  </div>
 
 </avatar>
 
-<avatar key="evil-name"
-  v-if="show('evil-name')"
+<avatar key="scary-name"
+  v-if="show('scary-name')"
   image="wizard.png" 
-  text="But then you learned my name is 'Evil Wizard', and that made you think I was more evil than average. Now, what probability do you assign to me being evil?">
+  text="But then you learned that I have a scary name, and that made you think I was more evil than average. Now, what probability do you assign to me being evil?">
 
   <buton @click="set('likelihood')">Next</buton>
 
@@ -1664,7 +1665,7 @@ Ruthless Swan was vanquished by challenging them to a duel.
 <avatar key="likelihood"
   v-if="show('likelihood')"
   image="wizard.png" 
-  text="To compute your new belief about my evilness, we need to look at how likely it is for for nice people to have an evil name, and for evil people to have an evil name. This is called the *likelihood ratio*.">
+  text="To compute your new belief about my evilness, we need to look at how likely it is for for nice people to have an scary name, and for evil people to have a scary name. This is called the *likelihood ratio*.">
 <!-- 
 
 To compute your new belief about my evilness, we need to compute the likelihood of an evil person vs a nice person, having an evil-sounding name.
@@ -1696,7 +1697,7 @@ To compute your new belief about my evilness, we need to compute the likelihood 
 </div>
 
 <div>
-  Drag the bars to represent this likelihood ratio. <note text="How many times more likely is the data under one hypothesis than the other? Only the ratio between the hypotheses matters.">Show hint</note>
+  Drag the bars to represent this likelihood ratio. <note text="How many times more likely is the data under one hypothesis than the other? Only the ratio between the hypotheses matters.">Hint</note>
 </div>
 
 <triple-bayes 
@@ -1845,7 +1846,7 @@ What is the probability that the cab involved in the accident was Blue rather th
 
 
 <div>
-What is the likelihood ratio of the data? The witness identified the guilty cab as Blue. <note text="Likelihood ratio: P(seen as blue|Blue cab guilty) / P(seen as blue|Green cab guilty)">Show hint</note>.
+What is the likelihood ratio of the data? The witness identified the guilty cab as Blue. <note text="Likelihood ratio: P(seen as blue|Blue cab guilty) / P(seen as blue|Green cab guilty)">Hint</note>.
 </div>
 
 
@@ -2538,10 +2539,12 @@ Especially, when we are comparing two separate hypotheses, you can see how P(D) 
 <!--<div style="text-align:center">prior × likelihood ∝ posterior</div> -->
 
 <div v-if="hasKey('prior')" class="bayes-comp" :style="compStyle('prior')">
-  <div class="label">
-    Prior
-<!--    <img v-if="showRainbow('prior')" src="images/rainbow.png" style="height:16px"> -->
+  <div class="label normal-div">
+    <div style="font-weight:700">Prior belief</div>
+    <div>What you think before</div>
   </div>
+  <img v-if="isCompRight('prior')" src="images/rainbow.png" class="rainbow"> 
+
   <samples-chart 
   :dist="arrToDist(priorArr)"
   :isDraggable="isDraggable('prior')"
@@ -2551,10 +2554,12 @@ Especially, when we are comparing two separate hypotheses, you can see how P(D) 
 
 
 <div v-if="hasKey('likelihood')" class="bayes-comp" :style="compStyle('likelihood')">
-  <div class="label">
-    Likelihood 
-<!--    <img v-if="showRainbow('likelihood')" src="images/rainbow.png" style="height:16px"> -->
-  </div> 
+  <div class="label normal-div">
+    <div style="font-weight:700">Likelihood ratio</div>
+    <div>Likelihood ratio of the evidence</div>
+  </div>
+  <img v-if="isCompRight('likelihood')" src="images/rainbow.png" class="rainbow"> 
+
   <samples-chart
   :dist="arrToDist(likelihoodArr)"
   :isDraggable="isDraggable('likelihood')"
@@ -2563,15 +2568,26 @@ Especially, when we are comparing two separate hypotheses, you can see how P(D) 
 </div>
 
 <div v-if="hasKey('posterior')" class="bayes-comp" :style="compStyle('posterior')">
-  <div class="label">Posterior</div>
+  <div class="label normal-div">
+    <div style="font-weight:700">Posterior belief</div>
+    <div>What you think after</div>
+  </div>
   <samples-chart 
   :dist="posteriorDist"
   :chartHeight="chartHeight" :chartWidth="chartWidth"
   ref="posterior-samples-chart" /> 
 </div>
 
-<div v-if="allCorrect">
-  <slot name="yay"></slot>
+<div v-if="showFeedback" style="background-color: #372F26; color: white; padding: 16px;" class="handwriting">
+  <div v-if="!allCorrect">Not quite. Try again!</div>
+  <slot v-if="!allCorrect" name="hint"></slot>
+
+  <div v-if="allCorrect">Correct!</div>
+  <slot v-if="allCorrect" name="yay"></slot>
+</div>
+
+<div v-if="!(showFeedback && allCorrect)" class="normal-div">
+<buton @click="submitClicked">Submit</buton>
 </div>
 
   </div>
@@ -2677,7 +2693,7 @@ Especially, when we are comparing two separate hypotheses, you can see how P(D) 
 <div style="position:absolute; left: 0px; top: 330px; width: 600px;">
 
 <div v-if="nopeText || showHint || showPS" style="background-color: #372F26; color: white; padding: 16px;" class="handwriting">
-  <!-- Show hint via nopeText or nope slot -->
+  <!-- Hint via nopeText or nope slot -->
   <div v-if="nopeText" style="margin-top:16px">{{nopeText}}</div>
   <div v-if="showHint && !showPS">
     <slot name="hint"></slot>
@@ -3568,6 +3584,7 @@ Vue.component('triple-bayes', {
   data: function(){
     return {
      conf: null,
+     showFeedback: null,
     }
   },
   computed: {
@@ -3605,28 +3622,36 @@ Vue.component('triple-bayes', {
     isDraggable(key){
       return this.conf[key] && this.conf[key].isDraggable;      
     },
-    showRainbow(key){
-      return this.conf[key] && this.conf[key].correct && _.isEqual(this.conf[key].correct, this.conf[key].dist);
-    },
     arrToDist(arr){
       return _.zipObject(this.hypotheses, arr);
+    },
+    isCompRight(key){
+      return this.showFeedback && this.conf[key] && this.conf[key].correct && _.isEqual(this.conf[key].correct, this.conf[key].dist);
     },
     compStyle(key){
       return {opacity: this.conf[key] && this.conf[key].isActive ? 1 : 0.2};
     },
     likelihoodChanged(params){
+      this.showFeedback = false;
       const distArr = this.hypotheses.map(hyp => params.dist[hyp]);
       Vue.set(this.conf.likelihood, 'dist', distArr);
       this.refreshPosterior();
     },
     priorChanged(params){
+      this.showFeedback = false;
       const distArr = this.hypotheses.map(hyp => params.dist[hyp]);
       Vue.set(this.conf.prior, 'dist', distArr);
       this.refreshPosterior();
     },
     refreshPosterior(){
       if (this.$refs['posterior-samples-chart']){
-        this.$refs['posterior-samples-chart'].countsFromProps();         
+        this.$refs['posterior-samples-chart'].countsFromProps()         
+      }
+    },
+    submitClicked(){
+      this.showFeedback=true;
+      if(this.allCorrect){
+        this.$emit('right');
       }
     }
   },
@@ -4046,7 +4071,7 @@ makeComponent('bayes-rule',
 [
   { key: 'intro', name: 'Intro', },
   { key: 'prior', name: 'Prior belief', problem: true},
-  { key: 'evil-name', name: 'Evil name', },
+  { key: 'scary-name', name: 'Scary name', },
   { key: 'likelihood', name: 'Likelihood ratio', problem: true},
   { key: 'bayes-rule', name: 'Bayes Rule', problem: true},
   { key: 'vegetarian', name: 'Wizard is vegetarian', problem: true},
@@ -4267,7 +4292,7 @@ new Vue({
   el: '#app',
   data: {
     chapters: chapters,
-    chapterInd: 0,
+    chapterInd: 5,
     // Obj property additions do not update DOM, so prepopulate all the keys in the object. Or use lists.
     //soundNameToCount: {},
     show: false,
