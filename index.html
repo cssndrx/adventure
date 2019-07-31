@@ -736,7 +736,7 @@ Potion A: p-value of 0.05
 Potion B: p-value of 0.1
 
 Which do you want to drink?">
-  <buton-group :onClick="() => set('11')">
+  <buton-group @clik="set('11')">
     <buton>Potion A</buton>
     <buton nope>Potion B</buton>
     <buton yay>Not enough info</buton>
@@ -778,7 +778,7 @@ Which do you want to drink?">
 In this case, which potion would you like to drink? 
 </div>
 
-<buton-group :onClick="() => set('12')">
+<buton-group @clik="set('12')">
   <buton>Potion A</buton>
   <buton>Potion B</buton>
 </buton-group>
@@ -1412,7 +1412,7 @@ Ruthless Swan was vanquished by challenging them to a duel.
   image="monster.png" 
   text="After I ran into the Bad Wizard the other day, I tossed a coin 100 times and it landed heads all 100 times! What do you think it landed on the 101-st time?">
 
-  <buton-group :onClick="() => set('100H-result')">
+  <buton-group @clik="set('100H-result')">
     <buton yay>H</buton>
     <buton>T</buton>
     <buton>It's 50-50</buton>
@@ -1648,7 +1648,7 @@ Ruthless Swan was vanquished by challenging them to a duel.
 
   <div v-if="memory=='prior-followup'">
     <div>In other words, what is the probability that a random character is evil?</div>
-    <input-box :right="5" :onRight="() => set('scary-name')">%</input-box>
+    <input-box :right="5" @right="set('scary-name')">%</input-box>
   </div>
 
 </avatar>
@@ -1722,11 +1722,11 @@ To compute your new belief about my evilness, we need to compute the likelihood 
 
 <div>Looking at this posterior, how many times more likely am I to be evil than good?</div>
 
-<input-box :right="5" :onRight="() => memory='bayes-rule-prob'"></input-box>
+<input-box :right="5" @right="memory='bayes-rule-prob'"></input-box>
 
 <div v-if="memory=='bayes-rule-prob'">
   <div>What is the probability that I'm evil?</div>
-  <input-box right="80" :onRight="() => memory='bayes-rule-done'">%</input-box>
+  <input-box right="80" @right="memory='bayes-rule-done'">%</input-box>
 </div>
 
 <div v-if="memory=='bayes-rule-done'">
@@ -1757,7 +1757,7 @@ Use this information to update your belief about my evilness.<br>
 
 <div v-if="memory=='vegetarian-prob'">
   <div>What is the probability that I'm evil?</div>
-  <input-box :right="80" :onRight="() => memory='vegetarian-done'">%</input-box>
+  <input-box :right="80" @right="memory='vegetarian-done'">%</input-box>
 </div>
 
 <div v-if="memory=='vegetarian-done'">
@@ -1792,7 +1792,7 @@ After incorporating this information into your belief, what is the probability t
 
 <div v-if="memory=='teaching-prob'">
   <div>What is the probability that I'm evil?</div>
-  <input-box :right="80" :onRight="() => memory='teaching-done'">%</input-box>
+  <input-box :right="80" @right="memory='teaching-done'">%</input-box>
 </div>
 
 <div v-if="memory=='teaching-done'">
@@ -2210,7 +2210,7 @@ Especially, when we are comparing two separate hypotheses, you can see how P(D) 
   </div>
 
   <div>
-  P(tall, greathair, tattoos) =  1/<input-box :right="42" :onRight="() => set('problem4')"/>
+  P(tall, greathair, tattoos) =  1/<input-box :right="42" @right="set('problem4')"/>
   </div>
 
 </avatar>
@@ -2252,7 +2252,7 @@ Especially, when we are comparing two separate hypotheses, you can see how P(D) 
     P(tall, greathair, tattoos, around her age, single) =
     </div>
 
-    1/<input-box :right="420" :onRight="() => set('not-many')"/>
+    1/<input-box :right="420" @right="set('not-many')"/>
 </avatar>
 
 
@@ -2303,7 +2303,7 @@ Especially, when we are comparing two separate hypotheses, you can see how P(D) 
   <div>
     How many different ways are there to decompose P(tall AND greathair and tattoos) using the Chain Rule?
   </div>
-  <input-box :right="6" :onRight="() => set('congrats')" :feedback="true"/>
+  <input-box :right="6" @right="set('congrats')" :feedback="true"/>
 </interstitial>
 
 
@@ -3144,10 +3144,10 @@ Vue.component('input-box', {
       type: Array, 
       default: function(){ return ['Try again', 'Nope']; },
     },
-    onRight: {
-      type: Function,
-      default: function(){},
-    },
+    // onRight: {
+    //   type: Function,
+    //   default: function(){},
+    // },
 
     // Default to no feedback bc avatar takes care of it, but sometimes we want to use this as a standalone component.
     feedback: {type: Boolean, default: true},
@@ -3187,7 +3187,7 @@ Vue.component('input-box', {
       // look at the value in the input.
       if (this.isYay){
         await wait(1000);
-        this.onRight();
+        this.$emit('right'); //onRight();
       } else {
         this.numWrong++;
       }
@@ -3395,7 +3395,7 @@ Vue.component('buton', {
       if (!this.isNope && this.$parent.onClick !== undefined){
         // Add delay so any custom handlers on the buton execute before the generic buton-group executes.
         await wait(1000);
-        this.$parent.onClick();        
+        this.$parent.$emit('clik'); // onClick();        
       }
     },
   },
