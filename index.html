@@ -32,6 +32,12 @@ font-family: 'Cormorant Garamond', serif;
 <script src="js/utils.js"></script>
 
 <style>
+.samples-chart{
+  -webkit-user-select: none; /* Safari 3.1+ */
+  -moz-user-select: none; /* Firefox 2+ */
+  -ms-user-select: none; /* IE 10+ */
+  user-select: none; /* Standard syntax */
+}
 
 .bayes-comp{
   border: 4px dashed #777;
@@ -41,6 +47,11 @@ font-family: 'Cormorant Garamond', serif;
   height: 250px;
   vertical-align: top;
   text-align: center;
+
+  -webkit-user-select: none; /* Safari 3.1+ */
+  -moz-user-select: none; /* Firefox 2+ */
+  -ms-user-select: none; /* IE 10+ */
+  user-select: none; /* Standard syntax */
 }
 .bayes-comp .label *{
   font-size: 14px;
@@ -48,6 +59,7 @@ font-family: 'Cormorant Garamond', serif;
 }
 .bayes-comp .rainbow{
   position:absolute; 
+  left: 8px;
   width:90%; 
   opacity:0.5
 }
@@ -1616,6 +1628,10 @@ Ruthless Swan was vanquished by challenging them to a duel.
     <div><div>What about 3?</div><input-box :right="5">%</input-box></div>
 </pset>-->
 
+ <triple-bayes 
+  :hypotheses="['Nice', 'Evil']" 
+  :config="{prior: {dist: [1, 1], correct: [1, 2], isActive: true, isDraggable:true}, likelihood: {dist: [10, 1], isActive: true, isDraggable: true}, posterior: {}}"></triple-bayes> 
+
 <!-- jump to a diferent problem -->
 <div class="point-container" style="width: 350px">
   <div v-for="point in points" 
@@ -1627,9 +1643,6 @@ Ruthless Swan was vanquished by challenging them to a duel.
   </div>
 </div>
 
-<!-- <triple-bayes 
-  :hypotheses="['Nice', 'Evil']" 
-  :config="{prior: {dist: [1, 4], correct: [1, 4], isActive: true, isDraggable:true}, likelihood: {dist: [10, 1], isActive: true, isDraggable: true}, posterior: {}}"></triple-bayes> -->
 
 <avatar key="intro"
   v-if="show('intro')"
@@ -1650,12 +1663,12 @@ Ruthless Swan was vanquished by challenging them to a duel.
   <pset>
     <triple-bayes 
       :hypotheses="['Nice', 'Evil']" 
-      :config="{prior: {dist: [1, 1], correct: [1, 5], isActive: true, isDraggable:true}}">
+      :config="{prior: {dist: [1, 1], correct: [5, 1], isActive: true, isDraggable:true}}">
     </triple-bayes>
 
     <div>
-      <div>In other words, what is the probability that a random character is evil?</div>
-      <input-box :right="5" @yay="set('scary-name')">%</input-box>
+      <div>In other words, what is the probability that a random character is evil? (round to nearest %)</div>
+      <input-box :right="17" @yay="set('scary-name')">%</input-box>
     </div>
   </pset>
 </avatar>
@@ -1664,35 +1677,34 @@ Ruthless Swan was vanquished by challenging them to a duel.
   v-if="show('scary-name')"
   text-align="left"
   image="wizard.png" 
-  text="But then you learned that I have a scary name, and that made you think I was more evil than average. Let's say 1 out of 5 nice people have a scary name. 4 out of 5 evil people have a scary name.">
+  text="But then you learned that I have a scary name, and that made you think I was more evil than average. Let's say 1 out of 10 nice people have a scary name. 9 out of 10 evil people have a scary name.">
 
   <div>
-    Plot the probability that "Scary Name" occurs under the two hypotheses.
+    Plot the relative probablity that "Scary Name" occurs under the two hypotheses. In other words, plot the ratio between P(Scary Name|Nice) and P(Scary Name|Evil). 
   </div>
 
   <div>
-   In other words, consider the ratio between P(Scary Name|Nice) and P(Scary Name|Evil). 
+    This ratio is called the <bold>likelihood ratio</bold> and shows which hypothesis the evidence points toward, and by how much.
   </div>
 
-  <div>
-    This ratio is called the likelihood ratio and shows which hypothesis the evidence points to, and by how much.
-  </div>
-
+  <pset>
   <triple-bayes 
     :hypotheses="['Nice', 'Evil']" 
-    :config="{prior: {dist: [1, 4]}, likelihood: {dist: [1, 1], correct: [20, 1], isActive: true, isDraggable: true}}">
-    <template v-slot:yay>
-      <buton @click="set('bayes-rule')">Next</buton>
-    </template>
+    :config="{prior: {dist: [5, 1]}, likelihood: {dist: [1, 1], correct: [1, 9], isActive: true, isDraggable: true}}">
   </triple-bayes>
 
+  <div>
+    <div>This evidence is 9 times more liekly to be seen if the character is evil, than if the character is nice.</div>      
+    <buton @click="set('bayes-rule')">Next</buton>
+  </div>
+</pset>
 </avatar>
 
 <avatar key="bayes-rule"
   v-if="show('bayes-rule')"
   image="wizard.png" 
   text-align="left"
-  text="Bayes Rule says our belief after seeing the evidence is our prior belief multiplied by the likelihood ratio.">
+  text="Bayes Rule says our belief after seeing the evidence ought to be our prior belief multiplied by the likelihood ratio.">
 
 
 <div>
@@ -1701,24 +1713,13 @@ Ruthless Swan was vanquished by challenging them to a duel.
 
 <triple-bayes 
   :hypotheses="['Nice', 'Evil']" 
-  :config="{prior: {dist: [1, 4]}, likelihood: {dist: [20, 1]}, posterior: {isActive: true}}">
+  :config="{prior: {dist: [5, 1]}, likelihood: {dist: [1, 9]}, posterior: {isActive: true}}">
 </triple-bayes>
 
-<pset>
-
 <div>
-<div>Looking at this posterior, how many times more likely am I to be evil than nice?</div>
-<input-box :right="5"></input-box>
+  Looking at the posterior belief, what is the approximate probability that I'm evil? (Just look at the relative areas of the bars).
 </div>
-
-
-<div>
-  <div>What is the probability that I'm evil?</div>
-  <input-box :right="80">%</input-box>
-</div>
-
-<buton @click="set('vegetarian')">Next</buton>
-</pset>
+<buton nope>50%</buton>  <buton yay @clik="set('vegetarian')">66%</buton> <buton nope>80%</buton>
 
 </avatar>
 
@@ -1738,15 +1739,14 @@ Use this information to create a likelihood ratio.<br>
 <pset>
 <triple-bayes 
   :hypotheses="['Nice', 'Evil']" 
-  :config="{prior: {dist: [1, 4]}, likelihood: {dist: [1, 1], correct: [20, 1], isActive: true, isDraggable: true}, posterior: {}}">
+  :config="{prior: {dist: [5, 9]}, likelihood: {dist: [1, 1], correct: [6, 1], isActive: true, isDraggable: true}, posterior: {}}">
 </triple-bayes>
 
 <div>
-  <div>What is the probability that I'm evil?</div>
-  <input-box :right="80" @yay="memory='vegetarian-done'">%</input-box>
+  <div>What is the approximate probability that I'm evil?</div>
+  <buton yay @clik="set('teaching')">25%</buton> <buton nope>30%</buton> <buton nope>40%</buton>
 </div>
 
-<buton @click="set('teaching')">Next</buton>
 </pset>
 </avatar>
 
@@ -1763,22 +1763,18 @@ Use this information to create a likelihood ratio.<br>
 Use this information to update your belief about my evilness*.<br>
 </div>
 
-
+<pset>
 <triple-bayes 
   :hypotheses="['Nice', 'Evil']" 
-  :config="{prior: {dist: [1, 4]}, likelihood: {dist: [1, 1], correct: [20, 1], isActive: true, isDraggable: true}, posterior: {}}">
+  :config="{prior: {dist: [30, 9]}, likelihood: {dist: [1, 1], correct: [1, 1], isActive: true, isDraggable: true}, posterior: {}}">
 </triple-bayes>
-
-<div>
-  <div>After incorporating this information into your belief, what is the probability that I am evil? 
-  </div>
-  <input-box :right="80">%</input-box>
-</div>
 
 <div>
   <div>Because the evidence was equally likely regardless of whether I'm evil or not, it provided no information and the posterior did not change.</div>
   <buton @click="set('taxi')">Next</buton>
 </div>
+</pset>
+
 </avatar>
 
 
@@ -1786,39 +1782,57 @@ Use this information to update your belief about my evilness*.<br>
   v-if="show('taxi')"
   image="wizard.png" 
   text-align="left"
-  text="Let's try this on a real problem. This is the Taxi-cab problem by Kahneman & Tversky.">
+  text="Let's try this on a real problem. This is the Taxi-cab problem by psychologists Kahneman & Tversky.">
 
 
 <div style="max-width: 400px; margin:0 auto; margin-bottom: 16px; line-height:1.4em; text-align: justify">
 70% of the cabs in the city are Green and 30% are Blue.
 A cab was involved in a hit and run, and the witness identified the cab as Blue. 
 The court tested the reliability of the witness under the circumstances that existed on the night of the accident, and concluded that the witness correctly identified each one of the two colors 80% of the time and failed 20% of the time.
-What is the probability that the cab involved in the accident was Blue rather than Green?
+What is the probability that the cab involved in the accident was Blue?
 </div>
 
 <div>
+<div><bold>Prior</bold></div>
 Ignoring the eye witness evidence, and just considering the base rate of cabs in the city... what is your prior belief about which company is at fault? 
 </div>
 
 <div>
-What is the likelihood ratio of the data? The witness identified the guilty cab as Blue. <note text="Likelihood ratio: P(seen as blue|Blue cab guilty) / P(seen as blue|Green cab guilty)">Hint</note>.
+<div><bold>Likelihood Ratio</bold></div>
+What is the likelihood ratio of the data? The witness identified the guilty cab as Blue. <note text="Likelihood ratio: P(Seen as blue|Blue cab guilty) / P(Seen as blue|Green cab guilty)">Hint</note>.
 </div>
 
+<pset>
 <triple-bayes 
   :hypotheses="['Blue', 'Green']" 
-  :config="{prior: {dist: [1, 4], isActive: true, isDraggable: true}, likelihood: {dist: [1, 1]}, posterior: {}}">
+  :config="{prior: {dist: [1, 1], isActive: true, isDraggable: true}, likelihood: {dist: [1, 1], isActive:true, isDraggable: true}, posterior: {isActive: true}}">
   <template v-slot:yay>
     <buton @click="set('bayes-rule')">Next</buton>
   </template>
 </triple-bayes>
 
+<div>
+  <div>
+    So what is the approximate probability that the accident was really caused by a Blue cab?
+  </div>
+  <buton yay>50%</buton> <buton nope>66%</buton> <buton nope>80%</buton>
+</div>
+
+<div>
+  <div>
+    Even though there is a pretty accurate eyewitness testimony pointing to Blue cabs, given the high base rate of Green cabs, it's still pretty uncertain which cab company was at fault.
+  </div>
+  <buton @click="set('congrats')">Next</buton>
+</div>
+</pset>
 </avatar>
 
 
 <avatar key="congrats"
   v-if="show('congrats')"
   image="wizard.png" 
-  text="You solved a problem that <X% of people get correct. By using both the prior and likelihood of evidence, you avoided the human tendency to just use one or the other.">
+  text="Congrats, you solved a problem that <X% of people get correct. By using both the prior and likelihood of evidence, you avoided the human tendency to just use one or the other.">
+
 </avatar>
 
 <avatar key="derivation"
@@ -1835,6 +1849,8 @@ The logic we are using comes from the odds ratio form of Bayes Rule.
 Bayes Rule looks like:
 P(A|B) = P(B|A) * P(A) / P(B)
 </div>
+
+<buton>Prove Bayes Rule</buton>
 
 <div>
 Plug in, D and H to make it more concrete.
@@ -2504,11 +2520,12 @@ Especially, when we are comparing two separate hypotheses, you can see how P(D) 
 <div v-if="hasKey('prior')" class="bayes-comp" :style="compStyle('prior')">
   <div class="label normal-div">
     <div style="font-weight:700">Prior belief</div>
-    <div>What you think before</div>
+    <div>What you think before the evidence</div>
   </div>
   <img v-if="isCompRight('prior')" src="images/rainbow.png" class="rainbow"> 
 
   <samples-chart 
+  :xdomain="hypotheses"
   :dist="arrToDist(priorArr)"
   :isDraggable="isDraggable('prior')"
   :chartHeight="chartHeight" :chartWidth="chartWidth"
@@ -2524,6 +2541,7 @@ Especially, when we are comparing two separate hypotheses, you can see how P(D) 
   <img v-if="isCompRight('likelihood')" src="images/rainbow.png" class="rainbow"> 
 
   <samples-chart
+  :xdomain="hypotheses"
   :dist="arrToDist(likelihoodArr)"
   :isDraggable="isDraggable('likelihood')"
   :chartHeight="chartHeight" :chartWidth="chartWidth"
@@ -2533,9 +2551,10 @@ Especially, when we are comparing two separate hypotheses, you can see how P(D) 
 <div v-if="hasKey('posterior')" class="bayes-comp" :style="compStyle('posterior')">
   <div class="label normal-div">
     <div style="font-weight:700">Posterior belief</div>
-    <div>What you think after</div>
+    <div>What you think after the evidence</div>
   </div>
   <samples-chart 
+  :xdomain="hypotheses"
   :dist="posteriorDist"
   :chartHeight="chartHeight" :chartWidth="chartWidth"
   ref="posterior-samples-chart" /> 
@@ -2552,7 +2571,7 @@ Especially, when we are comparing two separate hypotheses, you can see how P(D) 
   <slot name="yay"></slot>
 </div>
 
-<div v-if="!(showFeedback && allCorrect)" class="normal-div">
+<div v-if="(isDraggable('prior') || isDraggable('likelihood')) && !(showFeedback && allCorrect)" class="normal-div">
 <buton @click="submitClicked">Submit</buton>
 </div>
 
@@ -2564,7 +2583,7 @@ Especially, when we are comparing two separate hypotheses, you can see how P(D) 
 
 <svg :width="chartWidth+margin.left+margin.right" 
      :height="chartHeight+margin.top+margin.bottom">
-    <g v-if="isCreated" 
+    <g v-if="isCreated && counts" 
       class="container"
       :transform="'translate(' + margin.left + ',' + margin.top + ')'">
 <!--      <rect v-for="(count, x) in counts"
@@ -2575,10 +2594,10 @@ Especially, when we are comparing two separate hypotheses, you can see how P(D) 
           :key="x"
           fill="#E9BE2C"/>  -->
 
-        <g v-for="(count, x) in counts">
-          <rect v-for="countInd in count"
+        <g v-for="x in xdomain">
+          <rect v-for="countInd in counts[x]"
           :x="xScale(x)"
-          :y="chartHeight - yScale(count) + yScaleBandwidth*(countInd-1)+2"
+          :y="chartHeight - yScale(counts[x]) + yScaleBandwidth*(countInd-1)+2"
           :width="xScale.bandwidth()"
           :height="yScaleBandwidth-2"
           :key="x + countInd"
@@ -2586,24 +2605,24 @@ Especially, when we are comparing two separate hypotheses, you can see how P(D) 
         </g>
 
 
-      <text v-for="(count, x) in counts" 
+      <text v-for="x in xdomain" 
         :x="xScale(x)+ xScale.bandwidth()/2 - 4"
-        :y="chartHeight - yScale(count) - (isDraggable ? 8 : 2)">
-        {{ count }}
+        :y="chartHeight - yScale(counts[x]) - (isDraggable ? 8 : 2)">
+        {{ counts[x] }}
       </text>
 
     </g>
 </svg>
 
-  <div v-for="(count, x) in counts" 
-      v-if="isDraggable"
+  <div v-for="x in xdomain" 
+      v-if="isDraggable && counts"
       class="dot"
       style="position:absolute"
       draggable="true"
       @dragstart="dragstart(x)"
       @dragend="dragend"
       @drag="drag(x, $event)"
-      :style="{left: xScale(x)+ xScale.bandwidth()/2+ 4 + 'px', bottom: yScale(count) + 2 + 'px'}"></div>
+      :style="{left: xScale(x)+ xScale.bandwidth()/2+ 4 + 'px', bottom: yScale(counts[x]) + 2 + 'px'}"></div>
 
 
 </div>
@@ -3575,7 +3594,7 @@ Vue.component('triple-bayes', {
     },
     allCorrect(){
       const keys = ['prior', 'likelihood', 'posterior'];
-      const parts = keys.map(key => !this.conf[key] || !this.conf[key].correct || _.isEqual(this.conf[key].correct, this.conf[key].dist));
+      const parts = keys.map(key => !this.conf[key] || !this.conf[key].correct || this.isEqual(this.conf[key].correct, this.conf[key].dist));
       console.log(parts);
       return _.every(parts);
     }
@@ -3585,6 +3604,24 @@ Vue.component('triple-bayes', {
     this.conf = _.cloneDeep(this.config);
   },
   methods: {
+    isEqual(arr1, arr2){
+      return _.isEqual(this.simplifiedArr(arr1), this.simplifiedArr(arr2));
+    },
+    // simplifiedArr([3, 6]) => [1, 2]
+     simplifiedArr(arr){
+      var maxFactor = _.min(arr);
+      for (var i=maxFactor; i>1; i--){
+        var isDivisible = _.every(arr.map(function(x){
+          return Math.abs(x/i - Math.floor(x/i)) < .0001;
+        }));
+        if (isDivisible){
+          break;
+        }
+      }
+      var result = arr.map(x => Math.floor(x / i));
+      //console.log(result);
+      return result;
+    },
     hasKey(key){
       return this.conf[key];
     },
@@ -3595,15 +3632,10 @@ Vue.component('triple-bayes', {
       return this.conf[key] && this.conf[key].isDraggable;      
     },
     arrToDist(arr){
-      // var map = new Map();
-      // this.hypotheses.forEach(function(hyp, ind){
-      //   map.set(hyp, arr[ind])
-      // });
-      // return map;
       return _.zipObject(this.hypotheses, arr);
     },
     isCompRight(key){
-      return this.showFeedback && this.conf[key] && this.conf[key].correct && _.isEqual(this.conf[key].correct, this.conf[key].dist);
+      return this.showFeedback && this.conf[key] && this.conf[key].correct && this.isEqual(this.conf[key].correct, this.conf[key].dist);
     },
     compStyle(key){
       return {opacity: this.conf[key] && this.conf[key].isActive ? 1 : 0.5};
@@ -3632,6 +3664,7 @@ Vue.component('triple-bayes', {
         if (pset){
           pset.next();
         }
+        this.$emit('yay');
       }
     }
   },
@@ -3641,9 +3674,10 @@ Vue.component('triple-bayes', {
 Vue.component('samples-chart', {
   props: {
 
-    // Specify either (samples, xdomain) or dist
-    samples: {type: Array}, // ['H', 'H', 'H', 'T']
     xdomain: {type: Array}, // ['H', 'T']
+
+    // Specify either samples or dist
+    samples: {type: Array}, // ['H', 'H', 'H', 'T']
 
     dist: {type: Object}, // {H: 3, T: 1}
         
@@ -3661,13 +3695,10 @@ Vue.component('samples-chart', {
 
   },
   computed: {
-    xDomain(){
-      return this.samples ? this.xdomain : _.sortBy(_.keys(this.dist));
-    },
     xScale(){
       // Can only use for categorical domain.
       return d3.scaleBand()
-          .domain(this.xDomain).paddingInner(.1).range([0, this.chartWidth]);
+          .domain(this.xdomain).paddingInner(.1).range([0, this.chartWidth]);
     },
     sumCounts(){
       //return _.sum(_.values(this.counts));
@@ -3693,16 +3724,18 @@ Vue.component('samples-chart', {
     // Add domains
     this.isCreated = true;
   },
-  mounted: function() {
-    debugger;
+  mounted: async function() {
+    this.countsFromProps();
+
     // Add the axis
+    // Hack: for some reason axis needs to get added after a delay, or it doesn't show up.
+    await wait(500);
     var xAxis = d3.axisBottom(this.xScale); //.ticks(8);
 //    var yAxis = d3.axisLeft(this.yScale);
 
     const chart = d3.select(this.$el).select('.container');
 //    chart.append('g').call(yAxis);
     chart.append('g').attr('transform', 'translate(0,' + this.chartHeight + ')').call(xAxis);
-    this.countsFromProps();
   },
   watch: {
     samples(){
@@ -3711,16 +3744,6 @@ Vue.component('samples-chart', {
     dist(){
       this.countsFromProps();
     },
-    // counts: {
-//       // https://vuejs.org/v2/api/#watch
-//       handler: function(val, oldVal){
-//         if (oldVal && this.isDraggable) { // Don't emit on init.
-// //          console.log('emitting dist-changed');
-//           this.$emit('dist-changed', {dist: this.counts});          
-//         }
-//       },
-//       deep: true
-//     },
   },
   methods: {
     dragstart(x){
@@ -3734,7 +3757,7 @@ Vue.component('samples-chart', {
         this.counts = _.cloneDeep(this.dist);
       } else {
         const bins = _.groupBy(this.samples);
-        this.counts = _.zipObject(this.xDomain, this.xDomain.map(function(x){
+        this.counts = _.zipObject(this.xdomain, this.xdomain.map(function(x){
             return x in bins ? bins[x].length : 0;
           }));
       }
@@ -4365,11 +4388,10 @@ new Vue({
     // },
     play: function(soundName){
 //      console.log('playing ' + soundName);
-      var sound = sounds[soundName].clip;
-      sound.play().catch(function(error){
-        console.log(error.toString());
-//        debugger;
-      });    
+      // var sound = sounds[soundName].clip;
+      // sound.play().catch(function(error){
+      //   console.log(error.toString());
+      // });    
     },
     pause: function(soundName){
  //     console.log('pausing');
