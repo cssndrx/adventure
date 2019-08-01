@@ -37,7 +37,7 @@ font-family: 'Cormorant Garamond', serif;
   border: 4px dashed #777;
   display: inline-block;
   position:relative;
-  width: 200px;
+  width: 180px;
   height: 250px;
   vertical-align: top;
   text-align: center;
@@ -585,7 +585,7 @@ You are going to bring us into this new world of <span class="animated infinite 
 <avatar key="intro2"
   v-if="show('intro2')"
   image="wizard.png"
-  text="P-values are used to describe scientific results, but they are so misunderstood that most people misinterpret scientific results! HAHA!">
+  text="P-values are used to describe scientific results, but they are so misunderstood that many people misinterpret scientific results! HAHA!">
   <buton @click="set('intro3')">Next</buton>
 </avatar>
 
@@ -1610,6 +1610,12 @@ Ruthless Swan was vanquished by challenging them to a duel.
 <script type="text/x-template" id="bayes-rule-template">
 <div>
 
+<!--<pset>
+    <div><div>What about 1?</div><input-box :right="5">%</input-box></div>
+    <div><div>What about 2?</div><input-box :right="5">%</input-box></div>
+    <div><div>What about 3?</div><input-box :right="5">%</input-box></div>
+</pset>-->
+
 <!-- jump to a diferent problem -->
 <div class="point-container" style="width: 350px">
   <div v-for="point in points" 
@@ -1621,9 +1627,9 @@ Ruthless Swan was vanquished by challenging them to a duel.
   </div>
 </div>
 
-<triple-bayes 
-  :hypotheses="['Evil', 'Not evil']" 
-  :config="{prior: {dist: [1, 4], correct: [1, 4], isActive: true, isDraggable:true}, likelihood: {dist: [10, 1], isActive: true, isDraggable: true}, posterior: {}}"></triple-bayes> 
+<!-- <triple-bayes 
+  :hypotheses="['Nice', 'Evil']" 
+  :config="{prior: {dist: [1, 4], correct: [1, 4], isActive: true, isDraggable:true}, likelihood: {dist: [10, 1], isActive: true, isDraggable: true}, posterior: {}}"></triple-bayes> -->
 
 <avatar key="intro"
   v-if="show('intro')"
@@ -1635,103 +1641,84 @@ Ruthless Swan was vanquished by challenging them to a duel.
 <avatar key="prior"
   v-if="show('prior')"
   image="wizard.png" 
-  text="People in story book land are generally nice. Maybe 1 in 6 are evil. So your belief about a random character's evilness should look like:">
+  text-align="left"
+  text="People in story book land are generally nice. Maybe 1 in 6 are evil.">
 
-  <div>Drag the bars to represent the odds that a random character being evil. This is called your <bold>prior belief</bold>. <br><note text="If 1 in 6 people are evil, that means 5 in 6 people are not evil.">Hint</note>
+  <div>Drag the bars to show the odds that a random character is evil. This is called your <bold>prior belief</bold>. <note text="If 1 in 6 people are evil, that means 5 in 6 people are nice.">Hint</note>
   </div>
 
-  <triple-bayes 
-    :hypotheses="['Evil', 'Not evil']" 
-    :config="{prior: {dist: [1, 1], correct: [1, 5], isActive: true, isDraggable:true}}">
-    @right="memory='prior-followup'"
-  </triple-bayes>
+  <pset>
+    <triple-bayes 
+      :hypotheses="['Nice', 'Evil']" 
+      :config="{prior: {dist: [1, 1], correct: [1, 5], isActive: true, isDraggable:true}}">
+    </triple-bayes>
 
-  <div v-if="memory=='prior-followup'">
-    <div>In other words, what is the probability that a random character is evil?</div>
-    <input-box :right="5" @right="set('scary-name')">%</input-box>
-  </div>
-
+    <div>
+      <div>In other words, what is the probability that a random character is evil?</div>
+      <input-box :right="5" @yay="set('scary-name')">%</input-box>
+    </div>
+  </pset>
 </avatar>
 
 <avatar key="scary-name"
   v-if="show('scary-name')"
+  text-align="left"
   image="wizard.png" 
-  text="But then you learned that I have a scary name, and that made you think I was more evil than average. Now, what probability do you assign to me being evil?">
+  text="But then you learned that I have a scary name, and that made you think I was more evil than average. Let's say 1 out of 5 nice people have a scary name. 4 out of 5 evil people have a scary name.">
 
-  <buton @click="set('likelihood')">Next</buton>
+  <div>
+    Plot the probability that "Scary Name" occurs under the two hypotheses.
+  </div>
 
-</avatar>
+  <div>
+   In other words, consider the ratio between P(Scary Name|Nice) and P(Scary Name|Evil). 
+  </div>
 
-<avatar key="likelihood"
-  v-if="show('likelihood')"
-  image="wizard.png" 
-  text="To compute your new belief about my evilness, we need to look at how likely it is for for nice people to have an scary name, and for evil people to have a scary name. This is called the *likelihood ratio*.">
-<!-- 
+  <div>
+    This ratio is called the likelihood ratio and shows which hypothesis the evidence points to, and by how much.
+  </div>
 
-To compute your new belief about my evilness, we need to compute the likelihood of an evil person vs a nice person, having an evil-sounding name.
-
-
-<div>
-  The likelihood ratio tells us how likely we are to see the data D (aka having an evil sounding name) under the two hypotheses H1 and H2:
-</div>
--->
-
-<div>There are two possible hypotheses.</div>
-
-<div>
-  Hypothesis 1 (H1): Wizard is evil.<br>
-  Hypothesis 2 (H2): Wizard is not evil.
-</div>
-
-<div>
-  Compute the probability of seeing the data D (D = having an evil sounding name) under each of the hypotheses.
-</div>
-
-<div>
-  P(D|H1): Probability of evil sounding name, given the character is evil. <br>
-  P(D|H2): Probability of evil sounding name, given the character is not evil.
-</div>
-
-<div>
-  The <bold>likelihood ratio</bold> is the ratio of these two probabilities, and tells us which way the evidence points and how strongly.
-</div>
-
-<div>
-  Drag the bars to represent this likelihood ratio. <note text="How many times more likely is the data under one hypothesis than the other? Only the ratio between the hypotheses matters.">Hint</note>
-</div>
-
-<triple-bayes 
-  :hypotheses="['Evil', 'Not evil']" 
-  :config="{prior: {dist: [1, 4]}, likelihood: {dist: [1, 1], correct: [20, 1], isActive: true, isDraggable: true}, posterior: {}}">
-  <template v-slot:yay>
-    <buton @click="set('bayes-rule')">Next</buton>
-  </template>
-</triple-bayes>
+  <triple-bayes 
+    :hypotheses="['Nice', 'Evil']" 
+    :config="{prior: {dist: [1, 4]}, likelihood: {dist: [1, 1], correct: [20, 1], isActive: true, isDraggable: true}}">
+    <template v-slot:yay>
+      <buton @click="set('bayes-rule')">Next</buton>
+    </template>
+  </triple-bayes>
 
 </avatar>
 
 <avatar key="bayes-rule"
   v-if="show('bayes-rule')"
   image="wizard.png" 
-  text="Bayes Rule says we should multiply our prior belief with the likelihood ratio to get our posterior belief.">
+  text-align="left"
+  text="Bayes Rule says our belief after seeing the evidence is our prior belief multiplied by the likelihood ratio.">
+
+
+<div>
+  Multiplying your prior belief with the likelihood ratio of having a scary name, yields this posterior belief.
+</div>
 
 <triple-bayes 
-  :hypotheses="['Evil', 'Not evil']" 
+  :hypotheses="['Nice', 'Evil']" 
   :config="{prior: {dist: [1, 4]}, likelihood: {dist: [20, 1]}, posterior: {isActive: true}}">
 </triple-bayes>
 
-<div>Looking at this posterior, how many times more likely am I to be evil than good?</div>
+<pset>
 
-<input-box :right="5" @right="memory='bayes-rule-prob'"></input-box>
+<div>
+<div>Looking at this posterior, how many times more likely am I to be evil than nice?</div>
+<input-box :right="5"></input-box>
+</div>
 
-<div v-if="memory=='bayes-rule-prob'">
+
+<div>
   <div>What is the probability that I'm evil?</div>
-  <input-box right="80" @right="memory='bayes-rule-done'">%</input-box>
+  <input-box :right="80">%</input-box>
 </div>
 
-<div v-if="memory=='bayes-rule-done'">
-  <buton @click="set('vegetarian')">Next</buton>
-</div>
+<buton @click="set('vegetarian')">Next</buton>
+</pset>
 
 </avatar>
 
@@ -1739,63 +1726,56 @@ To compute your new belief about my evilness, we need to compute the likelihood 
 <avatar key="vegetarian"
   v-if="show('vegetarian')"
   image="wizard.png" 
+  text-align="left"
   text="But wait, I'm vegetarian.">
 
 <div>
-30 out of 100 good people are vegetarian.<br>
-5 out of 100 bad people are vegetarian.<br>
-Use this information to update your belief about my evilness.<br>
+30 out of 100 nice people are vegetarian.<br>
+5 out of 100 evil people are vegetarian.<br>
+Use this information to create a likelihood ratio.<br>
 </div>
 
+<pset>
 <triple-bayes 
-  :hypotheses="['Evil', 'Not evil']" 
+  :hypotheses="['Nice', 'Evil']" 
   :config="{prior: {dist: [1, 4]}, likelihood: {dist: [1, 1], correct: [20, 1], isActive: true, isDraggable: true}, posterior: {}}">
-  <template v-slot:yay>
-    <buton @click="memory='vegetarian-prob'">Next</buton>
-  </template>
 </triple-bayes>
 
-<div v-if="memory=='vegetarian-prob'">
+<div>
   <div>What is the probability that I'm evil?</div>
-  <input-box :right="80" @right="memory='vegetarian-done'">%</input-box>
+  <input-box :right="80" @yay="memory='vegetarian-done'">%</input-box>
 </div>
 
-<div v-if="memory=='vegetarian-done'">
-  <buton @click="set('teaching')">Next</buton>
-</div>
-
+<buton @click="set('teaching')">Next</buton>
+</pset>
 </avatar>
 
 
 <avatar key="teaching"
   v-if="show('teaching')"
   image="wizard.png" 
+  text-align="left"
   text="But I'm also good at teaching.">
 
 <div>
-1 out of 4 good people are good at teaching.<br>
-1 out of 4 bad people are good at teaching.<br>
+1 out of 4 nice people are good at teaching.<br>
+1 out of 4 evil people are good at teaching.<br>
 Use this information to update your belief about my evilness*.<br>
 </div>
 
-<div>
-After incorporating this information into your belief, what is the probability that I am evil? 
-</div>
 
 <triple-bayes 
-  :hypotheses="['Evil', 'Not evil']" 
+  :hypotheses="['Nice', 'Evil']" 
   :config="{prior: {dist: [1, 4]}, likelihood: {dist: [1, 1], correct: [20, 1], isActive: true, isDraggable: true}, posterior: {}}">
-  <template v-slot:yay>
-    <buton @click="set('bayes-rule')">Next</buton>
-  </template>
 </triple-bayes>
 
-<div v-if="memory=='teaching-prob'">
-  <div>What is the probability that I'm evil?</div>
-  <input-box :right="80" @right="memory='teaching-done'">%</input-box>
+<div>
+  <div>After incorporating this information into your belief, what is the probability that I am evil? 
+  </div>
+  <input-box :right="80">%</input-box>
 </div>
 
-<div v-if="memory=='teaching-done'">
+<div>
   <div>Because the evidence was equally likely regardless of whether I'm evil or not, it provided no information and the posterior did not change.</div>
   <buton @click="set('taxi')">Next</buton>
 </div>
@@ -1805,10 +1785,11 @@ After incorporating this information into your belief, what is the probability t
 <avatar key="taxi"
   v-if="show('taxi')"
   image="wizard.png" 
+  text-align="left"
   text="Let's try this on a real problem. This is the Taxi-cab problem by Kahneman & Tversky.">
 
 
-<div style="max-width: 400px; margin:0 auto; margin-bottom: 16px; line-height:1.8em;">
+<div style="max-width: 400px; margin:0 auto; margin-bottom: 16px; line-height:1.4em; text-align: justify">
 70% of the cabs in the city are Green and 30% are Blue.
 A cab was involved in a hit and run, and the witness identified the cab as Blue. 
 The court tested the reliability of the witness under the circumstances that existed on the night of the accident, and concluded that the witness correctly identified each one of the two colors 80% of the time and failed 20% of the time.
@@ -1816,7 +1797,11 @@ What is the probability that the cab involved in the accident was Blue rather th
 </div>
 
 <div>
-Ignoring the eye witness evidence, and just considering the prior rate of cabs in the city... what is your prior belief about which company is at fault? 
+Ignoring the eye witness evidence, and just considering the base rate of cabs in the city... what is your prior belief about which company is at fault? 
+</div>
+
+<div>
+What is the likelihood ratio of the data? The witness identified the guilty cab as Blue. <note text="Likelihood ratio: P(seen as blue|Blue cab guilty) / P(seen as blue|Green cab guilty)">Hint</note>.
 </div>
 
 <triple-bayes 
@@ -1830,36 +1815,6 @@ Ignoring the eye witness evidence, and just considering the prior rate of cabs i
 </avatar>
 
 
-
-<avatar key="taxi2"
-  v-if="show('taxi2')"
-  image="wizard.png" 
-  text="You got the prior belief. Now, let's add the likelihood of evidence.">
-
-
-<div style="max-width: 400px; margin:0 auto; margin-bottom: 16px; line-height:1.8em;">
-70% of the cabs in the city are Green and 30% are Blue.
-A cab was involved in a hit and run, and the witness identified the cab as Blue. 
-The court tested the reliability of the witness under the circumstances that existed on the night of the accident, and concluded that the witness correctly identified each one of the two colors 80% of the time and failed 20% of the time.
-What is the probability that the cab involved in the accident was Blue rather than Green?
-</div>
-
-
-<div>
-What is the likelihood ratio of the data? The witness identified the guilty cab as Blue. <note text="Likelihood ratio: P(seen as blue|Blue cab guilty) / P(seen as blue|Green cab guilty)">Hint</note>.
-</div>
-
-
-<triple-bayes 
-  :hypotheses="['Blue', 'Green']" 
-  :config="{prior: {dist: [1, 4]}, likelihood: {dist: [1, 1], correct: [20, 1], isActive: true, isDraggable: true}, posterior: {isActive: true}}">
-  <template v-slot:yay>
-    <buton @click="set('bayes-rule')">Next</buton>
-  </template>
-</triple-bayes>
-
-</avatar>
-
 <avatar key="congrats"
   v-if="show('congrats')"
   image="wizard.png" 
@@ -1869,6 +1824,7 @@ What is the likelihood ratio of the data? The witness identified the guilty cab 
 <avatar key="derivation"
   v-if="show('derivation')"
   image="wizard.png" 
+  text-align="left"
   text="Extra curious are we?">
 
 <div>
@@ -1903,6 +1859,13 @@ Especially, when we are comparing two separate hypotheses, you can see how P(D) 
 
 </div>
 </script>
+
+<script type="text/x-template" id="pset-template">
+  <div>
+    <slot></slot>
+  </div>
+</script>
+
 <script type="text/x-template" id="coin-template">
   <div @click="flip" class="coin normal-div">
     <img v-if="isShowingH" src="images/coin_heads.png" style="width:100px">
@@ -2210,7 +2173,7 @@ Especially, when we are comparing two separate hypotheses, you can see how P(D) 
   </div>
 
   <div>
-  P(tall, greathair, tattoos) =  1/<input-box :right="42" @right="set('problem4')"/>
+  P(tall, greathair, tattoos) =  1/<input-box :right="42" @yay="set('problem4')"/>
   </div>
 
 </avatar>
@@ -2252,7 +2215,7 @@ Especially, when we are comparing two separate hypotheses, you can see how P(D) 
     P(tall, greathair, tattoos, around her age, single) =
     </div>
 
-    1/<input-box :right="420" @right="set('not-many')"/>
+    1/<input-box :right="420" @yay="set('not-many')"/>
 </avatar>
 
 
@@ -2303,7 +2266,7 @@ Especially, when we are comparing two separate hypotheses, you can see how P(D) 
   <div>
     How many different ways are there to decompose P(tall AND greathair and tattoos) using the Chain Rule?
   </div>
-  <input-box :right="6" @right="set('congrats')" :feedback="true"/>
+  <input-box :right="6" @yay="set('congrats')" :feedback="true"/>
 </interstitial>
 
 
@@ -2529,7 +2492,7 @@ Especially, when we are comparing two separate hypotheses, you can see how P(D) 
 
 <!-- 
   <triple-bayes 
-  :hypotheses="['Evil', 'Not evil']" 
+  :hypotheses="['Nice', 'Evil']" 
   :config="{prior: {view: 'faded', dist: [1, 4]}, likelihood: {view: 'active', dist: [1, 10]}, posterior: {}}"></triple-bayes>
 
 -->
@@ -2578,12 +2541,15 @@ Especially, when we are comparing two separate hypotheses, you can see how P(D) 
   ref="posterior-samples-chart" /> 
 </div>
 
-<div v-if="showFeedback" style="background-color: #372F26; color: white; padding: 16px;" class="handwriting">
-  <div v-if="!allCorrect">Not quite. Try again!</div>
-  <slot v-if="!allCorrect" name="hint"></slot>
+<div v-if="showFeedback && !allCorrect" style="background-color: #372F26; color: white; padding: 8px;" class="handwriting normal-div">
+  <div>Not quite. Try again!</div>
+  <slot name="hint"></slot>
+</div>
 
-  <div v-if="allCorrect">Correct!</div>
-  <slot v-if="allCorrect" name="yay"></slot>
+
+<div v-if="showFeedback && allCorrect" class="handwriting normal-div">
+  <div>Correct!</div>
+  <slot name="yay"></slot>
 </div>
 
 <div v-if="!(showFeedback && allCorrect)" class="normal-div">
@@ -2704,7 +2670,7 @@ Especially, when we are comparing two separate hypotheses, you can see how P(D) 
   </div>
 </div>
 
-<div class="question" style="text-align:right">
+<div class="question" :style="{'text-align':textAlign}">
   <transition name="fade" mode="out-in">  
     <div v-if="showQuestion">  
       <slot></slot>
@@ -3187,7 +3153,12 @@ Vue.component('input-box', {
       // look at the value in the input.
       if (this.isYay){
         await wait(1000);
-        this.$emit('right'); //onRight();
+        this.$emit('yay'); //onRight();
+
+        const pset = firstAncestorOfComponent(this, 'pset');
+        if (pset){
+          pset.next();
+        }
       } else {
         this.numWrong++;
       }
@@ -3221,6 +3192,7 @@ Vue.component('avatar', {
   props: {
     image: {type: String}, // 'girl.png'
     text: {type: String, default: ''},
+    textAlign: {type: String, default: 'right'},
     animation: {type: String, default: 'wobble'},
     sound: {type: String},
   },
@@ -3572,7 +3544,7 @@ Vue.component('samples-from-distribution', {
 Vue.component('triple-bayes', {
   props: {
 
-    hypotheses: {type: Array}, // ['Evil', 'Not evil']
+    hypotheses: {type: Array}, // ['Nice', 'Evil']
         
     chartHeight: {type: Number, default: 160},
     chartWidth: {type: Number, default: 160},
@@ -3623,13 +3595,18 @@ Vue.component('triple-bayes', {
       return this.conf[key] && this.conf[key].isDraggable;      
     },
     arrToDist(arr){
+      // var map = new Map();
+      // this.hypotheses.forEach(function(hyp, ind){
+      //   map.set(hyp, arr[ind])
+      // });
+      // return map;
       return _.zipObject(this.hypotheses, arr);
     },
     isCompRight(key){
       return this.showFeedback && this.conf[key] && this.conf[key].correct && _.isEqual(this.conf[key].correct, this.conf[key].dist);
     },
     compStyle(key){
-      return {opacity: this.conf[key] && this.conf[key].isActive ? 1 : 0.2};
+      return {opacity: this.conf[key] && this.conf[key].isActive ? 1 : 0.5};
     },
     likelihoodChanged(params){
       this.showFeedback = false;
@@ -3651,7 +3628,10 @@ Vue.component('triple-bayes', {
     submitClicked(){
       this.showFeedback=true;
       if(this.allCorrect){
-        this.$emit('right');
+        const pset = firstAncestorOfComponent(this, 'pset');
+        if (pset){
+          pset.next();
+        }
       }
     }
   },
@@ -3714,6 +3694,7 @@ Vue.component('samples-chart', {
     this.isCreated = true;
   },
   mounted: function() {
+    debugger;
     // Add the axis
     var xAxis = d3.axisBottom(this.xScale); //.ticks(8);
 //    var yAxis = d3.axisLeft(this.yScale);
@@ -4071,13 +4052,12 @@ makeComponent('bayes-rule',
 [
   { key: 'intro', name: 'Intro', },
   { key: 'prior', name: 'Prior belief', problem: true},
-  { key: 'scary-name', name: 'Scary name', },
-  { key: 'likelihood', name: 'Likelihood ratio', problem: true},
+  { key: 'scary-name', name: 'Scary name', problem: true},
+  // { key: 'likelihood', name: 'Likelihood ratio', problem: true},
   { key: 'bayes-rule', name: 'Bayes Rule', problem: true},
   { key: 'vegetarian', name: 'Wizard is vegetarian', problem: true},
   { key: 'teaching', name: 'Wizard is a teacher', problem: true},
   { key: 'taxi', name: 'Taxi Cab Problem', problem: true},
-  { key: 'taxi2', name: 'Taxi Cab Problem 2', problem: true},
   { key: 'congrats', name: 'Congrats', },
   { key: 'derivation', name: 'Bayes Rule Derivation', },
 ]); 
@@ -4244,6 +4224,44 @@ Vue.component('live-text', {
     },
   },
   template: '#live-text-template'
+});
+
+// Child slot should call next() on the parent to advance.
+Vue.component('pset', {
+  computed: {
+    elms(){
+      return this.$slots.default.filter(x => x.tag).map(x => x.elm);
+    }
+  },
+  data: function(){
+    return {
+      ind: 0, // active index
+    };
+  },
+  mounted: function(){
+    this.elms[0].style.opacity = 1;
+    for (var i=1; i<this.elms.length; i++){
+      this.elms[i].style.opacity = 0;      
+    }
+  },
+  methods: {
+    next(){
+      this.ind = this.ind + 1;
+      if (this.ind >= this.elms.length){
+        this.$emit('done');
+        return;
+      }
+
+      // grey out previous indices
+      for (var i=0; i<this.ind; i++){
+        this.elms[i].style.opacity = 0.5;        
+      }
+
+      // make current ind, fully visible
+      this.elms[this.ind].style.opacity = 1;
+    }
+  },
+  template: '#pset-template'
 });
 
 const chapters = [
