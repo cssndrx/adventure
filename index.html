@@ -394,8 +394,8 @@ button{
   opacity: 0;
 }
 .story-point-silhouette{
-  -webkit-filter: contrast(0%) brightness(50%);
-  filter: contrast(0%) brightness(50%);
+  -webkit-filter: contrast(0%) brightness(90%);
+  filter: contrast(0%) brightness(90%);
   cursor: pointer;
 }
 .story-point-silhouette:hover{
@@ -1628,9 +1628,9 @@ Ruthless Swan was vanquished by challenging them to a duel.
     <div><div>What about 3?</div><input-box :right="5">%</input-box></div>
 </pset>-->
 
- <triple-bayes 
+<!-- <triple-bayes 
   :hypotheses="['Nice', 'Evil']" 
-  :config="{prior: {dist: [1, 1], correct: [1, 2], isActive: true, isDraggable:true}, likelihood: {dist: [10, 1], isActive: true, isDraggable: true}, posterior: {}}"></triple-bayes> 
+  :config="{prior: {dist: [1, 1], correct: [1, 2], isActive: true, isDraggable:true}, likelihood: {dist: [10, 1], isActive: true, isDraggable: true}, posterior: {}}"></triple-bayes> -->
 
 <!-- jump to a diferent problem -->
 <div class="point-container" style="width: 350px">
@@ -1643,11 +1643,11 @@ Ruthless Swan was vanquished by challenging them to a duel.
   </div>
 </div>
 
-
 <avatar key="intro"
   v-if="show('intro')"
   image="wizard.png" 
   text="Now, you can ask me the question you've been meaning to ask me.">
+
   <buton @click="set('prior')">Are you really evil?</buton>
 </avatar>
 
@@ -1739,7 +1739,7 @@ Use this information to create a likelihood ratio.<br>
 <pset>
 <triple-bayes 
   :hypotheses="['Nice', 'Evil']" 
-  :config="{prior: {dist: [5, 9]}, likelihood: {dist: [1, 1], correct: [6, 1], isActive: true, isDraggable: true}, posterior: {}}">
+  :config="{prior: {dist: [5, 9]}, likelihood: {dist: [1, 1], correct: [6, 1], isActive: true, isDraggable: true}, posterior: {isActive:true}}">
 </triple-bayes>
 
 <div>
@@ -1784,9 +1784,8 @@ Use this information to update your belief about my evilness*.<br>
   text-align="left"
   text="Let's try this on a real problem. This is the Taxi-cab problem by psychologists Kahneman & Tversky.">
 
-
 <div style="max-width: 400px; margin:0 auto; margin-bottom: 16px; line-height:1.4em; text-align: justify">
-70% of the cabs in the city are Green and 30% are Blue.
+30% of the cabs in the city are Blue and 70% are Green.
 A cab was involved in a hit and run, and the witness identified the cab as Blue. 
 The court tested the reliability of the witness under the circumstances that existed on the night of the accident, and concluded that the witness correctly identified each one of the two colors 80% of the time and failed 20% of the time.
 What is the probability that the cab involved in the accident was Blue?
@@ -1815,7 +1814,7 @@ What is the likelihood ratio of the data? The witness identified the guilty cab 
   <div>
     So what is the approximate probability that the accident was really caused by a Blue cab?
   </div>
-  <buton yay>50%</buton> <buton nope>66%</buton> <buton nope>80%</buton>
+  <buton nope>50%</buton> <buton yay>66%</buton> <buton nope>80%</buton>
 </div>
 
 <div>
@@ -1833,6 +1832,7 @@ What is the likelihood ratio of the data? The witness identified the guilty cab 
   image="wizard.png" 
   text="Congrats, you solved a problem that <X% of people get correct. By using both the prior and likelihood of evidence, you avoided the human tendency to just use one or the other.">
 
+  <buton @click="set('derivation')">Next</buton>
 </avatar>
 
 <avatar key="derivation"
@@ -2780,6 +2780,7 @@ Especially, when we are comparing two separate hypotheses, you can see how P(D) 
     :class="{'rainbow-text': showRainbowText, 'clicked-button': clickedButton}" 
     class="handwriting"
     :style="buttonStyle"><slot></slot>
+    <img v-if="showRainbow" style="width: 40px" src="images/rainbow.png">
   </button>
 <!--  <transition name="fade">
     <div v-if="showNopeText" class="nope" style="margin-bottom:8px; position:relative; top:-4px;">
@@ -2840,6 +2841,8 @@ var sounds = {
   'tails': {clip: new Audio('sounds/gold1.wav')},
 
   'speech': {clip: new Audio('sounds/speech_louder.wav')},
+  //'speech': {clip: new Audio('sounds/drums_text.wav')},
+
   'buton': {clip: new Audio('sounds/button.wav')},
   'wrong': {clip: new Audio('sounds/wrong.wav')},
   'chimes': {clip: new Audio('sounds/chimes.wav')},
@@ -3336,6 +3339,7 @@ Vue.component('buton', {
       showRainbowText: false,
       showX: false,
       clickedButton: false,
+      showRainbow: false,
     }
   },
   computed: {
@@ -3370,14 +3374,22 @@ Vue.component('buton', {
       // Mark the buton as wrong.
       if (this.isNope){
         this.showX = true;
-      } else {
+      } 
 
-        // Check if it has a PS. Early return if so, we don't want to hit event handling.
-        if (avatar && avatar.hasSlot('ps') && avatar.showPS === false){
-          avatar.showPS = true;
-          avatar.psButton = this;        
-          return;
-        }
+      // Check if it has a PS. Early return if so, we don't want to hit event handling.
+      if (!this.isNope && avatar && avatar.hasSlot('ps') && avatar.showPS === false){
+        avatar.showPS = true;
+        avatar.psButton = this;        
+        return;
+      }
+
+      if (this.isYay){
+        const pset = firstAncestorOfComponent(this, 'pset');
+        if (pset){
+          this.showRainbow = true;
+          await wait(500);
+          pset.next();
+        }        
       }
 
       // Event handling.
@@ -3388,6 +3400,7 @@ Vue.component('buton', {
         await wait(1000);
         this.$parent.$emit('clik'); // onClick();        
       }
+
     },
   },
   template: '#buton-template'
@@ -3580,7 +3593,10 @@ Vue.component('triple-bayes', {
   },
   computed: {
     posteriorDist(){
-      const distArr = _.zip(this.priorArr, this.likelihoodArr).map(x => _.reduce(x, _.multiply));
+      var distArr = _.zip(this.priorArr, this.likelihoodArr).map(x => _.reduce(x, _.multiply));
+      if (_.max(distArr) > 9){ // Start attempting to simplify posterior when it gets too big.
+        distArr = this.simplifiedArr(distArr);
+      }
       return _.zipObject(this.hypotheses, distArr);
     },
     priorArr(){
@@ -3691,7 +3707,7 @@ Vue.component('samples-chart', {
     },
 
     isDraggable: {type: Boolean, default: false}, 
-    maxCounts: {type: Number, default: 30},
+    maxCounts: {type: Number, default: 20},
 
   },
   computed: {
@@ -4333,7 +4349,7 @@ new Vue({
   el: '#app',
   data: {
     chapters: chapters,
-    chapterInd: 5,
+    chapterInd: 0,
     // Obj property additions do not update DOM, so prepopulate all the keys in the object. Or use lists.
     //soundNameToCount: {},
     show: false,
@@ -4388,10 +4404,10 @@ new Vue({
     // },
     play: function(soundName){
 //      console.log('playing ' + soundName);
-      // var sound = sounds[soundName].clip;
-      // sound.play().catch(function(error){
-      //   console.log(error.toString());
-      // });    
+      var sound = sounds[soundName].clip;
+      sound.play().catch(function(error){
+        console.log(error.toString());
+      });    
     },
     pause: function(soundName){
  //     console.log('pausing');
