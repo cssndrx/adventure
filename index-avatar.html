@@ -21,7 +21,7 @@ font-family: 'Cormorant Garamond', serif;
 -->
 
 <!-- todo: strip and remove the unused -->
-<link href="https://fonts.googleapis.com/css?family=Itim|Dokdo|Fira+Sans:300,700" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Schoolbell|Dokdo|Fira+Sans:300,700" rel="stylesheet">
 
 <script src="js/lodash.min.js"></script>
 <script src="js/d3.v5.min.js"></script>
@@ -124,15 +124,18 @@ img{
   max-width: 400px;
 }
 .handwriting, .handwriting *{
-font-family: 'Itim';
+/* font-family: 'Dokdo', cursive; */   
+  font-family: 'Schoolbell', cursive;
 }
 .dialog-text, .dialog-text *{
-font-family: 'Itim';
-  font-size: 20px;
+/*  font-family: 'Dokdo', cursive;  */
+  font-family: 'Schoolbell', cursive;
+  font-size: 28px;
   width: 340px;
 }
 .small-dialog-text, .small-dialog-text *{
-font-family: 'Itim';
+/*  font-family: 'Dokdo', cursive;  */
+  font-family: 'Schoolbell', cursive;
   font-size: 22px;
 }
 .centered, .centered *{
@@ -142,7 +145,7 @@ button{
   cursor: pointer;
   background-color: white;
   border-radius: 4px;
-  font-size: 20px;
+  font-size: 28px;
   font-weight: 700;
   margin-bottom: 8px; 
   padding: 8px 16px;
@@ -1127,35 +1130,41 @@ Ruthless Swan was vanquished by challenging them to a duel.
 
   <div style="max-width:500px; margin: 0 auto">
     <div>
-    Not really motivated by your standard statistics textbook, but you'll get out of bed to save the world?
+    Not really motivated by dry tests or stuffy professors, but you'll get out of bed to save the world?
     </div>
 
     <div>
-    Use statistics and stop the Evil Wizard.
+    Learn statistics and stop the Evil Wizard.
     </div>
   </div>
 
   <buton @click="$root.nextChapter()">Play</buton>
 
-
-  <div style="width:500px; text-align:left">
-    <p>
-      Not too long ago, I was just like you. Just a regular nerdy wizard, browsing the internet. 
-    </p>
-    <p>
-      As I clicked between Reddit and Hacker News, I realized that people really don't understand probability and statistics ___. And that the existing classes and books on it were boring and uninviting, with the exception of a few ___.
-    </p>
-
-    <p>
-      And that was when I decided that I could cause mischeif in the world... until everyone would be forced to notice.
-    </p>
-
-    <p style="font-style:italic">
-      And that is where you come in.
-    </p>
-  </div>
-
 </div> <!-- end intro -->
+
+<avatar key="1"
+  v-if="show('1')"
+  image="cop.png"
+  text="Hey! You're the new trainee, right?">
+  <buton @click="set('2')">Er...</buton>
+  <buton @click="set('2')">Yes</buton>
+</avatar>
+
+
+<avatar key="2"
+  v-if="show('2')"
+  image="cop.png"
+  text="I still remember my first day with the Statistics Police... What an honor to be chosen to help people with their statistics problems.">
+  <buton @click="set('3')">Next</buton>
+</avatar>
+
+
+<avatar key="3"
+  v-if="show('3')"
+  image="cop.png"
+  text="I'm going to make a fine officer out of you. Let's head to headquarters and see if anyone needs help.">
+  <buton @click="$root.nextChapter()">To headquarters</buton>
+</avatar>
 
 
 </div>
@@ -1244,8 +1253,7 @@ Ruthless Swan was vanquished by challenging them to a duel.
   <buton nope="Assume it is a fair coin that lands on heads with 50% probability.">Not enough info</buton>
 </avatar>
 
-<avatar 
-  image="wizard.png"
+<interstitial 
   key="HH-explanation" 
   v-if="show('HH-explanation')">
   <div>
@@ -1265,7 +1273,7 @@ Ruthless Swan was vanquished by challenging them to a duel.
     If we only care about the HH outcome, our probability of getting it is 1/4.
   </div>
   <buton @click="set('HHH')">Next</buton>
-</avatar> 
+</interstitial> 
 
 <avatar key="HHH"
   v-if="show('HHH')"
@@ -1389,7 +1397,7 @@ Ruthless Swan was vanquished by challenging them to a duel.
   <buton @click="set('independence')">Next</buton>
 </avatar>
 
-<avatar 
+<interstitial 
     image="monster.png"
     key="independence" 
     v-if="show('independence')">
@@ -1409,7 +1417,7 @@ Ruthless Swan was vanquished by challenging them to a duel.
 
   <buton @click="set('100H')">Next</buton>
 
-</avatar>
+</interstitial>
 
 <avatar key="100H"
   v-if="show('100H')"
@@ -1440,6 +1448,10 @@ Ruthless Swan was vanquished by challenging them to a duel.
   image="monster.png" 
   text="Will you please track down the Bad Wizard and fix my coins?">
 
+
+  <div style="font-size: 48px; letter-spacing:4px;">
+  CONGRATS
+  </div>
 
   <ul>
     <li>You learned about <bold>independent events</bold></li>
@@ -1591,6 +1603,10 @@ Ruthless Swan was vanquished by challenging them to a duel.
   v-if="show('fin')"
   image="wizard.png" 
   text="HAHAHA. That's it for coins. Let's cause more mischief.">
+
+  <div style="font-size: 48px; letter-spacing:4px;">
+  CONGRATS
+  </div>
 
   <ul>
     <li>You learned about what randomness feels like</li>
@@ -1952,7 +1968,7 @@ Especially, when we are comparing two separate hypotheses, you can see how P(D) 
 </avatar>
 
 
-<avatar 
+<interstitial 
     image="girl.png"
     key="fakeout1-inter" 
     v-if="show('fakeout1-inter')">
@@ -1970,7 +1986,7 @@ Especially, when we are comparing two separate hypotheses, you can see how P(D) 
   </div>
 
   <buton @click="set('conditional1')">Next</buton>
-</avatar>
+</interstitial>
 
 
 
@@ -2007,7 +2023,7 @@ Especially, when we are comparing two separate hypotheses, you can see how P(D) 
 </avatar>
 
 
-<avatar 
+<interstitial 
     image="girl.png"
     key="conditional2" 
     v-if="show('conditional2')">
@@ -2029,7 +2045,7 @@ Especially, when we are comparing two separate hypotheses, you can see how P(D) 
   </div>
 
   <buton @click="set('tall-hair')">Try it</buton>
-</avatar>
+</interstitial>
 
 
 <avatar key="tall-hair" 
@@ -2082,7 +2098,7 @@ Especially, when we are comparing two separate hypotheses, you can see how P(D) 
 </avatar>
 
 
-<avatar 
+<interstitial 
     image="girl.png"
     key="chainruleinter1" 
     v-if="show('chainruleinter1')">
@@ -2101,9 +2117,9 @@ Especially, when we are comparing two separate hypotheses, you can see how P(D) 
   </div>
 
   <buton @click="set('chainruleinter2')">Next</buton>
-</avatar>
+</interstitial>
 
-<avatar 
+<interstitial 
     image="girl.png"
     key="chainruleinter2" 
     v-if="show('chainruleinter2')">
@@ -2139,7 +2155,7 @@ Especially, when we are comparing two separate hypotheses, you can see how P(D) 
   </div>
 
   <buton @click="set('problem3')">Try it</buton>
-</avatar>
+</interstitial>
 
 
 <avatar key="problem3" 
@@ -2235,7 +2251,7 @@ Especially, when we are comparing two separate hypotheses, you can see how P(D) 
   <buton @click="set('mind-blown')">Next</buton>
 </avatar>
 
-<avatar 
+<interstitial 
     image="girl.png"
     key="mind-blown" 
     v-if="show('mind-blown')">
@@ -2267,13 +2283,17 @@ Especially, when we are comparing two separate hypotheses, you can see how P(D) 
     How many different ways are there to decompose P(tall AND greathair and tattoos) using the Chain Rule?
   </div>
   <input-box :right="6" @yay="set('congrats')" :feedback="true"/>
-</avatar>
+</interstitial>
 
 
 <avatar key="congrats"
         v-if="show('congrats')"
         image="wizard.png"
         text="Aw... you foiled my plan by showing Veronica how picky she was.">
+
+  <div style="font-size: 48px; letter-spacing:4px;">
+  CONGRATS
+  </div>
   
   <ul>
     <li>You learned about independence</li>
@@ -2420,6 +2440,9 @@ Especially, when we are comparing two separate hypotheses, you can see how P(D) 
 
 <centered key="congrats"
   v-if="show('congrats')">
+  <div style="font-size: 48px; letter-spacing:4px;">
+  CONGRATS
+  </div>
   
   <ul>
     <li>You learned about expected value (the average)</li>
@@ -2436,10 +2459,10 @@ Especially, when we are comparing two separate hypotheses, you can see how P(D) 
 
 <!-- begin templates -->
 <script type="text/x-template" id="interstitial-template">
-<div style="width:500px; margin: 0 auto;">
+<centered>
    <div class="cropcircle" style="margin:0 auto; margin-bottom:16px" :style="cropCircleStyle"></div>
   <slot></slot>
-</div>
+</centered>
 </script>
 
 
@@ -2608,17 +2631,73 @@ Especially, when we are comparing two separate hypotheses, you can see how P(D) 
 <script type="text/x-template" id="avatar-template">
 <div style="position: relative; width:600px; margin:0 auto; margin-top:16px">
 
- <div class="cropcircle" :style="cropCircleStyle" style="display:inline-block; vertical-align:top">
- </div>
+<!--
+<transition name="slide-fade">
+ <div v-if="showOverlay && hasSlot('overlay')"
+     style="position:absolute; z-index:1; height: 500px; width:100%; opacity:0.9; background-color: white; color:black;">
+  <centered>
+      <slot name="overlay"></slot>
+  </centered>
+</div>
+</transition> -->
 
+<img v-if="showRainbow" src="images/rainbow.png">
 
-<div style="display:inline-block; width:400px">
-    <slot name="dialog"></slot>
-    <div>{{text}}</div>
+<img :src="imgSrc" 
+     :class="imgClasses"
+     style="height: 300px; left: 0px; position:absolute; top:0px;">
 
-    <slot></slot>
+<!-- Dialog box -->
+<div style="position:absolute; left: 200px; top:0px;"
+  v-if="showLiveText">
+  <img src="images/dialog.png" :style="imgStyle" style="width:642px">
+  <div style="position: absolute; left:40px; top:23px;" 
+    class="dialog-text"
+    ref="dialog-text"
+    :class="dialogClass">
+    <live-text  
+        ref="initial-text"
+        key="initial-text"
+        @live-text-complete="showQuestion=true">
+        <slot name="dialog"></slot>
+      {{text}}
+    </live-text> 
+  </div>
 </div>
 
+<!-- Mini dialog 
+<div v-if="showMiniDialog" style="position:absolute; left: 100px; top:300px;">
+  <img src="images/mini_dialog.png" style="width:150px">
+  <div style="position: absolute; left:40px; top:40px;" class="small-dialog-text">
+    Yep!
+  </div>
+</div>-->
+
+
+<!-- bottom -->
+<div style="position:absolute; left: 0px; top: 330px; width: 600px;">
+
+<div v-if="nopeText || showHint || showPS" style="background-color: #372F26; color: white; padding: 16px;" class="handwriting">
+  <!-- Hint via nopeText or nope slot -->
+  <div v-if="nopeText" style="margin-top:16px">{{nopeText}}</div>
+  <div v-if="showHint && !showPS">
+    <slot name="hint"></slot>
+  </div> 
+  <div v-if="showPS">
+    <div><slot name="ps"></slot></div>
+    <buton @click="clickpsButton">Next</buton>
+  </div>
+</div>
+
+<div class="question" :style="{'text-align':textAlign}">
+  <transition name="fade" mode="out-in">  
+    <div v-if="showQuestion">  
+      <slot></slot>
+    </div>
+  </transition>
+</div>
+
+</div> <!-- end bottom -->
 
 
 </div>
@@ -2732,7 +2811,7 @@ Especially, when we are comparing two separate hypotheses, you can see how P(D) 
 
 <script>
 
-const wait = ms => new Promise(resolve => setTimeout(resolve, 0));
+const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
 // https://alligator.io/vuejs/global-event-bus/
 const bus = new Vue();
 
@@ -3182,9 +3261,6 @@ Vue.component('avatar', {
     // }, 3000);
   },
   computed: {
-    cropCircleStyle: function(){
-      return {'background-image': 'url("images/' + this.image + '")'};
-    },
     imgClasses: function(){
       var classes = {fallover: this.showFall};
       classes[this.animation] = true;
@@ -3278,7 +3354,7 @@ Vue.component('buton', {
       return 'yay' in this.$attrs;
     },
     buttonStyle: function(){
-      return {'font-size': this.$slots.default[0].text.length > 40 ? '16px' : '20px'};
+      return {'font-size': this.$slots.default[0].text.length > 40 ? '16px' : '28px'};
     }
   },
   methods: {
@@ -3874,8 +3950,8 @@ function makeComponent(componentName, points, reactions){
         console.log(thing);
       },
       show: function(key){
-        return true;
-//        return key == this.active;
+//        return true;
+        return key == this.active;
       }, 
       got: function(key){
         // Return the latest value
