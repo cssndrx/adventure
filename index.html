@@ -3,22 +3,17 @@
 
 <head>
 <meta charset="utf-8" />
-<!--<link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:200,400,700,900" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css?family=Gloria+Hallelujah" rel="stylesheet">-->
 
-<!--
-font-family: 'VT323', monospace;
-font-family: 'Princess Sofia', cursive;
-font-family: 'Indie Flower', cursive;
-font-family: 'Dokdo', cursive;
-font-family: 'East Sea Dokdo', cursive;
-font-family: 'Creepster', cursive;
-font-family: 'Bungee Hairline', cursive;
-font-family: 'Bungee', cursive;
-font-family: 'Bungee Shade', cursive;
-font-family: 'Bungee Inline', cursive;
-font-family: 'Cormorant Garamond', serif;
--->
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=59181255"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', '59181255');
+</script>
+
 
 <!-- todo: strip and remove the unused -->
 <link href="https://fonts.googleapis.com/css?family=Itim|Dokdo|Fira+Sans:300,700" rel="stylesheet">
@@ -32,6 +27,17 @@ font-family: 'Cormorant Garamond', serif;
 <script src="js/utils.js"></script>
 
 <style>
+
+html, body, #app{
+  height: 100%;
+}
+
+
+.rainbow-text{
+  background: linear-gradient(to right, orange , yellow, green, cyan, blue, violet);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
 .samples-chart{
   -webkit-user-select: none; /* Safari 3.1+ */
   -moz-user-select: none; /* Firefox 2+ */
@@ -147,6 +153,8 @@ button{
   margin-bottom: 8px; 
   padding: 8px 16px;
   margin: 8px;
+  max-width: 180px;
+  display: inline-block;
 }
 .question button:hover, .question .clicked-button{
   color: white;
@@ -363,7 +371,7 @@ button{
 .smaller-children, .smaller-children *{
   font-size: 16px;
 }
-/* https://w3bits.com/rainbow-text/ */
+/* https://w3bits.com/rainbow-text/
 .rainbow-text {
   background-image: repeating-linear-gradient(45deg, violet, indigo, blue, green, orange, red, violet);
   text-align: center;
@@ -375,7 +383,7 @@ button{
 @keyframes rainbow { 
     0%{background-position:0% 50%}
     50%{background-position:100% 25%}
-    100%{background-position:0% 50%}
+    100%{background-position:0% 50%} */
 }
 .fade-enter-active, .fade-leave-active {
   transition: opacity 1s;
@@ -413,7 +421,7 @@ button{
 }
 .coin{
   display: inline-block;
-  width: 150px;
+  width: 120px;
   cursor: pointer;
   vertical-align: top;
   word-wrap: break-word;
@@ -436,10 +444,6 @@ button{
   opacity: 0;
 }
 
-.nope{
-  color:red; 
-  font-size: 14px; 
-}
 
 .intro-to-distributions .distribution{
   display: inline-block;
@@ -478,15 +482,28 @@ button{
   filter: none;
 }
 
+.hint, .hint *{
+  font-size: 15px;
+  margin: 8px;
+  color: #777;
+}
+
+.ps, .ps *{  
+  font-size: 15px;
+  margin: 8px;
+}
+
+
 </style>
+</head>
+
 
 <body>
 
 
+<div id="app" style="position:relative;left: 60px;width:calc(100% - 60px);" @click="mainClick($event)">
 
-<div id="app" style="position:relative;left: 60px;width:calc(100% - 60px);">
-
-  <div 
+  <div ref="toc"
   :style="{'background-color': showTOC ? '#777' : '#ddd', 'color': showTOC ? 'white': 'black'}"
   style="width:60px;position: fixed; top:0px; left:0px; height: 100%; text-align: center; padding-top:8px"
   :style="{}">
@@ -569,189 +586,164 @@ You are going to bring us into this new world of <span class="animated infinite 
 
 
 <script type="text/x-template" id="intro-to-pvalues-template">
-<div style="width:600px; margin: 0 auto;">
-
-<div class="point-container" style="width: 400px">
-  <div v-for="point in points" 
-  @click="set(point.key)" 
-  class="point has-tooltip" 
-  :class="pointClass(point)"
-  :style="pointStyle(point)">
-    <span>{{point.name}}</span>
-  </div>
-</div>
+<pset>
 
 
-<!-- <note text="a measure of spread">Standard deviation*</note>: 2.3 -->
-
-<avatar key="intro"
-  v-if="show('intro')"
-  image="wizard.png"
+<avatar 
   text="I cannot take credit for this next act of evil... the p-value.">
-  <buton @click="set('intro2')">Next</buton>
+  <next>Next</next>
 </avatar>
 
-<avatar key="intro2"
-  v-if="show('intro2')"
-  image="wizard.png"
+<avatar 
   text="P-values are used to describe scientific results, but they are so misunderstood that many people misinterpret scientific results! HAHA!">
-  <buton @click="set('intro3')">Next</buton>
+  <next>Next</next>
 </avatar>
 
-<avatar key="intro3"
-  v-if="show('intro3')"
-  image="wizard.png"
-  text="Talk to this scientist and see if you can make sense of p-values.">
-  <buton @click="set('0')">Next</buton>
+<avatar 
+  text="Talk to Wei the Scientist and see if you can make sense of p-values.">
+  <next>Next</next>
 </avatar>
 
-<avatar key="0"
-  v-if="show('0')"
+<avatar
   image="scientist.png"
   text="For many years, I've been trying to brew a magic potion to teach statistics.">
-  <buton @click="set('2')">Next</buton>
+  <next>Next</next>
 </avatar>
 
-<avatar key="2"
-  v-if="show('2')"
+<avatar 
   image="scientist.png"
   text="I'll let you drink one of my potions. But in order to pick the right brew, you'll need to learn about p-values.">
 
-  <buton @click="set('2a')">Next</buton>
+  <next>Next</next>
 </avatar>
 
-<avatar key="2a"
-  v-if="show('2a')"
+<avatar 
   image="scientist.png"
   text="I ran experiments measuring the change in statistics knowledge after drinking each potion compared with a placebo.">
 
-  <buton @click="set('3')">Next</buton>
+  <next>Next</next>
 </avatar>
 
 
-<avatar key="3"
-  v-if="show('3')"
+<avatar 
   image="scientist.png"
   text="The default belief is that it's not possible to learn statistics by drinking a potion. In science speak, the default belief is called the *null hypothesis*.
 
   The *p-value* is the probability that you'll see as extreme a result if the null hypothesis is true.">
 
-  <buton @click="set('4')">Next</buton>
+  <next>Next</next>
 </avatar>
 
-<avatar key="4"
-  v-if="show('4')"
+<avatar 
   image="scientist.png"
   text="I ran the experiment with my first potion and got a p-value of 0.6.">
 
   <div>
-    What does a <note text="The chance of observing as extreme a result if the null hypothesis is right">p-value</note> of 0.6 mean?
+    What does a p-value of 0.6 mean?
   </div>
+
   <buton-group>
-    <buton yay @clik="set('5')">There's a 60% chance of observing as extreme a result even if the potion didn't work</buton>
+    <buton yay>There's a 60% chance of observing as extreme a result even if the potion didn't work</buton>
     <buton nope>There's a 60% chance that the potion is better than the placebo</buton>
     <buton nope>There's a 40% chance that the potion is better than the placebo</buton>
+
+    <template v-slot:hint>
+    P-values only speak about the probability of obtaining the results if the null hypothesis is true. It isn't the probability of the null hypothesis being correct, or the alternative hypothesis being correct.
+    </template>
   </buton-group>
 
-  <template v-slot:hint>
-  P-values only speak about the probability of obtaining the results if the null hypothesis is true. It isn't the probability of the null hypothesis being correct, or the alternative hypothesis being correct.
-  </template>
-
-  <template v-slot:ps>
-    Correct. A P-value assumes the null hypothesis (aka that educational potions don't work) and says how extreme the results are under this assumption.
-  </template>
 </avatar>
 
-<avatar key="5"
-  v-if="show('5')"
-  image="scientist.png"
+<avatar image="scientist.png">
+  Correct. A P-value assumes the null hypothesis (aka that educational potions don't work) and says how extreme the results are under this assumption.
+</avatar>
+
+<avatar  image="scientist.png"
   text="I ran the same experiment with a different potion and got a p-value of 0.01. What does a p-value of 0.01 mean?">
 
   <buton-group>
-    <buton yay @clik="set('6')">There's a 1% chance of observing as extreme a result even if the potion didn't work</buton>
+    <buton yay>There's a 1% chance of observing as extreme a result even if the potion didn't work</buton>
     <buton nope>There's a 1% chance that the placebo is better than the potion</buton>
     <buton nope>There's a 1% chance that the results are due to chance</buton>
-  </buton-group>
 
-  <template v-slot:hint>
-  P-values only speak about the probability of obtaining the results if the null hypothesis is true. It isn't the probability of the null hypothesis being correct, or the alternative hypothesis being correct.
-  </template>
+    <template v-slot:hint>
+    P-values only speak about the probability of obtaining the results if the null hypothesis is true. It isn't the probability of the null hypothesis being correct, or the alternative hypothesis being correct.
+    </template>
+  </buton-group>
 </avatar>
 
-<avatar key="6"
-  v-if="show('6')"
+<avatar 
   image="scientist.png"
   text="For one of my potion experiments, what would be a more exciting result? A p-value of 0.01 or 0.001? ">
-  <buton nope>0.01</buton>
-  <buton yay @clik="set('7')">0.001</buton>
 
-  <template v-slot:hint>
-  A p-value of 0.01 would mean that there's a 1% chance that we would observe as extreme a result if the potion didn't work. While that's nice, it would be nicer if there were only a 0.1% chance that the result would occur.
-  </template>
+  <buton-group>
+    <buton nope>0.01</buton>
+    <buton yay>0.001</buton>
 
-  <template v-slot:ps>
-  Yes! We're hoping that the potion is different from the placebo, so a lower p-value is better. 
-  </template>
-
+    <template v-slot:hint>
+    A p-value of 0.01 would mean that there's a 1% chance that we would observe as extreme a result if the potion didn't work. While that's nice, it would be nicer if there were only a 0.1% chance that the result would occur.
+    </template>
+  </buton-group>
 </avatar>
 
-<avatar key="7"
-  v-if="show('7')"
+<avatar image="scientist.png">
+  Yes! We're hoping that the potion is different from the placebo, so a lower p-value is better. 
+</avatar>
+
+<avatar 
   image="scientist.png"
   text="Scienitific journals usually require a p-value of 0.05 or smaller to publish. If a p-value is less than 0.05, it is called 'statistically significant'. Experimenting with another potion yielded a p-value of 0.14. Which is...">
 
   <buton nope>Statistically significant</buton>
-  <buton yay @clik="set('8')">Not statistically significant</buton>
-
-  <template v-slot:ps> 
-  Correct. "Statistically significant" sounds really important, but it's just the scientific name for p-value less than a threshold. It's up to the domain expert to determine if the result is meaningful or not.
-  </template>
+  <buton yay>Not statistically significant</buton>
 </avatar>
 
-<avatar key="8"
-  v-if="show('8')"
+<avatar image="scientist.png">
+  Correct. "Statistically significant" sounds really important, but it's just the scientific name for p-value less than a threshold. It's up to the domain expert to determine if the result is meaningful or not.
+</avatar>
+
+<avatar 
   image="scientist.png"
   text="How should a p-value of 0.14 be interpreted?">
 
   <buton nope>Weak evidence that the magic potion is the same as the placebo.</buton>
-  <buton yay @clik="set('9')">Weak evidence that the magic potion is better than the placebo.</buton>
+  <buton yay>Weak evidence that the magic potion is better than the placebo.</buton>
   <buton nope>Strong evidence that the magic potion is the same as the placebo.</buton>
   <buton nope>Strong evidence that the magic potion is better than the placebo.</buton>
-
-  <template v-slot:ps> 
-  Correct. Although a p-value of 0.14 does not meet the threshold for "statistical significance", it is still weak evidence that the results may be unusual under the null hypothesis (aka default world view). There was only a 14% chance that we would observe as extreme a result.
-  </template> 
 </avatar>
 
-<avatar key="9"
-  v-if="show('9')"
+<avatar image="scientist.png">
+  Correct. Although a p-value of 0.14 does not meet the threshold for "statistical significance", it is still weak evidence that the results may be unusual under the null hypothesis (aka default world view). There was only a 14% chance that we would observe as extreme a result.
+</avatar>
+
+<avatar 
   image="scientist.png"
   text="Ok so for the potion I tested and got a p-value of 0.14, what should I do?">
 
   <buton nope='Although the p-value in this experiment is insufficient to conclude "statistical significance", it doesnt mean that there is no effect. The power on the experiment may be insufficient.'>Conclude that potion C is no different from the placebo.</buton>
   <buton nope="If you rerun the experiment, due to random variation it may be possible to get a lower p-value. But this is considered bad science (and p-hacking). See the green jelly beans xkcd.">Rerun the same experiment in hopes of getting a lower p-value</buton>
-  <buton yay @clik="set('10')">Rerun the experiment but with a greater number of subjects</buton>
+  <buton yay>Rerun the experiment but with a greater number of subjects</buton>
+</avatar>
 
-  <template v-slot:ps>
+<avatar image="scientist.png">
   Yes, the p-value is borderline significant so it may be worth tweaking the experiment and rerunning. It is easier to get a signficant p-value with a larger number of samples.
-  </template>
 </avatar>
 
 <avatar key="10"
-  v-if="show('10')"
   image="scientist.png"
   text="After a lot of experimentation, I finally arrived at these two potions:
 Potion A: p-value of 0.05
 Potion B: p-value of 0.1
 
 Which do you want to drink?">
-  <buton-group @clik="set('11')">
+  <buton-group>
     <buton>Potion A</buton>
     <buton nope>Potion B</buton>
     <buton yay>Not enough info</buton>
   </buton-group>
+</avatar>
 
-  <template v-slot:ps>
+<avatar>
   <div>
     {{ got('10') ? "Correct! There's not enough info." : 'Good attempt, but not quite.' }} Potion A has a lower p-value, but the p-value doesn't say anything about effect size. 
   </div>
@@ -759,11 +751,9 @@ Which do you want to drink?">
   <div>
     You need both the effect size and the p-value to make your decision.
   </div>
-  </template>
 </avatar>
 
-<avatar key="11"
-  v-if="show('11')"
+<avatar 
   image="scientist.png"
   text="It turns out that the effect sizes were... "
   class="normal-div">
@@ -787,22 +777,20 @@ Which do you want to drink?">
 In this case, which potion would you like to drink? 
 </div>
 
-<buton-group @clik="set('12')">
+<buton-group>
   <buton>Potion A</buton>
   <buton>Potion B</buton>
 </buton-group>
 
 </avatar>
 
-<avatar key="12"
-  v-if="show('12')"
+<avatar 
   image="scientist.png"
   text="You drink the potion and....">
-  <buton @click="set('13')">Next</buton>
+  <next>Next</next>
 </avatar>
 
-<avatar key="13"
-  v-if="show('13')"
+<avatar 
   image="scientist.png"
   text="Turns out that the statistics you learn comes from deciding which potion to drink, rather than drinking it">
 
@@ -823,7 +811,7 @@ In this case, which potion would you like to drink?
 </avatar>
 
 
-</div>
+</pset>
 </script>
 
 
@@ -910,7 +898,7 @@ Ruthless Swan was vanquished by challenging them to a duel.
 <avatar key="4"
   v-if="show('4')"
   image="cop.png">
-  <template v-slot:dialog>
+  <template v-slot:text>
     An easier way to answer these questions about probabilities, is to convert the frequency chart to create a *distribution*.
   </template>
 
@@ -1072,50 +1060,13 @@ Ruthless Swan was vanquished by challenging them to a duel.
 </div>
 </script>
 
-<script type="text/x-template" id="toc-template">
-<div style="background-color: #eee; height: 100%; position:fixed; top:0px; left:60px; width: calc(100% - 60px)" class="font16 handwriting">
-  <div style="width:500px; margin: 0 auto; margin-top: 24px; ">
 
-
-    <div style="font-weight:700; font-size:12px">Chapters</div>
-    <div>
-      You can jump ahead in the story, but the story makes the most sense played through from the beginning.
-    </div>
-
-    <div>
-    <div v-for="(chapter, index) in chapters" v-if="index > 0">
-      <a @click="$root.showTOC = false; $root.chapterInd = index">Chapter {{index}}: {{chapter.description}}</a>
-    </div>
-    </div>
-
-    <div style="font-weight:700; font-size:12px">Your story so far</div>
-
-    <div>
-      You want to learn statistics so you're helping the Bad Wizard cause trouble in a faraway land. 
-    </div>
-
-    <div style="font-weight:700; font-size:12px">Hints</div>
-
-    <div>
-    It's okay to explore "wrong" answers to see what the story will say. You won't be penalized. 
-    </div>
-
-    <div>
-    It's possible to return to a question and answer it differently by using the jump points that look like:
-    </div>
-
-    <div class="point-container" style="width: 300px; margin-bottom:32px">
-      <div v-for="point in 8" 
-      class="point">
-        <span>{{point.name}}</span>
-      </div>
-    </div>
-  </div>
-</div>
-</script>
 
 <script type="text/x-template" id="intro-scene-template">
 <div style="width:600px; margin: 0 auto;">
+
+
+
 
 <div key="intro"
   v-if="show('intro')"
@@ -1127,36 +1078,16 @@ Ruthless Swan was vanquished by challenging them to a duel.
 
   <div style="max-width:500px; margin: 0 auto">
     <div>
-    Not really motivated by your standard statistics textbook, but you'll get out of bed to save the world?
+    Not really motivated by a normal statistics class, but you'll get out of bed to save the world?
     </div>
 
     <div>
-    Use statistics and stop the Evil Wizard.
+    Learn probability and statistics to stop the Evil Wizard.
     </div>
   </div>
 
-  <buton @click="$root.nextChapter()">Play</buton>
-
-
-  <div style="width:500px; text-align:left">
-    <p>
-      Not too long ago, I was just like you. Just a regular nerdy wizard, browsing the internet. 
-    </p>
-    <p>
-      As I clicked between Reddit and Hacker News, I realized that people really don't understand probability and statistics ___. And that the existing classes and books on it were boring and uninviting, with the exception of a few ___.
-    </p>
-
-    <p>
-      And that was when I decided that I could cause mischeif in the world... until everyone would be forced to notice.
-    </p>
-
-    <p style="font-style:italic">
-      And that is where you come in.
-    </p>
-  </div>
-
+  <buton @click="$root.nextChapter()">Play!</buton>
 </div> <!-- end intro -->
-
 
 </div>
 </script>
@@ -1197,57 +1128,78 @@ Ruthless Swan was vanquished by challenging them to a duel.
 </div>
 </script>
 
+
+<script type="text/x-template" id="next-template">
+  <buton @click="next()"><slot></slot></buton>
+</script>
+
+
 <script type="text/x-template" id="coin-flips-template">
-<div>
+<pset>
 
-<!-- jump to a diferent problem -->
-<div class="point-container">
-  <div v-for="point in points" 
-  @click="set(point.key)" 
-  class="point has-tooltip" 
-  :class="pointClass(point)"
-  :style="pointStyle(point)">
-    <span>{{point.name}}</span>
-  </div>
-</div>
+<!-- why is calc 50% being so large?? 
+<avatar key="HH"
+  image="monster.png" 
+  text="What is the probability that I toss a fair coin twice and get HH?">
+
+  <buton nope="1/2 is the probability of tossing a single coin and getting H. Getting two heads in a row is rarer than that.">1/2</buton>
+  <buton yay>1/4</buton>
+  <buton nope="Assume it is a fair coin that lands on heads with 50% probability.">Not enough info</buton>
+
+</avatar>-->
 
 
-<avatar key="intro"
-  v-if="show('intro')"
-  image="wizard.png"
-  text="For my first act of evil... people expect coins to be fair. I'm going to bias some coins and see if anyone notices.">
-  <buton @click="set('something-wrong')">Next</buton>
+<avatar key="intro">
+  <p>
+    Not too long ago, I was just like you. Just a regular nerdy wizard on the internet.
+  </p>
+  <p>
+    But one day, it dawned on me that humans really don't understand probability and statistics.
+  </p>
+
+  <p>
+    And that was when I realized... I could do good... by doing evil... if I could cause mischief in the world that everyone would be forced to notice probability in their daily life.
+  </p>
+
+  <p style="font-style:italic">
+    And that is where you come in.
+  </p>
+
+  <next>Oh dear</next>
 </avatar>
 
 
-<!-- <transition name="fade" mode="out-in">-->
+<avatar key="2"
+  image="wizard.png"
+  text="For my first act of evil... people expect coins to be fair. I'm going to bias some coins and see if anyone notices.">
+  <next>Next</next>
+</avatar>
+
+
 <avatar key="something-wrong"
-  v-if="show('something-wrong')"
   image="monster.png"
   text="I think something is wrong with my coins. I wonder if this is the Bad Wizard's doing?">
-  <buton @click="set('50-50')">What's wrong?</buton>
+  <next>What's wrong?</next>
 </avatar>
 
 <avatar key="50-50"
-  v-if="show('50-50')"
   image="monster.png" 
   text="You know how when you toss a fair coin, it's supposed to land H with 50% probability? And T with 50% probability?">
-  <buton @click="set('HH')">Yeah</buton>
+  <next>Yeah</next>
 </avatar>
 
 <avatar key="HH"
-  v-if="show('HH')"
   image="monster.png" 
   text="What is the probability that I toss a fair coin twice and get HH?">
+
   <buton nope="1/2 is the probability of tossing a single coin and getting H. Getting two heads in a row is rarer than that.">1/2</buton>
-  <buton @clik="set('HH-explanation')" yay>1/4</buton>
+  <buton yay>1/4</buton>
   <buton nope="Assume it is a fair coin that lands on heads with 50% probability.">Not enough info</buton>
+
 </avatar>
 
 <avatar 
-  image="wizard.png"
-  key="HH-explanation" 
-  v-if="show('HH-explanation')">
+  key="HH-explanation">
   <div>
     Nice work. In math lingo, you just calculated a <bold>joint probability</bold> -- the probability multiple events would occur.  For calculating the probability of independent events like coin tosses, this is done by multiplication. 1/2 x 1/2 = 1/4. 
   </div>
@@ -1264,68 +1216,73 @@ Ruthless Swan was vanquished by challenging them to a duel.
 
     If we only care about the HH outcome, our probability of getting it is 1/4.
   </div>
-  <buton @click="set('HHH')">Next</buton>
+  <next>Next</next>
 </avatar> 
 
 <avatar key="HHH"
-  v-if="show('HHH')"
   image="monster.png" 
   text="I've noticed my coins landing heads a lot. What is the probability that I toss a fair coin three times and get HHH?">
-  <buton nope>1/2</buton>
-  <buton nope>1/3</buton>
-  <buton @clik="set('10H')" yay>1/8</buton>
-  <buton nope>Not enough info</buton>
 
-  <template v-slot:hint>
-    <div>
-      By the same logic as before, coin flips are independent events (i.e. a result doesn't affect the next result). The probabilities of the joint event: seeing X AND Y can be combined with multiplication. The chance of getting HHH is 1/2 x 1/2 x 1/2.
-    </div>
+  <buton-group>
+    <buton nope>1/2</buton>
+    <buton nope>1/3</buton>
+    <buton yay>1/8</buton>
+    <buton nope>Not enough info</buton>
 
-    <div>
-      Another way to see this is that there are 8 possible outcomes:
+    <template v-slot:hint>
+      <div>
+        By the same logic as before, coin flips are independent events (i.e. a result doesn't affect the next result). The probabilities of the joint event: seeing X AND Y can be combined with multiplication. The chance of getting HHH is 1/2 x 1/2 x 1/2.
+      </div>
 
-      HHH
-      HHT
-      HTH
-      HTT
-      THH
-      THT
-      TTH
-      TTT
+      <div>
+        Another way to see this is that there are 8 possible outcomes:
 
-      If we only care about the HHH outcome, our probability of getting it is 1/8.
-    </div>
-  </template>
+        HHH
+        HHT
+        HTH
+        HTT
+        THH
+        THT
+        TTH
+        TTT
+
+        If we only care about the HHH outcome, our probability of getting it is 1/8.
+      </div>
+    </template>
+  </buton-group>
 </avatar>
 
 
 <avatar key="10H"
-  v-if="show('10H')"
   image="monster.png" 
   text="What is the probability that I toss a coin 10 times and get HHHHHHHHHH?">
-  <buton @clik="set('10HT')" yay>1/<exp base="2" pow="10"/></buton>
-  <buton nope>1/2</buton>
-  <buton nope>1/10</buton>
-  <buton nope>1/20</buton>
-  <buton nope>Not enough info</buton>
 
-  <template v-slot:hint>
-    <div>
-      Remember that independent events can be combined with multiplication.
-    </div>
+  <buton-group>
+    <buton yay>1/<exp base="2" pow="10"/></buton>
+    <buton nope>1/2</buton>
+    <buton nope>1/10</buton>
+    <buton nope>1/20</buton>
+    <buton nope>Not enough info</buton>
 
-    <div>
-      So the chance of getting HHHHHHHHHH is .... 1/(2*2*2*2*2*2*2*2*2*2) = approx .01%
-    </div>
-  </template>
+    <template v-slot:hint>
+      <div>
+        Remember that independent events can be combined with multiplication.
+      </div>
+
+      <div>
+        So the chance of getting HHHHHHHHHH is .... 1/(2*2*2*2*2*2*2*2*2*2) = approx .01%
+      </div>
+    </template>
+  </buton-group>
 </avatar>
 
 
 <avatar key="10HT"
-  v-if="show('10HT')"
   image="monster.png" 
   text="And what is the probability that I toss a coin 10 times and get HHHTHHTTTT?">
-  <buton @clik="set('HHHHH')" yay>1/<exp base="2" pow="10"/></buton>
+
+
+  <buton yay>1/<exp base="2" pow="10"/></buton>
   <buton nope>1/2</buton>
   <buton nope>1/10</buton>
   <buton nope>1/20</buton>
@@ -1342,8 +1299,19 @@ Ruthless Swan was vanquished by challenging them to a duel.
   </template>
 </avatar>
 
-<!-- stopped here: thinking how to phrase this
 
+<avatar image="monster.png">
+  <div>
+    Yeah! The chance of getting HHHTHHTTTT is the same as the probability of getting HHHHHHHHHH.
+  </div>
+
+  <div>
+    Because both involve computing the probability of 10 independent coin flips.
+  </div>
+</avatar>
+
+
+<!-- stopped here: thinking how to phrase this
   <avatar key="10HT"
   v-if="show('10HT')"
   image="monster.png" 
@@ -1356,43 +1324,38 @@ Ruthless Swan was vanquished by challenging them to a duel.
 
 
 <avatar key="HHHHH"
-  v-if="show('HHHHH')"
   image="monster.png" 
   text="If I tossed a fair coin 5 times, and it landed HHHHH all five times... What is it more likely to land the 6th time?">
 
-  <template v-slot:hint>
-    <div v-if="memory == 'userSaidT'">
-      <div>Nope, that's the Gambler's Fallacy... a common misconception that events that haven't occured are more likely to occur.</div>
+  <buton-group>
+    <buton @click="memory='userSaidH'" nope>H</buton>
+    <buton @click="memory='userSaidT'" nope>T</buton>
+    <buton yay>It's 50-50</buton>
 
-      <div>Coins have no memory, so just because H came up a lot, doesn't mean that T is more likely to come up in the future.</div>
-    </div>
+    <template v-slot:hint>
+      <div v-if="memory == 'userSaidT'">
+        <div>Nope, that's the Gambler's Fallacy... a common misconception that events that haven't occured are more likely to occur.</div>
 
-    <div v-if="memory == 'userSaidH'">
-      <div>Nope, that's the Hot Hand Fallacy... a common misconception that events that have occurred recently are "hot" and more likely to come up.</div>
+        <div>Coins have no memory, so just because H came up a lot, doesn't mean that T is more likely to come up in the future.</div>
+      </div>
 
-      <div>Coins have no memory, so just because H came up a lot, doesn't mean that H is any more likely to come up in the future.</div>
-    </div>
+      <div v-if="memory == 'userSaidH'">
+        <div>Nope, that's the Hot Hand Fallacy... a common misconception that events that have occurred recently are "hot" and more likely to come up.</div>
 
-  </template>
+        <div>Coins have no memory, so just because H came up a lot, doesn't mean that H is any more likely to come up in the future.</div>
+      </div>
 
-
-  <buton @click="memory='userSaidH'" nope>H</buton>
-  <buton @click="memory='userSaidT'" nope>T</buton>
-  <buton @clik="set('HHHHH-finale')" yay>It's 50-50</buton> <!-- needed to use clik, so rainbow would show -->
+    </template>
+  </buton-group>
 </avatar>
 
 <avatar key="HHHHH-finale"
-  v-if="show('HHHHH-finale')"
   image="monster_yay.png" 
-  sound="right"
   text="Yeah! The correct answer is that it's 50-50, regardless of what has happened before since coins have no memory.">
-  <buton @click="set('independence')">Next</buton>
+  <next>Next</next>
 </avatar>
 
-<avatar 
-    image="monster.png"
-    key="independence" 
-    v-if="show('independence')">
+<avatar image="monster.png">
   <div>
     Coin flips are <bold>independent events</bold>.
   </div>
@@ -1401,22 +1364,15 @@ Ruthless Swan was vanquished by challenging them to a duel.
     Meaning that knowing the result of one event does not give you information about the other events. 
   </div>
 
-<!--Which of these is another example of an independent event?
-  <buton nope>Landing a job</buton>
-  <buton @click="set('HH')" yay>Rolling dice</buton>
-  <buton nope>Winning at games</buton>
-  <buton nope>Having a good day</buton> -->
-
-  <buton @click="set('100H')">Next</buton>
+  <next>Next</next>
 
 </avatar>
 
 <avatar key="100H"
-  v-if="show('100H')"
   image="monster.png" 
   text="After I ran into the Bad Wizard the other day, I tossed a coin 100 times and it landed heads all 100 times! What do you think it landed on the 101-st time?">
 
-  <buton-group @clik="set('100H-result')">
+  <buton-group>
     <buton yay>H</buton>
     <buton>T</buton>
     <buton>It's 50-50</buton>
@@ -1424,19 +1380,17 @@ Ruthless Swan was vanquished by challenging them to a duel.
 </avatar>
 
 <avatar key="100H-result"
-  v-if="show('100H-result')"
   image="monster.png">
 
-  <template v-slot:dialog>
+  <div>
    {{got('100H') ? 'Yeah!': 'Not quite.'}} The probability of 100 heads in a row on a fair coin is 1/2^100. If all the 2^80 atoms in the universe were flipping coins, this still probably wouldn't happen. That's why I think the Bad Wizard did something to my coins, and they are no longer fair.
- </template>
+ </div>
 
- <buton @click="set('quest')">I see</buton>
+   <next>I see</next>
 </avatar>
 
 
 <avatar key="quest"
-  v-if="show('quest')"
   image="monster.png" 
   text="Will you please track down the Bad Wizard and fix my coins?">
 
@@ -1448,46 +1402,27 @@ Ruthless Swan was vanquished by challenging them to a duel.
   </ul> 
 
 
-  <buton @click="$root.nextChapter()">Accept Quest</buton>
+  <next @click="$root.nextChapter()">Accept Quest</next>
 </avatar>
 
-<!-- </transition> -->
 
-</div>
+</pset>
 </script>
 
 <script type="text/x-template" id="wizard-flips-template">
-<div>
+<pset>
 
-<!-- jump to a diferent problem -->
-<div class="point-container" style="width: 250px">
-  <div v-for="point in points" 
-  @click="set(point.key)" 
-  class="point has-tooltip" 
-  :class="pointClass(point)"
-  :style="pointStyle(point)">
-    <span>{{point.name}}</span>
-  </div>
-</div>
-
-<avatar key="intro"
-  v-if="show('intro')"
-  image="wizard.png" 
+<avatar
   text="Oh ho! That monster definitely didn't like me messing with his coins.">
-  <buton @click="set('wizard2')">Next</buton>
+  <next>Next</next>
 </avatar>
 
-<avatar key="wizard2"
-  v-if="show('wizard2')"
-  image="wizard.png" 
+<avatar  
   text="Let's see how you do at my next little game.">
-
-  <buton @click="set('3coins')">Next</buton>
+  <next>Next</next>
 </avatar>
 
-<avatar key="3coins"
-  v-if="show('3coins')"
-  image="wizard.png" 
+<avatar 
   text="I have 3 coins. 2 are fair, 1 is unfair. Let's see if you can find the unfair one.">
 
   <div>Click the coins to flip them at least 10 times each.</div>
@@ -1498,33 +1433,29 @@ Ruthless Swan was vanquished by challenging them to a duel.
   <coin :bias="0.7"></coin>
 
   <div class="handwriting">The unfair coin is:</div>
-  <div>
+
+  <buton-group>
     <buton nope>A</buton>
     <buton nope>B</buton>
-    <buton yay @click="set('interactive')">C</buton>
-  </div>
+    <buton yay>C</buton>
 
-  <template v-slot:hint>
-    Hint: One coin has a tendency to land on one side more than the other.
-  </template>
+    <template v-slot:hint>
+      Hint: One coin has a tendency to land on one side more than the other.
+    </template>
+  </buton-group>
+
 </avatar>
 
-<avatar key="interactive"
-  v-if="show('interactive')"
-  image="wizard.png" >
+<avatar >
 
-  <template v-slot:dialog>
-    {{ perfect('3coins') ? 'Oh. You got me. That coin was biased to land on H, 70% of the time.' : "HAAAHHAA! It's pretty hard to find the biased coin, right? And that was when the coin was biased to land on H, 70% of the time!"}} What is the weakest bias with which you can easily tell that the coin is biased?
-  </template>
+  {{ perfect('3coins') ? 'Oh. You got me. That coin was biased to land on H, 70% of the time.' : "HAAAHHAA! It's pretty hard to find the biased coin, right? And that was when the coin was biased to land on H, 70% of the time!"}} What is the weakest bias with which you can easily tell that the coin is biased?
 
   <biased-coin-machine></biased-coin-machine>
-  <buton @click="set('3coins2')">Done with this</buton> 
+  <next>Done with this</next> 
 
 </avatar>
 
-<avatar key="3coins2"
-  v-if="show('3coins2')"
-  image="wizard.png" 
+<avatar 
   text="HAHA this is fun. I again have 3 coins. 2 are fair, 1 is unfair. Find the unfair coin.">
 
   <div>Click the coins to flip them.</div>
@@ -1535,29 +1466,27 @@ Ruthless Swan was vanquished by challenging them to a duel.
   <coin></coin>
 
   <div class="handwriting">The unfair coin is:</div>
-  <buton nope>A</buton>
-  <buton yay @click="set('3coins2-result')">B</buton>
-  <buton nope>C</buton>
 
-  <template v-slot:hint>
-    Hint: Look at the pattern of coin flips. The wizard may be having a joke at your expense.
-  </template>
+  <buton-group>
+    <buton nope>A</buton>
+    <buton yay>B</buton>
+    <buton nope>C</buton>
 
+    <template v-slot:hint>
+      Hint: Look at the pattern of coin flips. The wizard may be having a joke at your expense.
+    </template>
+  </buton-group>
 </avatar>
 
 
-<avatar key="3coins2-result"
-  v-if="show('3coins2-result')"
-  image="wizard.png" 
+<avatar 
   text="HAHA yes, that coin always says HAHA. It lands on heads 50% of the time, but it's unfair because I know what's coming next. Genius, isn't it??">
 
-  <buton @click="set('3coins3')">Next</buton>
+  <next>Next</next>
 </avatar>
 
 
-<avatar key="3coins3"
-  v-if="show('3coins3')"
-  image="wizard.png" 
+<avatar 
   text="OKOK last one. Find the unfair coin.">
 
   <div>Click the coins to flip them.</div>
@@ -1568,28 +1497,27 @@ Ruthless Swan was vanquished by challenging them to a duel.
   <coin></coin>
 
   <div class="handwriting">The unfair coin is:</div>
-  <buton nope>A</buton>
-  <buton yay @click="set('3coins3-result')">B</buton>
-  <buton nope>C</buton>
 
-  <template v-slot:hint>
-    Hint: Look at the pattern of coin flips. One of these coins is a bit shy.
-  </template>
+  <buton-group>
+    <buton nope>A</buton>
+    <buton yay>B</buton>
+    <buton nope>C</buton>
+
+    <template v-slot:hint>
+      Hint: Look at the pattern of coin flips. One of these coins is a bit shy.
+    </template>
+  </buton-group>
 </avatar>
 
 
-<avatar key="3coins3-result"
-  v-if="show('3coins3-result')"
-  image="wizard.png" 
+<avatar 
   text="You got it. Interesting isn't it. This coin never has long streaks of one thing or the other. Humans tend to generate 'random' sequences like this. But they aren't random, because nature doesn't mind having long streaks.">
 
-  <buton @click="set('fin')">Next</buton>
+  <next>Next</next>
 </avatar>
 
 
-<avatar key="fin"
-  v-if="show('fin')"
-  image="wizard.png" 
+<avatar 
   text="HAHAHA. That's it for coins. Let's cause more mischief.">
 
   <ul>
@@ -1599,12 +1527,12 @@ Ruthless Swan was vanquished by challenging them to a duel.
   <buton @click="$root.nextChapter()">Next Story</buton>
 </avatar>
 
-</div>
+</pset>
 </script>
 
 
 <script type="text/x-template" id="bayes-rule-template">
-<div>
+<pset>
 
 <!--<pset>
     <div><div>What about 1?</div><input-box :right="5">%</input-box></div>
@@ -1616,51 +1544,30 @@ Ruthless Swan was vanquished by challenging them to a duel.
   :hypotheses="['Nice', 'Evil']" 
   :config="{prior: {dist: [1, 1], correct: [1, 2], isActive: true, isDraggable:true}, likelihood: {dist: [10, 1], isActive: true, isDraggable: true}, posterior: {}}"></triple-bayes> -->
 
-<!-- jump to a diferent problem -->
-<div class="point-container" style="width: 350px">
-  <div v-for="point in points" 
-  @click="set(point.key)" 
-  class="point has-tooltip" 
-  :class="pointClass(point)"
-  :style="pointStyle(point)">
-    <span>{{point.name}}</span>
-  </div>
-</div>
 
-<avatar key="intro"
-  v-if="show('intro')"
-  image="wizard.png" 
+<avatar  
   text="Now, you can ask me the question you've been meaning to ask me.">
-
-  <buton @click="set('prior')">Are you really evil?</buton>
+  <next>Are you really evil?</next>
 </avatar>
 
-<avatar key="prior"
-  v-if="show('prior')"
-  image="wizard.png" 
-  text-align="left"
+<avatar
   text="People in story book land are generally nice. Maybe 1 in 6 are evil.">
 
   <div>Drag the bars to show the odds that a random character is evil. This is called your <bold>prior belief</bold>. <note text="If 1 in 6 people are evil, that means 5 in 6 people are nice.">Hint</note>
   </div>
 
-  <pset>
-    <triple-bayes 
-      :hypotheses="['Nice', 'Evil']" 
-      :config="{prior: {dist: [1, 1], correct: [5, 1], isActive: true, isDraggable:true}}">
-    </triple-bayes>
-
-    <div>
-      <div>In other words, what is the probability that a random character is evil? (round to nearest %)</div>
-      <input-box :right="17" @yay="set('scary-name')">%</input-box>
-    </div>
-  </pset>
+  <triple-bayes 
+    :hypotheses="['Nice', 'Evil']" 
+    :config="{prior: {dist: [1, 1], correct: [5, 1], isActive: true, isDraggable:true}}">
+  </triple-bayes>
 </avatar>
 
-<avatar key="scary-name"
-  v-if="show('scary-name')"
-  text-align="left"
-  image="wizard.png" 
+<avatar>
+  <div>In other words, what is the probability that a random character is evil? (round to nearest %)</div>
+  <input-box :right="17" @yay="set('scary-name')">%</input-box>
+</avatar>
+
+<avatar 
   text="But then you learned that I have a scary name, and that made you think I was more evil than average. Let's say 1 out of 10 nice people have a scary name. 9 out of 10 evil people have a scary name.">
 
   <div>
@@ -1671,197 +1578,173 @@ Ruthless Swan was vanquished by challenging them to a duel.
     This ratio is called the <bold>likelihood ratio</bold> and shows which hypothesis the evidence points toward, and by how much.
   </div>
 
-  <pset>
   <triple-bayes 
     :hypotheses="['Nice', 'Evil']" 
     :config="{prior: {dist: [5, 1]}, likelihood: {dist: [1, 1], correct: [1, 9], isActive: true, isDraggable: true}}">
   </triple-bayes>
+</avatar>
 
+<avatar>
   <div>
     <div>This evidence is 9 times more liekly to be seen if the character is evil, than if the character is nice.</div>      
     <buton @click="set('bayes-rule')">Next</buton>
   </div>
-</pset>
 </avatar>
 
-<avatar key="bayes-rule"
-  v-if="show('bayes-rule')"
-  image="wizard.png" 
-  text-align="left"
+<avatar 
   text="Bayes Rule says our belief after seeing the evidence ought to be our prior belief multiplied by the likelihood ratio.">
 
-
-<div>
-  Multiplying your prior belief with the likelihood ratio of having a scary name, yields this posterior belief.
-</div>
-
-<triple-bayes 
-  :hypotheses="['Nice', 'Evil']" 
-  :config="{prior: {dist: [5, 1]}, likelihood: {dist: [1, 9]}, posterior: {isActive: true}}">
-</triple-bayes>
-
-<div>
-  Looking at the posterior belief, what is the approximate probability that I'm evil? (Just look at the relative areas of the bars).
-</div>
-<buton nope>50%</buton>  <buton yay @clik="set('vegetarian')">66%</buton> <buton nope>80%</buton>
-
-</avatar>
-
-
-<avatar key="vegetarian"
-  v-if="show('vegetarian')"
-  image="wizard.png" 
-  text-align="left"
-  text="But wait, I'm vegetarian.">
-
-<div>
-30 out of 100 nice people are vegetarian.<br>
-5 out of 100 evil people are vegetarian.<br>
-Use this information to create a likelihood ratio.<br>
-</div>
-
-<pset>
-<triple-bayes 
-  :hypotheses="['Nice', 'Evil']" 
-  :config="{prior: {dist: [5, 9]}, likelihood: {dist: [1, 1], correct: [6, 1], isActive: true, isDraggable: true}, posterior: {isActive:true}}">
-</triple-bayes>
-
-<div>
-  <div>What is the approximate probability that I'm evil?</div>
-  <buton yay @clik="set('teaching')">25%</buton> <buton nope>30%</buton> <buton nope>40%</buton>
-</div>
-
-</pset>
-</avatar>
-
-
-<avatar key="teaching"
-  v-if="show('teaching')"
-  image="wizard.png" 
-  text-align="left"
-  text="But I'm also good at teaching.">
-
-<div>
-1 out of 4 nice people are good at teaching.<br>
-1 out of 4 evil people are good at teaching.<br>
-Use this information to update your belief about my evilness*.<br>
-</div>
-
-<pset>
-<triple-bayes 
-  :hypotheses="['Nice', 'Evil']" 
-  :config="{prior: {dist: [30, 9]}, likelihood: {dist: [1, 1], correct: [1, 1], isActive: true, isDraggable: true}, posterior: {}}">
-</triple-bayes>
-
-<div>
-  <div>Because the evidence was equally likely regardless of whether I'm evil or not, it provided no information and the posterior did not change.</div>
-  <buton @click="set('taxi')">Next</buton>
-</div>
-</pset>
-
-</avatar>
-
-
-<avatar key="taxi"
-  v-if="show('taxi')"
-  image="wizard.png" 
-  text-align="left"
-  text="Let's try this on a real problem. This is the Taxi-cab problem by psychologists Kahneman & Tversky.">
-
-<div style="max-width: 400px; margin:0 auto; margin-bottom: 16px; line-height:1.4em; text-align: justify">
-30% of the cabs in the city are Blue and 70% are Green.
-A cab was involved in a hit and run, and the witness identified the cab as Blue. 
-The court tested the reliability of the witness under the circumstances that existed on the night of the accident, and concluded that the witness correctly identified each one of the two colors 80% of the time and failed 20% of the time.
-What is the probability that the cab involved in the accident was Blue?
-</div>
-
-<div>
-<div><bold>Prior</bold></div>
-Ignoring the eye witness evidence, and just considering the base rate of cabs in the city... what is your prior belief about which company is at fault? 
-</div>
-
-<div>
-<div><bold>Likelihood Ratio</bold></div>
-What is the likelihood ratio of the data? The witness identified the guilty cab as Blue. <note text="Likelihood ratio: P(Seen as blue|Blue cab guilty) / P(Seen as blue|Green cab guilty)">Hint</note>.
-</div>
-
-<pset>
-<triple-bayes 
-  :hypotheses="['Blue', 'Green']" 
-  :config="{prior: {dist: [1, 1], isActive: true, isDraggable: true}, likelihood: {dist: [1, 1], isActive:true, isDraggable: true}, posterior: {isActive: true}}">
-  <template v-slot:yay>
-    <buton @click="set('bayes-rule')">Next</buton>
-  </template>
-</triple-bayes>
-
-<div>
   <div>
-    So what is the approximate probability that the accident was really caused by a Blue cab?
+    Multiplying your prior belief with the likelihood ratio of having a scary name, yields this posterior belief.
   </div>
-  <buton nope>50%</buton> <buton yay>66%</buton> <buton nope>80%</buton>
-</div>
 
-<div>
+  <triple-bayes 
+    :hypotheses="['Nice', 'Evil']" 
+    :config="{prior: {dist: [5, 1]}, likelihood: {dist: [1, 9]}, posterior: {isActive: true}}">
+  </triple-bayes>
+
   <div>
-    Even though there is a pretty accurate eyewitness testimony pointing to Blue cabs, given the high base rate of Green cabs, it's still pretty uncertain which cab company was at fault.
+    Looking at the posterior belief, what is the approximate probability that I'm evil? (Just look at the relative areas of the bars).
   </div>
-  <buton @click="set('congrats')">Next</buton>
-</div>
+  <buton nope>50%</buton>
+  <buton yay>66%</buton>
+  <buton nope>80%</buton>
+</avatar>
+
+
+<avatar text="But wait, I'm vegetarian.">
+  <div>
+  30 out of 100 nice people are vegetarian.<br>
+  5 out of 100 evil people are vegetarian.<br>
+  Use this information to create a likelihood ratio.<br>
+  </div>
+
+  <triple-bayes 
+    :hypotheses="['Nice', 'Evil']" 
+    :config="{prior: {dist: [5, 9]}, likelihood: {dist: [1, 1], correct: [6, 1], isActive: true, isDraggable: true}, posterior: {isActive:true}}">
+  </triple-bayes>
+</avatar>
+
+<avatar>
+  <div>
+    <div>What is the approximate probability that I'm evil?</div>
+    <buton yay @clik="set('teaching')">25%</buton> <buton nope>30%</buton> <buton nope>40%</buton>
+  </div>
+</avatar>
+
+<avatar text="But I'm also good at teaching.">
+  <div>
+  1 out of 4 nice people are good at teaching.<br>
+  1 out of 4 evil people are good at teaching.<br>
+  Use this information to update your belief about my evilness*.<br>
+  </div>
+
+  <triple-bayes 
+    :hypotheses="['Nice', 'Evil']" 
+    :config="{prior: {dist: [30, 9]}, likelihood: {dist: [1, 1], correct: [1, 1], isActive: true, isDraggable: true}, posterior: {}}">
+  </triple-bayes>
+</avatar>
+
+<avatar>
+  <div>
+    <div>Because the evidence was equally likely regardless of whether I'm evil or not, it provided no information and the posterior did not change.</div>
+    <buton @click="set('taxi')">Next</buton>
+  </div>
+</avatar>
+
+
+<avatar text="Let's try this on a real problem. This is the Taxi-cab problem by psychologists Kahneman & Tversky.">
+
+  <div style="max-width: 400px; margin:0 auto; margin-bottom: 16px; line-height:1.4em; text-align: justify">
+  30% of the cabs in the city are Blue and 70% are Green.
+  A cab was involved in a hit and run, and the witness identified the cab as Blue. 
+  The court tested the reliability of the witness under the circumstances that existed on the night of the accident, and concluded that the witness correctly identified each one of the two colors 80% of the time and failed 20% of the time.
+  What is the probability that the cab involved in the accident was Blue?
+  </div>
+
+  <div>
+  <div><bold>Prior</bold></div>
+  Ignoring the eye witness evidence, and just considering the base rate of cabs in the city... what is your prior belief about which company is at fault? 
+  </div>
+
+  <div>
+  <div><bold>Likelihood Ratio</bold></div>
+  What is the likelihood ratio of the data? The witness identified the guilty cab as Blue. <note text="Likelihood ratio: P(Seen as blue|Blue cab guilty) / P(Seen as blue|Green cab guilty)">Hint</note>.
+  </div>
+
+  <triple-bayes 
+    :hypotheses="['Blue', 'Green']" 
+    :config="{prior: {dist: [1, 1], isActive: true, isDraggable: true}, likelihood: {dist: [1, 1], isActive:true, isDraggable: true}, posterior: {isActive: true}}">
+    <template v-slot:yay>
+      <buton @click="set('bayes-rule')">Next</buton>
+    </template>
+  </triple-bayes>
+
+</avatar>
+
+
+<avatar>
+  <div>
+    <div>
+      So what is the approximate probability that the accident was really caused by a Blue cab?
+    </div>
+    <buton nope>50%</buton> <buton yay>66%</buton> <buton nope>80%</buton>
+  </div>
+</avatar>
+
+<avatar>
+  <div>
+    <div>
+      Even though there is a pretty accurate eyewitness testimony pointing to Blue cabs, given the high base rate of Green cabs, it's still pretty uncertain which cab company was at fault.
+    </div>
+    <next>Next</next>
+  </div>
+</avatar>
+
+<avatar text="Congrats, you solved a problem that <X% of people get correct. By using both the prior and likelihood of evidence, you avoided the human tendency to just use one or the other.">
+
+  <next>Next</next>
+</avatar>
+
+<avatar text="Extra curious are we?">
+
+  <div>
+  The logic we are using comes from the odds ratio form of Bayes Rule.
+  </div>
+
+  <div>
+  Bayes Rule looks like:
+  P(A|B) = P(B|A) * P(A) / P(B)
+  </div>
+
+  <buton>Prove Bayes Rule</buton>
+
+  <div>
+  Plug in, D and H to make it more concrete.
+  P(H|D) = P(D|H) * P(H) / P(D)
+  </div>
+
+  <div>
+  posterior = likelihood * prior / normalization constant
+  </div>
+
+  <div>
+  posterior (proportional) likelihood * prior
+  </div>
+
+  <div>
+  Especially, when we are comparing two separate hypotheses, you can see how P(D) divides out and we are comparing
+  </div>
+
+  <big-frac num="P(H1|D)" den="P(H2|D)"></big-frac> =   <big-frac num="P(D|H1)" den="P(D|H2)"></big-frac> *   <big-frac num="P(H1)" den="P(H2)"></big-frac>
+
+</avatar> 
+
 </pset>
-</avatar>
-
-
-<avatar key="congrats"
-  v-if="show('congrats')"
-  image="wizard.png" 
-  text="Congrats, you solved a problem that <X% of people get correct. By using both the prior and likelihood of evidence, you avoided the human tendency to just use one or the other.">
-
-  <buton @click="set('derivation')">Next</buton>
-</avatar>
-
-<avatar key="derivation"
-  v-if="show('derivation')"
-  image="wizard.png" 
-  text-align="left"
-  text="Extra curious are we?">
-
-<div>
-The logic we are using comes from the odds ratio form of Bayes Rule.
-</div>
-
-<div>
-Bayes Rule looks like:
-P(A|B) = P(B|A) * P(A) / P(B)
-</div>
-
-<buton>Prove Bayes Rule</buton>
-
-<div>
-Plug in, D and H to make it more concrete.
-P(H|D) = P(D|H) * P(H) / P(D)
-</div>
-
-<div>
-posterior = likelihood * prior / normalization constant
-</div>
-
-<div>
-posterior (proportional) likelihood * prior
-</div>
-
-<div>
-Especially, when we are comparing two separate hypotheses, you can see how P(D) divides out and we are comparing
-</div>
-
-<big-frac num="P(H1|D)" den="P(H2|D)"></big-frac> =   <big-frac num="P(D|H1)" den="P(D|H2)"></big-frac> *   <big-frac num="P(H1)" den="P(H2)"></big-frac>
-
-</avatar>
-
-</div>
 </script>
 
 <script type="text/x-template" id="pset-template">
-  <div>
+  <div class="pset">
     <slot></slot>
   </div>
 </script>
@@ -1891,41 +1774,59 @@ Especially, when we are comparing two separate hypotheses, you can see how P(D) 
 
 <script type="text/x-template" id="chain-rule-template">
 
-<div>
+<pset>
 
-<!-- jump to a diferent problem -->
-<div class="point-container" style="width:400px">
-  <div v-for="point in points" 
-  @click="set(point.key)" 
-  class="point has-tooltip" 
-  :class="pointClass(point)"
-  :style="pointStyle(point)">
-    <span>{{point.name}}</span>
+<!-- <avatar 
+        image="girl.png" 
+        text="Ooh yes, I've heard of the Chain Rule. Here are the numbers that you'll need.">
+
+  <div>
+  What is P(tall, greathair, tattoos)?
   </div>
-</div>
 
-<!--<transition name="fade" mode="out-in">-->
+  <div class="extra-info">
+  Facts from before:
+  <ul>
+    <li>P(tall) = 1/2</li>
+    <li>P(greathair) = 1/4</li>
+    <li>P(greathair|tall) = 1/3</li>
+    <li>P(tattoos) = 1/5</li>
+    <li>P(tattoos|tall) = 1/6</li>
+    <li>P(tattoos|tall AND greathair) = 1/7</li>
+  </ul>
+  </div>
 
-<avatar key="intro"
-  v-if="show('intro')"
-  image="wizard.png" 
+  <div>
+  P(tall, greathair, tattoos) =  1/<input-box :right="42" @yay="set('problem4')">
+    <template v-slot:hint>
+      <div>
+        Recall the Chain Rule says that everything must be conditioned on what came before. 
+      </div>
+      <div>
+        So P(tall, greathair, tattoos) = P(tall) * P(greathair | tall) * P(tattoos | greathair AND tall). 
+      </div>
+    </template>
+  </input-box>
+  </div>
+
+</avatar> -->
+
+<avatar 
   text="For my next evil deed, I have cast a spell to cause many monsters to have bad hair.">
 
-  <buton @click="set('veronica')">Next</buton>
+  <next>Next</next>
 </avatar>
 
 
-<avatar key="veronica"
-  v-if="show('veronica')"
+<avatar 
   image="girl.png" 
   text="Hello! I'm Veronica and I only date monsters that are tall and have great hair.">
 
-  <buton @click="set('fakeout1')">Next</buton>
+  <next>Next</next>
 </avatar>
 
 
 <avatar key="fakeout1"
-  v-if="show('fakeout1')" 
   image="girl.png" 
   text="If 1/2 of all monsters are tall and 1/4 of monsters have great hair... What is the probability that a random monster is datable (i.e., is tall and has great hair)?">
 
@@ -1937,25 +1838,22 @@ Especially, when we are comparing two separate hypotheses, you can see how P(D) 
     What is P(tall AND great hair)?
   </div>
 
-  <buton-group :onClick="() => set('fakeout1-inter')">
+  <buton-group>
     <buton nope>1/8</buton>
     <buton nope="Hm... 1/3 doesn't make sense. Try again.">1/3</buton>
     <buton nope="Although 1/4 is the number of monsters have great hair, it's not clear that all great hair monsters are tall. Try again.">1/4</buton>
     <buton nope="There aren't even that many tall monsters! Try again.">3/4</buton>
     <buton yay>Not enough info</buton>
+
+    <template v-slot:hint>
+      Not quite. It is only valid to compute P(tall AND great hair) by multiplying P(tall) and P(great hair) if being tall and having great hair are <bold>independent</bold> — like coin flips.
+    </template>
+
   </buton-group>
-
-  <template v-slot:hint>
-    Not quite. It is only valid to compute P(tall AND great hair) by multiplying P(tall) and P(great hair) if being tall and having great hair are <bold>independent</bold> — like coin flips.
-  </template>
-
 </avatar>
 
 
-<avatar 
-    image="girl.png"
-    key="fakeout1-inter" 
-    v-if="show('fakeout1-inter')">
+<avatar image="girl.png">
 
   <div>
     Right! It's not possible to say. 
@@ -1969,14 +1867,12 @@ Especially, when we are comparing two separate hypotheses, you can see how P(D) 
      In our case, <bold>independence</bold> occurs if a monster's height <bold>does not provide any information</bold> on the greatness of a monsters hair. 
   </div>
 
-  <buton @click="set('conditional1')">Next</buton>
+  <next>Next</next>
 </avatar>
 
 
 
-<avatar key="conditional1" 
-        v-if="show('conditional1')"
-        image="girl.png" 
+<avatar image="girl.png" 
         text="It turns out that being tall and having great hair are slightly correlated, so they're not independent. I said before that 1/4 of all monsters have great hair. But about 1/3 of tall monsters have great hair.">
 
   <div>
@@ -2003,14 +1899,12 @@ Especially, when we are comparing two separate hypotheses, you can see how P(D) 
     We can use this information to calculate P(tall AND great hair).
   </div>
 
-  <buton @click="set('conditional2')">Next</buton>
+  <next>Next</next>
 </avatar>
 
 
 <avatar 
-    image="girl.png"
-    key="conditional2" 
-    v-if="show('conditional2')">
+    image="girl.png">
 
   <div>
     P(great hair|tall) = 1/3. A third of tall monsters have great hair. The probability that a tall monster has great hair is 1/3.
@@ -2028,12 +1922,11 @@ Especially, when we are comparing two separate hypotheses, you can see how P(D) 
     The formula makes logical sense. Multiply the fraction of tall monsters with the fraction of tall monsters with great hair.
   </div>
 
-  <buton @click="set('tall-hair')">Try it</buton>
+  <next>Try it</next>
 </avatar>
 
 
 <avatar key="tall-hair" 
-        v-if="show('tall-hair')"
         image="girl.png" 
         text="Okay so what is the probability that a random monster is datable?">
 
@@ -2047,7 +1940,7 @@ Especially, when we are comparing two separate hypotheses, you can see how P(D) 
   </ul>
   </div>
 
-  <buton-group :onClick="() => set('fakeout2')">
+  <buton-group>
     <buton yay>1/6</buton>
     <buton nope="We said that being tall and having great hair are not independent, so we can't just multiply 1/2 x 1/4.">1/8</buton>
     <buton nope="Are you just multiplying things together? Try again.">1/24</buton>
@@ -2057,7 +1950,6 @@ Especially, when we are comparing two separate hypotheses, you can see how P(D) 
 
 
 <avatar key="fakeout2"
-        v-if="show('fakeout2')"
         image="girl.png"
         text="Oh thank you for your help so far. But I forgot... I also want them to have tattoos. 1/5 of monsters have tattoos.">
 
@@ -2073,7 +1965,7 @@ Especially, when we are comparing two separate hypotheses, you can see how P(D) 
     </ul>
   </div>
 
-  <buton-group :onClick="() => set('chainruleinter1')">
+  <buton-group>
     <buton coy>1/30</buton>
     <buton nope="Remember, we want to use P(greathair|tall), not P(tall).">1/40</buton>
     <buton nope="Wait, are you just blindly multiplying numbers? Stop that.">1/120</buton>
@@ -2083,9 +1975,7 @@ Especially, when we are comparing two separate hypotheses, you can see how P(D) 
 
 
 <avatar 
-    image="girl.png"
-    key="chainruleinter1" 
-    v-if="show('chainruleinter1')">
+    image="girl.png">
 
   <div>
     {{ got('fakeout2') ? 'Right.': 'Not quite.' }} Again, it's not possible to say!
@@ -2100,13 +1990,10 @@ Especially, when we are comparing two separate hypotheses, you can see how P(D) 
     We need another conditional probability.
   </div>
 
-  <buton @click="set('chainruleinter2')">Next</buton>
+  <next>Next</next>
 </avatar>
 
-<avatar 
-    image="girl.png"
-    key="chainruleinter2" 
-    v-if="show('chainruleinter2')">
+<avatar image="girl.png">
   <div>
     This is called the Chain Rule of probability.
   </div>
@@ -2138,23 +2025,13 @@ Especially, when we are comparing two separate hypotheses, you can see how P(D) 
     Basically, the Chain Rule says that when adding a new item to the joint probability, condition on all the events that already exist.
   </div>
 
-  <buton @click="set('problem3')">Try it</buton>
+  <next>Try it</next>
 </avatar>
 
 
 <avatar key="problem3" 
-        v-if="show('problem3')"
         image="girl.png" 
         text="Ooh yes, I've heard of the Chain Rule. Here are the numbers that you'll need.">
-
-  <template v-slot:hint>
-    <div>
-      Recall the Chain Rule says that everything must be conditioned on what came before. 
-    </div>
-    <div>
-      So P(tall, greathair, tattoos) = P(tall) * P(greathair | tall) * P(tattoos | greathair AND tall). 
-    </div>
-  </template>
 
   <div>
   What is P(tall, greathair, tattoos)?
@@ -2173,7 +2050,16 @@ Especially, when we are comparing two separate hypotheses, you can see how P(D) 
   </div>
 
   <div>
-  P(tall, greathair, tattoos) =  1/<input-box :right="42" @yay="set('problem4')"/>
+  P(tall, greathair, tattoos) =  1/<input-box :right="42" @yay="set('problem4')">
+    <template v-slot:hint>
+      <div>
+        Recall the Chain Rule says that everything must be conditioned on what came before. 
+      </div>
+      <div>
+        So P(tall, greathair, tattoos) = P(tall) * P(greathair | tall) * P(tattoos | greathair AND tall). 
+      </div>
+    </template>
+  </input-box>
   </div>
 
 </avatar>
@@ -2286,9 +2172,7 @@ Especially, when we are comparing two separate hypotheses, you can see how P(D) 
 
 
 
-</transition>
-
-</div>
+</pset>
 
 </script>
 
@@ -2613,13 +2497,10 @@ Especially, when we are comparing two separate hypotheses, you can see how P(D) 
 
 
 <div style="display:inline-block; width:400px">
-    <slot name="dialog"></slot>
-    <div>{{text}}</div>
+    <div>{{text}}<slot name="text"></slot></div>
 
     <slot></slot>
 </div>
-
-
 
 </div>
 </script>
@@ -2692,38 +2573,58 @@ Especially, when we are comparing two separate hypotheses, you can see how P(D) 
 </script>
 
 <script type="text/x-template" id="buton-template">
-<span style="margin-bottom:0px; position:relative; display:inline-block">
-  <div v-if="showX" 
-       class="handwriting" 
-       style="display:inline-block; position:absolute; color:red; font-size: 64px; left: calc(50% - 20px); top:-4px">X</div>
-  <button 
-    @click="butonClicked()" v-on="$listeners" 
-    :class="{'rainbow-text': showRainbowText, 'clicked-button': clickedButton}" 
-    class="handwriting"
-    :style="buttonStyle"><slot></slot>
-    <img v-if="showRainbow" style="width: 40px" src="images/rainbow.png">
-  </button>
-<!--  <transition name="fade">
-    <div v-if="showNopeText" class="nope" style="margin-bottom:8px; position:relative; top:-4px;">
-      {{nope}}
-    </div>
-  </transition>-->
+<span style="margin-bottom:0px; position:relative; display:inline-block; vertical-align:top" class="normal-div">
+  <div style="display:inline-block">
+    <div v-if="showX" 
+         class="handwriting" 
+         style="display:inline-block; position:absolute; color:#777; font-size: 48px; left: calc(50% - 20px); top:-4px">X</div>
+    <button 
+      @click="butonClicked()" v-on="$listeners" 
+      :class="{'clicked-button': clickedButton}" 
+      class="handwriting"
+      :style="buttonStyle"
+      style="margin-bottom:4px"><slot></slot>
+    </button>
+  </div>
+
+  <div v-if="showNopeText" class="hint" style="margin-left:12px">
+    {{nopeText}}
+  </div>
+  <div v-if="showRainbow" class="rainbow-text" style="font-size:15px; margin:8px">
+    Yay
+  </div>
+
 </span>
 </script>
 
+<script type="text/x-template" id="buton-group-template">
+<div>
+  <slot></slot>
+  <div v-if="showHint" class="hint"><slot name="hint"></slot></div>
+</div>
+</script>
 
 <script type="text/x-template" id="input-box-template">
-  <div style="display:inline-block; position:relative;">
-    <input v-model="val" placeholder="?" style="width:50px; display:inline" v-on:keyup.enter="answerSubmit">
-    <slot></slot>
-    <buton style="display:inline" @click="answerSubmit">Go</buton>
-  
-    <transition name="fade">
-      <span v-if="showFeedback" class="nope" style="position:absolute; bottom: -8px; margin-bottom:0px" :style="feedbackStyle">
-        {{feedbackString}}
-      </span>
-    </transition>
-  </div>
+<div style="display:inline-block; position:relative;">
+  <input v-model="val" placeholder="?" style="width:50px; display:inline" v-on:keyup.enter="answerSubmit">
+  <slot></slot>
+  <buton style="display:inline" @click="answerSubmit">Go</buton>
+
+  <transition name="fade">
+    <span v-if="showCannedHint" class="hint">
+      {{feedbackString}}
+    </span>
+
+    <span v-if="showYay" class="rainbow-text">
+      {{feedbackString}}
+    </span>
+
+    <div v-if="showHintSlot" class="hint">
+      <slot name="hint"></slot>
+    </div>
+
+  </transition>
+</div>
 </script>
 
 
@@ -2731,6 +2632,8 @@ Especially, when we are comparing two separate hypotheses, you can see how P(D) 
 
 
 <script>
+var DEBUG = false;
+
 
 const wait = ms => new Promise(resolve => setTimeout(resolve, 0));
 // https://alligator.io/vuejs/global-event-bus/
@@ -2984,14 +2887,6 @@ Vue.component('coin', {
   template: '#coin-template'
 });
 
-// Vue.component('toc', {
-//   data: function(){
-//     return {
-//       chapters: chapters,
-//     }
-//   },
-//   template: '#toc-template'
-// });
 
 Vue.component('biased-coin-machine', {
   data: function(){
@@ -3053,6 +2948,7 @@ Vue.component('input-box', {
       type: Array, 
       default: function(){ return ['Try again', 'Nope']; },
     },
+    // replaced with yay@
     // onRight: {
     //   type: Function,
     //   default: function(){},
@@ -3066,47 +2962,62 @@ Vue.component('input-box', {
       if (this.isYay){
         return 'Yay!';
       }
-      return this.hints[this.numWrong % this.hints.length];
     },
-    feedbackStyle: function(){
-      return {'color': this.isYay ? 'green' : 'red'};
+    cannedHint(){
+      return this.hints[this.answers.length % this.hints.length];      
     },
     isYay: function(){
       return this.val == this.right;
     },
     isNope: function(){
       return !this.isYay;
+    },
+    showYay(){
+      return this.checkedAnswer && this.isYay;
+    },
+    showCannedHint(){
+      return this.checkedAnswer && !this.hasSlot('hint') && this.isNope;
+    },
+    showHintSlot(){
+      return (DEBUG || this.checkedAnswer) && this.hasSlot('hint') && this.isNope;
     }
   },
   data: function(){
     return {
       val: null,
-      showFeedback: false,
-      numWrong: 0,
+      answers: [],
+
+      checkedAnswer: false,
+    }
+  },
+  watch:{
+    val(){
+      this.checkedAnswer = false;
     }
   },
   methods: {
     answerSubmit: async function(){
-      if (this.feedback){
-        this.showFeedback = true;
-        await wait(500);
-      }
+      this.checkedAnswer = true;
+      this.answers.push(this.val);
+      // if (this.feedback){
+      //   this.showFeedback = true;
+      //   await wait(500);
+      // }
 
-      bus.$emit('answer-submitted', this);
+      //bus.$emit('answer-submitted', this);
       // look at the value in the input.
       if (this.isYay){
-        await wait(1000);
+//        await wait(1000);
         this.$emit('yay'); //onRight();
 
         const pset = firstAncestorOfComponent(this, 'pset');
         if (pset){
           pset.next();
         }
-      } else {
-        this.numWrong++;
-      }
+      } 
 
-    }
+    },
+    hasSlot: hasSlot,
   },
   template: '#input-box-template'
 });
@@ -3122,6 +3033,8 @@ function firstAncestorOfComponent(node, componentName){
   return undefined;
 }
 function isDescendant(ancestor, maybeChild){
+
+  // If maybeChild is a vue component
   var node = maybeChild.$parent;
   while(node !== undefined){
     if (node === ancestor){
@@ -3129,11 +3042,26 @@ function isDescendant(ancestor, maybeChild){
     }
     node = node.$parent;
   }
+
+  // If maybeChild is an HTML element
+  var node = maybeChild.parentElement;
+  while(node !== null){
+    if (node === ancestor){
+      return true;
+    }
+    node = node.parentElement;
+  }
+
   return false;
 }
+
+function hasSlot(name){
+  return !!this.$slots[ name ] || !!this.$scopedSlots[ name ];
+}
+
 Vue.component('avatar', {
   props: {
-    image: {type: String}, // 'girl.png'
+    image: {type: String, default:'wizard.png'}, // 'girl.png'
     text: {type: String, default: ''},
     textAlign: {type: String, default: 'right'},
     animation: {type: String, default: 'wobble'},
@@ -3218,9 +3146,7 @@ Vue.component('avatar', {
     }
   },
   methods: {
-    hasSlot: function(name){
-      return !!this.$slots[ name ] || !!this.$scopedSlots[ name ];
-    },
+    hasSlot: hasSlot,
     // For some reason, this need to be a separate fn, rather than inside the bus.
     // when the player clicks on a nope button, if the button has nope text, that is rendered.
     // otherwise, if the avatar has a hint slot that is shown.     
@@ -3259,16 +3185,19 @@ Vue.component('buton', {
   },
   data: function(){
     return {
-      showNopeText: false,
-      showRainbowText: false,
-      showX: false,
+//      showX: false,
       clickedButton: false,
-      showRainbow: false,
+//      showRainbow: false,
     }
   },
   computed: {
     nopeText: function(){
-      return this.nope;
+      if (this.nope){
+        return this.nope;        
+      }
+      if (this.isNope){
+        return 'Nope';
+      }
     },
     // Returns true for: <buton nope> or <buton nope="why not">
     isNope: function(){
@@ -3279,6 +3208,15 @@ Vue.component('buton', {
     },
     buttonStyle: function(){
       return {'font-size': this.$slots.default[0].text.length > 40 ? '16px' : '20px'};
+    },
+    showNopeText(){
+      return (DEBUG || this.clickedButton) && this.isNope;
+    },
+    showRainbow(){
+      return (DEBUG || this.clickedButton) && this.isYay;
+    },
+    showX(){
+      return this.clickedButton && this.isNope;
     }
   },
   methods: {
@@ -3295,35 +3233,32 @@ Vue.component('buton', {
         }
       }
 
-      // Mark the buton as wrong.
-      if (this.isNope){
-        this.showX = true;
-      } 
-
       // Check if it has a PS. Early return if so, we don't want to hit event handling.
-      if (!this.isNope && avatar && avatar.hasSlot('ps') && avatar.showPS === false){
-        avatar.showPS = true;
-        avatar.psButton = this;        
-        return;
+      // if (!this.isNope && avatar && avatar.hasSlot('ps') && avatar.showPS === false){
+      //   avatar.showPS = true;
+      //   avatar.psButton = this;        
+      //   return;
+      // }
+
+
+      // Event handling.
+      // this.$emit('clik');
+
+      // Add yourself to parent butonGroup's clicked children
+      // so it can show feedback.
+      const butonGroup = firstAncestorOfComponent(this, 'buton-group');
+      if (butonGroup){
+        butonGroup.clickedChildren.push(this);
       }
 
+      // Move the screen along.
       if (this.isYay){
         const pset = firstAncestorOfComponent(this, 'pset');
         if (pset){
-          this.showRainbow = true;
-          await wait(500);
           pset.next();
         }        
       }
-
-      // Event handling.
-      await wait(1000);
-      this.$emit('clik');
-      if (!this.isNope && this.$parent.onClick !== undefined){
-        // Add delay so any custom handlers on the buton execute before the generic buton-group executes.
-        await wait(1000);
-        this.$parent.$emit('clik'); // onClick();        
-      }
+      this.$root.scrollWindow();
 
     },
   },
@@ -3622,7 +3557,7 @@ Vue.component('samples-chart', {
     dist: {type: Object}, // {H: 3, T: 1}
         
     chartHeight: {type: Number, default: 100},
-    chartWidth: {type: Number, default: 120},
+    chartWidth: {type: Number, default: 100},
     margin: {
       type: Object, 
       default: function(){
@@ -3741,8 +3676,35 @@ Vue.component('buton-group', {
     onClick: {type: Function, 
               default: () => console.warn('buton-group should have onClick') },
   },
-  template: '<div><slot></slot></div>'
+  computed: {
+    lastChild(){
+      if (this.clickedChildren > 0){
+        return this.clickedChildren[this.clickedChildren.length-1];
+      }
+    },
+    showHint(){
+      if (DEBUG){
+        return true;
+      }
+      if (this.lastChild){
+        return this.lastChild.isNope;
+      }
+      return false;
+    }
+  },
+  // watch: {
+  //   clickedChildren(){
+
+  //   }
+  // },
+  data: function(){
+    return {
+      clickedChildren: [],
+    }
+  },
+  template: '#buton-group-template'
 });
+
 Vue.component('centered', {
   template: '#centered-template'
 });
@@ -3770,44 +3732,14 @@ function makeComponent(componentName, points, reactions){
   Vue.component(componentName, {
     data: function(){
       return {
-        active: 'intro',
+//        active: 'intro',
+        actives: ['intro'],
         lastActive: 'intro',
         points: points, // jump points in the story
         problemToCorrectness: {}, // 'fakeout1': [false, true]
         memory: null, // A variable for dumping short term component state.
 
         chapters: chapters,
-        fairCoin: {
-          title: 'P(fair coin)',
-          outcomes: [
-            {x: 'H', y: .5},
-            {x: 'T', y: .5},
-          ]
-        },
-
-        unfairCoin: {
-          title: 'P(unfair coin)',
-          outcomes: [
-            {x: 'H', y: .7},
-            {x: 'T', y: .3},
-          ]
-        },
-
-        greatHair: {
-          title: 'P(great hair)',
-          outcomes: [
-            {x: 'great hair', y: .25},
-            {x: 'not so great hair', y: .75},
-          ]
-        },
-
-        greatHairGivenTall: {
-          title: 'P(great hair | tall)',
-          outcomes: [
-            {x: 'great hair', y: .33},
-            {x: 'not so great hair', y: .67},
-          ]
-        },
 
       };
     },
@@ -3817,6 +3749,12 @@ function makeComponent(componentName, points, reactions){
           return this.active;
         }  
         return this.lastActive;
+      },
+      active: function(){
+        if (this.actives.length > 0){
+          return this.actives[this.actives.length-1];
+        }
+        return 'intro';
       }
     },
 
@@ -3875,11 +3813,10 @@ function makeComponent(componentName, points, reactions){
       },
       show: function(key){
         return true;
-//        return key == this.active;
+//        return this.actives.indexOf(key) > -1;
       }, 
       got: function(key){
         // Return the latest value
-//        debugger;
         if (this.problemToCorrectness[key]){
           var answers = this.problemToCorrectness[key];
           return answers[answers.length-1];
@@ -3895,15 +3832,9 @@ function makeComponent(componentName, points, reactions){
         }
         console.log('setting: ' + key);
         if (optionalDelay !== undefined){
-//          console.log('started waiting');
           await wait(optionalDelay);        
- //         console.log('done waiting');
         }
-        this.active = key;
-      },
-      delay: async function(fn, ms){
-        await wait(ms);
-        fn();
+        this.actives.push(key);
       },
       perfect: function(key){
         // All answers to this problem were correct.
@@ -3935,123 +3866,20 @@ function makeComponent(componentName, points, reactions){
     template: '#' + componentName + '-template'
   });
 }
-// Joint prob with independence
-makeComponent('intro-scene');
-makeComponent('coin-flips', 
-[
-  { key: 'intro', name: 'Intro', },
-  { key: 'HH', name: 'Probability of 2 heads', problem: true},
-  { key: 'HHH', name: 'Probability of 3 heads', problem: true},
-  { key: '10H', name: 'Probability of 10 heads', problem: true},
-  { key: '10HT', name: 'Probability of 10 heads and tails', problem: true},
-  { key: 'HHHHH', name: '5 heads', problem: true},
-  { key: '100H', name: '100 heads', problem: true},
-  { key: 'quest', name: 'Quest', },
-],
-{
-  'yay': 'monster_yay.png',
-  // 'nope': 'monster_cry.png'
-}
-);
-
-makeComponent('wizard-flips',
-[
-  { key: 'intro', name: 'Intro', },
-  { key: '3coins', name: '3 coins', problem: true},
-  { key: 'interactive', name: 'Play with biased coin', },
-  { key: '3coins2', name: '3 more coins', problem: true},
-  { key: '3coins3', name: 'Final 3 coins ', problem: true},
-  { key: 'fin', name: 'fin', },
-]); 
-
-// Conditional prob + join prob with chain rule
-makeComponent('chain-rule', [
-  { key: 'intro', name: 'Intro', },
-  { key: 'fakeout1', name: 'Independence', problem: true},
-  { key: 'conditional1', name: 'Conditional probability', },
-  { key: 'tall-hair', name: 'P(tall AND great hair)', problem: true},
-  { key: 'fakeout2', name: 'Tattoos', problem: true},
-  { key: 'chainruleinter1', name: 'Chain Rule', },
-  { key: 'problem3', name: 'P(tall AND great hair AND tattoos)', problem: true},
-  { key: 'problem4', name: 'They need to be single', problem: true},
-  { key: 'mind-blown', name: 'Mind blown', },
-  { key: 'congrats', name: 'Congrats', },
-  ],
-{
-    'yay': 'girl_happy.png',
-    // 'nope': 'girl_upset.png',
-    // 'coy': 'girl_coy.png'
-}
-); 
-// EV
-makeComponent('risk-reward', [
-  { key: 'intro', name: 'Intro', },
-  { key: 'ev', name: 'EV', },
-  { key: '100', name: 'EV 100', },
-  { key: '100-chart', name: 'Binomial distribution', },
-  { key: 'congrats', name: 'Congrats', },
-]); 
-makeComponent('intro-to-pvalues', [
-  { key: 'intro', name: 'Intro', },
-
-  { key: '2a', name: 'The experiment'},
-  { key: '3', name: 'Null hypothesis + p-value'},
-
-  { key: '4', name: 'p-value = 0.6', problem:true},
-  { key: '5', name: 'p-value = 0.01', problem: true},
-  { key: '6', name: '0.01 or 0.001?', problem: true},
-  { key: '7', name: 'Statistical significance', problem: true},
-
-  { key: '8', name: 'p-value = 0.14', problem: true},
-  { key: '9', name: 'What to do for borderline significance', problem:true},
-  { key: '10', name: 'Which do you want to drink?', problem:true},
-  { key: '11', name: 'Which do you want to drink? II', problem:true},
-  { key: '12', name: '??'},
-  { key: '13', name: 'Conclusion'},
-
-  ]);
-
-makeComponent('bayes-rule',
-[
-  { key: 'intro', name: 'Intro', },
-  { key: 'prior', name: 'Prior belief', problem: true},
-  { key: 'scary-name', name: 'Scary name', problem: true},
-  // { key: 'likelihood', name: 'Likelihood ratio', problem: true},
-  { key: 'bayes-rule', name: 'Bayes Rule', problem: true},
-  { key: 'vegetarian', name: 'Wizard is vegetarian', problem: true},
-  { key: 'teaching', name: 'Wizard is a teacher', problem: true},
-  { key: 'taxi', name: 'Taxi Cab Problem', problem: true},
-  { key: 'congrats', name: 'Congrats', },
-  { key: 'derivation', name: 'Bayes Rule Derivation', },
-]); 
+['intro-scene', 'coin-flips', 'wizard-flips', 'chain-rule', 'risk-reward', 'intro-to-pvalues', 'bayes-rule'].forEach(x => makeComponent(x));
 
 
-// makeComponent('intro-to-distributions', [
-//   { key: 'intro', name: 'Intro', },
-
-//   { key: '2', name: 'Independence'},
-//   { key: '3', name: 'Independence'},
-//   { key: '4', name: 'Independence'},
-
-//   { key: '5', name: 'Independence'},
-//   { key: '6', name: 'Independence'},
-//   { key: '7', name: 'Independence'},
-//   { key: '8', name: 'Independence'},
-
-//   ]);
-// makeComponent('intro-to-samples', [
-//   { key: 'intro', name: 'Intro', },
-
-//   { key: '2', name: 'Independence'},
-//   { key: '3', name: 'Independence'},
-//   { key: '4', name: 'Independence'},
-
-//   { key: '5', name: 'Independence'},
-//   { key: '6', name: 'Independence'},
-//   { key: '7', name: 'Independence'},
-//   { key: '8', name: 'Independence'},
-
-//   ]);
+Vue.component('next', {
+  methods: {
+    next(){
+      const pset = firstAncestorOfComponent(this, 'pset');
+      if (pset){
+        pset.next();
+      }      
+    }
+  },
+  template: '#next-template'
+});
 
 // Can be used to delay logic
 // <delay></delay>
@@ -4201,11 +4029,14 @@ Vue.component('pset', {
       ind: 0, // active index
     };
   },
+
   mounted: function(){
-    this.elms[0].style.opacity = 1;
+    // Hides elements initially.
     for (var i=1; i<this.elms.length; i++){
-      this.elms[i].style.opacity = 0;      
+      this.elms[i].style.display = 'none';
     }
+
+    this.$root.report(0);
   },
   methods: {
     next(){
@@ -4221,7 +4052,10 @@ Vue.component('pset', {
       }
 
       // make current ind, fully visible
-      this.elms[this.ind].style.opacity = 1;
+      this.elms[this.ind].style.display = 'block';
+
+      this.$root.report(this.ind);
+      this.$root.scrollWindow();
     }
   },
   template: '#pset-template'
@@ -4273,12 +4107,14 @@ new Vue({
   el: '#app',
   data: {
     chapters: chapters,
-    chapterInd: 0,
+    chapterInd: 5,
     // Obj property additions do not update DOM, so prepopulate all the keys in the object. Or use lists.
     //soundNameToCount: {},
     show: false,
     isPlaying: false,
     showTOC: false,
+
+    isScrolling: false,
   },
   computed: {
     currentChapter: function(){
@@ -4338,7 +4174,57 @@ new Vue({
       var sound = sounds[soundName].clip;
       sound.pause();
       sound.currentTime = 0;      
-    }
+    },
+    async scrollWindow(){
+//      console.log('scrollWindow');
+      if (this.isScrolling){
+        return;
+      }
+
+      this.isScrolling = true;
+      // Scroll down a little bit and see if we should keep scrolling.
+      // Stop scrolling if we've reached the bottom, 
+      // Or if we have somehow traveled up (i.e. user has moved the mouse)
+      while (true){
+        const startY = window.scrollY;
+//        console.log('lastStartY: ' + this.lastStartY + ' startY: ' + startY);
+        if (this.lastStartY >= startY){
+
+          // Hack: Wait and try one more time to scroll before exiting. 
+          // Seems like there might be a delay to add stuff to the DOM?
+          await wait(100);
+          window.scrollBy(0, 10);
+          if (this.lastStartY >= window.scrollY){
+//            console.log('break');
+            break;
+          }
+        }
+        this.lastStartY = startY;
+        window.scrollBy(0, 10);
+//        console.log('scrolling');
+        await wait(30);
+      }
+      this.isScrolling = false;
+    }, 
+    report(ind){
+      const chapterName = this.currentChapter.component;
+      console.log('reporting ' + chapterName + ' ' + ind);
+      gtag('event', 'evilwizard_v1', {
+        'event_category': 'read',
+        'event_label': chapterName,
+        'value': ind
+      });
+    },
+    mainClick(event){
+      console.log('click');
+      // When you click on the margins, event.target is the "app" node. 
+      //this.mouseEvent = event; 
+
+      if (!isDescendant(this.$refs['toc'], event.target)){
+        this.showTOC = false;
+      }
+    },
+
   } // end methods
 });
 </script>
