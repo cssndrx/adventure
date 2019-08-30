@@ -46,11 +46,10 @@ html, body, #app{
 }
 
 .bayes-comp{
-  border: 4px dashed #777;
   display: inline-block;
   position:relative;
-  width: 180px;
-  height: 250px;
+  width: 120px;
+  height: 270px;
   vertical-align: top;
   text-align: center;
 
@@ -1086,7 +1085,7 @@ Ruthless Swan was vanquished by challenging them to a duel.
     </div>
   </div>
 
-  <buton @click="$root.nextChapter()">Play!</buton>
+  <buton @click="$root.nextChapter()">PLAY</buton>
 </div> <!-- end intro -->
 
 </div>
@@ -2367,61 +2366,58 @@ Ruthless Swan was vanquished by challenging them to a duel.
 </div>
 </script>
 
-<!-- 
-  <triple-bayes 
+<!-- <triple-bayes 
   :hypotheses="['Nice', 'Evil']" 
-  :config="{prior: {view: 'faded', dist: [1, 4]}, likelihood: {view: 'active', dist: [1, 10]}, posterior: {}}"></triple-bayes>
-
--->
+  :config="{prior: {dist: [1, 1], correct: [1, 2], isActive: true, isDraggable:true}, likelihood: {dist: [10, 1], isActive: true, isDraggable: true}, posterior: {}}"></triple-bayes> -->
 <script type="text/x-template" id="triple-bayes-template">
-  <div>
-
-<!--<div style="text-align:center">prior × likelihood ∝ posterior</div> -->
+<div style="display:inline-block">
 
 <div v-if="hasKey('prior')" class="bayes-comp" :style="compStyle('prior')">
   <div class="label normal-div">
-    <div style="font-weight:700">Prior belief</div>
-    <div>What you think before the evidence</div>
+    <div style="font-weight:700">{{title('prior')}}</div>
+    <div>{{subtitle('prior')}}</div>
   </div>
-  <img v-if="isCompRight('prior')" src="images/rainbow.png" class="rainbow"> 
 
   <samples-chart 
   :xdomain="hypotheses"
   :dist="arrToDist(priorArr)"
   :isDraggable="isDraggable('prior')"
   :chartHeight="chartHeight" :chartWidth="chartWidth"
+  :showRatio="true"
+  :colors="colors"
   @dist-changed="priorChanged" /> 
 </div>
 
 
 <div v-if="hasKey('likelihood')" class="bayes-comp" :style="compStyle('likelihood')">
   <div class="label normal-div">
-    <div style="font-weight:700">Likelihood ratio</div>
-    <div>Likelihood ratio of the evidence</div>
+    <div style="font-weight:700">{{title('likelihood')}}</div>
+    <div>{{subtitle('likelihood')}}</div>
   </div>
-  <img v-if="isCompRight('likelihood')" src="images/rainbow.png" class="rainbow"> 
-
   <samples-chart
   :xdomain="hypotheses"
   :dist="arrToDist(likelihoodArr)"
   :isDraggable="isDraggable('likelihood')"
   :chartHeight="chartHeight" :chartWidth="chartWidth"
+  :colors="colors"
   @dist-changed="likelihoodChanged" /> 
 </div>
 
 <div v-if="hasKey('posterior')" class="bayes-comp" :style="compStyle('posterior')">
   <div class="label normal-div">
-    <div style="font-weight:700">Posterior belief</div>
-    <div>What you think after the evidence</div>
+    <div style="font-weight:700">{{title('posterior')}}</div>
+    <div>{{subtitle('posterior')}}</div>
   </div>
   <samples-chart 
   :xdomain="hypotheses"
   :dist="posteriorDist"
   :chartHeight="chartHeight" :chartWidth="chartWidth"
+  :showRatio="true"
+  :colors="colors"
   ref="posterior-samples-chart" /> 
 </div>
 
-<div v-if="showFeedback && !allCorrect" style="background-color: #372F26; color: white; padding: 8px;" class="handwriting normal-div">
+<div v-if="showFeedback && !allCorrect" class="handwriting normal-div">
   <div>Not quite. Try again!</div>
   <slot name="hint"></slot>
 </div>
@@ -2453,7 +2449,7 @@ Ruthless Swan was vanquished by challenging them to a duel.
           :width="xScale.bandwidth()"
           :height="yScale(count)"
           :key="x"
-          fill="#E9BE2C"/>  -->
+          fill="#D1D9E0"/>  -->
 
         <g v-for="x in xdomain">
           <rect v-for="countInd in counts[x]"
@@ -2462,7 +2458,7 @@ Ruthless Swan was vanquished by challenging them to a duel.
           :width="xScale.bandwidth()"
           :height="yScaleBandwidth-2"
           :key="x + countInd"
-          fill="#E9BE2C"/>
+          :fill="colors.bar || '#D1D9E0'"/>
         </g>
 
 
@@ -2470,6 +2466,14 @@ Ruthless Swan was vanquished by challenging them to a duel.
         :x="xScale(x)+ xScale.bandwidth()/2 - 4"
         :y="chartHeight - yScale(counts[x]) - (isDraggable ? 8 : 2)">
         {{ counts[x] }}
+      </text>
+
+      <text v-if="showRatio"
+        v-for="x in xdomain" 
+        :x="xScale(x)+ xScale.bandwidth()/2 - 8"
+        :y="chartHeight + 40"
+        fill="#bbb">
+        {{ prob(x) }}%
       </text>
 
     </g>
@@ -2483,7 +2487,7 @@ Ruthless Swan was vanquished by challenging them to a duel.
       @dragstart="dragstart(x)"
       @dragend="dragend"
       @drag="drag(x, $event)"
-      :style="{left: xScale(x)+ xScale.bandwidth()/2+ 4 + 'px', bottom: yScale(counts[x]) + 2 + 'px'}"></div>
+      :style="dotStyle(x)"></div>
 
 
 </div>
@@ -3438,11 +3442,18 @@ Vue.component('triple-bayes', {
     hypotheses: {type: Array}, // ['Nice', 'Evil']
         
     chartHeight: {type: Number, default: 160},
-    chartWidth: {type: Number, default: 160},
+    chartWidth: {type: Number, default: 100},
 
     // Missing keys from config are not rendered.
     // {prior: {dist: [1, 4]}, likelihood: {isActive: true, isDraggable: true, dist: [1, 10]}, posterior: {}}
     config: {type: Object},
+
+    colors: {
+      type: Object, 
+      default: function(){
+        return {bar: '', dot: ''};
+      }
+    },
   },
   data: function(){
     return {
@@ -3470,12 +3481,12 @@ Vue.component('triple-bayes', {
     allCorrect(){
       const keys = ['prior', 'likelihood', 'posterior'];
       const parts = keys.map(key => !this.conf[key] || !this.conf[key].correct || this.isEqual(this.conf[key].correct, this.conf[key].dist));
-      console.log(parts);
+//      console.log(parts);
       return _.every(parts);
     }
   },
   created(){
-    console.log('mounted');
+//    console.log('mounted');
     this.conf = _.cloneDeep(this.config);
   },
   methods: {
@@ -3496,6 +3507,28 @@ Vue.component('triple-bayes', {
       var result = arr.map(x => Math.floor(x / i));
       //console.log(result);
       return result;
+    },
+    title(key){
+      if (this.conf[key].title !== undefined){
+        return this.conf[key].title;
+      }
+      const defaultTitles = {
+        'prior': 'Prior Belief',
+        'likelihood': 'Likelihood Ratio',
+        'posterior': 'Posterior Belief'
+      };
+      return defaultTitles[key];
+    },
+    subtitle(key){
+      if (this.conf[key].subtitle !== undefined){
+        return this.conf[key].subtitle;
+      }
+      const defaultTitles = {
+        'prior': 'What you thought before',
+        'likelihood': 'Likelihood ratio of the evidence',
+        'posterior': 'What you think after the evidence'
+      };
+      return defaultTitles[key];
     },
     hasKey(key){
       return this.conf[key];
@@ -3557,16 +3590,24 @@ Vue.component('samples-chart', {
     dist: {type: Object}, // {H: 3, T: 1}
         
     chartHeight: {type: Number, default: 100},
-    chartWidth: {type: Number, default: 100},
+    chartWidth: {type: Number, default: 120},
     margin: {
       type: Object, 
       default: function(){
-        return {top: 10, right: 10, bottom: 20, left: 10};
+        return {top: 10, right: 10, bottom: 40, left: 10};
       }
     },
 
+    showRatio: {type: Boolean, default: false}, 
     isDraggable: {type: Boolean, default: false}, 
-    maxCounts: {type: Number, default: 20},
+    maxCounts: {type: Number, default: 15},
+
+    colors: {
+      type: Object, 
+      default: function(){
+        return {bar: '', dot: ''};
+      }
+    },
 
   },
   computed: {
@@ -3621,6 +3662,10 @@ Vue.component('samples-chart', {
     },
   },
   methods: {
+    prob(x){
+      const total = _.sum(_.values(this.counts));
+      return this.$root.roundTo(this.counts[x]/total*100, 0);
+    },
     dragstart(x){
       this.draggedDot = x;
     },
@@ -3636,6 +3681,13 @@ Vue.component('samples-chart', {
             return x in bins ? bins[x].length : 0;
           }));
       }
+    },
+    dotStyle(x){
+      return {
+        left: this.xScale(x)+ this.xScale.bandwidth()/2+ 4 + 'px', 
+        bottom: this.yScale(this.counts[x]) + 24 + 'px',
+        'background-color': this.colors.dot,
+      };
     },
     drag(x, event){
       //console.log('dragging');
@@ -3670,6 +3722,7 @@ Vue.component('samples-chart', {
   },
   template: '#samples-chart-template'
 });
+
 
 Vue.component('buton-group', {
   props: {
@@ -4032,9 +4085,9 @@ Vue.component('pset', {
 
   mounted: function(){
     // Hides elements initially.
-    for (var i=1; i<this.elms.length; i++){
-      this.elms[i].style.display = 'none';
-    }
+    // for (var i=1; i<this.elms.length; i++){
+    //   this.elms[i].style.display = 'none';
+    // }
 
     this.$root.report(0);
   },
