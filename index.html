@@ -1136,6 +1136,7 @@ Ruthless Swan was vanquished by challenging them to a duel.
 <script type="text/x-template" id="coin-flips-template">
 <pset>
 
+
 <!-- why is calc 50% being so large?? 
 <avatar key="HH"
   image="monster.png" 
@@ -1148,7 +1149,7 @@ Ruthless Swan was vanquished by challenging them to a duel.
 </avatar>-->
 
 
-<avatar key="intro">
+<avatar>
   <p>
     Not too long ago, I was just like you. Just a regular nerdy wizard on the internet.
   </p>
@@ -1168,65 +1169,55 @@ Ruthless Swan was vanquished by challenging them to a duel.
 </avatar>
 
 
-<avatar key="2"
-  image="wizard.png"
-  text="For my first act of evil... people expect coins to be fair. I'm going to bias some coins and see if anyone notices.">
+<avatar
+  text="Bobby the Green Monster was unkind to me before I got my wizarding powers. Let's see if my evil plan has worked.">
   <next>Next</next>
 </avatar>
 
 
-<avatar key="something-wrong"
-  image="monster.png"
-  text="I think something is wrong with my coins. I wonder if this is the Bad Wizard's doing?">
+<avatar 
+  image="monster_cry.png"
+  text="Ugh! Peanut butter and jelly again?">
   <next>What's wrong?</next>
 </avatar>
 
-<avatar key="50-50"
-  image="monster.png" 
-  text="You know how when you toss a fair coin, it's supposed to land H with 50% probability? And T with 50% probability?">
-  <next>Yeah</next>
+<avatar image="monster.png" 
+  text="Every day my mom packs me lunch by flipping a coin. If it lands tails, I get a peanut butter jelly sandwich. If it lands heads, I get my favorite -- a deluxe fried potato & cream cheese roll. ">
+  <next>Is that good?</next>
 </avatar>
+
+<avatar image="monster_yay.png" 
+  text="Duh it's good. You're missing out if you've never had it before.">
+  <next>Next</next>
+</avatar>
+
 
 <avatar key="HH"
   image="monster.png" 
-  text="What is the probability that I toss a fair coin twice and get HH?">
+  text="What is the probability that after my mom flips a fair coin twice, I'll be eating peanut butter and jelly two days in a row?">
 
   <buton nope="1/2 is the probability of tossing a single coin and getting H. Getting two heads in a row is rarer than that.">1/2</buton>
   <buton yay>1/4</buton>
-  <buton nope="Assume it is a fair coin that lands on heads with 50% probability.">Not enough info</buton>
-
 </avatar>
 
-<avatar 
+<avatar image="brain.png"
   key="HH-explanation">
   <div>
-    Nice work. In math lingo, you just calculated a <bold>joint probability</bold> -- the probability multiple events would occur.  For calculating the probability of independent events like coin tosses, this is done by multiplication. 1/2 x 1/2 = 1/4. 
+    Right. Coin flips are <bold>independent</bold>. Knowing the result of one event does not give you information about the other events, because coins have no memory. 
   </div>
-
   <div>
-    Another way to see this is that there are 4 possible outcomes:
-
-    <div style="margin-top:16px">
-    HH<br>
-    HT<br>
-    TH<br>
-    TT<br>
-    </div>
-
-    If we only care about the HH outcome, our probability of getting it is 1/4.
+    To calculate the probability that multiple independent events will occur together, you can multiply them. todo: show picture
   </div>
-  <next>Next</next>
 </avatar> 
 
 <avatar key="HHH"
-  image="monster.png" 
-  text="I've noticed my coins landing heads a lot. What is the probability that I toss a fair coin three times and get HHH?">
+  image="monster_cry.png" 
+  text="Well, truth is I've been eating peanut butter and jelly a LOT. What is the probability that after my mom tosses a fair coin three times, I'll be eating peanut butter and jelly three days in a row?">
 
   <buton-group>
     <buton nope>1/2</buton>
     <buton nope>1/3</buton>
     <buton yay>1/8</buton>
-    <buton nope>Not enough info</buton>
 
     <template v-slot:hint>
       <div>
@@ -1234,166 +1225,94 @@ Ruthless Swan was vanquished by challenging them to a duel.
       </div>
 
       <div>
-        Another way to see this is that there are 8 possible outcomes:
-
-        HHH
-        HHT
-        HTH
-        HTT
-        THH
-        THT
-        TTH
-        TTT
-
-        If we only care about the HHH outcome, our probability of getting it is 1/8.
+        todo: show the picture
       </div>
     </template>
   </buton-group>
 </avatar>
-
-
-<avatar key="10H"
-  image="monster.png" 
-  text="What is the probability that I toss a coin 10 times and get HHHHHHHHHH?">
-
-  <buton-group>
-    <buton yay>1/<exp base="2" pow="10"/></buton>
-    <buton nope>1/2</buton>
-    <buton nope>1/10</buton>
-    <buton nope>1/20</buton>
-    <buton nope>Not enough info</buton>
-
-    <template v-slot:hint>
-      <div>
-        Remember that independent events can be combined with multiplication.
-      </div>
-
-      <div>
-        So the chance of getting HHHHHHHHHH is .... 1/(2*2*2*2*2*2*2*2*2*2) = approx .01%
-      </div>
-    </template>
-  </buton-group>
-</avatar>
-
-
-<avatar key="10HT"
-  image="monster.png" 
-  text="And what is the probability that I toss a coin 10 times and get HHHTHHTTTT?">
-
-
-  <buton yay>1/<exp base="2" pow="10"/></buton>
-  <buton nope>1/2</buton>
-  <buton nope>1/10</buton>
-  <buton nope>1/20</buton>
-  <buton nope>Not enough info</buton>
-
-  <template v-slot:ps>
-    <div>
-      Yeah! The chance of getting HHHTHHTTTT is the same as the probability of getting HHHHHHHHHH.
-    </div>
-
-    <div>
-      Because both involve computing the probability of 10 independent coin flips.
-    </div>
-  </template>
-</avatar>
-
-
-<avatar image="monster.png">
-  <div>
-    Yeah! The chance of getting HHHTHHTTTT is the same as the probability of getting HHHHHHHHHH.
-  </div>
-
-  <div>
-    Because both involve computing the probability of 10 independent coin flips.
-  </div>
-</avatar>
-
-
-<!-- stopped here: thinking how to phrase this
-  <avatar key="10HT"
-  v-if="show('10HT')"
-  image="monster.png" 
-  text="How many different possible outcomes are there for tossing a coin 10 times?">
-  <buton @clik="set('10HT-interstitial')" yay>10</buton>
-  <buton nope>11</buton>
-  <buton nope>20</buton>
-  <buton nope>1024</buton>
-</avatar> -->
-
 
 <avatar key="HHHHH"
   image="monster.png" 
-  text="If I tossed a fair coin 5 times, and it landed HHHHH all five times... What is it more likely to land the 6th time?">
+  text="If I got peanut butter and jelly the last five days in a row, am I more likely to get peanut butter and jelly OR potato cream cheese today?">
 
   <buton-group>
-    <buton @click="memory='userSaidH'" nope>H</buton>
-    <buton @click="memory='userSaidT'" nope>T</buton>
+    <buton @click="memory='userSaidT'" nope>Peanut butter & jelly</buton>
+    <buton @click="memory='userSaidH'" nope>Potato & cream cheese</buton>
     <buton yay>It's 50-50</buton>
 
     <template v-slot:hint>
       <div v-if="memory == 'userSaidT'">
-        <div>Nope, that's the Gambler's Fallacy... a common misconception that events that haven't occured are more likely to occur.</div>
+        <div>That's the Gambler's Fallacy... a common misconception that events that haven't occured are more likely to occur.</div>
 
-        <div>Coins have no memory, so just because H came up a lot, doesn't mean that T is more likely to come up in the future.</div>
+        <div>Coins have no memory, so just because tails came up a lot, doesn't mean that heads is more likely to come up in the future.</div>
       </div>
 
       <div v-if="memory == 'userSaidH'">
-        <div>Nope, that's the Hot Hand Fallacy... a common misconception that events that have occurred recently are "hot" and more likely to come up.</div>
+        <div>That's the Hot Hand Fallacy... a common misconception that events that have occurred recently are "hot" and more likely to come up.</div>
 
-        <div>Coins have no memory, so just because H came up a lot, doesn't mean that H is any more likely to come up in the future.</div>
+        <div>Coins have no memory, so just because tails came up a lot, doesn't mean that tails is any more likely to come up in the future.</div>
       </div>
 
     </template>
   </buton-group>
 </avatar>
 
-<avatar key="HHHHH-finale"
-  image="monster_yay.png" 
-  text="Yeah! The correct answer is that it's 50-50, regardless of what has happened before since coins have no memory.">
+<avatar image="monster.png" 
+  text="Yeah! If mom's coin is fair, I still have a 50-50 chance to get potato & cream cheese since coins have no memory.">
   <next>Next</next>
 </avatar>
 
-<avatar image="monster.png">
-  <div>
-    Coin flips are <bold>independent events</bold>.
-  </div>
-
-  <div>
-    Meaning that knowing the result of one event does not give you information about the other events. 
-  </div>
-
-  <next>Next</next>
-
-</avatar>
 
 <avatar key="100H"
   image="monster.png" 
-  text="After I ran into the Bad Wizard the other day, I tossed a coin 100 times and it landed heads all 100 times! What do you think it landed on the 101-st time?">
+  text="Okay, but if I told you my mom's coin doomed me to peanut butter and jelly the last 100 days, what do you think I would get today?">
 
   <buton-group>
-    <buton yay>H</buton>
-    <buton>T</buton>
+    <buton>Peanut butter and jelly</buton>
+    <buton yay>Potato and cream cheese</buton>
     <buton>It's 50-50</buton>
   </buton-group>
 </avatar>
 
-<avatar key="100H-result"
-  image="monster.png">
-
+<avatar image="monster.png">
   <div>
-   {{got('100H') ? 'Yeah!': 'Not quite.'}} The probability of 100 heads in a row on a fair coin is 1/2^100. If all the 2^80 atoms in the universe were flipping coins, this still probably wouldn't happen. That's why I think the Bad Wizard did something to my coins, and they are no longer fair.
+   {{got('100H') ? 'Yeah!': 'Not quite.'}} The probability of seeing 100 tails in a row on a fair coin is so tiny... 1/<exp base="2" pow="100"/>. If all the <exp base="2" pow="80"/> atoms in the universe were flipping coins, it still would only have a 1 in million chance of happening. 
  </div>
 
-   <next>I see</next>
+   <next>How many days have you been eating PB&J?</next>
+</avatar>
+
+<avatar image="monster.png"
+  text="I've been eating PB&J for the last 10 days. Poor me. Do you think mom's coin is fair?">
+
+
+  <next>Yes</next>
+  <next>No</next>
+  <next>I don't know</next>
+</avatar>
+
+<avatar image="monster.png"
+  text="Well, I guess the probability of getting 10 PB&J sandwiches in a row is...">
+  <input-box/>
+</avatar>
+
+<avatar image="monster.png"
+  text="So, this should happen every how many days or so?">
+  <input-box/>
+</avatar>
+
+<avatar image="monster.png"
+  text="Mom has been packing lunch for me for ___ days, so I guess this was bound to happen.">
+  <next>Er...</next>
+</avatar>
+
+<avatar image="monster_cry.png"
+  text="I guess I'll wait a few more days to see if I get a potato & cream cheese sandwich.">
+  <next>Er...</next>  
 </avatar>
 
 
-<avatar key="quest"
-  image="monster.png" 
-  text="Will you please track down the Bad Wizard and fix my coins?">
-
-
+<avatar image="monster.png">
   <ul>
     <li>You learned about <bold>independent events</bold></li>
     <li>You learned to calculate the <bold>joint probability</bold> of independent events.</li>
@@ -1404,6 +1323,9 @@ Ruthless Swan was vanquished by challenging them to a duel.
   <next @click="$root.nextChapter()">Accept Quest</next>
 </avatar>
 
+<avatar>
+Haha! That was great... Bobby's gonna be stuck eating peanut butter and sandwiches. 
+</avatar>
 
 </pset>
 </script>
@@ -1412,17 +1334,26 @@ Ruthless Swan was vanquished by challenging them to a duel.
 <pset>
 
 <avatar
-  text="Oh ho! That monster definitely didn't like me messing with his coins.">
+  text="Oh ho! Bobby definitely didn't like his peanut butter sandwiches.">
   <next>Next</next>
 </avatar>
 
 <avatar  
-  text="Let's see how you do at my next little game.">
+  text="By the way, have you met my crow friend Elena?">
+  <next>Next</next>
+</avatar>
+
+<avatar image="crow.png"
+  text="Caw!">
+  <next>Next</next>
+</avatar>
+
+<avatar text="Elena found some hilarious coins. They say H on one side, and A on the other. Let's play with them! ">
   <next>Next</next>
 </avatar>
 
 <avatar 
-  text="I have 3 coins. 2 are fair, 1 is unfair. Let's see if you can find the unfair one.">
+  text="Of these 3 coins, 2 are fair and 1 is unfair. Let's see if you can find the unfair one.">
 
   <div>Click the coins to flip them at least 10 times each.</div>
   <div>When you have enough info, submit your guess.</div>
@@ -1517,10 +1448,33 @@ Ruthless Swan was vanquished by challenging them to a duel.
 
 
 <avatar 
-  text="HAHAHA. That's it for coins. Let's cause more mischief.">
+  text="HAHAHA. Aren't these coins great? Isn't Elena great? ">
+  <next>Yes</next>
+</avatar>
 
+<avatar text="Elena is my only friend actually. Bobby and the other kids at school aren't nice to me.">
+  <next>Oh</next>
+</avatar>
+
+<avatar image="crow.png"
+  text="Caw!">
+  <next>Next</next>
+</avatar>
+
+<avatar text="Bobby isn't actually a green monster by the way. I just drew him like that... because I could.">
+  <next>Oh</next>
+</avatar>
+
+<avatar text="You wanna see this other monster that I cursed?">
+</avatar>
+
+
+<avatar>
+  <div>
+    Well, at least you learned
+  </div>
   <ul>
-    <li>You learned about what randomness feels like</li>
+    <li>What real randomness feels like</li>
   </ul> 
 
   <buton @click="$root.nextChapter()">Next Story</buton>
@@ -1775,47 +1729,9 @@ Ruthless Swan was vanquished by challenging them to a duel.
 
 <pset>
 
-<!-- <avatar 
-        image="girl.png" 
-        text="Ooh yes, I've heard of the Chain Rule. Here are the numbers that you'll need.">
 
-  <div>
-  What is P(tall, greathair, tattoos)?
-  </div>
 
-  <div class="extra-info">
-  Facts from before:
-  <ul>
-    <li>P(tall) = 1/2</li>
-    <li>P(greathair) = 1/4</li>
-    <li>P(greathair|tall) = 1/3</li>
-    <li>P(tattoos) = 1/5</li>
-    <li>P(tattoos|tall) = 1/6</li>
-    <li>P(tattoos|tall AND greathair) = 1/7</li>
-  </ul>
-  </div>
-
-  <div>
-  P(tall, greathair, tattoos) =  1/<input-box :right="42" @yay="set('problem4')">
-    <template v-slot:hint>
-      <div>
-        Recall the Chain Rule says that everything must be conditioned on what came before. 
-      </div>
-      <div>
-        So P(tall, greathair, tattoos) = P(tall) * P(greathair | tall) * P(tattoos | greathair AND tall). 
-      </div>
-    </template>
-  </input-box>
-  </div>
-
-</avatar> -->
-
-<avatar 
-  text="For my next evil deed, I have cast a spell to cause many monsters to have bad hair.">
-
-  <next>Next</next>
-</avatar>
-
+<avatar text="I had a crush on Veronica but she didn't like me back. I didn't want her to find anyone else."></avatar>
 
 <avatar 
   image="girl.png" 
@@ -1825,37 +1741,47 @@ Ruthless Swan was vanquished by challenging them to a duel.
 </avatar>
 
 
+<avatar 
+  text="So I cast a spell to cause many monsters to have bad hair...">
+  <next>Oh</next>
+</avatar>
+
+
+<avatar image="girl.png"
+  text="Is that why it's so hard to find someone I like?">
+  <next>Next</next>
+</avatar>
+
+<avatar image="girl_happy.png"
+  text="Naw, I don't think that's it. I'm just waiting for my Mister Right.">
+  <next>Next</next>
+</avatar>
+
+
+
 <avatar key="fakeout1"
   image="girl.png" 
-  text="If 1/2 of all monsters are tall and 1/4 of monsters have great hair... What is the probability that a random monster is datable (i.e., is tall and has great hair)?">
-
-  <div>
-    In math language, P(tall) = 1/2. P(great hair) = 1/4. 
-  </div>
-
-  <div>
-    What is P(tall AND great hair)?
-  </div>
+  text="If 1/2 of all monsters are tall and 1/4 of monsters have great hair... What is the probability that a random monster is datable (is tall and has great hair)?">
 
   <buton-group>
-    <buton nope>1/8</buton>
+    <next>1/8</next>
     <buton nope="Hm... 1/3 doesn't make sense. Try again.">1/3</buton>
     <buton nope="Although 1/4 is the number of monsters have great hair, it's not clear that all great hair monsters are tall. Try again.">1/4</buton>
     <buton nope="There aren't even that many tall monsters! Try again.">3/4</buton>
     <buton yay>Not enough info</buton>
 
     <template v-slot:hint>
-      Not quite. It is only valid to compute P(tall AND great hair) by multiplying P(tall) and P(great hair) if being tall and having great hair are <bold>independent</bold> — like coin flips.
+      Not quite. It is only valid to compute the joint probability by multiplication if being tall and having great hair are <bold>independent</bold> — like coin flips.
     </template>
 
   </buton-group>
 </avatar>
 
 
-<avatar image="girl.png">
+<avatar image="brain.png">
 
   <div>
-    Right! It's not possible to say. 
+    {{got('fakeout1') ? "Right! It's not possible to say." : "Nice try, but there's a catch." }}
   </div>
 
   <div>
@@ -1870,24 +1796,32 @@ Ruthless Swan was vanquished by challenging them to a duel.
 </avatar>
 
 
-
 <avatar image="girl.png" 
         text="It turns out that being tall and having great hair are slightly correlated, so they're not independent. I said before that 1/4 of all monsters have great hair. But about 1/3 of tall monsters have great hair.">
+</avatar>
+
+<avatar image="brain.png">
+  <div>
+    Let's write what Veronica told us in math language.
+
+    The first two numbers she gave us were simple probabilities. 
+
+    The probability of a monster having great hair can be written as:
+
+
+    P(great hair) = 1/4
+
+    This is pronounced as, "The probability of great hair is 1/4".
+
+    Veronica also told us.
+        P(tall) = 1/2
+  </div>
+</avatar>
+
+<avatar image="brain.png">
 
   <div>
-    In math language, Veronica just told us a <bold>conditional probability</bold>. 
-  </div>
-
-  <div>
-    Conditional probabilities are written like P(A|B). This indicates the probability of A, given that we know B to be true.
-  </div>
-
-  <div style="font-size:12px">
-    Note: The "|" is pronounced as "given". 
-  </div>
-
-  <div>
-    Veronica told us P(great hair|tall) = 1/3.
+  Veronica also told us a <bold>conditional probability</bold> when she said:
   </div>
 
   <div>
@@ -1895,22 +1829,28 @@ Ruthless Swan was vanquished by challenging them to a duel.
   </div>
 
   <div>
-    We can use this information to calculate P(tall AND great hair).
+    Conditional probabilities are written like P(A|B). This indicates the probability of A <bold>given</bold> that we know B to be true.
   </div>
+
+
+  <div>
+    Veronica told us P(great hair|tall) = 1/3.
+  </div>
+
+
+  <div>
+   This is pronounced as the probability a monster has great hair<bold>given</bold> that we know the monster is tall is 1/3. 
+  </div>
+
 
   <next>Next</next>
 </avatar>
 
 
-<avatar 
-    image="girl.png">
+<avatar  image="brain.png">
 
   <div>
-    P(great hair|tall) = 1/3. A third of tall monsters have great hair. The probability that a tall monster has great hair is 1/3.
-  </div>
-
-  <div>
-    We can use this to calculate P(tall AND great hair) without assuming independence.
+    We can use this information to calculate P(tall AND great hair) without assuming independence:
   </div>
 
   <div>
@@ -1918,7 +1858,7 @@ Ruthless Swan was vanquished by challenging them to a duel.
   </div>
 
   <div>
-    The formula makes logical sense. Multiply the fraction of tall monsters with the fraction of tall monsters with great hair.
+    The formula makes logical sense. To get the probability of finding a tall monster with great hair.... multiply the probability of finding a tall monster.... with the probability that a tall monsters would have great hair.
   </div>
 
   <next>Try it</next>
@@ -1948,9 +1888,14 @@ Ruthless Swan was vanquished by challenging them to a duel.
 </avatar>
 
 
+<avatar image="girl.png" text="Kyaaa!!">
+  <next>Yes?</next>
+</avatar>
+
+
 <avatar key="fakeout2"
         image="girl.png"
-        text="Oh thank you for your help so far. But I forgot... I also want them to have tattoos. 1/5 of monsters have tattoos.">
+        text="Thank you for your help so far. But I forgot... I also want my monster to have tattoos. 1/5 of monsters have tattoos.">
 
   <div>In math speak, P(tattoos) = 1/5.</div>
   <div>What is P(tall AND great hair AND tattoos)?</div>
@@ -1992,7 +1937,7 @@ Ruthless Swan was vanquished by challenging them to a duel.
   <next>Next</next>
 </avatar>
 
-<avatar image="girl.png">
+<avatar image="brain.png">
   <div>
     This is called the Chain Rule of probability.
   </div>
@@ -2121,7 +2066,7 @@ Ruthless Swan was vanquished by challenging them to a duel.
 </avatar>
 
 <avatar 
-    image="girl.png"
+    image="brain.png"
     key="mind-blown" 
     v-if="show('mind-blown')">
   <div>
@@ -2166,9 +2111,27 @@ Ruthless Swan was vanquished by challenging them to a duel.
     <li>You learned to not be too picky ❤️</li>
   </ul> 
 
-  <buton @click="finish()">Next section</buton>
+  <buton @click="finish()">So you're doing all this for revenge?</buton>
 </avatar>
 
+<avatar>
+  <next>Surely you must have some friends though?</next>
+</avatar>
+Let's go make some friends!
+
+Uh... it's harder than you think...
+
+EV section
+
+fails to make friends
+
+Oh well, at least I have Elena...
+
+Elena?? Where is Elena??? [Bayes Rule]
+
+OR
+
+Yeah, Elena is a super smart crow. [P-values]
 
 
 </pset>
@@ -2581,8 +2544,10 @@ Ruthless Swan was vanquished by challenging them to a duel.
   <div style="display:inline-block">
     <div v-if="showX" 
          class="handwriting" 
-         style="display:inline-block; position:absolute; color:#777; font-size: 48px; left: calc(50% - 20px); top:-4px">X</div>
+         style="display:inline-block; position:absolute; color:#999; font-size: 48px; top:-4px"
+         :style="xStyle">X</div>
     <button 
+      ref="button"
       @click="butonClicked()" v-on="$listeners" 
       :class="{'clicked-button': clickedButton}" 
       class="handwriting"
@@ -2616,11 +2581,11 @@ Ruthless Swan was vanquished by challenging them to a duel.
 
   <transition name="fade">
     <span v-if="showCannedHint" class="hint">
-      {{feedbackString}}
+      {{cannedHint}}
     </span>
 
     <span v-if="showYay" class="rainbow-text">
-      {{feedbackString}}
+      Yay!
     </span>
 
     <div v-if="showHintSlot" class="hint">
@@ -2962,11 +2927,6 @@ Vue.component('input-box', {
     feedback: {type: Boolean, default: true},
   },
   computed: {
-    feedbackString: function(){
-      if (this.isYay){
-        return 'Yay!';
-      }
-    },
     cannedHint(){
       return this.hints[this.answers.length % this.hints.length];      
     },
@@ -3221,6 +3181,9 @@ Vue.component('buton', {
     },
     showX(){
       return this.clickedButton && this.isNope;
+    },
+    xStyle(){
+      return {left: (this.$refs['button'].clientWidth/2 - 10)+'px'};
     }
   },
   methods: {
@@ -3731,7 +3694,7 @@ Vue.component('buton-group', {
   },
   computed: {
     lastChild(){
-      if (this.clickedChildren > 0){
+      if (this.clickedChildren.length > 0){
         return this.clickedChildren[this.clickedChildren.length-1];
       }
     },
@@ -3745,11 +3708,6 @@ Vue.component('buton-group', {
       return false;
     }
   },
-  // watch: {
-  //   clickedChildren(){
-
-  //   }
-  // },
   data: function(){
     return {
       clickedChildren: [],
@@ -4160,7 +4118,7 @@ new Vue({
   el: '#app',
   data: {
     chapters: chapters,
-    chapterInd: 5,
+    chapterInd: 3,
     // Obj property additions do not update DOM, so prepopulate all the keys in the object. Or use lists.
     //soundNameToCount: {},
     show: false,
