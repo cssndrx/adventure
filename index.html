@@ -32,6 +32,14 @@ html, body, #app{
   height: 100%;
 }
 
+ul {
+  list-style-type: square;
+}
+
+li, li * {
+  font-size: 16px;
+  margin-bottom: 8px;
+}
 
 .rainbow-text{
   background: linear-gradient(to right, orange , yellow, green, cyan, blue, violet);
@@ -88,9 +96,6 @@ text{
   font-weight: 300;
 }
 
-ul{
-  list-style-type:none;    
-}
 div{
   margin-bottom: 16px;
 }
@@ -101,9 +106,6 @@ div{
 /* font-family: 'Gaegu', cursive; -- cute child like handwriting */
 /* font-family: 'Dokdo', cursive; -- funky */
 /* font-family: 'Bungee Shade', cursive; -- pop art caps */
-ul{
-  margin-top: 0px;
-}
 h4{
   font-size: 18px;
   font-weight: 500;
@@ -587,82 +589,90 @@ You are going to bring us into this new world of <span class="animated infinite 
 <script type="text/x-template" id="intro-to-pvalues-template">
 <pset>
 
-
 <avatar 
-  text="I cannot take credit for this next act of evil... the p-value.">
+  text="Elena, my crow friend is really smart.">
   <next>Next</next>
 </avatar>
 
+
 <avatar 
-  text="P-values are used to describe scientific results, but they are so misunderstood that many people misinterpret scientific results! HAHA!">
+  text="I'm going to get her evaluated by Wei the Scientist to see if her intelligence is statistically significant.">
   <next>Next</next>
 </avatar>
 
-<avatar 
-  text="Talk to Wei the Scientist and see if you can make sense of p-values.">
+
+<avatar image="scientist.png"
+  text="My my, what a pretty little bird.">
   <next>Next</next>
 </avatar>
 
-<avatar
+<avatar image="crow.png"
+  text="Caw caw!">
+  <next>Next</next>
+</avatar>
+
+<avatar image="scientist.png"
+  text="I can certainly design an intelligence test worthy of this lovely creature.">
+  <next>Next</next>
+</avatar>
+
+<avatar image="scientist.png">
+  <div>
+    Although, I guess the default belief is that you're just an average crow.
+  </div>
+  <next>Next</next>
+</avatar>
+
+<avatar image="crow.png"
+  text="Cawwww (Don't insult my intelligence, human).">
+  <next>Next</next>
+</avatar>
+
+<avatar image="brain.png">
+  <div>
+    Another name for default belief is <bold>null hypothesis</bold>.
+  </div>
+  <next>Next</next>
+</avatar>
+
+
+<avatar 
+  image="scientist.png">
+  <div>My apologies, clever crow. I'm just trying to explain what a p-value is. A <bold>p-value</bold> is the probability that you'll see as extreme a result if the null hypothesis is true.</div>
+  <next>Next</next>
+</avatar>
+
+
+<avatar 
   image="scientist.png"
-  text="For many years, I've been trying to brew a magic potion to teach statistics.">
-  <next>Next</next>
-</avatar>
-
-<avatar 
-  image="scientist.png"
-  text="I'll let you drink one of my potions. But in order to pick the right brew, you'll need to learn about p-values.">
-
-  <next>Next</next>
-</avatar>
-
-<avatar 
-  image="scientist.png"
-  text="I ran experiments measuring the change in statistics knowledge after drinking each potion compared with a placebo.">
-
-  <next>Next</next>
-</avatar>
-
-
-<avatar 
-  image="scientist.png"
-  text="The default belief is that it's not possible to learn statistics by drinking a potion. In science speak, the default belief is called the *null hypothesis*.
-
-  The *p-value* is the probability that you'll see as extreme a result if the null hypothesis is true.">
-
-  <next>Next</next>
-</avatar>
-
-<avatar 
-  image="scientist.png"
-  text="I ran the experiment with my first potion and got a p-value of 0.6.">
+  text="I ran Elena through my first battery of intelligence tests, and got a p-value of 0.6.">
 
   <div>
     What does a p-value of 0.6 mean?
   </div>
 
   <buton-group>
-    <buton yay>There's a 60% chance of observing as extreme a result even if the potion didn't work</buton>
-    <buton nope>There's a 60% chance that the potion is better than the placebo</buton>
-    <buton nope>There's a 40% chance that the potion is better than the placebo</buton>
+    <buton nope>There's a 60% chance that Elena is smarter than the average crow</buton>
+    <buton nope>There's a 60% chance that Elena is an average crow</buton>
+    <buton yay>There's a 60% chance of observing as extreme a result even if Elena is just an average crow</buton>
 
     <template v-slot:hint>
-    P-values only speak about the probability of obtaining the results if the null hypothesis is true. It isn't the probability of the null hypothesis being correct, or the alternative hypothesis being correct.
+    P-values only speak about the probability of obtaining the results if the null hypothesis is true. It isn't the probability of the null hypothesis being correct, or the alternative hypothesis ("Elena is smarter than an average crow") being correct.
     </template>
   </buton-group>
 
 </avatar>
 
 <avatar image="scientist.png">
-  Correct. A P-value assumes the null hypothesis (aka that educational potions don't work) and says how extreme the results are under this assumption.
+  Correct. A P-value assumes the null hypothesis (aka that Elena is just an average crow) and says how extreme the results are under this assumption.
 </avatar>
 
 <avatar  image="scientist.png"
-  text="I ran the same experiment with a different potion and got a p-value of 0.01. What does a p-value of 0.01 mean?">
+  text="I ran Elena through a different intelligence test and got a p-value of 0.01. What does a p-value of 0.01 mean?">
 
   <buton-group>
-    <buton yay>There's a 1% chance of observing as extreme a result even if the potion didn't work</buton>
-    <buton nope>There's a 1% chance that the placebo is better than the potion</buton>
+    <buton yay>There's a 1% chance of observing as extreme a result even if Elena is just an average crow</buton>
+    <buton nope>There's a 1% chance that Elena is an average crow</buton>
     <buton nope>There's a 1% chance that the results are due to chance</buton>
 
     <template v-slot:hint>
@@ -673,7 +683,7 @@ You are going to bring us into this new world of <span class="animated infinite 
 
 <avatar 
   image="scientist.png"
-  text="For one of my potion experiments, what would be a more exciting result? A p-value of 0.01 or 0.001? ">
+  text="For one of my experiments, what would be a more exciting result? A p-value of 0.01 or 0.001? ">
 
   <buton-group>
     <buton nope>0.01</buton>
@@ -686,126 +696,173 @@ You are going to bring us into this new world of <span class="animated infinite 
 </avatar>
 
 <avatar image="scientist.png">
-  Yes! We're hoping that the potion is different from the placebo, so a lower p-value is better. 
+  Yes! We're hoping that Elena is smarter than an average crow, so a lower p-value is better. 
+</avatar>
+
+<avatar image="scientist.png"
+  text="Oh interesting...">
+  <next>What?</next>
+</avatar>
+
+<avatar image="scientist.png"
+  key="trap"
+  text="Some other scientists have been testing crows as well. And found crows that tested more intelligently at a p-value of 0.05 or p-value of 0.1. Which crow do you think is smarter?">
+
+  <buton-group>
+    <buton nope>0.05</buton>
+    <buton nope>0.1</buton>
+    <buton yay>Not enough info</buton>
+  </buton-group>
+
+</avatar>
+
+
+<avatar image="brain.png">
+  <div>
+    {{ got('trap') ? "Correct! There's not enough info." : 'Good attempt, but not quite.' }}  
+  </div>
+
+   <div>
+    The surprising thing about p-values is that they don't say anything about <bold>effect size</bold>. A p-value just tells you how likely something is under the null hypothesis. 
+  </div>
+</avatar>
+
+
+<avatar image="scientist.png">
+  <div>
+    The two other crows scored as such. Which one do you think is the smarter bird?
+  </div>
+
+<div style="margin-bottom:24px;">
+<bold>Bird A</bold>
+<div>Scores compared to average:
+  <div style="font-size:14px">+2% +0% +6% +6% +8% +3% +4% +0% +9% +4% +7% +5% +9% +9% +4% +3% +7% +7% +1% +8% +3% +9% +5%</div>
+</div>
+<div>Average effect size: 5%</div>
+<div>P-value: 0.05</div>
+</div>
+
+
+<div>
+<bold>Bird B</bold>
+<div>Scores compared to average:
+  <div style="font-size:14px">+47% +46% +6% +0% -7% -3% +13% +0% -10% +28% -4% +30% +1% +48% +37% +26% +47% +46% -13% +15% +33% +33% +26% </div>
+</div>
+<div>Average effect size: 11% </div>
+<div>P-value against placebo: 0.1</div>
+</div>
+
+
+</avatar>
+
+<avatar image="brain.png" text="It's hard to say right? It's possible to have a greater average effect size but a less compelling p-value."></avatar>
+
+<avatar text="I don't care about these other birds. What is Elena's p-value?">
+  <next>Next</next>
+</avatar>
+
+<avatar image="scientist.png"
+  text="Well, based on the exxperiments I've run so far... Elena's p-value is 0.14.">
+
+  <next>Next</next>
+</avatar>
+
+  image="scientist.png"
+  text="After a lot of experimentation, I finally arrived at these two potions:
+Potion B: p-value of 0.1
+  <next>Next</next>
+</avatar>
+
+<avatar image="crow.png"
+  text="CAW!??! (WHAT!??!)">
+  <next>Next</next>
 </avatar>
 
 <avatar 
-  image="scientist.png"
-  text="Scienitific journals usually require a p-value of 0.05 or smaller to publish. If a p-value is less than 0.05, it is called 'statistically significant'. Experimenting with another potion yielded a p-value of 0.14. Which is...">
+  image="scientist.png">
+
+  <div>
+    Scienitific journals usually require a p-value of 0.05 or smaller to publish. If a p-value is less than 0.05, it is called <bold>statistically significant</bold>. Experimenting with another battery of tests yielded a p-value of 0.14. Which is...
+  </div>
 
   <buton nope>Statistically significant</buton>
   <buton yay>Not statistically significant</buton>
 </avatar>
 
-<avatar image="scientist.png">
-  Correct. "Statistically significant" sounds really important, but it's just the scientific name for p-value less than a threshold. It's up to the domain expert to determine if the result is meaningful or not.
+
+<avatar text="I DO NOT accept this!!!!">
+  <next>Next</next>
 </avatar>
+
+<avatar image="crow.png"
+  text="Cawwww!! (Indeed, what a gross miscalculation!!)">
+  <next>Next</next>
+</avatar>
+
+
+<avatar image="scientist.png">
+  <div>
+    Well "statistically significant" sounds really important, but it's just the scientific name for p-value less than a threshold. It's up to the domain expert to determine if the result is meaningful or not.
+  </div>
+  <next>Next</next>
+</avatar>
+
+<avatar text="I am SO OFFENDED (on Elena's behalf).">
+  <next>Next</next>
+</avatar>
+
 
 <avatar 
   image="scientist.png"
   text="How should a p-value of 0.14 be interpreted?">
 
-  <buton nope>Weak evidence that the magic potion is the same as the placebo.</buton>
-  <buton yay>Weak evidence that the magic potion is better than the placebo.</buton>
-  <buton nope>Strong evidence that the magic potion is the same as the placebo.</buton>
-  <buton nope>Strong evidence that the magic potion is better than the placebo.</buton>
+  <buton nope>Weak evidence that Elena is the same as an average crow</buton>
+  <buton yay>Weak evidence that Elena is smarter than an average crow</buton>
+  <buton nope>Strong evidence that Elena is the same as an average crow</buton>
+  <buton nope>Strong evidence that Elena is smarter than an average crow</buton>
+
 </avatar>
 
 <avatar image="scientist.png">
-  Correct. Although a p-value of 0.14 does not meet the threshold for "statistical significance", it is still weak evidence that the results may be unusual under the null hypothesis (aka default world view). There was only a 14% chance that we would observe as extreme a result.
-</avatar>
+  <div>
+    Correct. Although a p-value of 0.14 does not meet the threshold for "statistical significance", it is still weak evidence that the results may be unusual under the null hypothesis (aka default world view). There was only a 14% chance that we would observe as extreme a result. 
+  </div>
 
-<avatar 
-  image="scientist.png"
-  text="Ok so for the potion I tested and got a p-value of 0.14, what should I do?">
-
-  <buton nope='Although the p-value in this experiment is insufficient to conclude "statistical significance", it doesnt mean that there is no effect. The power on the experiment may be insufficient.'>Conclude that potion C is no different from the placebo.</buton>
-  <buton nope="If you rerun the experiment, due to random variation it may be possible to get a lower p-value. But this is considered bad science (and p-hacking). See the green jelly beans xkcd.">Rerun the same experiment in hopes of getting a lower p-value</buton>
-  <buton yay>Rerun the experiment but with a greater number of subjects</buton>
+  <next>Next</next>
 </avatar>
 
 <avatar image="scientist.png">
-  Yes, the p-value is borderline significant so it may be worth tweaking the experiment and rerunning. It is easier to get a signficant p-value with a larger number of samples.
-</avatar>
-
-<avatar key="10"
-  image="scientist.png"
-  text="After a lot of experimentation, I finally arrived at these two potions:
-Potion A: p-value of 0.05
-Potion B: p-value of 0.1
-
-Which do you want to drink?">
-  <buton-group>
-    <buton>Potion A</buton>
-    <buton nope>Potion B</buton>
-    <buton yay>Not enough info</buton>
-  </buton-group>
-</avatar>
-
-<avatar>
   <div>
-    {{ got('10') ? "Correct! There's not enough info." : 'Good attempt, but not quite.' }} Potion A has a lower p-value, but the p-value doesn't say anything about effect size. 
+    When you get a borderline p-value like 0.14 it is worth investigating further, perhaps redesigning part of the experiment to better capture signal from the noise. But you have to be careful not to p-hack like in the xKCD green jelly bean case.
   </div>
-
-  <div>
-    You need both the effect size and the p-value to make your decision.
-  </div>
+  <next>Next</next>
 </avatar>
 
-<avatar 
-  image="scientist.png"
-  text="It turns out that the effect sizes were... "
-  class="normal-div">
-
-<div style="margin-bottom:16px;">
-<bold>Potion A</bold>
-<div>Change in statistics knowledge: <br>+2% +0% +6% +6% +8% +3% +4% +0% +9% +4% +7% +5% +9% +9% +4% +3% +7% +7% +1% +8% +3% +9% +5%</div>
-<div>Average effect size: 5%</div>
-<div>P-value against placebo: 0.05</div>
-</div>
-
-
-<div style="margin-bottom: 16px">
-<bold>Potion B</bold>
-<div>Change in statistics knowledge: <br>+47% +46% +6% +0% -7% -3% +13% +0% -10% +28% -4% +30% +1% +48% +37% +26% +47% +46% -13% +15% +33% +33% +26% </div>
-<div>Average effect size: 11% </div>
-<div>P-value against placebo: 0.1</div>
-</div>
-
-<div>
-In this case, which potion would you like to drink? 
-</div>
-
-<buton-group>
-  <buton>Potion A</buton>
-  <buton>Potion B</buton>
-</buton-group>
-
+<avatar text="Well, I don't need a p-value to tell me that Elena is no average bird.">
+  <next>Next</next>
 </avatar>
 
-<avatar 
-  image="scientist.png"
-  text="You drink the potion and....">
+<avatar image="crow.png"
+  text="Caw... (Sad...)">
   <next>Next</next>
 </avatar>
 
 <avatar 
-  image="scientist.png"
-  text="Turns out that the statistics you learn comes from deciding which potion to drink, rather than drinking it">
+  image="brain.png">
 
-
-  <div>Congrats you learned....</div>
+  <div>You learned....</div>
   <ul>
     <li>The <bold>null hypothesis</bold> is the default belief (e.g. it's not possible to learn by drinking a potion).</li>
     <li>You learned that a <bold>p-value</bold> is the chance of witnessing as extreme an outcome under the null hypothesis.</li>
     <li>p-values below a threshold of 0.05 are called <bold>statistically significant</bold> but that does not mean it is necesarrily useful.</li>
     <li>A smaller p-value does not imply a larger effect size.</li>
-    <li>It is possible to get statistically significant but very small effect size results by increasing the size of the study.</li>
   </ul> 
 
   <div>
   If you liked this section, you may like the book, <a href="https://smile.amazon.com/p-value-Stories-Actually-Understand-Statistics/dp/0321629302">What is a P-Value Anyways?</a>
   </div>
+
+  <next>Next chapter</next>
 
 </avatar>
 
@@ -1274,7 +1331,7 @@ Ruthless Swan was vanquished by challenging them to a duel.
   </buton-group>
 </avatar>
 
-<avatar image="monster.png">
+<avatar image="brain.png">
   <div>
    {{got('100H') ? 'Yeah!': 'Not quite.'}} The probability of seeing 100 tails in a row on a fair coin is so tiny... 1/<exp base="2" pow="100"/>. If all the <exp base="2" pow="80"/> atoms in the universe were flipping coins, it still would only have a 1 in million chance of happening. 
  </div>
@@ -1302,7 +1359,7 @@ Ruthless Swan was vanquished by challenging them to a duel.
 </avatar>
 
 <avatar image="monster.png"
-  text="Mom has been packing lunch for me for ___ days, so I guess this was bound to happen.">
+  text="Mom has been packing lunch for me for 1540 days, so I guess this was bound to happen.">
   <next>Er...</next>
 </avatar>
 
@@ -1312,7 +1369,7 @@ Ruthless Swan was vanquished by challenging them to a duel.
 </avatar>
 
 
-<avatar image="monster.png">
+<avatar image="brain.png">
   <ul>
     <li>You learned about <bold>independent events</bold></li>
     <li>You learned to calculate the <bold>joint probability</bold> of independent events.</li>
@@ -1332,11 +1389,6 @@ Haha! That was great... Bobby's gonna be stuck eating peanut butter and sandwich
 
 <script type="text/x-template" id="wizard-flips-template">
 <pset>
-
-<avatar
-  text="Oh ho! Bobby definitely didn't like his peanut butter sandwiches.">
-  <next>Next</next>
-</avatar>
 
 <avatar  
   text="By the way, have you met my crow friend Elena?">
@@ -1469,7 +1521,7 @@ Haha! That was great... Bobby's gonna be stuck eating peanut butter and sandwich
 </avatar>
 
 
-<avatar>
+<avatar image="brain.png">
   <div>
     Well, at least you learned
   </div>
@@ -1888,14 +1940,14 @@ Haha! That was great... Bobby's gonna be stuck eating peanut butter and sandwich
 </avatar>
 
 
-<avatar image="girl.png" text="Kyaaa!!">
+<avatar image="girl_happy.png" text="Kyaaa!! Thank you for your help so far. But I forgot... ">
   <next>Yes?</next>
 </avatar>
 
 
 <avatar key="fakeout2"
         image="girl.png"
-        text="Thank you for your help so far. But I forgot... I also want my monster to have tattoos. 1/5 of monsters have tattoos.">
+        text="I also want my monster to have tattoos. 1/5 of monsters have tattoos.">
 
   <div>In math speak, P(tattoos) = 1/5.</div>
   <div>What is P(tall AND great hair AND tattoos)?</div>
@@ -1919,7 +1971,7 @@ Haha! That was great... Bobby's gonna be stuck eating peanut butter and sandwich
 
 
 <avatar 
-    image="girl.png">
+    image="brain.png">
 
   <div>
     {{ got('fakeout2') ? 'Right.': 'Not quite.' }} Again, it's not possible to say!
@@ -2069,9 +2121,6 @@ Haha! That was great... Bobby's gonna be stuck eating peanut butter and sandwich
     image="brain.png"
     key="mind-blown" 
     v-if="show('mind-blown')">
-  <div>
-    One quick thing that may blow your mind.
-  </div>
 
   <div>
     We had been decomposing:
@@ -2114,12 +2163,151 @@ Haha! That was great... Bobby's gonna be stuck eating peanut butter and sandwich
   <buton @click="finish()">So you're doing all this for revenge?</buton>
 </avatar>
 
-<avatar>
+<avatar text="I have a lot of free time because I don't have any friends.">
   <next>Surely you must have some friends though?</next>
 </avatar>
-Let's go make some friends!
 
-Uh... it's harder than you think...
+<avatar text="No, I really don't.">
+  <next>Let's go make some friends!</next>
+</avatar>
+
+<avatar text="Uh... it might be harder than you think...">
+  <next>Next</next>
+</avatar>
+
+</pset>
+
+</script>
+
+<script type="text/x-template" id="ev-story-template">
+<pset>
+
+<avatar text="How do I make friends?">
+</avatar>
+
+<avatar image="brain.png">
+
+<div>The internet claims that the 3 tenets of friendships are...</div>
+<ul>
+  <li>positivity</li>
+  <li>consistency</li>
+  <li>vulnerability</li>
+</ul>
+</avatar>
+
+<avatar>
+  <div>Okay, I'll start with <bold>positivity</bold>. To become friends, interactions need to be positive. That makes sense.</div>
+</avatar>
+
+<avatar text="I guess I could tell a joke. I'll memorize some jokes from https://www.rd.com/funny-stuff/short-jokes/">
+</avatar>
+
+<avatar text="Hm... but jokes don't always hit. A bad joke might be a negative.">
+</avatar>
+
+<avatar text="Take this joke for instance... should I tell it?">
+  <div>
+  40% of the time it lands favorably<br>
+  60% of the time it fails<br>
+  </div>
+
+  <buton-group>
+    <buton>Yes</buton>
+    <buton>No</buton>
+    <buton>Don't know</buton>
+  </buton-group>
+</avatar>
+
+<avatar text="The answer depends on the payoffs.">
+  <div>
+  If I get +1 positivity point when it lands.<br>
+  And -1 positivity point when it fails<br>
+  </div>
+
+  <div>
+    Then it seems like a bad deal, because on average I'd be down -0.2 positivity points each time I tell the joke.
+  </div>
+
+</avatar>
+
+
+<avatar text="">
+  <live-text>But if I get 5 friendships points when it lands, 
+And -1 positivity points when it fails
+
+Then it looks like a better deal. 
+</live-text>
+</avatar>
+
+
+
+But if I get 5 friendships points when it lands, 
+And -1 positivity points when it fails
+
+Then it looks like a better deal. 
+
+
+If you multiply the probability of each outcome occuring with the reward for the outcome, and addeverythign together, you get the <bold>expected value</bold>. The expected value is the average reward.
+
+Help me decide whether to tell these jokes or not, by calculating their expected value.
+
+
+
+Joke:
+25% of the time it lands favorably, resulting in $__
+
+
+[Tell] [Don't tell]
+
+
+
+
+https://www.rd.com/funny-stuff/short-jokes/
+
+----
+
+Okay, I think we might have enough positivity points. The next thing we need is consistency. 
+
+We need consistent repeat positive interactions. 
+
+
+repeat positive interactions ---
+stopped here -- thinking about htis
+
+
+
+You could join an actvitity. 
+
+Which activity should I join to maximize the number of interactions? 
+
+
+Poker club
+[distribution]
+
+
+Just like before, you can take the expected value. The cool thing is if you plot the possible otucomes as a distribution (possibilities on x-axis, probabilities on y-axis) taking the expected value is the balance point.
+
+
+Which activity should I join? 
+
+
+Cool, so now you're a member of the ___ ___ ___ clubs. 
+And you have ___ friendship points. 
+
+
+Brain: 
+
+For the final ingredient in making friends... you need vulnerability...
+
+
+Wizard: I'm not going there. 
+
+Why not? 
+
+Wizard: Why bother... I have Elena. 
+
+Wizard: Elena??? Where's Elena??
+
 
 EV section
 
@@ -2133,9 +2321,7 @@ OR
 
 Yeah, Elena is a super smart crow. [P-values]
 
-
 </pset>
-
 </script>
 
 <script type="text/x-template" id="risk-reward-template">
@@ -2647,6 +2833,31 @@ var sounds = {
   'curious': {clip: new Audio('sounds/curious.wav')},
   'achievement': {clip: new Audio('sounds/achievement.wav')},
 };
+
+
+const jokes = [
+{
+  a: "Did you hear about the mathematician who's afraid of negative numbers?",
+  b: "He'll stop at nothing to avoid them."
+},
+
+{
+  a:"Why don't scientists trust atoms?",
+  b:"Because they make up everything."
+},
+{
+  a:"Where are average things manufactured?",
+  b:"The satisfactory."
+},
+{
+  a:   "How many times can you substract 10 from 100?",
+  b: "Once. The next time you would be subtracting 10 from 90."
+},
+{
+  a: "The numbers 19 and 20 got into a fight.",
+  b: "21."
+}
+];
 
 // pull the dialog into a new component?? 
 const copIntro = {
@@ -3877,7 +4088,7 @@ function makeComponent(componentName, points, reactions){
     template: '#' + componentName + '-template'
   });
 }
-['intro-scene', 'coin-flips', 'wizard-flips', 'chain-rule', 'risk-reward', 'intro-to-pvalues', 'bayes-rule'].forEach(x => makeComponent(x));
+['intro-scene', 'coin-flips', 'wizard-flips', 'chain-rule', 'ev-story', 'risk-reward', 'intro-to-pvalues', 'bayes-rule'].forEach(x => makeComponent(x));
 
 
 Vue.component('next', {
@@ -4080,31 +4291,31 @@ const chapters = [
 },
 {
   component: 'coin-flips',
-  name: 'Independence',
   description: 'Independent events',
   image: 'monster.png',
 },
 {
   component: 'wizard-flips',
-  name: 'Randomness',
   description: 'What does randomness look like',
   image: 'wizard.png',
 },
 {
   component: 'chain-rule',
-  name: 'Chain Rule',
   description: 'Chain rule of probability',
   image: 'girl.png',
 },
 {
+  component: 'ev-story',
+  description: 'Expected value',
+  image: 'wizard.png',
+},
+{
   component: 'intro-to-pvalues',
-  name: 'P-values',
   description: 'P-values', 
   image: 'scientist.png',
 },
 {
   component: 'bayes-rule',
-  name: 'Bayes Rule',
   description: 'Bayes Rule', 
   image: 'wizard.png',
 },
@@ -4118,7 +4329,7 @@ new Vue({
   el: '#app',
   data: {
     chapters: chapters,
-    chapterInd: 3,
+    chapterInd: 5,
     // Obj property additions do not update DOM, so prepopulate all the keys in the object. Or use lists.
     //soundNameToCount: {},
     show: false,
