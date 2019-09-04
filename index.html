@@ -767,9 +767,7 @@ You are going to bring us into this new world of <span class="animated infinite 
   <next>Next</next>
 </avatar>
 
-  image="scientist.png"
-  text="After a lot of experimentation, I finally arrived at these two potions:
-Potion B: p-value of 0.1
+<avatar text="WHAT!">
   <next>Next</next>
 </avatar>
 
@@ -1787,14 +1785,14 @@ Haha! That was great... Bobby's gonna be stuck eating peanut butter and sandwich
 
 <avatar 
   image="girl.png" 
-  text="Hello! I'm Veronica and I only date monsters that are tall and have great hair.">
+  text="Hello! I'm Veronica and I only date monsters that are tall and have beards.">
 
   <next>Next</next>
 </avatar>
 
 
 <avatar 
-  text="So I cast a spell to cause many monsters to have bad hair...">
+  text="So I cast a spell to cause many monsters to be unable to grow beards...">
   <next>Oh</next>
 </avatar>
 
@@ -1810,20 +1808,50 @@ Haha! That was great... Bobby's gonna be stuck eating peanut butter and sandwich
 </avatar>
 
 
+<avatar 
+  image="girl.png" 
+  text="1/2 of all monsters are tall and 1/4 of monsters have beards.">
+  <next>Next</next>
+</avatar>
 
+<avatar image="brain.png">
+  <div>
+    Let's write what Veronica told us in math language.
+  </div>
+
+  <div>
+    The probability of a monster having a beard can be written as:
+  </div>
+
+  <div>
+    P(beard) = 1/4
+  </div>
+
+  <div>
+    This is pronounced as, "the probability of a beard is 1/4".
+  </div>
+
+  <div>
+    Veronica also told us
+  </div>
+
+  <div>
+    P(tall) = 1/2
+  </div>
+</avatar>
 <avatar key="fakeout1"
   image="girl.png" 
-  text="If 1/2 of all monsters are tall and 1/4 of monsters have great hair... What is the probability that a random monster is datable (is tall and has great hair)?">
+  text="What is the probability that a random monster is datable? i.e. What is P(tall AND beard)?">
 
   <buton-group>
     <next>1/8</next>
     <buton nope="Hm... 1/3 doesn't make sense. Try again.">1/3</buton>
-    <buton nope="Although 1/4 is the number of monsters have great hair, it's not clear that all great hair monsters are tall. Try again.">1/4</buton>
+    <buton nope="Although 1/4 is the number of monsters have beard, it's not clear that all bearded monsters are tall. Try again.">1/4</buton>
     <buton nope="There aren't even that many tall monsters! Try again.">3/4</buton>
     <buton yay>Not enough info</buton>
 
     <template v-slot:hint>
-      Not quite. It is only valid to compute the joint probability by multiplication if being tall and having great hair are <bold>independent</bold> — like coin flips.
+      Not quite. It is only valid to compute the joint probability by multiplication if being tall and having a beard are <bold>independent</bold> — like coin flips.
     </template>
 
   </buton-group>
@@ -1837,11 +1865,15 @@ Haha! That was great... Bobby's gonna be stuck eating peanut butter and sandwich
   </div>
 
   <div>
-    It is only valid to multiply two probabilities to calculate the joint probability if the two events are independent — like coin flips.
+    It is only valid to multiply two probabilities to calculate the joint probability if the two events are <bold>independent</bold> — like coin flips.
   </div>
 
   <div>
-     In our case, <bold>independence</bold> occurs if a monster's height <bold>does not provide any information</bold> on the greatness of a monsters hair. 
+     In our case, independence occurs if a monster's height <bold>does not provide any information</bold> on the greatness of a monsters hair. 
+  </div>
+
+  <div>
+    So knowing the monster is tall or short, cannot make it any more or less likely that they have a beard. If this is the case, then it's safe to say that having a beard and being tall are independent.
   </div>
 
   <next>Next</next>
@@ -1849,49 +1881,33 @@ Haha! That was great... Bobby's gonna be stuck eating peanut butter and sandwich
 
 
 <avatar image="girl.png" 
-        text="It turns out that being tall and having great hair are slightly correlated, so they're not independent. I said before that 1/4 of all monsters have great hair. But about 1/3 of tall monsters have great hair.">
+        text="I guess I do see some correlation between being tall and having a beard, so they're not independent. If I know a monster is tall, there's a 1/3 chance that they have a beard.">
 </avatar>
 
-<avatar image="brain.png">
-  <div>
-    Let's write what Veronica told us in math language.
 
-    The first two numbers she gave us were simple probabilities. 
-
-    The probability of a monster having great hair can be written as:
-
-
-    P(great hair) = 1/4
-
-    This is pronounced as, "The probability of great hair is 1/4".
-
-    Veronica also told us.
-        P(tall) = 1/2
-  </div>
-</avatar>
 
 <avatar image="brain.png">
 
   <div>
-  Veronica also told us a <bold>conditional probability</bold> when she said:
+  Veronica told us a <bold>conditional probability</bold> when she said:
   </div>
 
   <div>
-   The probability a monster has great hair is 1/3 <bold>given</bold> that we know the monster is tall. 
+   The probability a monster has a beard is 1/3 <bold>given</bold> that we know the monster is tall. 
   </div>
 
   <div>
-    Conditional probabilities are written like P(A|B). This indicates the probability of A <bold>given</bold> that we know B to be true.
-  </div>
-
-
-  <div>
-    Veronica told us P(great hair|tall) = 1/3.
+    Conditional probabilities are written like P(X|Y). The bar "|" is  pronounced as "given", and P(X|Y) indicates the probability of X given that we know Y to be true.
   </div>
 
 
   <div>
-   This is pronounced as the probability a monster has great hair<bold>given</bold> that we know the monster is tall is 1/3. 
+    Veronica told us P(beard|tall) = 1/3.
+  </div>
+
+
+  <div>
+   This is read as "the probability a monster has a beard given that we know the monster is tall is 1/3". 
   </div>
 
 
@@ -1902,15 +1918,15 @@ Haha! That was great... Bobby's gonna be stuck eating peanut butter and sandwich
 <avatar  image="brain.png">
 
   <div>
-    We can use this information to calculate P(tall AND great hair) without assuming independence:
+    We can use the conditional probability to calculate P(tall AND beard) without assuming independence:
   </div>
 
   <div>
-    P(tall AND great hair) = P(tall) x P(great hair|tall)
+    P(tall AND beard) = P(tall) x P(beard|tall)
   </div>
 
   <div>
-    The formula makes logical sense. To get the probability of finding a tall monster with great hair.... multiply the probability of finding a tall monster.... with the probability that a tall monsters would have great hair.
+    The formula says to get the probability of finding a tall monster with a beard = (probability of finding a tall monster) x (probability that a tall monster has a beard).
   </div>
 
   <next>Try it</next>
@@ -1921,19 +1937,19 @@ Haha! That was great... Bobby's gonna be stuck eating peanut butter and sandwich
         image="girl.png" 
         text="Okay so what is the probability that a random monster is datable?">
 
-  <div>What is P(tall AND greathair)?</div>
+  <div>What is P(tall AND beard)?</div>
 
   <div class="extra-info">Facts from before:
   <ul>
     <li>P(tall) = 1/2</li>
-    <li>P(great hair) = 1/4</li>
-    <li>P(great hair | tall) = 1/3</li>
+    <li>P(beard) = 1/4</li>
+    <li>P(beard | tall) = 1/3</li>
   </ul>
   </div>
 
   <buton-group>
     <buton yay>1/6</buton>
-    <buton nope="We said that being tall and having great hair are not independent, so we can't just multiply 1/2 x 1/4.">1/8</buton>
+    <buton nope="We said that being tall and having a beard are not independent, so we can't just multiply 1/2 x 1/4.">1/8</buton>
     <buton nope="Are you just multiplying things together? Try again.">1/24</buton>
     <buton nope="The answer isn't always 'Not enough info'...">Not enough info</buton>
   </buton-group>
@@ -1950,20 +1966,20 @@ Haha! That was great... Bobby's gonna be stuck eating peanut butter and sandwich
         text="I also want my monster to have tattoos. 1/5 of monsters have tattoos.">
 
   <div>In math speak, P(tattoos) = 1/5.</div>
-  <div>What is P(tall AND great hair AND tattoos)?</div>
+  <div>What is P(tall, beard, tattoos)? <span style="color:#777"><- Note: this is a more compact way of writing P(tall AND beard AND tattoos)</span></div>
 
   <div class="extra-info">Facts from before:
     <ul>
       <li>P(tall) = 1/2</li>
-      <li>P(greathair) = 1/4</li>
-      <li>P(greathair|tall) = 1/3</li>
-      <li>You calculated P(greathair AND tall) = 1/6</li>
+      <li>P(beard) = 1/4</li>
+      <li>P(beard|tall) = 1/3</li>
+      <li>You calculated P(beard, tall) = 1/6</li>
     </ul>
   </div>
 
   <buton-group>
     <buton coy>1/30</buton>
-    <buton nope="Remember, we want to use P(greathair|tall), not P(tall).">1/40</buton>
+    <buton nope="Remember, we want to use P(beard|tall), not P(tall).">1/40</buton>
     <buton nope="Wait, are you just blindly multiplying numbers? Stop that.">1/120</buton>
     <buton yay>Not enough info</buton>
   </buton-group>
@@ -1978,8 +1994,8 @@ Haha! That was great... Bobby's gonna be stuck eating peanut butter and sandwich
   </div>
 
   <div>
-    To get P(tattoo AND great hair AND tall), we can't just multiply
-    P(tattoo) * P(great hair AND tall) without assuming independence.
+    To get P(tattoo, beard, tall), we can't just multiply
+    P(tattoo) x P(beard, tall) without assuming independence.
   </div>
 
   <div>
@@ -1991,34 +2007,34 @@ Haha! That was great... Bobby's gonna be stuck eating peanut butter and sandwich
 
 <avatar image="brain.png">
   <div>
-    This is called the Chain Rule of probability.
+    And this brings us to the <bold>Chain Rule of Probability</bold>.
   </div>
 
   <div class="smaller-children">
-    P(tattoo AND greathair AND tall) = <br>
-    <span style="color:magenta">P(tall)</span> * <span style="color:green">P(great hair | tall)</span> * <span style="color:blue">P(tattoo | great hair AND tall)</span>
+    P(tattoo, beard, tall) = <br>
+    <span style="color:#7570b3">P(tall)</span> x <span style="color:#1b9e77">P(beard | tall)</span> x <span style="color:#d95f02">P(tattoo | beard AND tall)</span>
   </div>
 
   <div class="smaller-children" style="margin-left: 16px;">
     <div>
-      First, consider the <span style="color:magenta">probability of the monster being tall</span>.
+      First, consider the <span style="color:#7570b3">probability of the monster being tall</span>.
     </div>
 
     <div>
-      Then, consider the <span style="color:green">probability of a tall monster having great hair</span>.
+      Then, consider the <span style="color:#1b9e77">probability of a tall monster having a beard</span>.
     </div>
 
     <div>
-      Then, consider the <span style="color:blue">probability that a tall monster with great hair, would have a tattoo</span>.
+      Then, consider the <span style="color:#d95f02">probability that a tall monster with a beard, would have a tattoo</span>.
     </div>
 
     <div>
-      Multiply together to get monsters that are tall and have great hair and have tattoos.
+      Multiply together to get monsters that are tall and have a beard and have tattoos.
     </div>
   </div>
 
   <div>
-    Basically, the Chain Rule says that when adding a new item to the joint probability, condition on all the events that already exist.
+    Basically, the Chain Rule says that when bringing a new item to the joint probability, condition on all the events that already exist.
   </div>
 
   <next>Try it</next>
@@ -2030,29 +2046,30 @@ Haha! That was great... Bobby's gonna be stuck eating peanut butter and sandwich
         text="Ooh yes, I've heard of the Chain Rule. Here are the numbers that you'll need.">
 
   <div>
-  What is P(tall, greathair, tattoos)?
+  What is P(tall, beard, tattoos)?
   </div>
 
   <div class="extra-info">
   Facts from before:
   <ul>
     <li>P(tall) = 1/2</li>
-    <li>P(greathair) = 1/4</li>
-    <li>P(greathair|tall) = 1/3</li>
+    <li>P(beard) = 1/4</li>
+    <li>P(beard|tall) = 1/3</li>
+    <li>You calculated P(beard AND tall) = 1/6</li>
     <li>P(tattoos) = 1/5</li>
     <li>P(tattoos|tall) = 1/6</li>
-    <li>P(tattoos|tall AND greathair) = 1/7</li>
+    <li>P(tattoos|tall AND beard) = 1/7</li>
   </ul>
   </div>
 
   <div>
-  P(tall, greathair, tattoos) =  1/<input-box :right="42" @yay="set('problem4')">
+  P(tall, beard, tattoos) =  1/<input-box :right="42" @yay="set('problem4')">
     <template v-slot:hint>
       <div>
         Recall the Chain Rule says that everything must be conditioned on what came before. 
       </div>
       <div>
-        So P(tall, greathair, tattoos) = P(tall) * P(greathair | tall) * P(tattoos | greathair AND tall). 
+        So P(tall, beard, tattoos) = P(tall) x P(beard | tall) x P(tattoos | beard AND tall). 
       </div>
     </template>
   </input-box>
@@ -2062,21 +2079,22 @@ Haha! That was great... Bobby's gonna be stuck eating peanut butter and sandwich
 
 
 <avatar key="problem4" 
-        v-if="show('problem4')"
         image="girl.png" 
-        text="Yes, thank you! But silly us! We forgot to include that these tall, great hair, tattooed monsters also need to be... around my age and single.">
+        text="Yes, thank you! But silly us! We forgot to include that these tall, bearded, tattooed monsters also need to be... around my age and single.">
 
     <div class="extra-info">
     Facts from before:
     <ul>
       <li>P(tall) = 1/2</li>
-      <li>P(greathair) = 1/4</li>
-      <li>P(greathair|tall) = 1/3</li>
+      <li>P(beard) = 1/4</li>
+      <li>P(beard|tall) = 1/3</li>
+      <li>You calculated P(beard AND tall) = 1/6</li>
       <li>P(tattoos) = 1/5</li>
       <li>P(tattoos|tall) = 1/6</li>
-      <li>P(tattoos|tall AND greathair) = 1/7</li>
-      <li>P(around her age|tall AND greathair AND tattoos) = 1/5</li>
-      <li>P(single|tall AND greathair AND tattoos AND around her age) = 1/2</li>
+      <li>P(tattoos|tall AND beard) = 1/7</li>
+      <li>You calculated P(beard, tall, tattoos) = 1/42</li>
+      <li>P(around her age | tall, beard, tattoos) = 1/5</li>
+      <li>P(single | tall, beard, tattoos, around her age) = 1/2</li>
     </ul>
     </div>
 
@@ -2086,7 +2104,7 @@ Haha! That was great... Bobby's gonna be stuck eating peanut butter and sandwich
         Recall the Chain Rule says that everything must be conditioned on what came before. 
       </div>
       <div>
-        So in the case of four events, P(tall, greathair, tattoos, single) = P(tall) * P(greathair | tall) * P(tattoos | greathair AND tall) * P(greathair AND tall AND tattoos | single). 
+        So in the case of four events, P(tall, beard, tattoos, single) = P(tall) x P(beard | tall) x P(tattoos | beard AND tall) * P(beard AND tall AND tattoos | single). 
       </div>
       <div>
         What is it for five events?
@@ -2094,40 +2112,41 @@ Haha! That was great... Bobby's gonna be stuck eating peanut butter and sandwich
     </template>
 
     <div>
-    P(tall, greathair, tattoos, around her age, single) =
+    P(tall, beard, tattoos, around her age, single) =
     </div>
 
-    1/<input-box :right="420" @yay="set('not-many')"/>
+    1/<input-box :right="420"/>
 </avatar>
 
 
-<avatar key="not-many"
-        v-if="show('not-many')"
-        image="girl_shock.png"
+<avatar image="girl_shock.png"
         text="That's not very many people!">
+  <next>Next</next>
+</avatar>
 
+<avatar>
   <div>
-    Even though each individual criteria may not seem picky, requiring that a monster have all the traits leaves Veronica with a very small dating pool.
+    Even though each individual criteria may not seem picky, requiring that a monster have all the traits leaves Veronica with a very small dating pool. Ha-ha!
   </div>
+  <next>Next</next>
+</avatar>
 
-  <div>
-    But hey, at least Veronica's pickiness taught you the Chain Rule.
-  </div>
+<avatar>
+  <div>But hey, at least Veronica's pickiness taught you the Chain Rule.</div>
 
-  <buton @click="set('mind-blown')">Next</buton>
+  <next>Next</next>
 </avatar>
 
 <avatar 
     image="brain.png"
-    key="mind-blown" 
-    v-if="show('mind-blown')">
+    key="decompose" >
 
   <div>
     We had been decomposing:
   </div>
 
   <div style="font-size:16px">
-    P(tall AND greathair and tattoos) = P(tall) * P(greathair|tall) * P(tattoos | tall AND greathair).
+    P(tall, beard, tattoos) = P(tall) x P(beard|tall) x P(tattoos | tall AND beard).
   </div>
 
   <div>
@@ -2135,7 +2154,7 @@ Haha! That was great... Bobby's gonna be stuck eating peanut butter and sandwich
   </div>
 
   <div style="font-size:16px">
-    P(tall AND greathair and tattoos) = P(greathair) * P(tattoos | greathair) * P(tall | tattoos AND greathair).
+    P(tall AND beard and tattoos) = P(beard) x P(tattoos | beard) x P(tall | tattoos AND beard).
   </div>
 
   <div>
@@ -2143,36 +2162,34 @@ Haha! That was great... Bobby's gonna be stuck eating peanut butter and sandwich
   </div>
 
   <div>
-    How many different ways are there to decompose P(tall AND greathair and tattoos) using the Chain Rule?
+    How many different ways are there to decompose P(tall, beard, tattoos) using the Chain Rule?
   </div>
-  <input-box :right="6" @yay="set('congrats')" :feedback="true"/>
+  <input-box :right="6" :feedback="true"/>
 </avatar>
 
 
-<avatar key="congrats"
-        v-if="show('congrats')"
-        image="wizard.png"
-        text="Aw... you foiled my plan by showing Veronica how picky she was.">
-  
+<avatar image="wizard.png"
+        text="Aw... you foiled my plan by showing Veronica how picky she was. But....">
   <ul>
     <li>You learned about independence</li>
     <li>You learned about Chain Rule</li>
     <li>You learned to not be too picky ❤️</li>
   </ul> 
 
-  <buton @click="finish()">So you're doing all this for revenge?</buton>
+  <next>Next</next>
 </avatar>
+
 
 <avatar text="I have a lot of free time because I don't have any friends.">
   <next>Surely you must have some friends though?</next>
 </avatar>
 
 <avatar text="No, I really don't.">
-  <next>Let's go make some friends!</next>
+  <next>Let's get you friends</next>
 </avatar>
 
 <avatar text="Uh... it might be harder than you think...">
-  <next>Next</next>
+  <next>Next chapter</next>
 </avatar>
 
 </pset>
@@ -4329,7 +4346,7 @@ new Vue({
   el: '#app',
   data: {
     chapters: chapters,
-    chapterInd: 5,
+    chapterInd: 3,
     // Obj property additions do not update DOM, so prepopulate all the keys in the object. Or use lists.
     //soundNameToCount: {},
     show: false,
