@@ -41,6 +41,10 @@ li, li * {
   margin-bottom: 8px;
 }
 
+.ev-answer-bar{
+  transition: all 1s ease;
+}
+
 .rainbow-text{
   background: linear-gradient(to right, orange , yellow, green, cyan, blue, violet);
   -webkit-background-clip: text;
@@ -1030,97 +1034,9 @@ Ruthless Swan was vanquished by challenging them to a duel.
 </div>
 </script>
 
-<script type="text/x-template" id="samples-from-distribution-template">
-<div>
-  <distribution ref="distribution" :outcomes="outcomes"></distribution>
-  <samples-chart v-if="samples.length > 0" :xdomain="xDomain" :samples="samples" :chartWidth="200" :chartHeight="150"></samples-chart>
-  <buton @click="draw">Draw samples</buton>
-</div>
-</script>
-
-<script type="text/x-template" id="intro-to-samples-template">
-<div style="width:600px; margin: 0 auto;">
-
-
-<div class="point-container" style="width: 300px">
-  <div v-for="point in points" 
-  @click="set(point.key)" 
-  class="point has-tooltip" 
-  :class="pointClass(point)"
-  :style="pointStyle(point)">
-    <span>{{point.name}}</span>
-  </div>
-</div>
-
-
-<avatar key="intro"
-  v-if="show('intro')"
-  image="wizard.png"
-  text="Distributions are nice for capturing the theory, but *samples* are what you'll encounter in the real world.">
-  <buton @click="set('2')">Er...</buton>
-  <buton @click="set('2')">Yes</buton>
-</avatar>
-
-<avatar key="2"
-  v-if="show('2')"
-  image="wizard.png"
-  text="Let's draw samples from my EVIL PLAN distribution.">
-
-  <div>See how the samples may look quite different from the distribution that they came from.</div>
-
-  <!-- little screams from drawing samples -->
-  <samples-from-distribution></samples-from-distribution>
-
-</avatar>
-
-<avatar key="3"
-  v-if="show('3')"
-  image="cop.png"
-  text="I leave you unsupervised for a few moments... and you're helping the Bad Wizard?">
-</avatar>
-
-<avatar key="4"
-  v-if="show('4')"
-  image="wizard.png"
-  text="Heh. What can I say... I'm a very good teacher. And you have a very eager trainee.">
-</avatar>
- 
-<avatar key="5"
-  v-if="show('5')"
-  image="wizard.png"
-  text="Well, you can try and stop me... I've set up a little game for you.">
-
-  <div>
-    Guess the distribution that the samples came from to stop the wizard's evil plan.
-  </div>
-
-  Evil Unleashed (num sample): ___
-
-  <buton>Draw sample</buton>
-  <div>
-    Try not to draw too many samples. Each sample you draw unleashes some evil on the world.
-  </div>
-
-  Guess:
-  <buton>Plan A</buton>
-  <buton>Plan B</buton>
-  <buton>Plan C</buton>
-
-
-</avatar>
-
-
-
-</div>
-</script>
-
-
 
 <script type="text/x-template" id="intro-scene-template">
 <div style="width:600px; margin: 0 auto;">
-
-
-
 
 <div key="intro"
   v-if="show('intro')"
@@ -1143,42 +1059,6 @@ Ruthless Swan was vanquished by challenging them to a duel.
   <buton @click="$root.nextChapter()">PLAY</buton>
 </div> <!-- end intro -->
 
-</div>
-</script>
-
-<script type="text/x-template" id="cut-scene-template">
-<div style="width:700px; height:200px; margin-bottom: 100px; position:relative; margin:0 auto;" class="normal-div" >
-
-  <div v-if="showCop" style="position:absolute; bottom:0px; left:0px;" ref="cop">
-    <img src="images/cop.png" style="width:100px" >
-
-    <span v-if="showExclamation" style="font-size:48px; position:absolute; bottom:110px; left:50px">!</span>
-
-    <div v-if="showDialog" style="position:absolute; width:340px; left: 100px; top:20px;">
-      <img src="images/dialog.png" style="width:340px; height:100px;">
-
-      <live-text ref="cop-dialog" :key="state" class="handwriting" style="position:absolute; left:24px; top:8px;" @live-text-complete="liveTextComplete()">
-        {{copDialog}}
-      </live-text>
-    </div>
-  </div>
-
-  <div v-if="showButons" style="position:absolute; left: 450px; bottom:0px">
-    <buton v-for="butonValue in butonValues" :key="butonValue" @click="advance()">{{butonValue}}</buton>
-  </div>
-
-  <img v-if="showWizard" 
-    ref="wizard" :src="'images/' + wizardImg" class="walk-drift" style="width:100px;position:absolute;left:0px;z-index:-1">
-
-  <glitch ref="monster" v-if="showMonster" start="monster.png" end="monster.png" style="width:80px; position:absolute; left: 200px;bottom:0px;" ></glitch>
-
-  <glitch ref="girl" v-if="showMonster" start="girl.png" end="girl_fuzzy.png" style="width:80px; position:absolute; left: 280px;bottom:0px;" ></glitch> 
-
-  <div style="position:absolute; bottom:-100px; margin: 32px;">
-    <live-text :key="narration">
-      {{narration}}
-    </live-text>
-  </div>
 </div>
 </script>
 
@@ -2199,7 +2079,6 @@ Haha! That was great... Bobby's gonna be stuck eating peanut butter and sandwich
 <script type="text/x-template" id="ev-story-template">
 <pset>
 
-<distribution :outcomes="[{x: 1, y: 0.1},{x: 2, y: 0.2},{x: 3, y: 0.3},{x: 4, y: 0.4},]" xLabel="Number of interactions" yLabel="Probability" title="Fencing Club 💖" />
 
 <avatar text="How do I make friends?">
   <next>Next</next>
@@ -2314,8 +2193,8 @@ Haha! That was great... Bobby's gonna be stuck eating peanut butter and sandwich
 
 <avatar>
   <div><bold>The satisfactory!</bold></div>
-  <next @click.native="memory='haha'">Ha-ha!</next> 
-  <next @click.native="memory='eh'">Eh...</next>
+  <next @click.native="memory='haha'; positivityPoints+=5">Ha-ha!</next> 
+  <next @click.native="memory='eh'; positivityPoints-=1">Eh...</next>
 </avatar>
 
 <avatar>
@@ -2381,12 +2260,24 @@ Okay, I think that's enough for positivity. The second tenet of friendship is co
 </avatar>
 
 <avatar image="brain.png">
-Just like before, you can take the expected value. The cool thing is if you plot the possible outcomes as a distribution (possibilities on x-axis, probabilities on y-axis) taking the expected value is the balance point.
-</avatar>
+  <div>
+  Just like before, you can take the expected value. The cool thing is if you plot the possible outcomes as a distribution (possibilities on x-axis, probabilities on y-axis) taking the expected value is the balance point.
+  </div>
 
-<div>
-  Click where you think the balance point is...
-</div>
+  <div>
+    Click where you think the balance point is...
+  </div>
+
+  <visual-ev-click 
+  v-for="(club, index) in clubs" 
+  v-if="index <= clubInd" 
+  :outcomes="club.outcomes"
+  :key="club.name"
+  :title="club.name + ' 💖'"
+  xLabel="Number of interactions"
+  yLabel="Probability"
+  @done="nextClub"></visual-ev-click>  
+</avatar>
 
 
 <avatar>
@@ -2406,7 +2297,7 @@ Just like before, you can take the expected value. The cool thing is if you plot
 </avatar>
 
 <avatar>
-Cool, so now I'm a member of the Knitting Circle. And I have ___ friendship points. What's next?
+Cool, so now I'm a member of the Knitting Circle. And I have {{positivityPoints}} positivity points. What's next?
 </avatar>
 
 
@@ -2431,6 +2322,50 @@ Why bother... I have Elena.
 </avatar>
 
 </pset>
+</script>
+
+
+<script type="text/x-template" id="visual-ev-click-template">
+
+<div style="position:relative">
+
+<distribution ref="distribution" 
+  :outcomes="outcomes"
+  :title="title"
+  :xLabel="xLabel"
+  :yLabel="yLabel" ></distribution>
+
+<div style="position:absolute; top:0px; z-index:1"   
+  class="overlay"
+  :style="overlayStyle"
+  @mousemove="mouseX = getRelativeMouseX($event)"
+  @mouseenter="isMouseover = true"
+  @click.once="distributionClicked">
+
+  <!-- tracks the user mouseover and user answer -->
+  <div v-if="isMouseover" 
+       style="border-left:2px solid #7570b3; width:1px; height:200px; position:absolute; bottom: -48px; pointer-events:none;"
+       :style="trackerStyle"></div>
+
+  <!-- show the real answer -->
+  <div ref="answer-marker"
+       v-if="answerPx" 
+       class="ev-answer-bar"
+       :style="{left: answerPx + 'px'}"
+       style="border-left:2px solid #1b9e77; width:1px; height:200px; position:absolute; bottom: -48px; pointer-events:none;"></div>
+</div>
+
+
+<div v-if="answerReal" class="smaller-children">
+  <div>
+  You <span style="color:#7570b3">guessed {{$root.roundTo(guessReal, 1)}}</span>. The <span style="color:#1b9e77">true answer of  {{$root.roundTo(answerReal,1)}}</span> was {{isUserClose  ? 'very close!' : 'far off.'}} {{ isUserClose ? 'Good job!' : 'Needs work.' }}
+  </div>
+
+  <buton @click.native="$emit('done')">Next</buton>
+</div>
+
+
+</div>
 </script>
 
 <script type="text/x-template" id="ev-joke-template">
@@ -2459,7 +2394,7 @@ Why bother... I have Elena.
 
 <avatar v-if="ev < 0 && userAnswer == 'No'">
   Good call... that joke has negative expected value so I probably shouldn't tell it.
-  <next @click.native="finish">Next</next>
+  <next @click.native="finish(0)">Next</next>
 </avatar>
 
 
@@ -2484,17 +2419,17 @@ Why bother... I have Elena.
   </div>
 
   <div>
-    {{evCalculation}} in expectation.
+    {{evCalculation}} points in expectation.
   </div>
 
-  <next @click.native="finish">Next</next>
+  <next @click.native="finish(chosenOutcome.payoff)">Next</next>
 </avatar>
 
 <avatar v-if="userAnswer !== null && chosenOutcome.payoff > 0">
   <div>
     Yay!! That joke {{chosenOutcome.past}}! So I gain {{chosenOutcome.payoff}} positivity points.
   </div>
-  <next @click.native="finish">Next</next>
+  <next @click.native="finish(chosenOutcome.payoff)">Next</next>
 </avatar>
 
 </pset>
@@ -2645,20 +2580,6 @@ Why bother... I have Elena.
 
 
 <!-- begin templates -->
-<script type="text/x-template" id="interstitial-template">
-<div style="width:500px; margin: 0 auto;">
-   <div class="cropcircle" style="margin:0 auto; margin-bottom:16px" :style="cropCircleStyle"></div>
-  <slot></slot>
-</div>
-</script>
-
-
-<script type="text/x-template" id="centered-template">
-<div class="centered">
-  <div class="centered-content"><slot></slot></div> 
-</div>
-</script>
-
 <script type="text/x-template" id="bold-template">
 <span class="bold"><slot></slot></span> 
 </script>
@@ -2666,7 +2587,7 @@ Why bother... I have Elena.
 
 <script type="text/x-template" id="distribution-template">
 <div class="distribution" style="display:inline-block">
-<div v-if="title" style="text-align: center; font-size: 16px" :style="titleStyle">{{title}}</div>
+<div v-if="title" style="text-align: center; font-size: 16px; text-transform:capitalize" :style="titleStyle">{{title}}</div>
 
 <svg :width="chartWidth+margin.left+margin.right" 
      :height="chartHeight+margin.top+margin.bottom">
@@ -2837,10 +2758,6 @@ Why bother... I have Elena.
 
 
 
-<script type="text/x-template" id="story-template">
-<div v-if="isVisible"><slot></slot></div>
-</script>
-
 <script type="text/x-template" id="live-text-template">
   <div>
     <transition-group name="fade" tag="span">
@@ -2967,7 +2884,7 @@ Why bother... I have Elena.
 var DEBUG = false;
 
 
-const wait = ms => new Promise(resolve => setTimeout(resolve, 0));
+const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
 // https://alligator.io/vuejs/global-event-bus/
 const bus = new Vue();
 
@@ -3104,106 +3021,6 @@ const copIntro = {
   }
 };
 
-Vue.component('intro-scene', {
-  data: function(){
-    return {
-      stateInd: 0,
-      showButons: false,
-      showCop: true,
-      showDialog: true,
-      showWizard: false,
-      showMonster: false,
-      showExclamation: false,
-      states: ['trainee', 'honor', 'understaffed', 'chase', 'fin'],
-      wizardImg: 'wizard_run.png',
-      narration: '',
-    }
-  },
-  computed: {
-    state: function(){
-      return this.states[Math.min(this.stateInd, this.states.length-1)];
-    },
-    copDialog: function(){
-      if (copIntro[this.state]){
-        return copIntro[this.state].dialog;        
-      }
-    },
-    butonValues: function(){
-      if (copIntro[this.state]){
-        return copIntro[this.state].buttons;        
-      }
-      return ['Next'];
-    },
-  },
-  mounted: async function(){
-    // await wait(100);
-    // this.$refs['cop'].style.left = 'calc(50% - 50px)';
-    // await wait(3000);
-    // this.$refs['cop'].classList.remove('walk-bounce');
-  },
-  methods: {
-    advance: async function(){
-      console.log('advancing from: ' + this.state);
-      this.showButons = false;
-      this.stateInd++;
-      if (this.state == 'chase'){
-        this.showCop = false;
-        this.showMonster = true;
-        this.showWizard = true;
-        // Wizard runs to the middle
-        this.$refs['wizard'].classList.remove('walk-drift');
-        this.$refs['wizard'].style.left = '0%';
-        await wait(100);
-        this.$refs['wizard'].classList.add('walk-drift');
-        this.$refs['wizard'].style.left = '60%';
-        // Wizard casts spell.
-        await wait(1500);
-        this.wizardImg = 'wizard.png';
-        this.$root.play('spell');  
-        // Monster begins to glitch.
-        this.$refs['monster'].glitch();
-        this.$refs['girl'].glitch();
-
-        // Wizard runs off.
-        await wait(800);      
-        this.wizardImg = 'wizard_run.png';
-        this.$refs['wizard'].style.left = '105%';
-        await wait(1500);
-        this.narration = 'The mysterious figure cast a spell! The victims are now fuzzy.';
-
-        await wait(1500);
-        this.showButons = true;
-      } 
-      if (this.state == 'fin'){
-        this.$root.nextChapter();
-        // this.$emit('scene-complete');
-      }
-    },
-    liveTextComplete: async function(){
-      if (this.state == 'understaffed'){
-        await wait(500);
-        this.showExclamation = true;
- 
-        await wait(200);
-        // this.showDialog = false;
-        this.showWizard = true;
-        // https://michaelnthiessen.com/force-re-render
-        // this.$nextTick(() => {
-        //   debugger;
-        //   this.$refs['wizard'].style.left = '105%';
-        // });
-        await wait(100);
-        this.$refs['wizard'].style.left = '105%';
-        await wait(2000);
-      } 
-
-      if (this.state in copIntro){
-        this.showButons = true;
-      }
-    },
-  },
-  template: '#intro-scene-template'
-});
 
 Vue.component('coin', {
   props: {
@@ -3341,18 +3158,16 @@ Vue.component('ev-joke', {
   },
   mounted(){
    this.chosenOutcomeInd = drawIndFromOutcomes(this.joke.outcomes);
-//   this.chosenOutcome = drawFromOutcomes(this.joke.outcomes);
   },
   data: function(){
     return {
       stage: 0,
       userAnswer: null,
-//      chosenOutcome: null,
     }
   },
   methods: {
-    finish(){
-      this.$emit('done');
+    finish(payoff){
+      this.$emit('done', {payoff: payoff});
     }
   },
   template: '#ev-joke-template'
@@ -3702,17 +3517,6 @@ Vue.component('buton', {
         }
       }
 
-      // Check if it has a PS. Early return if so, we don't want to hit event handling.
-      // if (!this.isNope && avatar && avatar.hasSlot('ps') && avatar.showPS === false){
-      //   avatar.showPS = true;
-      //   avatar.psButton = this;        
-      //   return;
-      // }
-
-
-      // Event handling.
-      // this.$emit('clik');
-
       // Add yourself to parent butonGroup's clicked children
       // so it can show feedback.
       const butonGroup = firstAncestorOfComponent(this, 'buton-group');
@@ -3772,39 +3576,6 @@ Vue.component('big-frac', {
   template: '#big-frac-template'
 });
 
-// function drawFromOutcomes(outcomes){
-//   var ind = drawIndFromOutcomes(outcomes);
-//   return outcomes[ind].x;
-// }
-
-// function drawIndFromOutcomes(outcomes){
-//   var probs = _.map(outcomes, 'y');
-//   if (!approx(sum(probs), 1.0)){
-//     console.error('certainties for outcomes did not sum to 1: ' + outcomes);
-//   }
-
-//   var rand = Math.random();
-//   var cumsum_probs = cumulativeSum(probs);
-//   var cumsum_ind = 0;
-//   while (cumsum_probs[cumsum_ind] < rand){
-//     cumsum_ind++;
-//   }
-//   return cumsum_ind;
-// }
-
-// // categorical x
-// outcomes = [
-//   {x: 'tattoos', y: 0.2},
-//   {x: 'no tattoos', y: 0.8},
-// ]
-
-// // numerical x
-// outcomes = [
-//   {x: 1, y: 0.1},
-//   {x: 2, y: 0.2},
-//   {x: 3, y: 0.3},
-//   {x: 4, y: 0.4},
-// ]
 
 // histogram example
 // https://bl.ocks.org/d3noob/96b74d0bd6d11427dd797892551a103c
@@ -3812,6 +3583,9 @@ Vue.component('distribution', {
   props: {
 
     title: {type: String},
+    xLabel: {type: String},
+    yLabel: {type: String},
+
     // Pass in outcomes directly.
     outcomes: {type: Array, default: function(){
       return [
@@ -3827,13 +3601,17 @@ Vue.component('distribution', {
         return {top: 10, right: 10, bottom: 50, left: 50};
       }
     },
-    xLabel: {type: String},
-    yLabel: {type: String}
   },
   computed: {
     xScale(){
       return d3.scaleBand()
           .domain(this.outcomes.map(d => d.x)).paddingInner(0.01).range([0, this.chartWidth]);
+    },
+    xScaleContinuous(){
+      const domain = this.xScale.domain();
+      const range = this.xScale.range();
+      const bandwidth = this.xScale.bandwidth();
+      return d3.scaleLinear().domain([domain[0], domain[domain.length-1]]).range([range[0] + bandwidth/2, range[1] - bandwidth/2]);
     },
     yScale(){
       return d3.scaleLinear()
@@ -3841,7 +3619,10 @@ Vue.component('distribution', {
     },
     titleStyle(){
       return {'margin-left': this.margin.left + 'px', 'margin-right': this.margin.right + 'px'};
-    }
+    },
+    mean: function(){
+      return sum(this.outcomes.map(outcome => outcome.x * outcome.y));
+    },
   },
   data: function(){
     return {
@@ -3880,44 +3661,111 @@ Vue.component('distribution', {
       .text(this.yLabel);    
 
   },
-  // methods: {
-  //   draw(){
-  //     return drawFromOutcomes(this.outcomes); // this needs .x
-  //   }
-  // },
   template: '#distribution-template'
 });
 
 
-Vue.component('samples-from-distribution', {
+Vue.component('visual-ev-click', {
   props: {
     title: {type: String},
-    outcomes: {type: Array, default: function(){
-      return  [
-          {x: 'Confuse people', y: .3},
-          {x: 'Annoy people', y: .4},
-          {x: 'Scare people', y: .3},
-        ];
-    }},
+    xLabel: {type: String},
+    yLabel: {type: String},
+
+    outcomes: {type: Array, default: () => [{certainty: 0.1, hp:4}, {certainty: 0.3, hp:3}, {certainty: 0.4, hp:2}, {certainty: 0.2, hp:1}] },
   },
-  data(){
+  data: function(){
     return {
-      samples: [],
+      isMouseover: false,
+
+      mouseX: null,  // tracks mouse position always
+
+      guessPx: null, // populated when user clicks
+      guessReal: null, // populated when user clicks
+
+      answerPx: null, // populated after delay when user clicks
+      answerReal: null, // populated after delay when user clicks
+
+      isMounted: false,
     };
   },
+
   computed: {
-    xDomain(){
-      return this.outcomes.map(d => d.x);
+    trackerStyle: function(){
+      return {
+        left: (this.guessPx !== null ? this.guessPx : this.mouseX) + 'px'
+      };
     },
-  },
-  methods: {
-    draw(){
-      const outcome = this.$refs['distribution'].draw();
-      this.samples.push(outcome);
+
+    isUserClose: function(){
+      // Is close if it's less than X% away from the true answer
+      var distribution_component = this.$refs['distribution'];
+      const domain = distribution_component.xScale.domain();
+      var total = domain[domain.length-1] - domain[0];
+
+      var difference = Math.abs(this.answerReal - this.guessReal);
+      return difference / total < .1;
+    },
+
+    overlayStyle(){
+       if(!this.isMounted){
+          return;        
+       }
+       console.log('here');
+       const d = this.$refs['distribution'];
+
+       return {
+          left: d.margin.left + 'px',
+          height: d.chartHeight + d.margin.bottom + 'px',
+          width: d.chartWidth + 'px'
+       };
     }
   },
-  template: '#samples-from-distribution-template'
+
+  mounted(){
+    this.isMounted = true;
+  },
+
+  methods: {
+    distributionClicked: async function(event){
+      const distribution_component = this.$refs['distribution'];
+      const distMean = distribution_component.mean;
+      const xScale = distribution_component.xScaleContinuous; 
+
+      this.guessPx = this.getRelativeMouseX(event);
+      this.guessReal = xScale.invert(this.guessPx);
+
+      // answerPx gets animated into the correct position.
+      this.answerPx = this.guessPx;
+
+      // Make the answer bar animate.
+      await wait(300);
+      this.answerPx = xScale(distMean);
+      //debugger;
+
+      // Make the text show.
+      await wait(1300);
+      this.answerReal = distMean;
+    },
+
+    getRelativeMouseX: function(event){
+      // https://stackoverflow.com/questions/5921413/difference-between-e-target-and-e-currenttarget
+      // e.target is what triggers the event dispatcher to trigger and e.currentTarget is what you assigned your listener to.
+
+      // Find the 'dist' element to compute relative mouse coords.
+      var refElement = event.target;
+      while (refElement.className !== 'overlay'){
+        refElement = refElement.parentElement;
+      }
+
+      // console.log(event.target.className + ' ' + event.clientX + '      ' + refElement.className + JSON.stringify(refElement.getBoundingClientRect()));        
+      return event.clientX - refElement.getBoundingClientRect().x;
+    },
+
+  },
+  template: '#visual-ev-click-template',
 });
+
+
 
 Vue.component('triple-bayes', {
   props: {
@@ -4236,34 +4084,17 @@ Vue.component('buton-group', {
   template: '#buton-group-template'
 });
 
-Vue.component('centered', {
-  template: '#centered-template'
-});
 Vue.component('bold', {
   template: '#bold-template'
 });
 
-Vue.component('interstitial', {
-  props: {
-    image: {type: String, default: 'wizard.png'}, 
-  },
-  computed: {
-    cropCircleStyle: function(){
-      return {'background-image': 'url("images/' + this.image + '")'};
-    }
-  },
-  mounted: function(){
-    this.$root.play('chimes');
-  },
-  template: '#interstitial-template'
-});
 
 function makeComponent(componentName, points, reactions){
   var reactions = reactions || {};
   Vue.component(componentName, {
     data: function(){
       return {
-//        active: 'intro',
+
         actives: ['intro'],
         lastActive: 'intro',
         points: points, // jump points in the story
@@ -4272,8 +4103,15 @@ function makeComponent(componentName, points, reactions){
 
         chapters: chapters,
 
+
+        // State for 'ev-story'
+        positivityPoints: 0,
         jokes: jokes,
         jokeInd: 0,
+        clubs: clubs,
+        clubInd: 0,
+
+
       };
     },
     computed: {
@@ -4395,7 +4233,8 @@ function makeComponent(componentName, points, reactions){
         await wait(1500);
         this.$root.nextChapter();
       },
-      nextJoke(){
+      nextJoke(params){
+        this.positivityPoints += params.payoff;
         this.jokeInd++;
         if (this.jokeInd >= this.jokes.length){
           const pset = firstAncestorOfComponent(this, 'pset');
@@ -4403,6 +4242,15 @@ function makeComponent(componentName, points, reactions){
             pset.next();
           }      
         }
+      },
+      nextClub(){
+        this.clubInd++;
+        if (this.clubInd >= this.clubs.length){
+          const pset = firstAncestorOfComponent(this, 'pset');
+          if (pset){
+            pset.next();
+          }      
+        }        
       }
     },
     template: '#' + componentName + '-template'
@@ -4452,23 +4300,6 @@ Vue.component('delay', {
   },
   template: `<span v-if="shouldTrigger" style="compStyle"><slot></slot></span>`,
 });
-
-// Hides content until it is revealed as part of the story.
-Vue.component('story', {
-  props: {
-    visible: {type: Boolean, default:false},
-  },
-  data: function(){
-    return {
-      isVisible: this.visible,
-    };
-  },
-  watch: {
-    isVisible: scrollWindow,
-  },
-  template: '#story-template'
-});
-
 
 
 /*
