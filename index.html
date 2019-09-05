@@ -1,6 +1,4 @@
 <!doctype html>
-
-
 <head>
 <meta charset="utf-8" />
 
@@ -15,18 +13,19 @@
 </script>
 
 
-<!-- todo: strip and remove the unused -->
-<link href="https://fonts.googleapis.com/css?family=Itim|Dokdo|Fira+Sans:300,700" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Itim|Fira+Sans:300,700" rel="stylesheet">
 
 <script src="js/lodash.min.js"></script>
 <script src="js/d3.v5.min.js"></script>
-<script src="js/d3-array.v2.min.js"></script>
-
 <script src="js/vue.js"></script>
-<script src="js/vuex.js"></script>
-<script src="js/utils.js"></script>
 
 <style>
+
+*{
+  font-family: 'Fira Sans', sans-serif;
+  font-size: 18px;
+  font-weight: 300;
+}
 
 html, body, #app{
   height: 100%;
@@ -91,13 +90,6 @@ li, li * {
 
 text{
   font-size: 13px;
-/*  font-family: 'Schoolbell', cursive;*/
-}
-
-*{
-  font-family: 'Fira Sans', sans-serif;
-  font-size: 18px;
-  font-weight: 300;
 }
 
 div{
@@ -107,48 +99,20 @@ div{
 .normal-div, .normal-div div{
   margin-bottom: 0px;
 }
-/* font-family: 'Gaegu', cursive; -- cute child like handwriting */
-/* font-family: 'Dokdo', cursive; -- funky */
-/* font-family: 'Bungee Shade', cursive; -- pop art caps */
-h4{
-  font-size: 18px;
-  font-weight: 500;
-}
+
 a{
   color: #337ab7; /* bootstrap blue */
   text-decoration: none;
   cursor: pointer;
 }
-.note, .note *{
-  color:#999;
-  cursor: pointer;
-}
-.note .word{
-  font-weight: 700;
-}
-.note:hover .word{
-  text-decoration: underline;
-}
-
 
 img{
   max-width: 400px;
 }
 .handwriting, .handwriting *{
-font-family: 'Itim';
+  font-family: 'Itim';
 }
-.dialog-text, .dialog-text *{
-font-family: 'Itim';
-  font-size: 20px;
-  width: 340px;
-}
-.small-dialog-text, .small-dialog-text *{
-font-family: 'Itim';
-  font-size: 22px;
-}
-.centered, .centered *{
-  font-size: 22px;
-}
+
 button{
   cursor: pointer;
   background-color: white;
@@ -161,269 +125,22 @@ button{
   max-width: 180px;
   display: inline-block;
 }
-.question button:hover, .question .clicked-button{
-  color: white;
-  background-color: black;
-}
+
 .bold{
   font-weight: 700;
-}
-.centered{
-  display: grid;
-  grid-template-columns: 1fr 500px 1fr;
-  grid-template-rows: 1fr auto 1fr;
-  grid-template-areas: 
-    ". . ."
-    ". centered-content ."
-    ". . .";
-  height: 500px;
-}
-.centered-content {
-  grid-area: centered-content;
-}
-.centered button{
-  margin: 0 auto;
-  margin-bottom: 8px;
-}
-.hidden-at-first{
-  opacity: 0;
-  transition: opacity 1s;
-}
-.spin-and-pulse{
-  position: absolute;
-  animation: spin-and-pulse 5s ease 0s 1;
-}
-@keyframes spin-and-pulse {
-  0% {
-    transform: rotate(1turn);
-  }
-  5% {
-    transform: rotate(0turn);
-  }
-  7% {
-    transform: scale(1);
-  }
-  10% {
-    transform: scale(1.2);
-  }
-  13% {
-    transform: scale(1);
-  }
-  15% {
-    transform: scale(1.1);
-  }
-  18% {
-    transform: scale(1);
-  }
-}
-.wobble{
-  position: absolute;
-  animation: wobble 5s ease 0s infinite;
-}
-@keyframes wobble {
-  0% {
-    transform: rotate(0turn);
-  }
-  5% {
-    transform: rotate(0.003turn);
-  }
-  10% {
-    transform: rotate(0turn);
-  }
-  12% {
-    transform: rotate(0.003turn);
-  }
-  15% {
-    transform: rotate(0turn);
-  }
-}
-.bounce{
-  position: absolute;
-  animation: bounce 5s ease 0s infinite;
-}
-@keyframes bounce {
-  0% {
-    transform: translateY(20px);
-  }
-  3% {
-    transform: translateY(-30px);
-  }
-  6% {
-    transform: translateY(10px);
-  }
-  10% {
-    transform: translateY(-10px);
-  }
-  12% {
-    transform: translateY(0px);
-  }
-}
-@keyframes mad-bounce {
-  0% {
-    transform: translateY(20px);
-  }
-  1% {
-    transform: translateY(-30px);
-  }
-  2% {
-    transform: translateY(10px);
-  }
-  3% {
-    transform: translateY(-10px);
-  }
-  4% {
-    transform: translateY(0px);
-  }
-}
-.mad-bounce{
-  position: absolute;
-  animation: bounce 4s ease 0s infinite;  
-}
-.walk-drift{
-  position: absolute;
-  transition: left 3s;
-}
-.walk-bounce{
-  position: absolute;
-  animation: walk-bounce 0.8s ease 0s infinite;
-}
-@keyframes walk-bounce {
-  0% {
-    transform: translateY(0px);
-  }
-  25%{
-    transform: translateY(-12px);    
-  }
-  50% {
-    transform: translateY(0px);
-  }
-  75%{
-    transform: translateY(-12px);    
-  }
-  100% {
-    transform: translateY(0px);
-  }
-}
-@keyframes fallover{
-  100% {
-    transform: rotate(0.3turn);
-  }
-}
-.fallover{
-  position: absolute;
-  animation: fallover 1s ease-in 0s 1; /* to not stand back up:  normal forwards;  */
-}
-.point-container{
-  width: 350px;
-  display:flex; 
-  justify-content:space-between; 
-  margin: 0 auto;
-}
-.point{
-  display: inline-block;
-  width: 12px;
-  height: 12px;
-/*  border-radius: 50%;*/
-  border: 2px solid black;
-  margin-top: 4px;
-  transition: all .5s ease;
-}
-.active-point{
-  background-color: black;
-  width: 20px;
-  height: 20px;
-  margin-top: 0px;
-}
-.circle{
-  border-radius: 50%;
-  width: 14px;
-  height: 14px;
-}
-.circle.active-point{
-  width: 20px;
-  height: 20px;  
-}
-:not(.circle).active-point{
-  width: 18px;
-  height: 18px;
-  margin-top: 1px;
-}
-
-
-.point:hover{
-  background-color: #333;
-}
-.has-tooltip{
-  position: relative;
-}
-.has-tooltip span{
-  display: none;
-  position:absolute;
-  font-size: 10px;
-  top: 24px;
-  white-space: nowrap;
-  background-color: rgba(0,0,0,0.5);
-  padding: 8px;
-  border-radius: 8px;
-  color: white;
-}
-.has-tooltip:hover span{
-  display: inline-block;
-}
-.extra-info, .extra-info *{
-/*  font-size: 14px;*/
 }
 .smaller-children, .smaller-children *{
   font-size: 16px;
 }
-/* https://w3bits.com/rainbow-text/
-.rainbow-text {
-  background-image: repeating-linear-gradient(45deg, violet, indigo, blue, green, orange, red, violet);
-  text-align: center;
-  background-size: 800% 800%;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: rainbow 4s ease infinite;
-}
-@keyframes rainbow { 
-    0%{background-position:0% 50%}
-    50%{background-position:100% 25%}
-    100%{background-position:0% 50%} */
-}
-.fade-enter-active, .fade-leave-active {
-  transition: opacity 1s;
-}
-.fade-enter, .fade-leave-to {
-  opacity: 0;
-}
-.slide-fade-enter-active, .slide-fade-leave-active {
-  transition: all .3s ease;
-}
-.slide-fade-enter, .slide-fade-leave-to {
-  transform: translateY(-300px);
-  opacity: 0;
-}
-.story-point-silhouette{
-  -webkit-filter: contrast(0%) brightness(90%);
-  filter: contrast(0%) brightness(90%);
-  cursor: pointer;
-}
-.story-point-silhouette:hover{
-  -webkit-filter: none;
-  filter: none;
-}
+
 .cropcircle{
     width: 100px;
     height: 100px;
     border-radius: 100%;
-/*    background: #000 no-repeat center;*/
     background-size: cover;
     border: 4px solid black;
 }
 
-.small-avatar{
-  width: 80px;
-}
 .coin{
   display: inline-block;
   width: 120px;
@@ -437,40 +154,12 @@ button{
   user-select: none; /* Standard syntax */
 }
 
-/* https://forum.vuejs.org/t/add-transitions-to-slide-up/27446/4 */
-.slide-up-enter-active {
-  transition: all .6s ease;
-}
-.slide-up-leave-active {
-  transition: all .6s cubic-bezier(1.0, 0.5, 0.8, 1.0);
-}
-.slide-up-enter, .slide-fade-leave-to {
-  transform: translateY(100vh);
-  opacity: 0;
-}
-
-
-.intro-to-distributions .distribution{
-  display: inline-block;
-}
-
-.intro-to-distributions .icon{
-  width: 50px;
-}
-
-.question-table td:nth-child(2){
-  width: 200px;
-}
 
 .sideways{
   transform: translateX(-50%) translateY(-50%) rotate(-90deg);
   position: absolute;
   top: 50%;
   left: 50%;
-}
-
-.font16, .font16 *{
-  font-size: 15px;
 }
 
 .toc-chapter{
@@ -493,12 +182,6 @@ button{
   color: #777;
 }
 
-.ps, .ps *{  
-  font-size: 15px;
-  margin: 8px;
-}
-
-
 </style>
 </head>
 
@@ -515,17 +198,8 @@ button{
     <img v-if="!showTOC" src="images/menu.png" style="cursor: pointer" @click="showTOC = !showTOC">
     <img v-if="showTOC" src="images/x.png" style="cursor: pointer" @click="showTOC = !showTOC">
     <span class="sideways handwriting" style="white-space: nowrap;" v-if="currentChapter.name">Chapter{{chapterInd}}: {{currentChapter.name}}</span>
-
-
-<!--    <div v-for="(chapter, ind) in chapters"
-         @click="chapterInd = ind"
-         style="display:inline-block;">
-      <img :class="{'story-point-silhouette': currentChapter !== chapter}"
-          :src="'images/' + chapter.image" 
-          style="width:50px">
-      <span style="top:60px;">{{chapter.name}}</span>
-    </div> -->
   </div> 
+
   <div v-if="showTOC" class="normal-div" style="position:fixed; z-index:1; width:200px;top:0px; left:60px; top:0;
     bottom:0;
 overflow-y:scroll;padding-top:8px; background-color: #eee;">
@@ -540,54 +214,11 @@ overflow-y:scroll;padding-top:8px; background-color: #eee;">
     </div>
   </div>
 
-
-<!--
-<transition name="slide-fade">
-<div v-if="show" style="background-color: blue; width:200px; height:200px;"></div>
-</transition>
-  <button @click="show = !show">
-    Toggle render
-  </button>
-<button class="rainbow-text">Test</button>
-<story :visible="true">
-Are you here?
-If so, you are in the <a @click="show('waiting')">right place</a>.
-What is the probability that you will succeed?
-</story>
-<once-group>
-<once-button>1/2</once-button>
-<once-button>1/4</once-button>
-<once-button>1/8</once-button>
-</once-group>
-<story ref="waiting">
-I have been <a @click="show('changing')">waiting</a> for you. 
-</story>
-<story ref="changing">
-The times are changing.
-The prophecies are unclear, but the times are changing.
-This planet is <a @click="show('new-world')">changing</a>.
-</story>
-<story ref="new-world">
-<div>
-You are going to bring us into this new world of <span class="animated infinite jello" style="display:inline-block">uncertainty</span>.
-</div>-->
-
-
 <keep-alive>
   <component v-bind:is="visibleScreen"></component>
 </keep-alive>
-
-
-
 </div> <!-- end #app -->
 
-
-<script type="text/x-template" id="glitch-template">
-  <div>
-    <img v-if="showStart" :src="'images/'+start" style="width:100%">
-    <img v-if="!showStart" :src="'images/'+end" style="width:100%">
-  </div>
-</script>
 
 
 <script type="text/x-template" id="intro-to-pvalues-template">
@@ -892,168 +523,6 @@ You are going to bring us into this new world of <span class="animated infinite 
 </script>
 
 
-<script type="text/x-template" id="intro-to-distributions-template">
-<div style="width:600px; margin: 0 auto;" class="intro-to-distributions">
-
-
-<div class="point-container" style="width: 300px">
-  <div v-for="point in points" 
-  @click="set(point.key)" 
-  class="point has-tooltip" 
-  :class="pointClass(point)"
-  :style="pointStyle(point)">
-    <span>{{point.name}}</span>
-  </div>
-</div>
-
-<avatar key="intro"
-  v-if="show('intro')"
-  image="cop.png"
-  text="Hm. The Bad Wizard is appearing a lot recently.">
-  <buton @click="set('2')">Next</buton>
-</avatar>
-
-<avatar key="2"
-  v-if="show('2')"
-  image="cop.png"
-  text="In the past, I've employed a variety of strategies to handle bad guys.">
-
-<pre>
-Professor Grubby was vanquished by nicely asking them to go away.
-Grimy Man was vanquished by nicely asking them to go away.
-Agent Horrible was vanquished by giving them an unsolved math problem.
-Mighty Starlet was vanquished by giving them an unsolved math problem.
-Master Rapid Arsonist was vanquished by challenging them to a duel.
-Ruthless Swan was vanquished by challenging them to a duel.
-</pre>
-
-<buton @click="set('3')">Next</buton>
-</avatar>
-
-<avatar key="3"
-  v-if="show('3')"
-  image="cop.png"
-  text="If we plot all the methods we used to vanquish bad guys in the past, we get this frequency plot.">
-
-<div class="handwriting">Ways Commando Gauss has vanquished bad guys</div>
-
-<samples-chart 
-:xdomain="['Ask to go away', 'Give an unsolved math problem', 'Challenge to a duel', 'Reason with them']"
-:samples="['Ask to go away', 'Ask to go away', 'Ask to go away', 'Challenge to a duel', 'Challenge to a duel', 'Challenge to a duel', 'Challenge to a duel', 'Give an unsolved math problem', 'Give an unsolved math problem', 'Reason with them']"
-:chartHeight="150" :chartWidth="600" />
-
-<div>
-  What was the most likely method of vanquishing? 
-</div>
-
-<table class="question-table">
-  <tr>
-    <td>How many more times more likely is a foe to have been vanquished by "challenging them to a duel" than by "reasoning with them"?</td>
-    <td><input-box :right="4">&nbsp;&nbsp;</input-box></td>
-  </tr>
-
-  <tr>
-    <td>How many times more likely is a foe to have been vanquished by "asking them to go away" than by "giving them an unsolved math problem"?</td>
-    <td><input-box :right="1.5">&nbsp;&nbsp;</input-box></td>
-  </tr>
-
-  <tr>
-    <td>What is the probability that a vanquished foe was vanquished by asking them to go away?</td>
-    <td><input-box :right="30">%</input-box></td>
-  </tr>
-
-  <tr>
-    <td>What is the probability that a vanquished foe was vanquished by challenging them to a duel?</td>
-    <td><input-box :right="40">%</input-box></td>
-  </tr>
-</table>
-
-
-
-</avatar>
-
-<avatar key="4"
-  v-if="show('4')"
-  image="cop.png">
-  <template v-slot:text>
-    An easier way to answer these questions about probabilities, is to convert the frequency chart to create a *distribution*.
-  </template>
-
-
-  <samples-chart 
-:xdomain="['Ask to go away', 'Give an unsolved math problem', 'Challenge to a duel', 'Reason with them']"
-:samples="['Ask to go away', 'Ask to go away', 'Ask to go away', 'Challenge to a duel', 'Challenge to a duel', 'Challenge to a duel', 'Challenge to a duel', 'Give an unsolved math problem', 'Give an unsolved math problem', 'Reason with them']"
-:chartHeight="150" :chartWidth="600" />
-
-  <div>
-    A distribution has:
-    - outcomes on the x-axis.
-    - probabilities on the y-axis.
-  </div>
-
-  <div>
-    To create the distribution, sum up all the counts and divide each value by the sum. 
-  </div>
-
-  <div>
-    // would be great to figure out a way to get people to do this??
-  </div>
-
-  <buton @click="set('5')">Next</buton>
-</avatar>
-
-<avatar key="5"
-  v-if="show('5')"
-  image="cop.png"
-  text="Once you have a distribution, you can answer questions like ___?">
-
-  Relative probabilities.
-</avatar>
-
-<avatar key="6"
-  v-if="show('6')"
-  image="wizard.png"
-  text="Oh boy! Is this the lesson on distributions?! Can I play??!">
-  <buton yay>Yes</buton>
-  <buton>No</buton>
-</avatar>
-
-<avatar key="7"
-  v-if="show('7')"
-  image="wizard.png"
-  text="That sure isn't a way to make friends! I don't need your permission to show you my EVIL PLAN distribution.">
-
-  CHECK THIS OUT:
-
-
-  What is the probability that ____? 
-  How many more times likely is it to ___?
-</avatar>
-
-<avatar key="8"
-  v-if="show('8')"
-  image="wizard.png"
-  text="Now checkout my WORLD CHAOS distribution. ">
-
-  What is the average amount of chaos I unleash on the world?
-
-  Pro tip: ___.
-</avatar>
-
-<avatar key="9"
-  v-if="show('9')"
-  image="wizard.png"
-  text="Aren't distributions useful??">
-
-  CONGRATS 
-
-  You learned: ___.
-</avatar>
-
-</div>
-</script>
-
-
 <script type="text/x-template" id="once-group-template">
 <div :class="{disabled: isClicked}"><slot></slot></div>
 </script>
@@ -1167,6 +636,7 @@ Ruthless Swan was vanquished by challenging them to a duel.
   <div>
     To calculate the probability that multiple independent events will occur together, you can multiply them. todo: show picture
   </div>
+  <next>Next</next>
 </avatar> 
 
 <avatar key="HHH"
@@ -1227,18 +697,18 @@ Ruthless Swan was vanquished by challenging them to a duel.
   text="Okay, but if I told you my mom's coin doomed me to peanut butter and jelly the last 100 days, what do you think I would get today?">
 
   <buton-group>
-    <buton>Peanut butter and jelly</buton>
-    <buton yay>Potato and cream cheese</buton>
-    <buton>It's 50-50</buton>
+    <buton yay>Peanut butter and jelly</buton>
+    <buton nope>Potato and cream cheese</buton>
+    <next>It's 50-50</next>
   </buton-group>
 </avatar>
 
 <avatar image="brain.png">
   <div>
-   {{got('100H') ? 'Yeah!': 'Not quite.'}} The probability of seeing 100 tails in a row on a fair coin is so tiny... 1/<exp base="2" pow="100"/>. If all the <exp base="2" pow="80"/> atoms in the universe were flipping coins, it still would only have a 1 in million chance of happening. 
+   {{got('100H') ? 'Yeah!': 'Nice try but not quite.'}} The probability of seeing 100 tails in a row on a fair coin is so tiny... 1/<exp base="2" pow="100"/>. If all the <exp base="2" pow="80"/> atoms in the universe were flipping coins, it still would only have a 1 in million chance of happening. 
  </div>
 
-   <next>How many days have you been eating PB&J?</next>
+   <next>How many days has Bobby been eating PB&J?</next>
 </avatar>
 
 <avatar image="monster.png"
@@ -1250,24 +720,30 @@ Ruthless Swan was vanquished by challenging them to a duel.
   <next>I don't know</next>
 </avatar>
 
-<avatar image="monster.png"
-  text="Well, I guess the probability of getting 10 PB&J sandwiches in a row is...">
-  <input-box/>
+<avatar image="monster.png">
+  <div>Well, I guess the probability of getting 10 PB&J sandwiches in a row is <frac num="1" den="X"/>  where X = ?. 
+  </div>
+  <input-box :right="1024" />
 </avatar>
 
 <avatar image="monster.png"
-  text="So, this should happen every how many days or so?">
-  <input-box/>
+  text="So, I should see a streak of 10 PB&J sandwiches every 1024 days or so.">
+  <next>Next</next>
 </avatar>
 
 <avatar image="monster.png"
   text="Mom has been packing lunch for me for 1540 days, so I guess this was bound to happen.">
+  <next>Next</next>
+</avatar>
+
+<avatar image="monster.png"
+  text="And here I was being paranoid that I was cursed by an evil wizard or something.">
   <next>Er...</next>
 </avatar>
 
 <avatar image="monster_cry.png"
-  text="I guess I'll wait a few more days to see if I get a potato & cream cheese sandwich.">
-  <next>Er...</next>  
+  text="I guess I'll wait a few more days to see if I get a potato & cream cheese sandwich. Thanks!">
+  <next>Next</next>  
 </avatar>
 
 
@@ -1277,13 +753,14 @@ Ruthless Swan was vanquished by challenging them to a duel.
     <li>You learned to calculate the <bold>joint probability</bold> of independent events.</li>
     <li>You learned that there are <exp base="2" pow="80"/> atoms in the universe.</li>
   </ul> 
-
-
-  <next @click="$root.nextChapter()">Accept Quest</next>
+  <next>Next</next>  
 </avatar>
 
 <avatar>
-Haha! That was great... Bobby's gonna be stuck eating peanut butter and sandwiches. 
+  <div>
+  Haha! That was great... I wonder how many more peanut butter and jelly sandwiches I can get Bobby to eat. 
+  </div>
+  <buton @click.native="$root.nextChapter()">Next chapter</buton>
 </avatar>
 
 </pset>
@@ -1332,7 +809,13 @@ Haha! That was great... Bobby's gonna be stuck eating peanut butter and sandwich
 
 <avatar >
 
-  {{ perfect('3coins') ? 'Oh. You got me. That coin was biased to land on H, 70% of the time.' : "HAAAHHAA! It's pretty hard to find the biased coin, right? And that was when the coin was biased to land on H, 70% of the time!"}} What is the weakest bias with which you can easily tell that the coin is biased?
+  <div>
+    {{ perfect('3coins') ? 'Oh. You got me. That coin was biased to land on H, 70% of the time.' : "HAAAHHAA! It's pretty hard to find the biased coin, right? And that was when the coin was biased to land on H, 70% of the time!"}} 
+  </div>
+
+  <div>
+     What is the weakest bias with which you can easily tell that the coin is biased?
+   </div>
 
   <biased-coin-machine></biased-coin-machine>
   <next>Done with this</next> 
@@ -1829,23 +1312,28 @@ Haha! That was great... Bobby's gonna be stuck eating peanut butter and sandwich
 </script>
 
 <script type="text/x-template" id="coin-template">
-  <div @click="flip" class="coin normal-div">
+  <div @click="flip" class="coin normal-div" style="position:relative">
     <img v-if="isShowingH" src="images/coin_heads.png" style="width:100px">
     <img v-if="!isShowingH" src="images/coin_tails.png" style="width:100px">
     <div ref="flip-string" style="font-size:13px;" :style="flipStringStyle">{{flipString}}</div>
-    <samples-chart v-if="flips.length > 8" :xdomain="xDomain" :samples="samples"></samples-chart>
+    <samples-chart v-if="flips.length > 8" :xdomain="xDomain" :samples="samples" :style="chartStyle"></samples-chart>
   </div>
 </script>
 
 
 <script type="text/x-template" id="biased-coin-machine-template">
 <div>
-  <div>Adjust the bias, and click coin to flip.</div>
-  <span>Lands H with {{$root.formatPct(bias)}} probability:</span>
-  <input v-model="slider" type="range" min="0" max="100" style="width:200px">
+
+  <div class="smaller-children">Adjust the bias, and click coin to flip.</div>
 
   <div>
-  <coin ref="coin" :bias="bias" style="width:300px"></coin>
+    <span class="smaller-children">Lands H with <bold>{{$root.formatPct(bias)}}</bold> chance:</span>
+    <input v-model="slider" type="range" min="0" max="100" style="width:100px; display:inline">
+  </div>
+
+
+  <div>
+  <coin ref="coin" :bias="bias" style="width:120px" :sideBySide="true"></coin>
   </div>
 </div>
 </script>
@@ -1855,7 +1343,7 @@ Haha! That was great... Bobby's gonna be stuck eating peanut butter and sandwich
 
 <pset>
 
-<avatar text="I liked Veronica but she didn't like me back.">
+<avatar text="I liked this girl but she didn't like me back.">
   <next>Next</next>
 </avatar>
 
@@ -1914,6 +1402,7 @@ Haha! That was great... Bobby's gonna be stuck eating peanut butter and sandwich
   <div>
     P(tall) = 1/2
   </div>
+  <next>Next</next>
 </avatar>
 <avatar key="fakeout1"
   image="girl.png" 
@@ -1925,11 +1414,6 @@ Haha! That was great... Bobby's gonna be stuck eating peanut butter and sandwich
     <buton nope="Although 1/4 is the number of monsters have beard, it's not clear that all bearded monsters are tall. Try again.">1/4</buton>
     <buton nope="There aren't even that many tall monsters! Try again.">3/4</buton>
     <buton yay>Not enough info</buton>
-
-    <template v-slot:hint>
-      Not quite. It is only valid to compute the joint probability by multiplication if being tall and having a beard are <bold>independent</bold> — like coin flips.
-    </template>
-
   </buton-group>
 </avatar>
 
@@ -1949,7 +1433,7 @@ Haha! That was great... Bobby's gonna be stuck eating peanut butter and sandwich
   </div>
 
   <div>
-    So knowing the monster is tall or short, cannot make it any more or less likely that they have a beard. If this is the case, then it's safe to say that having a beard and being tall are independent.
+    So if knowing that a monster is tall or short, does not make it any more or less likely that the monster has a beard... then it's safe to say that having a beard and being tall are independent.
   </div>
 
   <next>Next</next>
@@ -2694,149 +2178,6 @@ Click where you think the balance point is...
 </div>
 </script>
 
-<script type="text/x-template" id="risk-reward-template">
-<div>
-
-<!-- jump to a diferent problem -->
-<div class="point-container" style="width:220px">
-  <div v-for="point in points" 
-  @click="set(point.key)" 
-  class="point has-tooltip" 
-  :class="pointClass(point)"
-  :style="pointStyle(point)">
-    <span>{{point.name}}</span>
-  </div>
-</div>
-
-
-<!--<transition name="fade" mode="out-in">-->
-
-<avatar key="intro"
-  v-if="show('intro')"
-  image="bear.png" 
-  text="Do you dare play with a bear???">
-  <buton @click="set('ev')">Yes</buton>
-</avatar>
-
-<avatar key="ev"
-  v-if="show('ev')"
-  image="bear.png" 
-  text="What would you rather? (a) I pay you 1 coin or... (b) I pay you 4 coins with 20% certainty, and 80% of the time you get nothing.">
-  <buton @click="set('ev-right')" yay>(a) 1 coin with certainty</buton>
-  <buton @click="set('ev-wrong')" nope>(b) 4 coins with 20% certainty</buton>
-</avatar>
-
-<avatar key="ev-right"
-  v-if="show('ev-right')"
-  image="bear.png" 
-  text="Well, that's correct.">
-
-  <div>
-   On average, the 4 coins with 20% probability is only worth 0.8 coins on average, so the 1 coin with certainty is worth more.
-  </div>
-
-  <buton @click="set('100')">Next</buton>
-</avatar>
-
-<avatar key="ev-wrong"
-  v-if="show('ev-wrong')"
-  image="bear_money.png" 
-  text="Heh heh ."
-  animation="spin-and-pulse">
-
-  <template v-slot:overlay>
-    <div>
-      Player! Your answer was incorrect.
-    </div>
-
-    <div>
-      On average, the 4 coins with 20% certainty is only worth 0.8 coins.
-    </div>
-
-    <div>
-      AND it's riskier because the payout isn't guaranteed.
-    </div>
-
-    <div>
-      By the risk-reward tradeoff, you ought to be compensated for extra risk with higher average reward.
-    </div>
-
-    <div style="font-size: 10px">
-      The bear offered a bum deal because 4 coins with 20% probability was higher risk and lower average reward.
-    </div>
-
-    <buton @click="set('100')">Next</buton>
-  </template>
-</avatar>
-
-<avatar key="100"
-  v-if="show('100')"
-  image="bear.png" 
-  text="What if I offered you the chance to pick one choice and play 100 times? Which would you pick?">
-  <buton @click="set('100-right');" yay>(a) 1 coin with certainty</buton>
-  <buton @click="set('100-wrong')" nope>(b) 4 coins with 20% certainty</buton>
-</avatar>
-
-
-<avatar key="100-right"
-  v-if="show('100-right')"
-  image="bear.png" 
-  text="Yeah, that's correct.">
-
-  <div>
-   Playing 100 times doesn't change the fact that 4 coins with 20% probability has the lower expected value.
-  </div>
-
-  <buton @click="set('100-chart')">Next</buton>
-</avatar>
-
-<avatar key="100-wrong"
-  v-if="show('100-wrong')"
-  image="bear_money.png" 
-  text="Heh. Wrong."
-  animation="spin-and-pulse">
-
-  <div>
-   Playing 100 times doesn't change the fact that 4 coins with 20% probability has the lower expected value.
-  </div>
-
-  <buton @click="set('100-chart')">Next</buton>
-</avatar>
-
-<centered key="100-chart"
-  v-if="show('100-chart')">
-  <div>
-  Running a simulation where a computer really executes the 4 coins with 20% probability deal 100 times, yields... (chart)
-  </div>
-  
-  <div>
-    We see the average result is near 80, although random variation resulted in totals near 60 and 100. But in __% of casses, taking the guaranteed 100 coins would have been a better choice.
-  </div>
-
-  <div>
-    This is a sneak peak of the Binomial Distribution which you will see later in this adventure. Statisticians have invented distributions to model many common scenarios. 
-  </div>
-
-  <buton @click="set('congrats')">Stats is cool</buton>
-</centered>
-
-<centered key="congrats"
-  v-if="show('congrats')">
-  
-  <ul>
-    <li>You learned about expected value (the average)</li>
-    <li>You got a sneak peak of the usefulness statistical distributions</li>
-  </ul> 
-
-  <buton @click="finish()">Next section</buton>
-</centered>
-
-<!--</transition> -->
-</div>
-</script>
-
-
-<!-- begin templates -->
 <script type="text/x-template" id="bold-template">
 <span class="bold"><slot></slot></span> 
 </script>
@@ -3014,17 +2355,6 @@ Click where you think the balance point is...
 </script>
 
 
-
-<script type="text/x-template" id="live-text-template">
-  <div>
-    <transition-group name="fade" tag="span">
-      <span v-for="(token, i) in visibleTokens" :key="i" v-html="token">
-      </span>
-    </transition-group>
-  </div>
-</script>
-
-
 <script type="text/x-template" id="monk-head-template">
 <div class="handwriting normal-div"
       style="display:inline-block; position:relative; white-space: nowrap;">
@@ -3047,14 +2377,6 @@ Click where you think the balance point is...
   </div>
 
 </div>
-</script>
-
-<script type="text/x-template" id="note-template">
-<span class="note" @click="showExpansion=!showExpansion">
-<span class="word"><slot></slot>
-</span> 
-<span v-if="showExpansion" class="text">({{text}}<slot name="text">)</slot></span>
-</span>
 </script>
 
 
@@ -3096,7 +2418,7 @@ Click where you think the balance point is...
   <div v-if="showNopeText" class="hint" style="margin-left:12px">
     {{nopeText}}
   </div>
-  <div v-if="showRainbow" class="rainbow-text" style="font-size:15px; margin:8px">
+  <div v-if="showYay" class="rainbow-text" style="font-size:15px; margin:8px">
     Yay
   </div>
 
@@ -3112,11 +2434,11 @@ Click where you think the balance point is...
 
 <script type="text/x-template" id="input-box-template">
 <div style="display:inline-block; position:relative;">
-  <input v-model="val" placeholder="?" style="width:50px; display:inline" v-on:keyup.enter="answerSubmit">
+  <input v-model="val" placeholder="?" style="width:70px; display:inline; position:relative; top:16px" v-on:keyup.enter="answerSubmit">
   <slot></slot>
   <buton style="display:inline" @click="answerSubmit">Go</buton>
 
-  <transition name="fade">
+  <div>
     <span v-if="showCannedHint" class="hint">
       {{cannedHint}}
     </span>
@@ -3128,12 +2450,9 @@ Click where you think the balance point is...
     <div v-if="showHintSlot" class="hint">
       <slot name="hint"></slot>
     </div>
-
-  </transition>
+  </div>
 </div>
 </script>
-
-
 <!-- end templates -->
 
 
@@ -3145,24 +2464,6 @@ const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
 // https://alligator.io/vuejs/global-event-bus/
 const bus = new Vue();
 
-
-const store = new Vuex.Store({
-  state: {
-    flipStringHeight: 20,
-  },
-  // sync // store.commit('name', payload)
-  mutations: {
-    flipStringHeight(state, height){
-      state.flipStringHeight = height;
-    },
-  },
-  // async  // state.dispatch('name', payload);
-  actions: {
-  }, 
-  // Put shared logic 
-  getters: {
-  }
-});
 
 
 var sounds = {
@@ -3213,16 +2514,6 @@ const jokes = [
   punchline:"Because they make up everything"
 },
 
-
-// {
-//   outcomes: [
-//     {present: 'fails': past: 'failed', certainty: 0.7, payoff: -1}, 
-//     {present: 'lands': past: 'landed', certainty: 0.3, payoff: 4}
-//   ],
-//   lead:"Where are average things manufactured?",
-//   punchline:"The satisfactory"
-// },
-
 {
   outcomes: [
     {present: 'fails', past: 'failed', certainty: 0.8, payoff: -1}, 
@@ -3270,27 +2561,13 @@ const clubs = [
   },
 ];
 
-// pull the dialog into a new component?? 
-const copIntro = {
-  'trainee': {
-    dialog: "Hey! You're the new trainee, right?",
-    buttons: ['Er...', 'Yes'],
-  },
-'honor': {
-    dialog: "I still remember my first day with the Statistics Police... What an honor to be chosen to help people with their statistics problems.",
-    buttons: ['Next'],
-  },
-'understaffed': {
-    dialog: "Anyways, I'm glad you're here. We are massively understaffed. And there are reports of some mysterious --",
-    buttons: ['Chase'],  
-  }
-};
 
 
 Vue.component('coin', {
   props: {
     bias: {type: Number, default: 0.5},
     pattern: {type: String},
+    sideBySide: {type: Boolean, default: false},
   },
   data: function(){
     return {
@@ -3302,8 +2579,7 @@ Vue.component('coin', {
       return this.samples.join('');
     },
     flipStringStyle: function(){
-      console.log('reading new flipStringHeight in computed: ' + store.state.flipStringHeight);
-      return { 'min-height': store.state.flipStringHeight + 'px'};
+      return { 'min-height': '30px'};
     },
     isShowingH: function(){
       if (this.flips.length == 0){
@@ -3322,15 +2598,14 @@ Vue.component('coin', {
     samples(){
       return this.flips.map(this.render);
     },
-  },
-  watch: {
-    flipString(){
-      const height = this.$refs['flip-string'].clientHeight;
-//      console.log('height: ' + height);
-      if (height > store.state.flipStringHeight){
-        console.log('updating height to: ' + height);
-//        store.commit('flipStringHeight', height);
-      }
+    chartStyle(){
+      if (this.sideBySide){
+      return {
+        position: 'absolute',
+        left: '150px',
+        bottom: '0px'       
+      };
+    }
     }
   },
   methods: {
@@ -3379,12 +2654,30 @@ Vue.component('coin', {
 });
 
 
+// Returns a boolean measuring if two numbers are approximately equal.
+function approx(a, b, epsilon){
+  var epsilon = _.isUndefined(epsilon) ? .001 : epsilon;
+  return Math.abs(a - b) < epsilon;
+}
+
+function cumulativeSum(arr){
+  if (arr.length < 1){
+    return [];
+  }
+
+  var total = [arr[0]];
+  for (var i=1; i<arr.length; i++){
+    var last = total[total.length - 1];
+    total.push(last + arr[i]);
+  }
+  return total;
+}
+
 
 // outcomes = [
-//  {certainty: 0.4, hp: 15, caption: 'warmth'}, 
-//  {certainty: 0.6, hp: 0, caption: 'you fail to start the fire'}
+//  {certainty: 0.4, ...}, 
+//  {certainty: 0.6, ...}
 // ]
-// outcomes is a list of {certainty: __}
 function drawFromOutcomes(outcomes){
   var ind = drawIndFromOutcomes(outcomes);
   return outcomes[ind];
@@ -3392,7 +2685,7 @@ function drawFromOutcomes(outcomes){
 
 function drawIndFromOutcomes(outcomes){
   var certainties = _.map(outcomes, 'certainty');
-  if (!approx(sum(certainties), 1.0)){
+  if (!approx(_.sum(certainties), 1.0)){
     debugger;
     console.error('certainties for outcomes did not sum to 1: ' + outcomes);
   }
@@ -3412,7 +2705,7 @@ Vue.component('ev-joke', {
   },
   computed: {
     ev(){
-      return sum(this.joke.outcomes.map(outcome => outcome.certainty * outcome.payoff));
+      return _.sum(this.joke.outcomes.map(outcome => outcome.certainty * outcome.payoff));
     },
     evCalculation(){
       return this.joke.outcomes.map(outcome => outcome.certainty + ' × ' + outcome.payoff).join(' + ') + ' = ' + this.ev;
@@ -3460,39 +2753,6 @@ Vue.component('biased-coin-machine', {
 });
 
 
-// You're the trainee right?
-// This causes the buttons to show up
-// User clicking the buton advances the state -- 
-Vue.component('glitch', {
-  props: {
-    start: {type: String},
-    end: {type: String},
-  },
-  data: function(){
-    return {
-      showStart: true,
-    }
-  },
-  methods: {
-    glitch: async function(){
-      await wait(1000);
-      this.showStart = false;
-      this.$root.play('glitch');
-      await wait(200);
-      this.showStart = true;
-      await wait(200);
-      this.showStart = false;
-      this.$root.play('glitch');
-      await wait(200);
-      this.showStart = true;
-      await wait(200);
-      this.showStart = false;
-      this.$root.play('glitch');
-    }
-  },
-  template: '#glitch-template'
-});
-
 Vue.component('input-box', {
   props: {
     right: {type: Number, default: 0},
@@ -3500,14 +2760,6 @@ Vue.component('input-box', {
       type: Array, 
       default: function(){ return ['Try again', 'Nope']; },
     },
-    // replaced with yay@
-    // onRight: {
-    //   type: Function,
-    //   default: function(){},
-    // },
-
-    // Default to no feedback bc avatar takes care of it, but sometimes we want to use this as a standalone component.
-    feedback: {type: Boolean, default: true},
   },
   computed: {
     cannedHint(){
@@ -3546,16 +2798,9 @@ Vue.component('input-box', {
     answerSubmit: async function(){
       this.checkedAnswer = true;
       this.answers.push(this.val);
-      // if (this.feedback){
-      //   this.showFeedback = true;
-      //   await wait(500);
-      // }
 
-      //bus.$emit('answer-submitted', this);
-      // look at the value in the input.
       if (this.isYay){
-//        await wait(1000);
-        this.$emit('yay'); //onRight();
+        this.$emit('yay');
 
         const pset = firstAncestorOfComponent(this, 'pset');
         if (pset){
@@ -3583,7 +2828,7 @@ function isDescendant(ancestor, maybeChild){
 
   // If maybeChild is a vue component
   var node = maybeChild.$parent;
-  while(node !== undefined){
+  while(node){
     if (node === ancestor){
       return true;
     }
@@ -3592,7 +2837,7 @@ function isDescendant(ancestor, maybeChild){
 
   // If maybeChild is an HTML element
   var node = maybeChild.parentElement;
-  while(node !== null){
+  while(node){
     if (node === ancestor){
       return true;
     }
@@ -3608,27 +2853,9 @@ function hasSlot(name){
 
 Vue.component('avatar', {
   props: {
-    image: {type: String, default:'wizard.png'}, // 'girl.png'
+    image: {type: String, default:'wizard.png'},
     text: {type: String, default: ''},
-    textAlign: {type: String, default: 'right'},
-    animation: {type: String, default: 'wobble'},
     sound: {type: String},
-  },
-  data: function(){
-    return {
-      showQuestion: false,
-      showMiniDialog: false,
-      showLiveText: false,
-      showHint: false,
-      showRainbow: false,
-      showFall: false,
-      reactionImage: null,
-      nopeText: null,
-      showPS: false,
-      psButton: null,
-
-      maxLen: 180,
-    };
   },
   mounted: async function(){
     // Add a blink
@@ -3637,104 +2864,23 @@ Vue.component('avatar', {
       this.$root.play(this.sound);
       await wait(sounds[this.sound].duration || 500);
     }
-    await wait(500);
-    this_.showLiveText = true;
-    bus.$on('avatar-react', function(params){
-      this_[params.key] = params.value;
-    });
-    bus.$on('answer-submitted', function(input){
-      this_.reactToInput(input);
-    });
-    bus.$on('chapter-changed', function(){
-      this_.showRainbow = false;
-    });
-    // setInterval(async function(){
-    //   // change it to the blink
-    //   console.log('blinking');
-    //   this_.reactionImage = 'monster_blink.png';
-    //   await wait(100);
-    //   this_.reactionImage = null;
-    // }, 3000);
   },
   computed: {
     cropCircleStyle: function(){
       return {'background-image': 'url("images/' + this.image + '")'};
     },
-    imgClasses: function(){
-      var classes = {fallover: this.showFall};
-      classes[this.animation] = true;
-      return classes;
-    },
-    imgSrc: function(){
-      return 'images/'+ (this.reactionImage || this.image);
-    },
-    imgStyle(){
-      const height = 330;
-      if (this.useSmallFont){
-        return {'height' : _.clamp(lerp(this.textLength, 180, 300, .6, 1), .5, 1) * height + 'px'};
-      }
-      return {'height' : _.clamp(lerp(this.textLength, 60, 180, .5, 1), .5, 1) * height + 'px'};
-    },
-    textLength(){
-      var lengths = [this.text.length];
-      if (this.hasSlot('dialog') && this.$slots['dialog'][0].text){
-        lengths.push(this.$slots['dialog'][0].text.length);
-      }
-      if (this.hasSlot('dialog') && this.$slots['dialog'][0].children && this.$slots['dialog'][0].children[0].text){
-        lengths.push(this.$slots['dialog'][0].children[0].text.length); 
-      }
-      return _.max(lengths);
-    },
-    useSmallFont(){
-      return this.textLength > this.maxLen;
-    }, 
-    dialogClass: function(){
-      return {'small-dialog-text': this.useSmallFont};
-    }
-  },
-  methods: {
-    hasSlot: hasSlot,
-    // For some reason, this need to be a separate fn, rather than inside the bus.
-    // when the player clicks on a nope button, if the button has nope text, that is rendered.
-    // otherwise, if the avatar has a hint slot that is shown.     
-    reactToInput: function(input){
-      // when the player clicks on a nope button, if the button has nope text, that is rendered.
-      // otherwise, if the avatar has a hint slot that is shown. 
-      if (input.nopeText){  
-        this.nopeText = input.nopeText;
-      } else if(input.isNope && this.hasSlot('hint')){
-        this.showHint = true;
-      }
-    },
-    clickpsButton(){
-      this.psButton.butonClicked();
-    }
   },
   template: '#avatar-template'
 });
+
 // Just like a button, but with some special abilities.
-// When clicked it looks at it's parent to see if it's a buton-group.
-// Executes the onClick event if so.
-// e.g.
-// <buton-group onClick="doSomethingSecond">
-//   <buton @click="doSomethingFirst">Click me</buton>
-// </buton-group>
-// However, if the buton is a nope buton the buton-group does not get triggered.
-// <buton nope="stop and think">Tricked ya</buton>
-// <buton nope>Tricked ya</buton>
-// Buttons may also have a yay attribute.
-// Which causes the button to turn rainbow-text after it gets clicked.
 Vue.component('buton', {
   props: {
     nope: {type: String}, // Text for why the answer is wrong. Blocks progression.
-    // moved to attr
-    //yay: {type: Boolean, default:false}, // Causes cool animation to happen when clicked.
   },
   data: function(){
     return {
-//      showX: false,
       clickedButton: false,
-//      showRainbow: false,
     }
   },
   computed: {
@@ -3759,7 +2905,7 @@ Vue.component('buton', {
     showNopeText(){
       return (DEBUG || this.clickedButton) && this.isNope;
     },
-    showRainbow(){
+    showYay(){
       return (DEBUG || this.clickedButton) && this.isYay;
     },
     showX(){
@@ -3771,7 +2917,7 @@ Vue.component('buton', {
   },
   methods: {
     butonClicked: async function(){
-      this.$root.play('buton');
+//      this.$root.play('buton');
       this.clickedButton = true;
       const avatar = firstAncestorOfComponent(this, 'avatar');
 
@@ -3804,17 +2950,6 @@ Vue.component('buton', {
   template: '#buton-template'
 });
 
-Vue.component('note', {
-  props: {
-    text: {type: String },
-  },
-  data(){
-    return {
-      showExpansion: false,
-    }
-  },
-  template: '#note-template'
-});
 
 Vue.component('exp', {
   props: {
@@ -3887,7 +3022,7 @@ Vue.component('distribution', {
       return {'margin-left': this.margin.left + 'px', 'margin-right': this.margin.right + 'px'};
     },
     mean: function(){
-      return sum(this.outcomes.map(outcome => outcome.x * outcome.y));
+      return _.sum(this.outcomes.map(outcome => outcome.x * outcome.y));
     },
   },
   data: function(){
@@ -4014,23 +3149,17 @@ Vue.component('visual-ev-click', {
     },
 
     getRelativeMouseX: function(event){
-      // https://stackoverflow.com/questions/5921413/difference-between-e-target-and-e-currenttarget
-      // e.target is what triggers the event dispatcher to trigger and e.currentTarget is what you assigned your listener to.
-
-      // Find the 'dist' element to compute relative mouse coords.
+      // Find the parent element to compute relative mouse coords.
       var refElement = event.target;
       while (refElement.className !== 'overlay'){
         refElement = refElement.parentElement;
       }
-
-      // console.log(event.target.className + ' ' + event.clientX + '      ' + refElement.className + JSON.stringify(refElement.getBoundingClientRect()));        
       return event.clientX - refElement.getBoundingClientRect().x;
     },
 
   },
   template: '#visual-ev-click-template',
 });
-
 
 
 Vue.component('triple-bayes', {
@@ -4078,12 +3207,10 @@ Vue.component('triple-bayes', {
     allCorrect(){
       const keys = ['prior', 'likelihood', 'posterior'];
       const parts = keys.map(key => !this.conf[key] || !this.conf[key].correct || this.isEqual(this.conf[key].correct, this.conf[key].dist));
-//      console.log(parts);
       return _.every(parts);
     }
   },
   created(){
-//    console.log('mounted');
     this.conf = _.cloneDeep(this.config);
   },
   methods: {
@@ -4187,7 +3314,7 @@ Vue.component('samples-chart', {
     dist: {type: Object}, // {H: 3, T: 1}
         
     chartHeight: {type: Number, default: 100},
-    chartWidth: {type: Number, default: 120},
+    chartWidth: {type: Number, default: 100},
     margin: {
       type: Object, 
       default: function(){
@@ -4214,7 +3341,6 @@ Vue.component('samples-chart', {
           .domain(this.xdomain).paddingInner(.1).range([0, this.chartWidth]);
     },
     sumCounts(){
-      //return _.sum(_.values(this.counts));
       return this.maxCounts;
     },
     yScale(){
@@ -4244,10 +3370,7 @@ Vue.component('samples-chart', {
     // Hack: for some reason axis needs to get added after a delay, or it doesn't show up.
     await wait(500);
     var xAxis = d3.axisBottom(this.xScale); //.ticks(8);
-//    var yAxis = d3.axisLeft(this.yScale);
-
     const chart = d3.select(this.$el).select('.container');
-//    chart.append('g').call(yAxis);
     chart.append('g').attr('transform', 'translate(0,' + this.chartHeight + ')').call(xAxis);
   },
   watch: {
@@ -4305,10 +3428,7 @@ Vue.component('samples-chart', {
       }
     },
     getRelativeMouseY: function(event){
-      // https://stackoverflow.com/questions/5921413/difference-between-e-target-and-e-currenttarget
-      // e.target is what triggers the event dispatcher to trigger and e.currentTarget is what you assigned your listener to.
-
-      // Find the 'dist' element to compute relative mouse coords.
+      // Find the parent element to compute relative mouse coords.
       var refElement = event.target;
       while (refElement.className !== 'samples-chart'){
         refElement = refElement.parentElement;
@@ -4338,7 +3458,7 @@ Vue.component('once-group', {
   template: '#once-group-template',
 });
 
-
+// Allows hints to be shown. Buttons within the group can be clicked multiple times.
 Vue.component('buton-group', {
   props: {
     onClick: {type: Function, 
@@ -4368,10 +3488,10 @@ Vue.component('buton-group', {
   template: '#buton-group-template'
 });
 
+
 Vue.component('bold', {
   template: '#bold-template'
 });
-
 
 function makeComponent(componentName, points, reactions){
   var reactions = reactions || {};
@@ -4379,14 +3499,10 @@ function makeComponent(componentName, points, reactions){
     data: function(){
       return {
 
-        actives: ['intro'],
-        lastActive: 'intro',
-        points: points, // jump points in the story
         problemToCorrectness: {}, // 'fakeout1': [false, true]
         memory: null, // A variable for dumping short term component state.
 
         chapters: chapters,
-
 
         // State for 'ev-story'
         positivityPoints: 0,
@@ -4398,56 +3514,26 @@ function makeComponent(componentName, points, reactions){
 
       };
     },
-    computed: {
-      activeOrLastKnownPoint: function(){
-        if (this.isKnownPoint(this.active)){
-          return this.active;
-        }  
-        return this.lastActive;
-      },
-      active: function(){
-        if (this.actives.length > 0){
-          return this.actives[this.actives.length-1];
-        }
-        return 'intro';
-      }
-    },
-
     mounted: async function(){
       var this_ = this;
-      bus.$on('answer-submitted', async function(input){
+      bus.$on('answer-submitted', async function(input){        
         // Respond only if the input is within the current component.
         if (!isDescendant(this_, input)){
           return;
         }
-        // Have avatar react based on buton attributes.
+
         var avatar = firstAncestorOfComponent(input, 'avatar');
         if (!avatar){
-          // The buton was not used within an avatar, but something else.
           return;
         }
+
         var problemKey = avatar.$vnode.data.key;
-        // If there's a yay.
         if (input.isYay){
-          avatar.reactionImage = reactions.yay;
           this_.addCorrectness(problemKey, true);          
-          // If the user got it on their first try, show a rainbow.
-          if (this_.perfect(problemKey)){
-            this_.react('showRainbow', true);
-          }
-        } else {
-          // this_.addCorrectness(problemKey, false);          
-        }
-        
-        // just a naked <buton nope>
+        } 
         if (input.isNope){
-          avatar.reactionImage = reactions.nope;
           this_.addCorrectness(problemKey, false);          
         } 
-        if ('coy' in input.$attrs){
-          avatar.reactionImage = reactions.coy;
-          this_.$root.play('coy');
-        }
       });
     },
     methods: {
@@ -4455,22 +3541,11 @@ function makeComponent(componentName, points, reactions){
         if(!(key in this.problemToCorrectness)){
           this.problemToCorrectness[key] = [];
         }
+        console.log('logging ' + key + ': ' + isCorrect);
         this.problemToCorrectness[key].push(isCorrect);
       },
-      isKnownPoint: function(point){
-        return points && points.map(d => d.key).indexOf(point) > -1;
-      },
-      react: function(k, v){
-        bus.$emit('avatar-react', {key: k, value: v});
-      },
-      print: function(thing){
-        console.log(thing);
-      },
-      show: function(key){
-        return true;
-//        return this.actives.indexOf(key) > -1;
-      }, 
       got: function(key){
+        console.log('calling "got" for ' + key);
         // Return the latest value
         if (this.problemToCorrectness[key]){
           var answers = this.problemToCorrectness[key];
@@ -4480,42 +3555,12 @@ function makeComponent(componentName, points, reactions){
           return false;
         }
       },
-      set: async function(key, optionalDelay){
-        // Only update the lastActive point if the point is a known point.
-        if (this.isKnownPoint(this.active)){
-          this.lastActive = this.active;          
-        }
-        console.log('setting: ' + key);
-        if (optionalDelay !== undefined){
-          await wait(optionalDelay);        
-        }
-        this.actives.push(key);
-      },
       perfect: function(key){
         // All answers to this problem were correct.
         if(this.problemToCorrectness[key] && _.every(this.problemToCorrectness[key])){
           return true;
         }
         return false;
-      },
-      pointStyle: function(point){
-        var style = {};
-        if (this.perfect(point.key)){
-          style['background-image'] = "url('images/rainbow.png')";
-          style['background-size'] = 'cover';
-        }
-        return style; 
-      },
-      pointClass: function(point){
-        return {
-          'active-point': point.key == this.activeOrLastKnownPoint,
-          'circle': point.problem
-        };
-      },
-      finish: async function(){
-        this.$root.play('achievement');
-        await wait(1500);
-        this.$root.nextChapter();
       },
       nextJoke(params){
         this.positivityPoints += params.payoff;
@@ -4552,124 +3597,6 @@ Vue.component('next', {
   template: '#next-template'
 });
 
-// Can be used to delay logic
-// <delay></delay>
-Vue.component('delay', {
-  props: {
-    ms: {type: Number, default: 500},
-    visible: {type: Boolean, default: false},
-  },
-  data: function(){
-    return {
-      shouldTrigger: false,
-    }
-  },
-  computed: {
-    compStyle: function(){
-      if (this.visible){
-        return {};
-      } else {
-        return {'display': 'none'};
-      }
-    }
-  },
-  mounted: function(){
-    var this_ = this;
-    setTimeout(function(){
-      this_.shouldTrigger = true;
-    }, this.ms);
-  },
-  template: `<span v-if="shouldTrigger" style="compStyle"><slot></slot></span>`,
-});
-
-
-/*
-How should this work:
-- split the text into words
-- inject the words in via setinterval
-- add a transition component that makes it fade in when it is injected
-*/
-Vue.component('live-text', {
-  props: {
-    interval: {type: Number, default: 1000},
-  },
-  render: function (createElement) {
-    var data = [];
-    for (var i=0; i<this.$slots.default.length; i++){
-      var vnode = this.$slots.default[i];
-      if (vnode.tag){
-        data.push([vnode.tag, vnode.data, vnode.children]);
-      } else if (vnode.text){
-        var tokens = vnode.text.split(' ').filter(token => token);
-        data = _.concat(data, tokens.map(token => ['span', {}, token + ' ']));
-      }
-    }
-    var vnodes = data.map(function(tuple, i){
-      const tag = tuple[0];
-      const nodeData = tuple[1];
-      const children = tuple[2];
-      const meta = {
-        ref: i, 
-        class: { 'hidden-at-first': true }
-      };
-      return createElement(tag, _.merge(meta, nodeData), children);
-    });
-    return createElement(
-      'div',   // tag name
-      vnodes, 
-    )
-  },
-  data: function(){
-    return {
-      visibleTokens: [],
-      length: 0,
-    };
-  },
-  mounted: function(){
-    console.log('mounting live text');
-    this.animate();
-  },
-  methods: {
-    animate: async function(){
-      var elts = _.values(this.$refs);
-
-      this.length = _.sum(elts.map(elt => elt.textContent.length));
-
-      function pauseDuration(text){
-        const short = 100;
-        const med = 500;
-        const long = 1000;
-        if (!text){
-          return short;
-        }
-        if (text.includes('.') || text.includes('?') || text.includes('!')){
-          return long;
-        }
-        if (text.includes(')')){
-          return med;
-        }
-        return short;
-      }
-      this.$root.play('speech');
-      for (var i=0; i<elts.length; i++){
-        var elt = elts[i];
-        elt.style.opacity = 1;
-        // Pause.
-        var duration = pauseDuration(elt.textContent);
-        if (duration == 1000){
-          this.$root.pause('speech');
-        }
-        await wait(duration);
-        if (duration == 1000){
-          this.$root.play('speech');
-        }
-      }
-      this.$root.pause('speech');
-      this.$emit('live-text-complete');
-    },
-  },
-  template: '#live-text-template'
-});
 
 // Child slot should call next() on the parent to advance.
 Vue.component('pset', {
@@ -4686,9 +3613,11 @@ Vue.component('pset', {
 
   mounted: function(){
     // Hides elements initially.
-    // for (var i=1; i<this.elms.length; i++){
-    //   this.elms[i].style.display = 'none';
-    // }
+    if (!DEBUG){
+      for (var i=1; i<this.elms.length; i++){
+        this.elms[i].style.display = 'none';
+      }      
+    }
 
     this.$root.report(0);
   },
@@ -4753,6 +3682,18 @@ const chapters = [
 },
 ];
 
+
+function formatPct(certainty){
+  return roundTo(certainty*100, 0) + '%';
+}
+
+// round_to(2.777777, 0) -> 3
+// round_to(2.777777, 2) -> 2.78
+function roundTo(x, num_decimals){
+  return parseFloat(x.toFixed(num_decimals));
+}
+
+
 // Gotchas:
 // DOM does not update for new property additions.
 // DOM does not update for direct assignments within arrays.
@@ -4761,11 +3702,10 @@ new Vue({
   el: '#app',
   data: {
     chapters: chapters,
-    chapterInd: 6,
+    chapterInd: 3,
     // Obj property additions do not update DOM, so prepopulate all the keys in the object. Or use lists.
     //soundNameToCount: {},
-    show: false,
-    isPlaying: false,
+//    show: false,
     showTOC: false,
 
     isScrolling: false,
@@ -4790,59 +3730,24 @@ new Vue({
       this_.elapsedSeconds = this_.roundTo(seconds % 60, 0);
     }, 1000);
   },
-  watch:{
-    chapterInd(){
-      // Remove the rainbow
-      bus.$emit('chapter-changed');
-    }
-  },
   methods: {
-//    show: show, 
     formatPct: formatPct,
-    // round_to(2.777777, 0) -> 3
-    // round_to(2.777777, 2) -> 2.78
     roundTo: roundTo,
     nextChapter: async function(){
-      // this.play('achievement');
-      // await wait(1500);
       this.chapterInd = Math.min(this.chapters.length-1, this.chapterInd+1);
     },
-    // // Given 0.8 --> returns {}
-    // paramsFromCertainty: function(certainty){
-    //   if (certainty == 1.0){
-    //     return {
-    //       numLoseIfWrong: 10000000, 
-    //       numWinIfRight: 1,
-    //       certainty: certainty,
-    //       percent: '100%',
-    //     };
-    //   }
-    //   return {
-    //     numWinIfRight: 1, 
-    //     numLoseIfWrong: this.roundTo(certainty/(1-certainty), 1),
-    //     certainty: certainty,
-    //     percent: this.formatPct(certainty)
-    //   };      
-    // },
-    // paramsFromBet: function(num_win_if_right, num_lose_if_wrong){
-    //   var certainty = num_lose_if_wrong/(num_win_if_right+num_lose_if_wrong);
-    //   return this.paramsFromCertainty(certainty);
-    // },
     play: function(soundName){
-//      console.log('playing ' + soundName);
       var sound = sounds[soundName].clip;
       sound.play().catch(function(error){
         console.log(error.toString());
       });    
     },
     pause: function(soundName){
- //     console.log('pausing');
       var sound = sounds[soundName].clip;
       sound.pause();
       sound.currentTime = 0;      
     },
     async scrollWindow(){
-//      console.log('scrollWindow');
       if (this.isScrolling){
         return;
       }
@@ -4853,7 +3758,6 @@ new Vue({
       // Or if we have somehow traveled up (i.e. user has moved the mouse)
       while (true){
         const startY = window.scrollY;
-//        console.log('lastStartY: ' + this.lastStartY + ' startY: ' + startY);
         if (this.lastStartY >= startY){
 
           // Hack: Wait and try one more time to scroll before exiting. 
@@ -4861,21 +3765,18 @@ new Vue({
           await wait(100);
           window.scrollBy(0, 10);
           if (this.lastStartY >= window.scrollY){
-//            console.log('break');
             break;
           }
         }
         this.lastStartY = startY;
         window.scrollBy(0, 10);
-//        console.log('scrolling');
         await wait(30);
       }
       this.isScrolling = false;
     }, 
     report(ind){
       const chapterName = this.currentChapter.component;
-      console.log('reporting ' + chapterName + ' ' + ind);
-      gtag('event', 'evilwizard_v1', {
+      gtag('event', 'statsstory_v1', {
         'event_category': 'read',
         'event_label': chapterName,
         'value': ind
