@@ -593,6 +593,13 @@ You are going to bring us into this new world of <span class="animated infinite 
 <script type="text/x-template" id="intro-to-pvalues-template">
 <pset>
 
+<avatar image="scroll.png">
+  <div>
+    This is a flashback to the recent past in which Elena was still with us...
+  </div>
+  <next>Next</next>
+</avatar>
+
 <avatar 
   text="Elena, my crow friend is really smart.">
   <next>Next</next>
@@ -668,7 +675,10 @@ You are going to bring us into this new world of <span class="animated infinite 
 </avatar>
 
 <avatar image="scientist.png">
-  Correct. A P-value assumes the null hypothesis (aka that Elena is just an average crow) and says how extreme the results are under this assumption.
+  <div>
+    Correct. A P-value assumes the null hypothesis (aka that Elena is just an average crow) and says how extreme the results are under this assumption.
+  </div>
+  <next>Next</next>
 </avatar>
 
 <avatar  image="scientist.png"
@@ -700,7 +710,10 @@ You are going to bring us into this new world of <span class="animated infinite 
 </avatar>
 
 <avatar image="scientist.png">
-  Yes! We're hoping that Elena is smarter than an average crow, so a lower p-value is better. 
+  <div>
+    Yes! We're hoping that Elena is smarter than an average crow, so a lower p-value is better. 
+  </div>
+  <next>Next</next>
 </avatar>
 
 <avatar image="scientist.png"
@@ -729,6 +742,7 @@ You are going to bring us into this new world of <span class="animated infinite 
    <div>
     The surprising thing about p-values is that they don't say anything about <bold>effect size</bold>. A p-value just tells you how likely something is under the null hypothesis. 
   </div>
+  <next>Next</next>
 </avatar>
 
 
@@ -756,10 +770,15 @@ You are going to bring us into this new world of <span class="animated infinite 
 <div>P-value against placebo: 0.1</div>
 </div>
 
-
+<once-group>
+  <next>Bird A</next>
+  <next>Bird B</next>
+</once-group>
 </avatar>
 
-<avatar image="brain.png" text="It's hard to say right? It's possible to have a greater average effect size but a less compelling p-value."></avatar>
+<avatar image="brain.png" text="It's hard to say, right? It's possible to have a greater average effect size but a less compelling p-value.">
+<next>Next</next>
+</avatar>
 
 <avatar text="I don't care about these other birds. What is Elena's p-value?">
   <next>Next</next>
@@ -864,7 +883,7 @@ You are going to bring us into this new world of <span class="animated infinite 
   If you liked this section, you may like the book, <a href="https://smile.amazon.com/p-value-Stories-Actually-Understand-Statistics/dp/0321629302">What is a P-Value Anyways?</a>
   </div>
 
-  <next>Next chapter</next>
+  <buton @click="$root.nextChapter()">Next chapter</buton>
 
 </avatar>
 
@@ -1032,6 +1051,11 @@ Ruthless Swan was vanquished by challenging them to a duel.
 </avatar>
 
 </div>
+</script>
+
+
+<script type="text/x-template" id="once-group-template">
+<div :class="{disabled: isClicked}"><slot></slot></div>
 </script>
 
 
@@ -1417,128 +1441,295 @@ Haha! That was great... Bobby's gonna be stuck eating peanut butter and sandwich
 <script type="text/x-template" id="bayes-rule-template">
 <pset>
 
-<!--<pset>
-    <div><div>What about 1?</div><input-box :right="5">%</input-box></div>
-    <div><div>What about 2?</div><input-box :right="5">%</input-box></div>
-    <div><div>What about 3?</div><input-box :right="5">%</input-box></div>
-</pset>-->
-
-<!-- <triple-bayes 
-  :hypotheses="['Nice', 'Evil']" 
-  :config="{prior: {dist: [1, 1], correct: [1, 2], isActive: true, isDraggable:true}, likelihood: {dist: [10, 1], isActive: true, isDraggable: true}, posterior: {}}"></triple-bayes> -->
-
-
-<avatar  
-  text="Now, you can ask me the question you've been meaning to ask me.">
-  <next>Are you really evil?</next>
+<avatar text="Elena??? Where's Elena??">
+  <next>NEXT?</next>
 </avatar>
 
-<avatar
-  text="People in story book land are generally nice. Maybe 1 in 6 are evil.">
-
-  <div>Drag the bars to show the odds that a random character is evil. This is called your <bold>prior belief</bold>. <note text="If 1 in 6 people are evil, that means 5 in 6 people are nice.">Hint</note>
-  </div>
-
-  <triple-bayes 
-    :hypotheses="['Nice', 'Evil']" 
-    :config="{prior: {dist: [1, 1], correct: [5, 1], isActive: true, isDraggable:true}}">
-  </triple-bayes>
+<avatar text="Oh noooo my one and only friend!">
+  <next>NEXT?!?!!</next>
 </avatar>
 
-<avatar>
-  <div>In other words, what is the probability that a random character is evil? (round to nearest %)</div>
-  <input-box :right="17" @yay="set('scary-name')">%</input-box>
+<avatar image="brain.png"
+        text="Calm down calm down CALM DOWN.">
+  <next>Breathe</next>
 </avatar>
 
-<avatar 
-  text="But then you learned that I have a scary name, and that made you think I was more evil than average. Let's say 1 out of 10 nice people have a scary name. 9 out of 10 evil people have a scary name.">
+<avatar text="Wait... does this have to do with the scientist??">
+  <next>Next</next>
+</avatar>
 
+<avatar text="Do you think Elena was offended by her p-value?">
+  <next>Possibly</next>
+</avatar>
+
+
+<avatar text="But Elena is a very clever self sufficient crow. Chances are that she's okay.">
+  <next>Next</next>
+</avatar>
+
+
+<avatar text="But then again, I've never seen Elena so ruffled before.">
+  <next>Next</next>  
+</avatar>
+
+<avatar text="There's too much conflicting info!! Is Elena okay or not??">
+  <next>Next</next>
+</avatar>
+
+<avatar image="brain.png">
   <div>
-    Plot the relative probablity that "Scary Name" occurs under the two hypotheses. In other words, plot the ratio between P(Scary Name|Nice) and P(Scary Name|Evil). 
+    You learned about this in school... use <bold>Bayes Rule</bold>.
   </div>
-
-  <div>
-    This ratio is called the <bold>likelihood ratio</bold> and shows which hypothesis the evidence points toward, and by how much.
-  </div>
-
-  <triple-bayes 
-    :hypotheses="['Nice', 'Evil']" 
-    :config="{prior: {dist: [5, 1]}, likelihood: {dist: [1, 1], correct: [1, 9], isActive: true, isDraggable: true}}">
-  </triple-bayes>
+  <next>Next</next>
 </avatar>
 
 <avatar>
   <div>
-    <div>This evidence is 9 times more liekly to be seen if the character is evil, than if the character is nice.</div>      
-    <buton @click="set('bayes-rule')">Next</buton>
+  P(A|B) = <big-frac style="position:relative; top:12px">
+    <template v-slot:num>
+      P(B|A) × P(A)
+    </template>
+    <template v-slot:den>
+      P(B)
+    </template>
+  </big-frac> ?
   </div>
+  <next>Next</next>
 </avatar>
 
-<avatar 
-  text="Bayes Rule says our belief after seeing the evidence ought to be our prior belief multiplied by the likelihood ratio.">
+
+<avatar image="brain.png"
+        text="No... use the more useful form of Bayes Rule...">
+    <next>Next</next>
+</avatar>
+
+<avatar>
+  <div>
+  P(H|D) = <big-frac style="position:relative; top:12px">
+    <template v-slot:num>
+      P(D|H) × P(H)
+    </template>
+    <template v-slot:den>
+      P(D)
+    </template>
+  </big-frac>
+  </div>
 
   <div>
-    Multiplying your prior belief with the likelihood ratio of having a scary name, yields this posterior belief.
+    The same formula as above, but where H is hypothesis and D is data?
+  </div>
+  <next>Next</next>
+</avatar>
+
+<avatar image="brain.png">
+  <div>
+  Yes, if you remove the normalization constant P(D), you get:
+  </div>
+
+  <div>P(H|D) <span style="font-size:28px">∝</span> P(D|H) × P(H)</div>
+
+  <div>
+  <span style="font-size:28px">∝</span> means proportional to.
+  </div>
+
+
+  <next>Next</next>
+</avatar>
+
+
+<avatar image="brain.png">
+  <div>
+    This tells you how to incoporate new information into your belief:
+  </div>
+  <div>
+    Your belief after seeing the data  P(H|D)
+  </div>
+
+  <div>
+    is proportional to your prior belief P(H)
+  </div>
+
+  <div>
+    multiplied by
+  </div>
+
+  <div>
+    the likelihood of the evidence under your prior belief P(D|H)
+  </div>
+  <next>Next</next>
+</avatar>
+
+<avatar text="Hm... what is my prior belief on Elena being okay?">
+  <next>Next</next>
+</avatar>
+
+<avatar>
+  <div>
+    Elena is a very self-sufficient bird, so 80% of the times she's disappeared on me, she has been okay.
+  </div>
+
+  <div>Drag the bars to show the odds that Elena is okay. This is called your <bold>prior belief</bold>.
   </div>
 
   <triple-bayes 
-    :hypotheses="['Nice', 'Evil']" 
-    :config="{prior: {dist: [5, 1]}, likelihood: {dist: [1, 9]}, posterior: {isActive: true}}">
+    :hypotheses="['OK', 'Not OK']" 
+    :config="{prior: {dist: [1, 1], correct: [4, 1], isActive: true, isDraggable:true}}">
+  </triple-bayes>
+
+</avatar>
+
+<avatar image="brain.png">
+  <div>
+    Now need to take into account the data that Elena was last seen visibly ruffled. 
+  </div>
+  <div>
+    To incorporate this data, Bayes Rule says to look at the likelihood of the data under each hypothesis P(D|H). 
+  </div>
+
+  <div>
+    We need to compute the ratio of
+  </div>
+
+  <div>
+    P(Ruffled|OK) vs P(Ruffled|Not OK).
+  </div>
+</avatar>
+
+
+<avatar>
+  <div>
+    Out of 100 OK birds, I imagine 10 of them might be ruffled.
+    Out of 100 Not OK Birds, probably 80 are ruffled.
+  </div>
+
+  <div>
+    Drag the bars to reflect the <bold>likelihood ratio of the evidence</bold>.
+  </div>
+
+  <triple-bayes 
+    :hypotheses="['OK', 'Not OK']" 
+    :config="{prior: {dist: [4, 1]}, likelihood: {dist: [1, 1], correct: [1, 8], isActive: true, isDraggable: true}}">
+  </triple-bayes>
+
+</avatar>
+
+<avatar 
+  text="Bayes Rule says our belief after seeing the evidence is our prior belief multiplied by the likelihood ratio.">
+
+  <div>
+    The belief after we have considered the evidence is called the <bold>posterior belief</bold>.
+  </div>
+
+  <triple-bayes 
+    :hypotheses="['OK', 'Not OK']" 
+    :config="{prior: {dist: [4, 1]}, likelihood: {dist: [1, 8]}, posterior: {isActive: true}}">
   </triple-bayes>
 
   <div>
-    Looking at the posterior belief, what is the approximate probability that I'm evil? (Just look at the relative areas of the bars).
+    Looking at the posterior belief, what is the probability that Elena is OK?
   </div>
-  <buton nope>50%</buton>
-  <buton yay>66%</buton>
+  <buton yay>33%</buton>
+  <buton nope>40%</buton>
   <buton nope>80%</buton>
 </avatar>
 
+<avatar text="That's not great odds.">
+  <next>Oh no</next>
+</avatar>
 
-<avatar text="But wait, I'm vegetarian.">
+
+<avatar text="The other thing is she didn't leave a note.">
   <div>
-  30 out of 100 nice people are vegetarian.<br>
-  5 out of 100 evil people are vegetarian.<br>
+  50 out of 100 OK people don't leave a note when they are ruffled.<br>
+  90 out of 100 Not OK people don't leave a note when they are ruffled.
+  </div>
+
+  <div>
   Use this information to create a likelihood ratio.<br>
   </div>
 
   <triple-bayes 
-    :hypotheses="['Nice', 'Evil']" 
-    :config="{prior: {dist: [5, 9]}, likelihood: {dist: [1, 1], correct: [6, 1], isActive: true, isDraggable: true}, posterior: {isActive:true}}">
+    :hypotheses="['Ok', 'Not OK']" 
+    :config="{prior: {dist: [4, 8]}, likelihood: {dist: [1, 1], correct: [5, 9], isActive: true, isDraggable: true}, posterior: {isActive:true}}">
   </triple-bayes>
+</avatar>
+
+<avatar text="Oh no!!! Only a 22% chance she's okay??">
+  <next>Next</next>
+</avatar>
+
+<avatar text="Wait I hear a cacophony of crows!">
+  <next>Next</next>
 </avatar>
 
 <avatar>
   <div>
-    <div>What is the approximate probability that I'm evil?</div>
-    <buton yay @clik="set('teaching')">25%</buton> <buton nope>30%</buton> <buton nope>40%</buton>
+    What's the probability that I'd hear a cacophony of crows under each hypothesis?
   </div>
+
+  <next>Next</next>
 </avatar>
 
-<avatar text="But I'm also good at teaching.">
+<avatar image="brain.png"
+  text="Get out of your head and follow the noise!">
+  <next>Next</next>
+</avatar>
+
+<avatar text="ELENA!!!">
+  <next>Next</next>
+</avatar>
+
+<avatar image="crow.png" text="CAWW (HELP)">
+  <next>Next</next>
+</avatar>
+
+<avatar text="There you are Elena!">
+  <next>Next</next>
+</avatar>
+
+<avatar text="Was I right to infer that there was a 78% chance you were in trouble?">
+  <next>Next</next>
+</avatar>
+
+<avatar image="crow.png" text="CAWW CAWW (HELP HELP)">
+  <next>Next</next>
+</avatar>
+
+<avatar text="You get away from her, mean crows!">
+  <next>Next</next>
+</avatar>
+
+<avatar text="Thank you for helping me find Elena.">
+  <next>Next</next>
+</avatar>
+
+<avatar text="Elena, I hope that p-value nonsense didn't cause you to run away.">
+  <next>Next</next>
+</avatar>
+
+<avatar image="crow.png" text="...">
+  <next>Next</next>
+</avatar>
+
+<avatar text="Not only are you the cleverest crow I know, you're my best friend.">
+  <next>Next</next>
+</avatar>
+
+<avatar image="crow.png" text="c... aw...">
+  <next>Next</next>
+</avatar>
+
+<avatar image="brain.png">
   <div>
-  1 out of 4 nice people are good at teaching.<br>
-  1 out of 4 evil people are good at teaching.<br>
-  Use this information to update your belief about my evilness*.<br>
+  While this is all touching, let's take another look at Bayes Rule that saved the day.
   </div>
-
-  <triple-bayes 
-    :hypotheses="['Nice', 'Evil']" 
-    :config="{prior: {dist: [30, 9]}, likelihood: {dist: [1, 1], correct: [1, 1], isActive: true, isDraggable: true}, posterior: {}}">
-  </triple-bayes>
+  <next>Next</next>
 </avatar>
 
-<avatar>
-  <div>
-    <div>Because the evidence was equally likely regardless of whether I'm evil or not, it provided no information and the posterior did not change.</div>
-    <buton @click="set('taxi')">Next</buton>
-  </div>
-</avatar>
+<avatar image="brain.png"
+      text="This is the Taxi-cab problem by psychologists Kahneman & Tversky.">
 
-
-<avatar text="Let's try this on a real problem. This is the Taxi-cab problem by psychologists Kahneman & Tversky.">
-
-  <div style="max-width: 400px; margin:0 auto; margin-bottom: 16px; line-height:1.4em; text-align: justify">
+  <div style="max-width: 350px; margin:0 auto; margin-bottom: 16px; line-height:1.4em; text-align: justify" class="smaller-children">
   30% of the cabs in the city are Blue and 70% are Green.
   A cab was involved in a hit and run, and the witness identified the cab as Blue. 
   The court tested the reliability of the witness under the circumstances that existed on the night of the accident, and concluded that the witness correctly identified each one of the two colors 80% of the time and failed 20% of the time.
@@ -1546,20 +1737,36 @@ Haha! That was great... Bobby's gonna be stuck eating peanut butter and sandwich
   </div>
 
   <div>
-  <div><bold>Prior</bold></div>
-  Ignoring the eye witness evidence, and just considering the base rate of cabs in the city... what is your prior belief about which company is at fault? 
-  </div>
-
-  <div>
-  <div><bold>Likelihood Ratio</bold></div>
-  What is the likelihood ratio of the data? The witness identified the guilty cab as Blue. <note text="Likelihood ratio: P(Seen as blue|Blue cab guilty) / P(Seen as blue|Green cab guilty)">Hint</note>.
+    Use the widget to solve the problem.
   </div>
 
   <triple-bayes 
-    :hypotheses="['Blue', 'Green']" 
-    :config="{prior: {dist: [1, 1], isActive: true, isDraggable: true}, likelihood: {dist: [1, 1], isActive:true, isDraggable: true}, posterior: {isActive: true}}">
+    :hypotheses="['B guilty', 'G guilty']" 
+    :config="{prior: {dist: [1, 1], correct: [3, 7], isActive: true, isDraggable: true}, likelihood: {dist: [1, 1], correct:[4, 1], isActive:true, isDraggable: true}, posterior: {isActive: true}}">
+
     <template v-slot:yay>
       <buton @click="set('bayes-rule')">Next</buton>
+    </template>
+
+    <template v-slot:hint>
+
+      <div>
+      <div><bold>Prior</bold></div>
+      Ignoring the eye witness evidence, and just considering the base rate of cabs in the city gets the prior.
+      </div>
+
+      <div>
+      <div><bold>Likelihood Ratio</bold></div>
+      The likelihood ratio of the data P(D|H) given that the eyewitness saw a blue cab consists of
+      </div>
+      <big-frac>
+        <template v-slot:num>
+          P(Saw blue|Blue guilty)
+          </template>
+          <template v-slot:den>
+          P(Saw blue|Green guilty)
+        </template>
+      </big-frac>
     </template>
   </triple-bayes>
 
@@ -1569,59 +1776,48 @@ Haha! That was great... Bobby's gonna be stuck eating peanut butter and sandwich
 <avatar>
   <div>
     <div>
-      So what is the approximate probability that the accident was really caused by a Blue cab?
-    </div>
-    <buton nope>50%</buton> <buton yay>66%</buton> <buton nope>80%</buton>
-  </div>
-</avatar>
-
-<avatar>
-  <div>
-    <div>
-      Even though there is a pretty accurate eyewitness testimony pointing to Blue cabs, given the high base rate of Green cabs, it's still pretty uncertain which cab company was at fault.
+      So even though there is pretty accurate eyewitness testimony pointing to Blue cabs, given the low base rate of Blue cabs, it's still pretty uncertain which cab company was at fault.
     </div>
     <next>Next</next>
   </div>
 </avatar>
 
-<avatar text="Congrats, you solved a problem that <X% of people get correct. By using both the prior and likelihood of evidence, you avoided the human tendency to just use one or the other.">
+<avatar image="brain.png"
+  text="Congrats, you solved a problem that <X% of people get correct todo: find number. By using both the prior and likelihood of evidence, you avoided the human tendency to just use one or the other.">
 
   <next>Next</next>
 </avatar>
 
-<avatar text="Extra curious are we?">
+<avatar text="Hey... are you my friend? ">
+  <next>Next</next>
+</avatar>
 
+<avatar text="I feel like we've hit the three tenets of friendship from Chapter 4.">
+  <next>Next</next>
+</avatar>
+
+<avatar>
   <div>
-  The logic we are using comes from the odds ratio form of Bayes Rule.
+    We have consistency — you've hung out with me for {{$root.elapsedMinutes}} minutes and {{$root.elapsedSeconds}} seconds.
   </div>
-
-  <div>
-  Bayes Rule looks like:
-  P(A|B) = P(B|A) * P(A) / P(B)
-  </div>
-
-  <buton>Prove Bayes Rule</buton>
-
-  <div>
-  Plug in, D and H to make it more concrete.
-  P(H|D) = P(D|H) * P(H) / P(D)
-  </div>
-
-  <div>
-  posterior = likelihood * prior / normalization constant
-  </div>
-
-  <div>
-  posterior (proportional) likelihood * prior
-  </div>
-
-  <div>
-  Especially, when we are comparing two separate hypotheses, you can see how P(D) divides out and we are comparing
-  </div>
-
-  <big-frac num="P(H1|D)" den="P(H2|D)"></big-frac> =   <big-frac num="P(D|H1)" den="P(D|H2)"></big-frac> *   <big-frac num="P(H1)" den="P(H2)"></big-frac>
-
+  <next>Next</next>
 </avatar> 
+
+<avatar text="And positivity — you look like you're having fun.">
+  <next>Next</next>
+</avatar>
+
+<avatar text="And vulnerability — you know that I don't have friends.">
+  <next>Next</next>
+</avatar>
+
+<avatar>
+  <div>
+  So... final question... I guess we're friends now? 
+  </div>
+
+  <next>Yes</next><next>No</next>
+</avatar>
 
 </pset>
 </script>
@@ -1846,7 +2042,7 @@ Haha! That was great... Bobby's gonna be stuck eating peanut butter and sandwich
         text="I also want my monster to have tattoos. 1/5 of monsters have tattoos.">
 
   <div>In math speak, P(tattoos) = 1/5.</div>
-  <div>What is P(tall, beard, tattoos)? <span style="color:#777"><- Note: this is a more compact way of writing P(tall AND beard AND tattoos)</span></div>
+  <div>What is P(tall, beard, tattoos)? <span style="color:#777"><- Note: This is a more compact way of writing P(tall AND beard AND tattoos). The comma is pronounced "and".</span></div>
 
   <div class="extra-info">Facts from before:
     <ul>
@@ -2056,7 +2252,7 @@ Haha! That was great... Bobby's gonna be stuck eating peanut butter and sandwich
     <li>You learned to not be too picky ❤️</li>
   </ul> 
 
-  <next>Next</next>
+  <next>Are you doing this all for revenge?</next>
 </avatar>
 
 
@@ -2069,7 +2265,7 @@ Haha! That was great... Bobby's gonna be stuck eating peanut butter and sandwich
 </avatar>
 
 <avatar text="Uh... it might be harder than you think...">
-  <next>Next chapter</next>
+  <buton @click="$root.nextChapter()">Next chapter</buton>
 </avatar>
 
 </pset>
@@ -2158,6 +2354,7 @@ Haha! That was great... Bobby's gonna be stuck eating peanut butter and sandwich
     60% jake fails, -1 point.<br>
   </div>
 
+  <next>Next</next>
 </avatar>
 
 <avatar image="brain.png">
@@ -2165,7 +2362,7 @@ Haha! That was great... Bobby's gonna be stuck eating peanut butter and sandwich
     To calculate the expected value, multiply the probability of each outcome occuring with the reward for the outcome, and add everything together.  
   </div>
 
-  <div>The expected value of the joke in question is...?</div>
+  <div>The expected value of the joke in question is?</div>
 
   <input-box :right="1.4"/>
 </avatar>
@@ -2207,7 +2404,10 @@ Haha! That was great... Bobby's gonna be stuck eating peanut butter and sandwich
 </avatar>
 
 <avatar>
+  <div>
 Help me decide whether to tell each joke or not, by calculating their expected value.
+</div>
+<next>Next</next>
 </avatar>
 
 <div>
@@ -2221,7 +2421,10 @@ Help me decide whether to tell each joke or not, by calculating their expected v
 </div>
 
 <avatar image="brain.png">
+  <div>
 Okay, I think that's enough for positivity. The second tenet of friendship is consistency... you need to find a structure to make people repeatedly hangout with you.
+</div>
+<next>Next</next>
 </avatar>
 
 <avatar text="Hm... I could join a CLUB.">
@@ -2249,11 +2452,13 @@ Okay, I think that's enough for positivity. The second tenet of friendship is co
   <div>I've plotted the average number of interactions other people have experienced from joining the fencing club.</div>
 
   <distribution :outcomes="[{x: 1, y: 0.1},{x: 2, y: 0.2},{x: 3, y: 0.3},{x: 4, y: 0.4},]" xLabel="Number of interactions" yLabel="Probability" title="Fencing Club 💖" />
+
+  <div>This type of plot with possibilities on the x-axis, and probabilities on the y-axis is called a <bold>distribution</bold>.</div>
 </avatar>
 
 <avatar>
   <div>
-    What is the average number of interactions I can expect from joining the fencing club?
+    Hm... I wonder how many interactions I would get from joining the fencing club?
   </div>
 
   <next>Next</next>
@@ -2261,24 +2466,44 @@ Okay, I think that's enough for positivity. The second tenet of friendship is co
 
 <avatar image="brain.png">
   <div>
-  Just like before, you can take the expected value. The cool thing is if you plot the possible outcomes as a distribution (possibilities on x-axis, probabilities on y-axis) taking the expected value is the balance point.
-  </div>
-
-  <div>
-    Click where you think the balance point is...
+  Just like before, you can take the expected value. Once the data is plotted as a distribution is the same as finding the balance point (where would the distribution balance on your finger if it were made of cardboard).
   </div>
 
   <visual-ev-click 
-  v-for="(club, index) in clubs" 
-  v-if="index <= clubInd" 
-  :outcomes="club.outcomes"
-  :key="club.name"
-  :title="club.name + ' 💖'"
-  xLabel="Number of interactions"
-  yLabel="Probability"
-  @done="nextClub"></visual-ev-click>  
+    :outcomes="clubs[0].outcomes"
+    :title="clubs[0].name + ' 💖'"
+    xLabel="Number of interactions"
+    yLabel="Probability"
+    @done="next" /> 
 </avatar>
 
+<avatar text="That's not a bad number of interactions. What about the math team?">
+
+  <visual-ev-click 
+    :outcomes="clubs[1].outcomes"
+    :title="clubs[1].name + ' 💖'"
+    xLabel="Number of interactions"
+    yLabel="Probability"
+    @done="next" /> 
+</avatar>
+
+<avatar text="What about Biology Olympiad?">
+  <visual-ev-click 
+    :outcomes="clubs[2].outcomes"
+    :title="clubs[2].name + ' 💖'"
+    xLabel="Number of interactions"
+    yLabel="Probability"
+    @done="next" /> 
+</avatar>
+
+<avatar text="The other club I was considering was the Knitting Circle.">
+  <visual-ev-click 
+    :outcomes="clubs[3].outcomes"
+    :title="clubs[3].name + ' 💖'"
+    xLabel="Number of interactions"
+    yLabel="Probability"
+    @done="next" /> 
+</avatar>
 
 <avatar>
   <div>
@@ -2286,9 +2511,10 @@ Okay, I think that's enough for positivity. The second tenet of friendship is co
   </div>
 
   <buton-group>
-    <buton>Fencing Club</buton>
-    <buton>Math Team</buton>
-    <buton>Knitting Circle</buton>
+    <buton nope>Fencing Club</buton>
+    <buton nope>Math Team</buton>
+    <buton yay>Bio Olympiad</buton>
+    <buton nope>Knitting Circle</buton>
 
     <template v-slot:hint>
       Join the club with the maximum expected number of interactions.
@@ -2297,20 +2523,32 @@ Okay, I think that's enough for positivity. The second tenet of friendship is co
 </avatar>
 
 <avatar>
-Cool, so now I'm a member of the Knitting Circle. And I have {{positivityPoints}} positivity points. What's next?
+  <div>
+Cool, so now I'm a member of Bio Olympiad. And I have {{positivityPoints}} positivity points. What's next?
+</div>
+<next>Next</next>
 </avatar>
 
 
 <avatar image="brain.png">
+  <div>
 For the final ingredient in making friends... you need to be vulnerable.
+</div>
+<next>Next</next>
 </avatar>
 
 <avatar>
+  <div>
 Eh... I'm not going there. Who needs friends anyways?
+</div>
+<next>Next</next>
 </avatar>
 
 <avatar>
+  <div>
 Why bother... I have Elena. 
+</div>
+<next>Next</next>
 </avatar>
 
 <avatar image="" text="(silence)">
@@ -2318,7 +2556,7 @@ Why bother... I have Elena.
 </avatar>
 
 <avatar text="Elena??? Where's Elena??">
-  <next>Next chapter</next>
+  <buton @click="$root.nextChapter()">Next chapter</buton>
 </avatar>
 
 </pset>
@@ -2326,6 +2564,13 @@ Why bother... I have Elena.
 
 
 <script type="text/x-template" id="visual-ev-click-template">
+
+<div>
+
+<div>
+Click where you think the balance point is...
+</div>
+
 
 <div style="position:relative">
 
@@ -2358,13 +2603,14 @@ Why bother... I have Elena.
 
 <div v-if="answerReal" class="smaller-children">
   <div>
-  You <span style="color:#7570b3">guessed {{$root.roundTo(guessReal, 1)}}</span>. The <span style="color:#1b9e77">true answer of  {{$root.roundTo(answerReal,1)}}</span> was {{isUserClose  ? 'very close!' : 'far off.'}} {{ isUserClose ? 'Good job!' : 'Needs work.' }}
+  You <span style="color:#7570b3">guessed {{$root.roundTo(guessReal, 1)}}</span>. The <span style="color:#1b9e77">true answer of  {{$root.roundTo(answerReal,1)}}</span> was {{isUserClose  ? 'pretty close!' : 'far off.'}} {{ isUserClose ? 'Good job!' : 'Needs work.' }}
   </div>
 
   <buton @click.native="$emit('done')">Next</buton>
 </div>
 
 
+</div>
 </div>
 </script>
 
@@ -2397,8 +2643,19 @@ Why bother... I have Elena.
   <next @click.native="finish(0)">Next</next>
 </avatar>
 
+<avatar v-if="ev === 0 && userAnswer !== null">
+  <div>
+    The expected value is 0, so you could go either way on this one. 
+  </div>
 
-<pset v-if="ev > 0 && userAnswer == 'Yes'">
+  <next v-if="userAnswer == 'Yes'"  
+        @click.native="forceTell=true">Next</next>
+
+  <next v-if="userAnswer == 'No'"  
+        @click.native="finish(0)">Next</next>
+</avatar>
+
+<pset v-if="(ev > 0 && userAnswer == 'Yes') || forceTell">
 <avatar text="Okay... here goes...">
   <next>Next</next>
 </avatar>
@@ -2664,18 +2921,18 @@ Why bother... I have Elena.
   ref="posterior-samples-chart" /> 
 </div>
 
-<div v-if="showFeedback && !allCorrect" class="handwriting normal-div">
+<div v-if="showFeedback && !allCorrect" class="handwriting">
   <div>Not quite. Try again!</div>
   <slot name="hint"></slot>
 </div>
 
 
-<div v-if="showFeedback && allCorrect" class="handwriting normal-div">
+<div v-if="showFeedback && allCorrect" class="handwriting">
   <div>Correct!</div>
   <slot name="yay"></slot>
 </div>
 
-<div v-if="(isDraggable('prior') || isDraggable('likelihood')) && !(showFeedback && allCorrect)" class="normal-div">
+<div v-if="(isDraggable('prior') || isDraggable('likelihood')) && !(showFeedback && allCorrect)">
 <buton @click="submitClicked">Submit</buton>
 </div>
 
@@ -2711,7 +2968,7 @@ Why bother... I have Elena.
 
       <text v-for="x in xdomain" 
         :x="xScale(x)+ xScale.bandwidth()/2 - 4"
-        :y="chartHeight - yScale(counts[x]) - (isDraggable ? 8 : 2)">
+        :y="Math.max(0, chartHeight - yScale(counts[x]) - (isDraggable ? 8 : 2))">
         {{ counts[x] }}
       </text>
 
@@ -2719,7 +2976,7 @@ Why bother... I have Elena.
         v-for="x in xdomain" 
         :x="xScale(x)+ xScale.bandwidth()/2 - 8"
         :y="chartHeight + 40"
-        fill="#bbb">
+        fill="#999">
         {{ prob(x) }}%
       </text>
 
@@ -2933,8 +3190,8 @@ const jokes = [
 {
   outcomes: [
     // Order matters -- index is used to determine ?????
-    {present: 'fails', past: 'failed', certainty: 0.7, payoff: -1}, 
-    {present: 'lands', past: 'landed', certainty: 0.3, payoff: 4}
+    {present: 'fails', past: 'failed', certainty: 0.5, payoff: -1}, 
+    {present: 'lands', past: 'landed', certainty: 0.5, payoff: 2}
   ],
   lead: "Did you hear about the mathematician who's afraid of negative numbers?",
   punchline: "He'll stop at nothing to avoid them",
@@ -2942,26 +3199,20 @@ const jokes = [
 
 {
   outcomes: [
-    {present: 'fails', past: 'failed', certainty: 0.7, payoff: -1}, 
-    {present: 'lands', past: 'landed', certainty: 0.3, payoff: 4}
+    {present: 'fails', past: 'failed', certainty: 0.6, payoff: -1}, 
+    {present: 'lands', past: 'landed', certainty: 0.4, payoff: 1}
   ]
 },
 
 {
   outcomes: [
-    {present: 'fails', past: 'failed', certainty: 0.7, payoff: -1}, 
-    {present: 'lands', past: 'landed', certainty: 0.3, payoff: 4}
+    {present: 'fails', past: 'failed', certainty: 0.6, payoff: -1}, 
+    {present: 'lands', past: 'landed', certainty: 0.4, payoff: 4}
   ],
   lead:"Why don't scientists trust atoms?",
   punchline:"Because they make up everything"
 },
 
-{
-  outcomes: [
-    {present: 'fails', past: 'failed', certainty: 0.7, payoff: -1}, 
-    {present: 'lands', past: 'landed', certainty: 0.3, payoff: 4}
-  ]
-},
 
 // {
 //   outcomes: [
@@ -2974,16 +3225,26 @@ const jokes = [
 
 {
   outcomes: [
-    {present: 'fails', past: 'failed', certainty: 0.7, payoff: -1}, 
-    {present: 'lands', past: 'landed', certainty: 0.3, payoff: 4}
+    {present: 'fails', past: 'failed', certainty: 0.8, payoff: -1}, 
+    {present: 'lands', past: 'landed', certainty: 0.2, payoff: 5}
   ],
   lead:   "How many times can you substract 10 from 100?",
   punchline: "Once. The next time you would be subtracting 10 from 90"
 },
+
 {
   outcomes: [
-    {present: 'fails', past: 'failed', certainty: 0.7, payoff: -1}, 
-    {present: 'lands', past: 'landed', certainty: 0.3, payoff: 4}
+    {present: 'fails', past: 'failed', certainty: 0.8, payoff: -2}, 
+    {present: 'lands', past: 'landed', certainty: 0.2, payoff: 5}
+  ]
+},
+
+
+// EV = 0.
+{
+  outcomes: [
+    {present: 'fails', past: 'failed', certainty: 0.8, payoff: -1}, 
+    {present: 'lands', past: 'landed', certainty: 0.2, payoff: 4}
   ],
   lead: "The numbers 19 and 20 got into a fight.",
   punchline: "21"
@@ -2993,15 +3254,19 @@ const jokes = [
 const clubs = [
   {
     name: 'fencing club',
-    outcomes: [{x: 1, y: 0.1},{x: 2, y: 0.2},{x: 3, y: 0.3},{x: 4, y: 0.4},]
+    outcomes: [{x: 1, y: 0.2},{x: 2, y: 0.3},{x: 3, y: 0.3},{x: 4, y: 0.2},]
   },
   {
     name: 'math team',
     outcomes: [{x: 1, y: 0.1},{x: 2, y: 0.2},{x: 3, y: 0.3},{x: 4, y: 0.4},]
   },
   {
+    name: 'biology olympiad',
+    outcomes: [{x: 1, y: 0.1},{x: 2, y: 0.2},{x: 3, y: 0.1},{x: 4, y: 0.6},]
+  },
+  {
     name: 'knitting circle',
-    outcomes: [{x: 1, y: 0.1},{x: 2, y: 0.2},{x: 3, y: 0.3},{x: 4, y: 0.4},]
+    outcomes: [{x:1, y: 0}, {x: 2, y: 0.5},{x: 3, y: 0.3},{x: 4, y: 0.2},]
   },
 ];
 
@@ -3163,6 +3428,7 @@ Vue.component('ev-joke', {
     return {
       stage: 0,
       userAnswer: null,
+      forceTell:null,
     }
   },
   methods: {
@@ -3782,7 +4048,7 @@ Vue.component('triple-bayes', {
     colors: {
       type: Object, 
       default: function(){
-        return {bar: '', dot: ''};
+        return {bar: '#ddd', dot: '#EF6D21'};
       }
     },
   },
@@ -4054,6 +4320,24 @@ Vue.component('samples-chart', {
   template: '#samples-chart-template'
 });
 
+// Put a buton inside a once-group to ensure it is only clicked once.
+Vue.component('once-group', {
+  data: function(){
+    return {
+      isClicked: false
+    }
+  },
+  methods: {
+    childClicked: function(childComponent) {
+      if (this.isClicked){
+        return;
+      }
+      this.isClicked = true;
+    }
+  },
+  template: '#once-group-template',
+});
+
 
 Vue.component('buton-group', {
   props: {
@@ -4243,14 +4527,11 @@ function makeComponent(componentName, points, reactions){
           }      
         }
       },
-      nextClub(){
-        this.clubInd++;
-        if (this.clubInd >= this.clubs.length){
-          const pset = firstAncestorOfComponent(this, 'pset');
-          if (pset){
-            pset.next();
-          }      
-        }        
+      next(){
+        const pset = firstAncestorOfComponent(this, 'pset');
+        if (pset){
+          pset.next();
+        }      
       }
     },
     template: '#' + componentName + '-template'
@@ -4480,7 +4761,7 @@ new Vue({
   el: '#app',
   data: {
     chapters: chapters,
-    chapterInd: 4,
+    chapterInd: 6,
     // Obj property additions do not update DOM, so prepopulate all the keys in the object. Or use lists.
     //soundNameToCount: {},
     show: false,
@@ -4488,6 +4769,9 @@ new Vue({
     showTOC: false,
 
     isScrolling: false,
+
+    elapsedMinutes: null,
+    elapsedSeconds: null,
   },
   computed: {
     currentChapter: function(){
@@ -4496,6 +4780,15 @@ new Vue({
     visibleScreen: function(){
       return this.currentChapter.component;
     }
+  },
+  mounted(){
+    const loadTime = Date.now();
+    var this_ = this;
+    setInterval(function(){
+      const seconds = (Date.now() - loadTime) / 1000;
+      this_.elapsedMinutes = Math.floor(seconds/60);
+      this_.elapsedSeconds = this_.roundTo(seconds % 60, 0);
+    }, 1000);
   },
   watch:{
     chapterInd(){
