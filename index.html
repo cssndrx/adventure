@@ -1779,13 +1779,13 @@ Haha! That was great... Bobby's gonna be stuck eating peanut butter and sandwich
 
 <pset>
 
-
-
-<avatar text="I had a crush on Veronica but she didn't like me back. I didn't want her to find anyone else."></avatar>
+<avatar text="I liked Veronica but she didn't like me back.">
+  <next>Next</next>
+</avatar>
 
 <avatar 
   image="girl.png" 
-  text="Hello! I'm Veronica and I only date monsters that are tall and have beards.">
+  text="I'm Veronica and I only date monsters that are tall and have beards.">
 
   <next>Next</next>
 </avatar>
@@ -2199,27 +2199,38 @@ Haha! That was great... Bobby's gonna be stuck eating peanut butter and sandwich
 <script type="text/x-template" id="ev-story-template">
 <pset>
 
+<distribution :outcomes="[{x: 1, y: 0.1},{x: 2, y: 0.2},{x: 3, y: 0.3},{x: 4, y: 0.4},]" xLabel="Number of interactions" yLabel="Probability" title="Fencing Club 💖" />
+
 <avatar text="How do I make friends?">
+  <next>Next</next>
 </avatar>
 
 <avatar image="brain.png">
 
-<div>The internet claims that the 3 tenets of friendships are...</div>
+<div>The <a target="_blank" href="//www.youtube.com/watch?v=hmJyWreER7A">internet</a> claims that the 3 tenets of friendships are...</div>
+
 <ul>
   <li>positivity</li>
   <li>consistency</li>
   <li>vulnerability</li>
 </ul>
+<next>Thanks internet</next>
 </avatar>
 
 <avatar>
-  <div>Okay, I'll start with <bold>positivity</bold>. To become friends, interactions need to be positive. That makes sense.</div>
+  <div>To become friends, interactions need to be positive. That makes sense.</div>
+  <next>Next</next>
 </avatar>
 
-<avatar text="I guess I could tell a joke. I'll memorize some jokes from https://www.rd.com/funny-stuff/short-jokes/">
+<avatar>
+  <div>
+    I'm pretty good at telling jokes. I'll memorize some jokes from the <a target="_blank" href="//www.rd.com/funny-stuff/short-jokes/">internet</a> and make people laugh.
+  </div>
+  <next>Next</next>
 </avatar>
 
-<avatar text="Hm... but jokes don't always hit. A bad joke might be a negative.">
+<avatar text="Hm... but jokes don't always hit. A bad joke might actually be a negative.">
+  <next>Next</next>
 </avatar>
 
 <avatar text="Take this joke for instance... should I tell it?">
@@ -2228,117 +2239,267 @@ Haha! That was great... Bobby's gonna be stuck eating peanut butter and sandwich
   60% of the time it fails<br>
   </div>
 
+  <next>Uh...</next>
+</avatar>
+
+<avatar image="brain.png"
+        text="The answer depends on the payoffs.">
+  <div>
+    If the wizard get +1 positivity point when it lands.<br>
+    And -1 positivity point when it fails<br>
+  </div>
+
+  <div>
+    Then it seems like a bad deal, because on average the wizard loses -0.2 positivity points each time I tell the joke. 
+  </div>
+
+  <div>
+    This average is called the <bold>expected value</bold>.
+  </div>
+
+  <next>Next</next>
+</avatar>
+
+
+<avatar>
+  <div>
+    Hm... everyone already thinks I'm weird.
+  </div>
+
+  <div>
+    I feel like, if the joke fails I might lose 1 point. But if the joke lands, I'll gain 5 points because there's nowhere to go but up for my reputation. Ha-ha!
+  </div>
+
+  <div>
+    So I need to calculate the expected value of:
+  </div>
+
+  <div>
+    40% joke lands favorably, +5 points.<br>
+    60% jake fails, -1 point.<br>
+  </div>
+
+</avatar>
+
+<avatar image="brain.png">
+  <div>
+    To calculate the expected value, multiply the probability of each outcome occuring with the reward for the outcome, and add everything together.  
+  </div>
+
+  <div>The expected value of the joke in question is...?</div>
+
+  <input-box :right="1.4"/>
+</avatar>
+
+
+<avatar>
+  <div>So, I should tell the joke?</div>
   <buton-group>
-    <buton>Yes</buton>
-    <buton>No</buton>
-    <buton>Don't know</buton>
+    <buton yay>Yes</buton>
+    <buton nope>No</buton>
+
+    <template v-slot:hint>
+      The wizard should tell the joke because it has positive expected value, given that there aren't options that are higher in expected value.
+    </template>
   </buton-group>
 </avatar>
 
-<avatar text="The answer depends on the payoffs.">
-  <div>
-  If I get +1 positivity point when it lands.<br>
-  And -1 positivity point when it fails<br>
+<avatar text="Okay... here goes...">
+  <next>Next</next>
+</avatar>
+
+<avatar text="Where are average things manufactured?">
+  <next>Next</next>
+</avatar>
+
+<avatar>
+  <div><bold>The satisfactory!</bold></div>
+  <next @click.native="memory='haha'">Ha-ha!</next> 
+  <next @click.native="memory='eh'">Eh...</next>
+</avatar>
+
+<avatar>
+  <div v-if="memory=='haha'">
+    Yay!! That joke landed! So I gain 5 positivity points.
   </div>
+  <div v-if="memory=='eh'">
+    Aw... it seems like that joke didn't land. So I lost 1 positivity point. I'm still glad I told the joke, because it was positive expected value.
+  </div>
+</avatar>
+
+<avatar>
+Help me decide whether to tell each joke or not, by calculating their expected value.
+</avatar>
+
+<div>
+  <ev-joke 
+    v-for="(joke, index) in jokes" 
+    v-if="index <= jokeInd" 
+    :joke="joke"
+    :key="joke.lead"
+    @done="nextJoke"
+   />
+</div>
+
+<avatar image="brain.png">
+Okay, I think that's enough for positivity. The second tenet of friendship is consistency... you need to find a structure to make people repeatedly hangout with you.
+</avatar>
+
+<avatar text="Hm... I could join a CLUB.">
+  <next>Next</next>
+</avatar>
+
+<avatar text="todo: come up with acrostic for CLUB">
+  <next>Next</next>  
+</avatar>
+
+<avatar text="But which club should I join to maximize the number of interactions?">
+  <next>Next</next>
+</avatar>
+
+<avatar>
 
   <div>
-    Then it seems like a bad deal, because on average I'd be down -0.2 positivity points each time I tell the joke.
+    I could join the fencing club...
   </div>
 
+  <next>Next</next>
+</avatar>
+
+<avatar>
+  <div>I've plotted the average number of interactions other people have experienced from joining the fencing club.</div>
+
+  <distribution :outcomes="[{x: 1, y: 0.1},{x: 2, y: 0.2},{x: 3, y: 0.3},{x: 4, y: 0.4},]" xLabel="Number of interactions" yLabel="Probability" title="Fencing Club 💖" />
+</avatar>
+
+<avatar>
+  <div>
+    What is the average number of interactions I can expect from joining the fencing club?
+  </div>
+
+  <next>Next</next>
+</avatar>
+
+<avatar image="brain.png">
+Just like before, you can take the expected value. The cool thing is if you plot the possible outcomes as a distribution (possibilities on x-axis, probabilities on y-axis) taking the expected value is the balance point.
+</avatar>
+
+<div>
+  Click where you think the balance point is...
+</div>
+
+
+<avatar>
+  <div>
+    Okay, so which club should I join? 
+  </div>
+
+  <buton-group>
+    <buton>Fencing Club</buton>
+    <buton>Math Team</buton>
+    <buton>Knitting Circle</buton>
+
+    <template v-slot:hint>
+      Join the club with the maximum expected number of interactions.
+    </template>
+  </buton-group>
+</avatar>
+
+<avatar>
+Cool, so now I'm a member of the Knitting Circle. And I have ___ friendship points. What's next?
 </avatar>
 
 
-<avatar text="">
-  <live-text>But if I get 5 friendships points when it lands, 
-And -1 positivity points when it fails
-
-Then it looks like a better deal. 
-</live-text>
+<avatar image="brain.png">
+For the final ingredient in making friends... you need to be vulnerable.
 </avatar>
 
+<avatar>
+Eh... I'm not going there. Who needs friends anyways?
+</avatar>
 
+<avatar>
+Why bother... I have Elena. 
+</avatar>
 
-But if I get 5 friendships points when it lands, 
-And -1 positivity points when it fails
+<avatar image="" text="(silence)">
+  <next>Next</next>
+</avatar>
 
-Then it looks like a better deal. 
-
-
-If you multiply the probability of each outcome occuring with the reward for the outcome, and addeverythign together, you get the <bold>expected value</bold>. The expected value is the average reward.
-
-Help me decide whether to tell these jokes or not, by calculating their expected value.
-
-
-
-Joke:
-25% of the time it lands favorably, resulting in $__
-
-
-[Tell] [Don't tell]
-
-
-
-
-https://www.rd.com/funny-stuff/short-jokes/
-
-----
-
-Okay, I think we might have enough positivity points. The next thing we need is consistency. 
-
-We need consistent repeat positive interactions. 
-
-
-repeat positive interactions ---
-stopped here -- thinking about htis
-
-
-
-You could join an actvitity. 
-
-Which activity should I join to maximize the number of interactions? 
-
-
-Poker club
-[distribution]
-
-
-Just like before, you can take the expected value. The cool thing is if you plot the possible otucomes as a distribution (possibilities on x-axis, probabilities on y-axis) taking the expected value is the balance point.
-
-
-Which activity should I join? 
-
-
-Cool, so now you're a member of the ___ ___ ___ clubs. 
-And you have ___ friendship points. 
-
-
-Brain: 
-
-For the final ingredient in making friends... you need vulnerability...
-
-
-Wizard: I'm not going there. 
-
-Why not? 
-
-Wizard: Why bother... I have Elena. 
-
-Wizard: Elena??? Where's Elena??
-
-
-EV section
-
-fails to make friends
-
-Oh well, at least I have Elena...
-
-Elena?? Where is Elena??? [Bayes Rule]
-
-OR
-
-Yeah, Elena is a super smart crow. [P-values]
+<avatar text="Elena??? Where's Elena??">
+  <next>Next chapter</next>
+</avatar>
 
 </pset>
+</script>
+
+<script type="text/x-template" id="ev-joke-template">
+<div>
+<avatar>
+  <div>So, I should tell the joke?</div>
+
+  <div v-for="outcome in joke.outcomes">
+    {{outcome.certainty*100}}% chance joke {{outcome.present}}, {{outcome.payoff}} points
+  </div>
+
+  <buton @click.native="userAnswer='Yes'">Yes</buton>
+  <buton @click.native="userAnswer='No'">No</buton>
+</avatar>
+
+
+<avatar v-if="ev > 0 && userAnswer == 'No'">
+  <div>Oh, what's wrong with this joke? It seems like positive expected value to me: </div>
+  <div>{{evCalculation}}</div>
+</avatar>
+
+<avatar v-if="ev < 0 && userAnswer == 'Yes'">
+  <div>Hmm... I'm not sure if this is a good idea: </div>
+  <div>{{evCalculation}}</div>
+</avatar>
+
+<avatar v-if="ev < 0 && userAnswer == 'No'">
+  Good call... that joke has negative expected value so I probably shouldn't tell it.
+  <next @click.native="finish">Next</next>
+</avatar>
+
+
+<pset v-if="ev > 0 && userAnswer == 'Yes'">
+<avatar text="Okay... here goes...">
+  <next>Next</next>
+</avatar>
+
+<avatar :text="joke.lead">
+  <next>Next</next>
+</avatar>
+
+<avatar>
+  <div><bold>{{joke.punchline}}!</bold></div>
+  <next>{{chosenOutcome.payoff > 0 ? 'Ha-ha!' : 'Eh...'}}</next>
+</avatar>
+
+
+<avatar v-if="userAnswer !== null && chosenOutcome.payoff < 0">
+  <div>
+    Aw... it seems like that joke {{chosenOutcome.past}}. So I lost {{chosenOutcome.payoff}} positivity points. I'm still glad I told the joke, because it was positive expected value.
+  </div>
+
+  <div>
+    {{evCalculation}} in expectation.
+  </div>
+
+  <next @click.native="finish">Next</next>
+</avatar>
+
+<avatar v-if="userAnswer !== null && chosenOutcome.payoff > 0">
+  <div>
+    Yay!! That joke {{chosenOutcome.past}}! So I gain {{chosenOutcome.payoff}} positivity points.
+  </div>
+  <next @click.native="finish">Next</next>
+</avatar>
+
+</pset>
+
+</div>
 </script>
 
 <script type="text/x-template" id="risk-reward-template">
@@ -2504,8 +2665,8 @@ Yeah, Elena is a super smart crow. [P-values]
 
 
 <script type="text/x-template" id="distribution-template">
-<div class="distribution">
-<div v-if="title" class="handwriting" style="text-align: center;">{{title}}</div>
+<div class="distribution" style="display:inline-block">
+<div v-if="title" style="text-align: center; font-size: 16px" :style="titleStyle">{{title}}</div>
 
 <svg :width="chartWidth+margin.left+margin.right" 
      :height="chartHeight+margin.top+margin.bottom">
@@ -2518,15 +2679,14 @@ Yeah, Elena is a super smart crow. [P-values]
           :width="xScale.bandwidth()"
           :height="chartHeight - yScale(outcome.y)"
           :key="outcome.x"
-          fill="#001681"/>
+          fill="#EA27A2"/>
 
-      <!-- top of bar -->
+      <!-- top of bar 
       <text v-for="outcome in outcomes" 
         :x="xScale(outcome.x) + xScale.bandwidth()/2 - 8"
         :y="yScale(outcome.y) - 2">
         {{ outcome.y }}
-      </text>
-
+      </text>-->
     </g>
 </svg>
 </div>
@@ -2854,26 +3014,78 @@ var sounds = {
 
 const jokes = [
 {
-  a: "Did you hear about the mathematician who's afraid of negative numbers?",
-  b: "He'll stop at nothing to avoid them."
+  outcomes: [
+    // Order matters -- index is used to determine ?????
+    {present: 'fails', past: 'failed', certainty: 0.7, payoff: -1}, 
+    {present: 'lands', past: 'landed', certainty: 0.3, payoff: 4}
+  ],
+  lead: "Did you hear about the mathematician who's afraid of negative numbers?",
+  punchline: "He'll stop at nothing to avoid them",
 },
 
 {
-  a:"Why don't scientists trust atoms?",
-  b:"Because they make up everything."
+  outcomes: [
+    {present: 'fails', past: 'failed', certainty: 0.7, payoff: -1}, 
+    {present: 'lands', past: 'landed', certainty: 0.3, payoff: 4}
+  ]
+},
+
+{
+  outcomes: [
+    {present: 'fails', past: 'failed', certainty: 0.7, payoff: -1}, 
+    {present: 'lands', past: 'landed', certainty: 0.3, payoff: 4}
+  ],
+  lead:"Why don't scientists trust atoms?",
+  punchline:"Because they make up everything"
+},
+
+{
+  outcomes: [
+    {present: 'fails', past: 'failed', certainty: 0.7, payoff: -1}, 
+    {present: 'lands', past: 'landed', certainty: 0.3, payoff: 4}
+  ]
+},
+
+// {
+//   outcomes: [
+//     {present: 'fails': past: 'failed', certainty: 0.7, payoff: -1}, 
+//     {present: 'lands': past: 'landed', certainty: 0.3, payoff: 4}
+//   ],
+//   lead:"Where are average things manufactured?",
+//   punchline:"The satisfactory"
+// },
+
+{
+  outcomes: [
+    {present: 'fails', past: 'failed', certainty: 0.7, payoff: -1}, 
+    {present: 'lands', past: 'landed', certainty: 0.3, payoff: 4}
+  ],
+  lead:   "How many times can you substract 10 from 100?",
+  punchline: "Once. The next time you would be subtracting 10 from 90"
 },
 {
-  a:"Where are average things manufactured?",
-  b:"The satisfactory."
+  outcomes: [
+    {present: 'fails', past: 'failed', certainty: 0.7, payoff: -1}, 
+    {present: 'lands', past: 'landed', certainty: 0.3, payoff: 4}
+  ],
+  lead: "The numbers 19 and 20 got into a fight.",
+  punchline: "21"
 },
-{
-  a:   "How many times can you substract 10 from 100?",
-  b: "Once. The next time you would be subtracting 10 from 90."
-},
-{
-  a: "The numbers 19 and 20 got into a fight.",
-  b: "21."
-}
+];
+
+const clubs = [
+  {
+    name: 'fencing club',
+    outcomes: [{x: 1, y: 0.1},{x: 2, y: 0.2},{x: 3, y: 0.3},{x: 4, y: 0.4},]
+  },
+  {
+    name: 'math team',
+    outcomes: [{x: 1, y: 0.1},{x: 2, y: 0.2},{x: 3, y: 0.3},{x: 4, y: 0.4},]
+  },
+  {
+    name: 'knitting circle',
+    outcomes: [{x: 1, y: 0.1},{x: 2, y: 0.2},{x: 3, y: 0.3},{x: 4, y: 0.4},]
+  },
 ];
 
 // pull the dialog into a new component?? 
@@ -3082,6 +3294,68 @@ Vue.component('coin', {
     }
   },
   template: '#coin-template'
+});
+
+
+
+// outcomes = [
+//  {certainty: 0.4, hp: 15, caption: 'warmth'}, 
+//  {certainty: 0.6, hp: 0, caption: 'you fail to start the fire'}
+// ]
+// outcomes is a list of {certainty: __}
+function drawFromOutcomes(outcomes){
+  var ind = drawIndFromOutcomes(outcomes);
+  return outcomes[ind];
+}
+
+function drawIndFromOutcomes(outcomes){
+  var certainties = _.map(outcomes, 'certainty');
+  if (!approx(sum(certainties), 1.0)){
+    debugger;
+    console.error('certainties for outcomes did not sum to 1: ' + outcomes);
+  }
+
+  var rand = Math.random();
+  var cumsum_certainties = cumulativeSum(certainties);
+  var cumsum_ind = 0;
+  while (cumsum_certainties[cumsum_ind] < rand){
+    cumsum_ind++;
+  }
+  return cumsum_ind;
+}
+
+Vue.component('ev-joke', {
+  props: {
+    joke: {type: Object},
+  },
+  computed: {
+    ev(){
+      return sum(this.joke.outcomes.map(outcome => outcome.certainty * outcome.payoff));
+    },
+    evCalculation(){
+      return this.joke.outcomes.map(outcome => outcome.certainty + ' × ' + outcome.payoff).join(' + ') + ' = ' + this.ev;
+    },
+    chosenOutcome(){
+      return this.joke.outcomes[this.chosenOutcomeInd];
+    }
+  },
+  mounted(){
+   this.chosenOutcomeInd = drawIndFromOutcomes(this.joke.outcomes);
+//   this.chosenOutcome = drawFromOutcomes(this.joke.outcomes);
+  },
+  data: function(){
+    return {
+      stage: 0,
+      userAnswer: null,
+//      chosenOutcome: null,
+    }
+  },
+  methods: {
+    finish(){
+      this.$emit('done');
+    }
+  },
+  template: '#ev-joke-template'
 });
 
 
@@ -3498,25 +3772,25 @@ Vue.component('big-frac', {
   template: '#big-frac-template'
 });
 
-function drawFromOutcomes(outcomes){
-  var ind = drawIndFromOutcomes(outcomes);
-  return outcomes[ind].x;
-}
+// function drawFromOutcomes(outcomes){
+//   var ind = drawIndFromOutcomes(outcomes);
+//   return outcomes[ind].x;
+// }
 
-function drawIndFromOutcomes(outcomes){
-  var probs = _.map(outcomes, 'y');
-  if (!approx(sum(probs), 1.0)){
-    console.error('certainties for outcomes did not sum to 1: ' + outcomes);
-  }
+// function drawIndFromOutcomes(outcomes){
+//   var probs = _.map(outcomes, 'y');
+//   if (!approx(sum(probs), 1.0)){
+//     console.error('certainties for outcomes did not sum to 1: ' + outcomes);
+//   }
 
-  var rand = Math.random();
-  var cumsum_probs = cumulativeSum(probs);
-  var cumsum_ind = 0;
-  while (cumsum_probs[cumsum_ind] < rand){
-    cumsum_ind++;
-  }
-  return cumsum_ind;
-}
+//   var rand = Math.random();
+//   var cumsum_probs = cumulativeSum(probs);
+//   var cumsum_ind = 0;
+//   while (cumsum_probs[cumsum_ind] < rand){
+//     cumsum_ind++;
+//   }
+//   return cumsum_ind;
+// }
 
 // // categorical x
 // outcomes = [
@@ -3544,31 +3818,29 @@ Vue.component('distribution', {
         {x: 'tattoos', y: 0.2},
         {x: 'no tattoos', y: 0.8},
       ];
-
-      // return [
-      //   {x: 1, y: 0.1},
-      //   {x: 2, y: 0.2},
-      //   {x: 3, y: 0.3},
-      //   {x: 4, y: 0.4},
-      // ];
     }},
     chartHeight: {type: Number, default: 150},
     chartWidth: {type: Number, default: 200},
     margin: {
       type: Object, 
       default: function(){
-        return {top: 10, right: 10, bottom: 20, left: 30};
+        return {top: 10, right: 10, bottom: 50, left: 50};
       }
     },
+    xLabel: {type: String},
+    yLabel: {type: String}
   },
   computed: {
     xScale(){
       return d3.scaleBand()
-          .domain(this.outcomes.map(d => d.x)).paddingInner(.1).range([0, this.chartWidth]);
+          .domain(this.outcomes.map(d => d.x)).paddingInner(0.01).range([0, this.chartWidth]);
     },
     yScale(){
       return d3.scaleLinear()
           .domain([0, 1]).range([this.chartHeight, 0]);
+    },
+    titleStyle(){
+      return {'margin-left': this.margin.left + 'px', 'margin-right': this.margin.right + 'px'};
     }
   },
   data: function(){
@@ -3588,14 +3860,34 @@ Vue.component('distribution', {
     const chart = d3.select(this.$el).select('.container');
     chart.append('g').call(yAxis);
     chart.append('g').attr('transform', 'translate(0,' + this.chartHeight + ')').call(xAxis);
+
+
+    // x axis label
+    chart.append("text")             
+      .attr("transform",
+            "translate(" + (this.chartWidth/2) + " ," + 
+                           (this.chartHeight + this.margin.top + 20) + ")")
+      .style("text-anchor", "middle")
+      .text(this.xLabel);
+
+    // y axis label
+    chart.append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 0 - this.margin.left)
+      .attr("x",0 - (this.chartHeight / 2))
+      .attr("dy", "1em")
+      .style("text-anchor", "middle")
+      .text(this.yLabel);    
+
   },
-  methods: {
-    draw(){
-      return drawFromOutcomes(this.outcomes);
-    }
-  },
+  // methods: {
+  //   draw(){
+  //     return drawFromOutcomes(this.outcomes); // this needs .x
+  //   }
+  // },
   template: '#distribution-template'
 });
+
 
 Vue.component('samples-from-distribution', {
   props: {
@@ -3980,6 +4272,8 @@ function makeComponent(componentName, points, reactions){
 
         chapters: chapters,
 
+        jokes: jokes,
+        jokeInd: 0,
       };
     },
     computed: {
@@ -4100,6 +4394,15 @@ function makeComponent(componentName, points, reactions){
         this.$root.play('achievement');
         await wait(1500);
         this.$root.nextChapter();
+      },
+      nextJoke(){
+        this.jokeInd++;
+        if (this.jokeInd >= this.jokes.length){
+          const pset = firstAncestorOfComponent(this, 'pset');
+          if (pset){
+            pset.next();
+          }      
+        }
       }
     },
     template: '#' + componentName + '-template'
@@ -4334,7 +4637,7 @@ const chapters = [
 {
   component: 'bayes-rule',
   description: 'Bayes Rule', 
-  image: 'wizard.png',
+  image: 'crow.png',
 },
 ];
 
@@ -4346,7 +4649,7 @@ new Vue({
   el: '#app',
   data: {
     chapters: chapters,
-    chapterInd: 3,
+    chapterInd: 4,
     // Obj property additions do not update DOM, so prepopulate all the keys in the object. Or use lists.
     //soundNameToCount: {},
     show: false,
