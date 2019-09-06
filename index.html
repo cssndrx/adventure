@@ -17,7 +17,7 @@
 
 <script src="js/lodash.min.js"></script>
 <script src="js/d3.v5.min.js"></script>
-<script src="js/vue.js"></script>
+<script src="js/vue.min.js"></script>
 
 <style>
 
@@ -25,6 +25,16 @@
   font-family: 'Fira Sans', sans-serif;
   font-size: 18px;
   font-weight: 300;
+}
+
+.handwriting, .handwriting *{
+  font-family: 'Itim';
+}
+
+h2{
+  font-family: 'Itim';
+  font-size: 36px;  
+  margin-left: 24px;
 }
 
 html, body, #app{
@@ -48,7 +58,16 @@ li, li * {
   background: linear-gradient(to right, orange , yellow, green, cyan, blue, violet);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  font-size: 16px;
+  margin: 8px;
 }
+
+.hint, .hint *{
+  font-size: 16px;
+  margin: 8px;
+  color: #777;
+}
+
 .samples-chart{
   -webkit-user-select: none; /* Safari 3.1+ */
   -moz-user-select: none; /* Firefox 2+ */
@@ -108,9 +127,6 @@ a{
 
 img{
   max-width: 400px;
-}
-.handwriting, .handwriting *{
-  font-family: 'Itim';
 }
 
 button{
@@ -176,11 +192,6 @@ button{
   filter: none;
 }
 
-.hint, .hint *{
-  font-size: 15px;
-  margin: 8px;
-  color: #777;
-}
 
 </style>
 </head>
@@ -222,6 +233,10 @@ overflow-y:scroll;padding-top:8px; background-color: #eee;">
 
 
 <script type="text/x-template" id="intro-to-pvalues-template">
+<div>
+
+<h2>Chapter 5</h2>
+
 <pset>
 
 <avatar image="scroll.png">
@@ -520,6 +535,7 @@ overflow-y:scroll;padding-top:8px; background-color: #eee;">
 
 
 </pset>
+</div>
 </script>
 
 
@@ -531,9 +547,7 @@ overflow-y:scroll;padding-top:8px; background-color: #eee;">
 <script type="text/x-template" id="intro-scene-template">
 <div style="width:600px; margin: 0 auto;">
 
-<div key="intro"
-  v-if="show('intro')"
-  style="text-align:center;">
+<div style="text-align:center;">
 
   <div class="handwriting" style="font-size:48px;">The Evil Wizard's Guide to Statistics</div>
 
@@ -550,7 +564,7 @@ overflow-y:scroll;padding-top:8px; background-color: #eee;">
   </div>
 
   <buton @click="$root.nextChapter()">PLAY</buton>
-</div> <!-- end intro -->
+</div>
 
 </div>
 </script>
@@ -562,6 +576,8 @@ overflow-y:scroll;padding-top:8px; background-color: #eee;">
 
 
 <script type="text/x-template" id="coin-flips-template">
+<div>
+<h2>Chapter 1</h2>
 <pset>
 
 
@@ -610,7 +626,7 @@ overflow-y:scroll;padding-top:8px; background-color: #eee;">
 </avatar>
 
 <avatar image="monster.png" 
-  text="Every day my mom packs me lunch by flipping a coin. If it lands tails, I get a peanut butter jelly sandwich. If it lands heads, I get my favorite -- a deluxe fried potato & cream cheese roll. ">
+  text="Every day my mom packs me lunch by flipping a coin. If it lands tails, I get a peanut butter jelly sandwich. If it lands heads, I get my favorite — a deluxe fried potato & cream cheese roll. ">
   <next>Is that good?</next>
 </avatar>
 
@@ -764,9 +780,13 @@ overflow-y:scroll;padding-top:8px; background-color: #eee;">
 </avatar>
 
 </pset>
+</div>
 </script>
 
 <script type="text/x-template" id="wizard-flips-template">
+<div>
+
+<h2>Chapter 2</h2>
 <pset>
 
 <avatar  
@@ -918,10 +938,15 @@ overflow-y:scroll;padding-top:8px; background-color: #eee;">
 </avatar>
 
 </pset>
+</div>
 </script>
 
 
 <script type="text/x-template" id="bayes-rule-template">
+<div>
+
+<h2>Chapter 6</h2>  
+
 <pset>
 
 <avatar text="Elena??? Where's Elena??">
@@ -1303,6 +1328,7 @@ overflow-y:scroll;padding-top:8px; background-color: #eee;">
 </avatar>
 
 </pset>
+</div>
 </script>
 
 <script type="text/x-template" id="pset-template">
@@ -1340,10 +1366,12 @@ overflow-y:scroll;padding-top:8px; background-color: #eee;">
 
 
 <script type="text/x-template" id="chain-rule-template">
+<div>
 
+  <h2>Chapter 3</h2>
 <pset>
 
-<avatar text="I liked this girl but she didn't like me back.">
+<avatar text="I like this girl but she doesn't like me back.">
   <next>Next</next>
 </avatar>
 
@@ -1392,7 +1420,7 @@ overflow-y:scroll;padding-top:8px; background-color: #eee;">
   </div>
 
   <div>
-    This is pronounced as, "the probability of a beard is 1/4".
+    This is pronounced as "the probability of a beard is 1/4".
   </div>
 
   <div>
@@ -1442,6 +1470,7 @@ overflow-y:scroll;padding-top:8px; background-color: #eee;">
 
 <avatar image="girl.png" 
         text="I guess I do see some correlation between being tall and having a beard, so they're not independent. If I know a monster is tall, there's a 1/3 chance that they have a beard.">
+  <next>Next</next>
 </avatar>
 
 
@@ -1516,7 +1545,7 @@ overflow-y:scroll;padding-top:8px; background-color: #eee;">
 </avatar>
 
 
-<avatar image="girl_happy.png" text="Kyaaa!! Thank you for your help so far. But I forgot... ">
+<avatar image="girl_happy.png" text="Thank you for your help so far. But I forgot... ">
   <next>Yes?</next>
 </avatar>
 
@@ -1525,8 +1554,8 @@ overflow-y:scroll;padding-top:8px; background-color: #eee;">
         image="girl.png"
         text="I also want my monster to have tattoos. 1/5 of monsters have tattoos.">
 
-  <div>In math speak, P(tattoos) = 1/5.</div>
-  <div>What is P(tall, beard, tattoos)? <span style="color:#777"><- Note: This is a more compact way of writing P(tall AND beard AND tattoos). The comma is pronounced "and".</span></div>
+  <div>In math speak, <bold>P(tattoos) = 1/5.</bold></div>
+  <div>What is P(tall, beard, tattoos)? <span style="color:#777"><- Note: This is a more compact way of writing P(tall AND beard AND tattoos).</span></div>
 
   <div class="extra-info">Facts from before:
     <ul>
@@ -1538,7 +1567,7 @@ overflow-y:scroll;padding-top:8px; background-color: #eee;">
   </div>
 
   <buton-group>
-    <buton coy>1/30</buton>
+    <next>1/30</next>
     <buton nope="Remember, we want to use P(beard|tall), not P(tall).">1/40</buton>
     <buton nope="Wait, are you just blindly multiplying numbers? Stop that.">1/120</buton>
     <buton yay>Not enough info</buton>
@@ -1623,7 +1652,7 @@ overflow-y:scroll;padding-top:8px; background-color: #eee;">
   </div>
 
   <div>
-  P(tall, beard, tattoos) =  1/<input-box :right="42" @yay="set('problem4')">
+  P(tall, beard, tattoos) = 1/<input-box :right="42">
     <template v-slot:hint>
       <div>
         Recall the Chain Rule says that everything must be conditioned on what came before. 
@@ -1636,7 +1665,6 @@ overflow-y:scroll;padding-top:8px; background-color: #eee;">
   </div>
 
 </avatar>
-
 
 <avatar key="problem4" 
         image="girl.png" 
@@ -1753,14 +1781,16 @@ overflow-y:scroll;padding-top:8px; background-color: #eee;">
 </avatar>
 
 </pset>
-
+</div>
 </script>
 
 <script type="text/x-template" id="ev-story-template">
+<div>
+<h2>Chapter 4</h2>
 <pset>
 
 
-<avatar text="How do I make friends?">
+<avatar text="How can I make friends?">
   <next>Next</next>
 </avatar>
 
@@ -1822,11 +1852,7 @@ overflow-y:scroll;padding-top:8px; background-color: #eee;">
 
 <avatar>
   <div>
-    Hm... everyone already thinks I'm weird.
-  </div>
-
-  <div>
-    I feel like, if the joke fails I might lose 1 point. But if the joke lands, I'll gain 5 points because there's nowhere to go but up for my reputation. Ha-ha!
+    Hm... everyone already thinks I'm weird. I feel like, if the joke fails I might lose 1 point. But if the joke lands, I'll gain 5 points because there's nowhere to go but up for my reputation. Ha-ha!
   </div>
 
   <div>
@@ -1885,6 +1911,7 @@ overflow-y:scroll;padding-top:8px; background-color: #eee;">
   <div v-if="memory=='eh'">
     Aw... it seems like that joke didn't land. So I lost 1 positivity point. I'm still glad I told the joke, because it was positive expected value.
   </div>
+  <next>Next</next>
 </avatar>
 
 <avatar>
@@ -2044,6 +2071,7 @@ Why bother... I have Elena.
 </avatar>
 
 </pset>
+</div>
 </script>
 
 
@@ -2101,7 +2129,7 @@ Click where you think the balance point is...
 <script type="text/x-template" id="ev-joke-template">
 <div>
 <avatar>
-  <div>So, I should tell the joke?</div>
+  <div>Should I tell the joke?</div>
 
   <div v-for="outcome in joke.outcomes">
     {{outcome.certainty*100}}% chance joke {{outcome.present}}, {{outcome.payoff}} points
@@ -2115,16 +2143,20 @@ Click where you think the balance point is...
 <avatar v-if="ev > 0 && userAnswer == 'No'">
   <div>Oh, what's wrong with this joke? It seems like positive expected value to me: </div>
   <div>{{evCalculation}}</div>
+  <div>Pick again.</div>
 </avatar>
 
 <avatar v-if="ev < 0 && userAnswer == 'Yes'">
   <div>Hmm... I'm not sure if this is a good idea: </div>
   <div>{{evCalculation}}</div>
+  <div>Pick again.</div>
 </avatar>
 
 <avatar v-if="ev < 0 && userAnswer == 'No'">
-  Good call... that joke has negative expected value so I probably shouldn't tell it.
-  <next @click.native="finish(0)">Next</next>
+  <div>
+    Good call... that joke has negative expected value so I probably shouldn't tell it.
+  </div>
+  <buton @click.native="finish(0)">Next</buton>
 </avatar>
 
 <avatar v-if="ev === 0 && userAnswer !== null">
@@ -2132,11 +2164,11 @@ Click where you think the balance point is...
     The expected value is 0, so you could go either way on this one. 
   </div>
 
-  <next v-if="userAnswer == 'Yes'"  
-        @click.native="forceTell=true">Next</next>
+  <buton v-if="userAnswer == 'Yes'"  
+        @click.native="forceTell=true">Next</buton>
 
-  <next v-if="userAnswer == 'No'"  
-        @click.native="finish(0)">Next</next>
+  <buton v-if="userAnswer == 'No'"  
+        @click.native="finish(0)">Next</buton>
 </avatar>
 
 <pset v-if="(ev > 0 && userAnswer == 'Yes') || forceTell">
@@ -2299,9 +2331,9 @@ Click where you think the balance point is...
         <g v-for="x in xdomain">
           <rect v-for="countInd in counts[x]"
           :x="xScale(x)"
-          :y="chartHeight - yScale(counts[x]) + yScaleBandwidth*(countInd-1)+2"
+          :y="chartHeight - yScale(counts[x]) + yScaleBandwidth*(countInd-1)+yPadBetweenBars"
           :width="xScale.bandwidth()"
-          :height="yScaleBandwidth-2"
+          :height="yScaleBandwidth-yPadBetweenBars"
           :key="x + countInd"
           :fill="colors.bar || '#D1D9E0'"/>
         </g>
@@ -2355,34 +2387,8 @@ Click where you think the balance point is...
 </script>
 
 
-<script type="text/x-template" id="monk-head-template">
-<div class="handwriting normal-div"
-      style="display:inline-block; position:relative; white-space: nowrap;">
-  <img src="images/monk_head.png" style="width:80px;">
-
-  <!-- speech pointing to left -->
-  <div v-if="hasSlot('lhs')">
-    <div style="width:22px; border:1px solid black; transform:rotate(50deg); position:absolute; top:-14px; left:10px;"></div>
-    <div style="position:absolute; top: -40px; left:0px;">
-      <slot name="lhs"></slot>
-    </div>
-  </div>
-
-  <!-- speech pointing to right -->
-  <div v-if="hasSlot('rhs')">
-    <div style="width:24px; border:1px solid black; transform:rotate(310deg); position:absolute; top:-14px; left:50px;"></div>
-    <div style="position:absolute; top: -40px; left: 60px;">
-      <slot name="rhs"></slot>
-    </div>
-  </div>
-
-</div>
-</script>
-
-
 <script type="text/x-template" id="exp-template">
 <var>{{base}}<sup>{{pow}}</sup></var>
-<!--<span>{{base}}<sup>{{pow}}</sup></span>-->
 </script>
 
 
@@ -2433,27 +2439,25 @@ Click where you think the balance point is...
 </script>
 
 <script type="text/x-template" id="input-box-template">
-<div style="display:inline-block; position:relative;">
+<div style="display:inline-block; position:relative; top:-16px;">
   <input v-model="val" placeholder="?" style="width:70px; display:inline; position:relative; top:16px" v-on:keyup.enter="answerSubmit">
   <slot></slot>
   <buton style="display:inline" @click="answerSubmit">Go</buton>
 
-  <div>
-    <span v-if="showCannedHint" class="hint">
-      {{cannedHint}}
-    </span>
+  <!-- absolute position so they don't shift the screen -->
+  <span v-if="showCannedHint" class="hint" style="position:absolute; bottom:-24px; right:4px">
+    {{cannedHint}}
+  </span>
+  <span v-if="showYay" class="rainbow-text" style="position:absolute; bottom:-24px; right:4px">
+    Yay!
+  </span>
 
-    <span v-if="showYay" class="rainbow-text">
-      Yay!
-    </span>
 
-    <div v-if="showHintSlot" class="hint">
-      <slot name="hint"></slot>
-    </div>
+  <div v-if="showHintSlot" class="hint normal-div">
+    <slot name="hint"></slot>
   </div>
 </div>
 </script>
-<!-- end templates -->
 
 
 <script>
@@ -2490,7 +2494,6 @@ var sounds = {
 const jokes = [
 {
   outcomes: [
-    // Order matters -- index is used to determine ?????
     {present: 'fails', past: 'failed', certainty: 0.5, payoff: -1}, 
     {present: 'lands', past: 'landed', certainty: 0.5, payoff: 2}
   ],
@@ -2708,7 +2711,7 @@ Vue.component('ev-joke', {
       return _.sum(this.joke.outcomes.map(outcome => outcome.certainty * outcome.payoff));
     },
     evCalculation(){
-      return this.joke.outcomes.map(outcome => outcome.certainty + ' × ' + outcome.payoff).join(' + ') + ' = ' + this.ev;
+      return this.joke.outcomes.map(outcome => outcome.certainty + ' × ' + outcome.payoff).join(' + ') + ' = ' + this.$root.roundTo(this.ev, 2);
     },
     chosenOutcome(){
       return this.joke.outcomes[this.chosenOutcomeInd];
@@ -2766,7 +2769,10 @@ Vue.component('input-box', {
       return this.hints[this.answers.length % this.hints.length];      
     },
     isYay: function(){
-      return this.val == this.right;
+      const exactMatch = this.val == this.right;
+      const europeanCommaMatch = this.val.replace(',', '.') == this.right;
+      const evalMatch = approx(eval(this.val), eval(this.right));
+      return exactMatch || europeanCommaMatch || evalMatch;
     },
     isNope: function(){
       return !this.isYay;
@@ -3324,7 +3330,9 @@ Vue.component('samples-chart', {
 
     showRatio: {type: Boolean, default: false}, 
     isDraggable: {type: Boolean, default: false}, 
-    maxCounts: {type: Number, default: 15},
+
+    // Minimum number of bars in y direction.
+    minNumInY: {type: Number, default: 15},
 
     colors: {
       type: Object, 
@@ -3340,17 +3348,25 @@ Vue.component('samples-chart', {
       return d3.scaleBand()
           .domain(this.xdomain).paddingInner(.1).range([0, this.chartWidth]);
     },
-    sumCounts(){
-      return this.maxCounts;
+    numBarsInY(){
+      if (!this.samples){
+        return this.minNumInY;
+      }
+
+      const bins = _.groupBy(this.samples);
+      const maxBinLength = _.max(_.values(bins).map(arr => arr.length));
+      return Math.max(this.minNumInY, maxBinLength);
     },
     yScale(){
-      // const maxHeight = sumCounts == 1 ? this.xScale.bandwidth() : this.chartHeight;
       return d3.scaleLinear()
-          .domain([0, this.sumCounts]).range([0, this.chartHeight]);
+          .domain([0, this.numBarsInY]).range([0, this.chartHeight]);
     },
     yScaleBandwidth(){
-      return this.chartHeight / this.sumCounts;
+      return this.chartHeight / this.numBarsInY;
     },
+    yPadBetweenBars(){
+      return this.numBarsInY < 40 ? 2 : 0;
+    }
   },
   data: function(){
     return {
@@ -3493,13 +3509,12 @@ Vue.component('bold', {
   template: '#bold-template'
 });
 
-function makeComponent(componentName, points, reactions){
-  var reactions = reactions || {};
+function makeComponent(componentName){
   Vue.component(componentName, {
     data: function(){
       return {
 
-        problemToCorrectness: {}, // 'fakeout1': [false, true]
+        problemTuples: [], // [ ['problem1', true], ['problem2', false] ]
         memory: null, // A variable for dumping short term component state.
 
         chapters: chapters,
@@ -3513,6 +3528,12 @@ function makeComponent(componentName, points, reactions){
 
 
       };
+    },
+    computed: {
+      // 'fakeout1': [false, true]
+      problemToCorrectness(){
+        return _.groupBy(this.problemTuples, d => d[0]);
+      }
     },
     mounted: async function(){
       var this_ = this;
@@ -3538,12 +3559,11 @@ function makeComponent(componentName, points, reactions){
     },
     methods: {
       addCorrectness(key, isCorrect){
-        if(!(key in this.problemToCorrectness)){
-          this.problemToCorrectness[key] = [];
-        }
+        this.problemTuples.push([key, isCorrect]);
         console.log('logging ' + key + ': ' + isCorrect);
-        this.problemToCorrectness[key].push(isCorrect);
       },
+
+      // Got the correct answer once.
       got: function(key){
         console.log('calling "got" for ' + key);
         // Return the latest value
@@ -3555,8 +3575,9 @@ function makeComponent(componentName, points, reactions){
           return false;
         }
       },
+
+      // Got the correct answer every time.
       perfect: function(key){
-        // All answers to this problem were correct.
         if(this.problemToCorrectness[key] && _.every(this.problemToCorrectness[key])){
           return true;
         }
@@ -3566,10 +3587,7 @@ function makeComponent(componentName, points, reactions){
         this.positivityPoints += params.payoff;
         this.jokeInd++;
         if (this.jokeInd >= this.jokes.length){
-          const pset = firstAncestorOfComponent(this, 'pset');
-          if (pset){
-            pset.next();
-          }      
+          this.next();
         }
       },
       next(){
@@ -3702,7 +3720,7 @@ new Vue({
   el: '#app',
   data: {
     chapters: chapters,
-    chapterInd: 3,
+    chapterInd: 4,
     // Obj property additions do not update DOM, so prepopulate all the keys in the object. Or use lists.
     //soundNameToCount: {},
 //    show: false,
