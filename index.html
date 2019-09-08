@@ -34,7 +34,10 @@
 h2{
   font-family: 'Itim';
   font-size: 36px;  
-  margin-left: 24px;
+  width: 600px;
+  margin: 0 auto;
+  margin-bottom: 16px;
+  margin-top: 16px;
 }
 
 html, body, #app{
@@ -55,16 +58,19 @@ li, li * {
 }
 
 .rainbow-text{
+  font-size: 16px;
+  margin: 8px;
+  font-weight: 700;
+
   background: linear-gradient(to right, orange , yellow, green, cyan, blue, violet);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  font-size: 16px;
-  margin: 8px;
 }
 
 .hint, .hint *{
   font-size: 16px;
   margin: 8px;
+  font-weight: 700;
   color: #777;
 }
 
@@ -170,7 +176,6 @@ button{
   user-select: none; /* Standard syntax */
 }
 
-
 .sideways{
   transform: translateX(-50%) translateY(-50%) rotate(-90deg);
   position: absolute;
@@ -186,12 +191,6 @@ button{
 .toc-chapter:hover{
   background-color: #ddd;
 }
-
-.toc-chapter:hover img{
-    -webkit-filter: none;
-  filter: none;
-}
-
 
 </style>
 </head>
@@ -413,7 +412,7 @@ overflow-y:scroll;padding-top:8px; background-color: #eee;">
   <div style="font-size:14px">+47% +46% +6% +0% -7% -3% +13% +0% -10% +28% -4% +30% +1% +48% +37% +26% +47% +46% -13% +15% +33% +33% +26% </div>
 </div>
 <div>Average effect size: 11% </div>
-<div>P-value against placebo: 0.1</div>
+<div>P-value: 0.1</div>
 </div>
 
 <once-group>
@@ -598,11 +597,7 @@ overflow-y:scroll;padding-top:8px; background-color: #eee;">
     Not too long ago, I was just like you. Just a regular nerdy wizard on the internet.
   </p>
   <p>
-    But one day, it dawned on me that humans really don't understand probability and statistics.
-  </p>
-
-  <p>
-    And that was when I realized... I could do good... by doing evil... if I could cause mischief in the world that everyone would be forced to notice probability in their daily life.
+    But one day, I realized... I could do good... by doing evil... if I could cause mischief in the world that everyone would be forced to notice the probability and statistics in their daily life.
   </p>
 
   <p style="font-style:italic">
@@ -950,7 +945,7 @@ overflow-y:scroll;padding-top:8px; background-color: #eee;">
 <pset>
 
 <avatar text="Elena??? Where's Elena??">
-  <next>NEXT?</next>
+  <next>NEXT</next>
 </avatar>
 
 <avatar text="Oh noooo my one and only friend!">
@@ -962,7 +957,7 @@ overflow-y:scroll;padding-top:8px; background-color: #eee;">
   <next>Breathe</next>
 </avatar>
 
-<avatar text="Wait... does this have to do with the scientist??">
+<avatar text="Wait... does this have to do with Chapter 5??">
   <next>Next</next>
 </avatar>
 
@@ -1062,7 +1057,7 @@ overflow-y:scroll;padding-top:8px; background-color: #eee;">
   </div>
 
   <div>
-    the likelihood of the evidence under your prior belief P(D|H)
+    the likelihood of the evidence under your prior belief P(D|H).
   </div>
   <next>Next</next>
 </avatar>
@@ -1088,7 +1083,7 @@ overflow-y:scroll;padding-top:8px; background-color: #eee;">
 
 <avatar image="brain.png">
   <div>
-    Now need to take into account the data that Elena was last seen visibly ruffled. 
+    Now you need to take into account the data that Elena was last seen visibly ruffled. 
   </div>
   <div>
     To incorporate this data, Bayes Rule says to look at the likelihood of the data under each hypothesis P(D|H). 
@@ -1101,6 +1096,7 @@ overflow-y:scroll;padding-top:8px; background-color: #eee;">
   <div>
     P(Ruffled|OK) vs P(Ruffled|Not OK).
   </div>
+  <next>Next</next>
 </avatar>
 
 
@@ -1321,13 +1317,38 @@ overflow-y:scroll;padding-top:8px; background-color: #eee;">
 
 <avatar>
   <div>
-  So... final question... I guess we're friends now? 
+  So... I guess we're friends now? 
   </div>
 
-  <next>Yes</next><next>No</next>
+  <once-group>
+    <next>Yes</next><next>Possibly</next>
+  </once-group>
 </avatar>
 
+<avatar>
+  <div>
+  And you see probability and statistics IRL now? 
+  </div>
+
+  <once-group>
+    <next>Yes</next><next>Possibly</next>
+  </once-group>
+</avatar>
+
+<avatar>
+  <div>
+  Then my work here is done, friend.
+  </div>
+  <next>The End</next>
+</avatar>
+
+
 </pset>
+</div>
+</script>
+
+<script type="text/x-template" id="the-end">
+<div>
 </div>
 </script>
 
@@ -1341,7 +1362,7 @@ overflow-y:scroll;padding-top:8px; background-color: #eee;">
   <div @click="flip" class="coin normal-div" style="position:relative">
     <img v-if="isShowingH" src="images/coin_heads.png" style="width:100px">
     <img v-if="!isShowingH" src="images/coin_tails.png" style="width:100px">
-    <div ref="flip-string" style="font-size:13px;" :style="flipStringStyle">{{flipString}}</div>
+    <div ref="flip-string" style="font-size:13px; margin-left:8px; margin-right:8px" :style="flipStringStyle">{{flipString}}</div>
     <samples-chart v-if="flips.length > 8" :xdomain="xDomain" :samples="samples" :style="chartStyle"></samples-chart>
   </div>
 </script>
@@ -1371,7 +1392,7 @@ overflow-y:scroll;padding-top:8px; background-color: #eee;">
   <h2>Chapter 3</h2>
 <pset>
 
-<avatar text="I like this girl but she doesn't like me back.">
+<avatar text="I like a girl but she doesn't like me back.">
   <next>Next</next>
 </avatar>
 
@@ -1787,7 +1808,7 @@ overflow-y:scroll;padding-top:8px; background-color: #eee;">
 <script type="text/x-template" id="ev-story-template">
 <div>
 <h2>Chapter 4</h2>
-<pset>
+<pset ref="pset">
 
 
 <avatar text="How can I make friends?">
@@ -1921,6 +1942,7 @@ Help me decide whether to tell each joke or not, by calculating their expected v
 <next>Next</next>
 </avatar>
 
+
 <div>
   <ev-joke 
     v-for="(joke, index) in jokes" 
@@ -1932,7 +1954,7 @@ Help me decide whether to tell each joke or not, by calculating their expected v
 </div>
 
 <avatar image="brain.png">
-  <div>
+<div>
 Okay, I think that's enough for positivity. The second tenet of friendship is consistency... you need to find a structure to make people repeatedly hangout with you.
 </div>
 <next>Next</next>
@@ -1941,6 +1963,7 @@ Okay, I think that's enough for positivity. The second tenet of friendship is co
 <avatar text="Hm... I could join a CLUB.">
   <next>Next</next>
 </avatar>
+
 
 <avatar text="todo: come up with acrostic for CLUB">
   <next>Next</next>  
@@ -1965,11 +1988,12 @@ Okay, I think that's enough for positivity. The second tenet of friendship is co
   <distribution :outcomes="[{x: 1, y: 0.1},{x: 2, y: 0.2},{x: 3, y: 0.3},{x: 4, y: 0.4},]" xLabel="Number of interactions" yLabel="Probability" title="Fencing Club 💖" />
 
   <div>This type of plot with possibilities on the x-axis, and probabilities on the y-axis is called a <bold>distribution</bold>.</div>
+  <next>Next</next>
 </avatar>
 
 <avatar>
   <div>
-    Hm... I wonder how many interactions I would get from joining the fencing club?
+    Hm... I wonder how many interactions I could expect to get from joining the fencing club?
   </div>
 
   <next>Next</next>
@@ -2115,7 +2139,7 @@ Click where you think the balance point is...
 
 <div v-if="answerReal" class="smaller-children">
   <div>
-  You <span style="color:#7570b3">guessed {{$root.roundTo(guessReal, 1)}}</span>. The <span style="color:#1b9e77">true answer of  {{$root.roundTo(answerReal,1)}}</span> was {{isUserClose  ? 'pretty close!' : 'far off.'}} {{ isUserClose ? 'Good job!' : 'Needs work.' }}
+  You <span style="color:#7570b3">guessed {{$root.roundTo(guessReal, 1)}}</span>. The <span style="color:#1b9e77">expected value of  {{$root.roundTo(answerReal,1)}}</span> was {{isUserClose  ? 'pretty close!' : 'far off.'}} {{ isUserClose ? 'Good job!' : 'Needs work.' }}
   </div>
 
   <buton @click.native="$emit('done')">Next</buton>
@@ -2132,7 +2156,7 @@ Click where you think the balance point is...
   <div>Should I tell the joke?</div>
 
   <div v-for="outcome in joke.outcomes">
-    {{outcome.certainty*100}}% chance joke {{outcome.present}}, {{outcome.payoff}} points
+    {{$root.roundTo(outcome.certainty*100, 0)}}% chance joke {{outcome.present}}, {{outcome.payoff}} points
   </div>
 
   <buton @click.native="userAnswer='Yes'">Yes</buton>
@@ -2471,23 +2495,26 @@ const bus = new Vue();
 
 
 var sounds = {
-  'coin': {clip: new Audio('sounds/gold1.wav')},
+  // 'coin': {clip: new Audio('sounds/gold1.wav')},
   'heads': {clip: new Audio('sounds/gold0.wav')},
   'tails': {clip: new Audio('sounds/gold1.wav')},
 
-  'speech': {clip: new Audio('sounds/speech_louder.wav')},
+  // 'speech': {clip: new Audio('sounds/speech_louder.wav')},
   //'speech': {clip: new Audio('sounds/drums_text.wav')},
 
-  'buton': {clip: new Audio('sounds/button.wav')},
-  'wrong': {clip: new Audio('sounds/wrong.wav')},
-  'chimes': {clip: new Audio('sounds/chimes.wav')},
-  // 'right': {clip: new Audio('sounds/right_soft.wav'), duration: 1000},
-  'glitch': {clip: new Audio('sounds/glitch.wav')},
-  'spell': {clip: new Audio('sounds/spell.wav')},
-  'coy': {clip: new Audio('sounds/laugh.wav')},
-  'right': {clip: new Audio('sounds/swish1.wav')},
-  'curious': {clip: new Audio('sounds/curious.wav')},
-  'achievement': {clip: new Audio('sounds/achievement.wav')},
+  // 'buton': {clips: [new Audio('sounds/la2.wav'), new Audio('sounds/re1.wav'), new Audio('sounds/la1.wav')]},
+
+  'nope': {clip: new Audio('sounds/ci3.wav')},
+  'yay': {clip: new Audio('sounds/rere.wav')},
+
+  // 'chimes': {clip: new Audio('sounds/chimes.wav')},
+  // // 'right': {clip: new Audio('sounds/right_soft.wav'), duration: 1000},
+  // 'glitch': {clip: new Audio('sounds/glitch.wav')},
+  // 'spell': {clip: new Audio('sounds/spell.wav')},
+  // 'coy': {clip: new Audio('sounds/laugh.wav')},
+  // 'right': {clip: new Audio('sounds/swish1.wav')},
+  // 'curious': {clip: new Audio('sounds/curious.wav')},
+  // 'achievement': {clip: new Audio('sounds/achievement.wav')},
 };
 
 
@@ -2495,7 +2522,7 @@ const jokes = [
 {
   outcomes: [
     {present: 'fails', past: 'failed', certainty: 0.5, payoff: -1}, 
-    {present: 'lands', past: 'landed', certainty: 0.5, payoff: 2}
+    {present: 'lands', past: 'landed', certainty: 0.5, payoff: 3}
   ],
   lead: "Did you hear about the mathematician who's afraid of negative numbers?",
   punchline: "He'll stop at nothing to avoid them",
@@ -2511,7 +2538,7 @@ const jokes = [
 {
   outcomes: [
     {present: 'fails', past: 'failed', certainty: 0.6, payoff: -1}, 
-    {present: 'lands', past: 'landed', certainty: 0.4, payoff: 4}
+    {present: 'lands', past: 'landed', certainty: 0.4, payoff: 5}
   ],
   lead:"Why don't scientists trust atoms?",
   punchline:"Because they make up everything"
@@ -2519,26 +2546,24 @@ const jokes = [
 
 {
   outcomes: [
-    {present: 'fails', past: 'failed', certainty: 0.8, payoff: -1}, 
-    {present: 'lands', past: 'landed', certainty: 0.2, payoff: 5}
+    {present: 'fails', past: 'failed', certainty: 0.55, payoff: -1}, 
+    {present: 'lands', past: 'landed', certainty: 0.45, payoff: 3}
   ],
-  lead:   "How many times can you substract 10 from 100?",
+  lead:   "How many times can you subtract 10 from 100?",
   punchline: "Once. The next time you would be subtracting 10 from 90"
 },
 
 {
   outcomes: [
-    {present: 'fails', past: 'failed', certainty: 0.8, payoff: -2}, 
-    {present: 'lands', past: 'landed', certainty: 0.2, payoff: 5}
+    {present: 'fails', past: 'failed', certainty: 0.7, payoff: -2}, 
+    {present: 'lands', past: 'landed', certainty: 0.3, payoff: 4}
   ]
 },
 
-
-// EV = 0.
 {
   outcomes: [
-    {present: 'fails', past: 'failed', certainty: 0.8, payoff: -1}, 
-    {present: 'lands', past: 'landed', certainty: 0.2, payoff: 4}
+    {present: 'fails', past: 'failed', certainty: 0.32, payoff: -1}, 
+    {present: 'lands', past: 'landed', certainty: 0.68, payoff: 4}
   ],
   lead: "The numbers 19 and 20 got into a fight.",
   punchline: "21"
@@ -2923,7 +2948,13 @@ Vue.component('buton', {
   },
   methods: {
     butonClicked: async function(){
-//      this.$root.play('buton');
+      if (this.isYay){
+        // this.$root.play('yay');        
+      } else if (this.isNope){
+        // this.$root.play('nope');
+      } else{
+//        this.$root.play('buton');        
+      }
       this.clickedButton = true;
       const avatar = firstAncestorOfComponent(this, 'avatar');
 
@@ -3094,6 +3125,12 @@ Vue.component('visual-ev-click', {
 
       isMounted: false,
     };
+  },
+
+  watch:{
+    answerReal(){
+      this.$root.scrollWindow();
+    }
   },
 
   computed: {
@@ -3586,15 +3623,13 @@ function makeComponent(componentName){
       nextJoke(params){
         this.positivityPoints += params.payoff;
         this.jokeInd++;
+        console.log(this.jokeInd + ' ' + this.jokes.length);
         if (this.jokeInd >= this.jokes.length){
           this.next();
         }
       },
       next(){
-        const pset = firstAncestorOfComponent(this, 'pset');
-        if (pset){
-          pset.next();
-        }      
+        this.$refs['pset'].next();
       }
     },
     template: '#' + componentName + '-template'
@@ -3640,7 +3675,7 @@ Vue.component('pset', {
     this.$root.report(0);
   },
   methods: {
-    next(){
+    async next(){
       this.ind = this.ind + 1;
       if (this.ind >= this.elms.length){
         this.$emit('done');
@@ -3656,6 +3691,8 @@ Vue.component('pset', {
       this.elms[this.ind].style.display = 'block';
 
       this.$root.report(this.ind);
+
+      await wait(200);
       this.$root.scrollWindow();
     }
   },
@@ -3720,16 +3757,18 @@ new Vue({
   el: '#app',
   data: {
     chapters: chapters,
-    chapterInd: 4,
+    chapterInd: DEBUG ? 5 : 0,
     // Obj property additions do not update DOM, so prepopulate all the keys in the object. Or use lists.
-    //soundNameToCount: {},
-//    show: false,
     showTOC: false,
 
     isScrolling: false,
 
     elapsedMinutes: null,
     elapsedSeconds: null,
+
+
+    // Doesn't need to be reactive so this is OK.
+    soundToCount: {},
   },
   computed: {
     currentChapter: function(){
@@ -3755,10 +3794,27 @@ new Vue({
       this.chapterInd = Math.min(this.chapters.length-1, this.chapterInd+1);
     },
     play: function(soundName){
-      var sound = sounds[soundName].clip;
-      sound.play().catch(function(error){
+      const clip = sounds[soundName].clip;
+      if (clip){
+        this.playClip(clip);
+        return;
+      }
+
+      const clips = sounds[soundName].clips;
+      if (clips){
+        if (!(soundName in this.soundToCount)){
+          this.soundToCount[soundName] = 0;
+        }
+
+        const ind = this.soundToCount[soundName] % clips.length;
+        this.soundToCount[soundName]++;
+        this.playClip(clips[ind]);
+      }
+    },
+    playClip(clip){
+      clip.play().catch(function(error){
         console.log(error.toString());
-      });    
+      });            
     },
     pause: function(soundName){
       var sound = sounds[soundName].clip;
@@ -3780,7 +3836,7 @@ new Vue({
 
           // Hack: Wait and try one more time to scroll before exiting. 
           // Seems like there might be a delay to add stuff to the DOM?
-          await wait(100);
+          await wait(150);
           window.scrollBy(0, 10);
           if (this.lastStartY >= window.scrollY){
             break;
@@ -3801,7 +3857,7 @@ new Vue({
       });
     },
     mainClick(event){
-      console.log('click');
+      //console.log('click');
       // When you click on the margins, event.target is the "app" node. 
       //this.mouseEvent = event; 
 
