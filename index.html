@@ -205,21 +205,25 @@ button{
 
   <div ref="toc"
   :style="{'background-color': showTOC ? '#777' : '#ddd', 'color': showTOC ? 'white': 'black'}"
-  style="width:60px;position: fixed; top:0px; left:0px; height: 100%; text-align: center; padding-top:8px"
-  :style="{}">
+  style="width:60px;position: fixed; top:0px; left:0px; height: 100%; text-align: center; "
+  class="normal-div">
 
-    <div>
-      <img v-if="!showTOC" src="images/menu.png" style="cursor: pointer" @click="showTOC = !showTOC">
-      <img v-if="showTOC" src="images/x.png" style="cursor: pointer" @click="showTOC = !showTOC">
+    <div style="height:58px; ">
+      <img v-if="!showTOC" src="images/menu.png" style="cursor: pointer; position:relative; top:12px" @click="showTOC = !showTOC">
+      <img v-if="showTOC" src="images/x.png" style="cursor: pointer; position:relative; top:12px" @click="showTOC = !showTOC">
     </div>
 
-    <div v-if="hasVolume" @click="hasVolume = !hasVolume" >
+    <div style="position:relative; top: 12px;  padding-bottom: 8px">
+    <div v-if="hasVolume" @click="hasVolume = !hasVolume">
       <img src="images/volume.png" style="width:28px">
     </div>
 
     <div v-if="!hasVolume" @click="hasVolume = !hasVolume">
       <img src="images/volume_off.png" style="width:28px">
     </div>
+    </div>
+
+    <span class="sideways handwriting" style="font-weight: 700; white-space: nowrap">Evil Wizard's Guide to Statistics</span>
 
   </div> 
 
@@ -2546,7 +2550,7 @@ Click where you think the balance point is...
 
 
 <script>
-var DEBUG = true;
+var DEBUG = false;
 
 
 const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
