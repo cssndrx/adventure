@@ -62,7 +62,9 @@ li, li * {
   margin: 8px;
   font-weight: 700;
 
-  background: linear-gradient(to right, orange , yellow, green, cyan, blue, violet);
+/*  background: linear-gradient(to right, orange , yellow, green, cyan, blue, violet);*/
+
+  background: linear-gradient(to right, orange, yellow, cyan, violet);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -114,7 +116,7 @@ li, li * {
 }
 
 text{
-  font-size: 13px;
+  font-size: 10px;
 }
 
 div{
@@ -205,9 +207,20 @@ button{
   :style="{'background-color': showTOC ? '#777' : '#ddd', 'color': showTOC ? 'white': 'black'}"
   style="width:60px;position: fixed; top:0px; left:0px; height: 100%; text-align: center; padding-top:8px"
   :style="{}">
-    <img v-if="!showTOC" src="images/menu.png" style="cursor: pointer" @click="showTOC = !showTOC">
-    <img v-if="showTOC" src="images/x.png" style="cursor: pointer" @click="showTOC = !showTOC">
-    <span class="sideways handwriting" style="white-space: nowrap;" v-if="currentChapter.name">Chapter{{chapterInd}}: {{currentChapter.name}}</span>
+
+    <div>
+      <img v-if="!showTOC" src="images/menu.png" style="cursor: pointer" @click="showTOC = !showTOC">
+      <img v-if="showTOC" src="images/x.png" style="cursor: pointer" @click="showTOC = !showTOC">
+    </div>
+
+    <div v-if="hasVolume" @click="hasVolume = !hasVolume" >
+      <img src="images/volume.png" style="width:28px">
+    </div>
+
+    <div v-if="!hasVolume" @click="hasVolume = !hasVolume">
+      <img src="images/volume_off.png" style="width:28px">
+    </div>
+
   </div> 
 
   <div v-if="showTOC" class="normal-div" style="position:fixed; z-index:1; width:200px;top:0px; left:60px; top:0;
@@ -368,11 +381,11 @@ overflow-y:scroll;padding-top:8px; background-color: #eee;">
 
 <avatar image="scientist.png"
   key="trap"
-  text="Some other scientists have been testing crows as well. And found crows that tested more intelligently at a p-value of 0.05 or p-value of 0.1. Which crow do you think is smarter?">
+  text="Some other scientists have been testing unusual crows as well. One scientist found a crow that tested more intelligent than normal  at a p-value of 0.05. Another scientist found a crow that tested more intelligent than normal at a p-value of 0.1. Which crow do you think is smarter?">
 
   <buton-group>
-    <buton nope>0.05</buton>
-    <buton nope>0.1</buton>
+    <buton nope>p<0.05 crow</buton>
+    <buton nope>p<0.1 crow</buton>
     <buton yay>Not enough info</buton>
   </buton-group>
 
@@ -385,7 +398,7 @@ overflow-y:scroll;padding-top:8px; background-color: #eee;">
   </div>
 
    <div>
-    The surprising thing about p-values is that they don't say anything about <bold>effect size</bold>. A p-value just tells you how likely something is under the null hypothesis. 
+    The surprising thing about p-values is that they don't say anything about <bold>effect size</bold>. The effect size is the actual difference in the measured quantity. A p-value just tells you how likely something is under the null hypothesis. 
   </div>
   <next>Next</next>
 </avatar>
@@ -499,10 +512,24 @@ overflow-y:scroll;padding-top:8px; background-color: #eee;">
 
 <avatar image="scientist.png">
   <div>
-    When you get a borderline p-value like 0.14 it is worth investigating further, perhaps redesigning part of the experiment to better capture signal from the noise. But you have to be careful not to p-hack like in the xKCD green jelly bean case.
+    When you get a borderline p-value like 0.14 it is worth investigating further, perhaps redesigning part of the experiment to better capture signal from the noise. 
   </div>
   <next>Next</next>
 </avatar>
+
+<avatar image="crow.png"
+  text="Caw caw caw caw?? (Test me 10 more times!)">
+  <next>Er...</next>
+</avatar>
+
+
+<avatar image="scientist.png">
+  <div>
+    I can't test just randomly test you until I get a positive result. That is p-hacking like in the <a href="//xkcd.com/882/" target="_blank">xkcd green jelly bean case</a>.
+  </div>
+  <next>Next</next>
+</avatar>
+
 
 <avatar text="Well, I don't need a p-value to tell me that Elena is no average bird.">
   <next>Next</next>
@@ -734,7 +761,7 @@ overflow-y:scroll;padding-top:8px; background-color: #eee;">
 <avatar image="monster.png">
   <div>Well, I guess the probability of getting 10 PB&J sandwiches in a row is <frac num="1" den="X"/>  where X = ?. 
   </div>
-  <input-box :right="1024" />
+  <input-box :right="['1024', '2^10']" />
 </avatar>
 
 <avatar image="monster.png"
@@ -1096,6 +1123,10 @@ overflow-y:scroll;padding-top:8px; background-color: #eee;">
   <div>
     P(Ruffled|OK) vs P(Ruffled|Not OK).
   </div>
+
+  <div>
+    This is called the <bold>likelihood ratio of the evidence</bold>.
+  </div>
   <next>Next</next>
 </avatar>
 
@@ -1107,7 +1138,7 @@ overflow-y:scroll;padding-top:8px; background-color: #eee;">
   </div>
 
   <div>
-    Drag the bars to reflect the <bold>likelihood ratio of the evidence</bold>.
+    Drag the bars to reflect the likelihood ratio of the evidence.
   </div>
 
   <triple-bayes 
@@ -1339,7 +1370,23 @@ overflow-y:scroll;padding-top:8px; background-color: #eee;">
   <div>
   Then my work here is done, friend.
   </div>
-  <next>The End</next>
+  <next>Next</next>
+</avatar>
+
+<avatar 
+  image="brain.png">
+
+  <div>You learned....</div>
+
+  <ul>
+    <li>how to update beliefs with <bold>Bayes Rule</bold> is the average reward.</li>
+    <li>posterior belief <span style="font-size:28px">∝</span> prior belief × likelihood</li>
+    <li>To breathe when panicking.</li>
+    <li>That you have a new friend.</li>
+  </ul> 
+
+  <buton @click="$root.nextChapter()">Next chapter</buton>
+
 </avatar>
 
 
@@ -1673,7 +1720,7 @@ overflow-y:scroll;padding-top:8px; background-color: #eee;">
   </div>
 
   <div>
-  P(tall, beard, tattoos) = 1/<input-box :right="42">
+  P(tall, beard, tattoos) = 1/<input-box right="42">
     <template v-slot:hint>
       <div>
         Recall the Chain Rule says that everything must be conditioned on what came before. 
@@ -1724,7 +1771,7 @@ overflow-y:scroll;padding-top:8px; background-color: #eee;">
     P(tall, beard, tattoos, around her age, single) =
     </div>
 
-    1/<input-box :right="420"/>
+    1/<input-box right="420"/>
 </avatar>
 
 
@@ -1773,7 +1820,7 @@ overflow-y:scroll;padding-top:8px; background-color: #eee;">
   <div>
     How many different ways are there to decompose P(tall, beard, tattoos) using the Chain Rule?
   </div>
-  <input-box :right="6" :feedback="true"/>
+  <input-box right="6" :feedback="true"/>
 </avatar>
 
 
@@ -1890,12 +1937,16 @@ overflow-y:scroll;padding-top:8px; background-color: #eee;">
 
 <avatar image="brain.png">
   <div>
-    To calculate the expected value, multiply the probability of each outcome occuring with the reward for the outcome, and add everything together.  
+    To calculate the expected value, <bold>multiply the probability</bold> of each outcome occuring <bold>with the reward</bold> for the outcome <bold>then add</bold> everything together. 
+  </div>
+
+  <div>
+    This captures the sense of the "average" reward.
   </div>
 
   <div>The expected value of the joke in question is?</div>
 
-  <input-box :right="1.4"/>
+  <input-box right="1.4"/>
 </avatar>
 
 
@@ -1921,8 +1972,8 @@ overflow-y:scroll;padding-top:8px; background-color: #eee;">
 
 <avatar>
   <div><bold>The satisfactory!</bold></div>
-  <next @click.native="memory='haha'; positivityPoints+=5">Ha-ha!</next> 
-  <next @click.native="memory='eh'; positivityPoints-=1">Eh...</next>
+  <next @click.native="memory='haha'; positivityPoints+=5; $root.play('haha')">Ha-ha!</next> 
+  <next @click.native="memory='eh'; positivityPoints-=1; $root.play('crickets')">Eh...</next>
 </avatar>
 
 <avatar>
@@ -2091,7 +2142,23 @@ Why bother... I have Elena.
 </avatar>
 
 <avatar text="Elena??? Where's Elena??">
+  <buton>Next</buton>
+</avatar>
+
+<avatar 
+  image="brain.png">
+
+  <div>You learned....</div>
+
+  <ul>
+    <li>The <bold>expected value</bold> is the average reward.</li>
+    <li>To use the expected value to make good decisions (on average).</li>
+    <li>To take the expected value of a scenario by multiplying the probability of each outcome by the reward, and then summing.</li>
+    <li>That the expected value of a distribution its balance point.</li>
+  </ul> 
+
   <buton @click="$root.nextChapter()">Next chapter</buton>
+
 </avatar>
 
 </pset>
@@ -2139,7 +2206,7 @@ Click where you think the balance point is...
 
 <div v-if="answerReal" class="smaller-children">
   <div>
-  You <span style="color:#7570b3">guessed {{$root.roundTo(guessReal, 1)}}</span>. The <span style="color:#1b9e77">expected value of  {{$root.roundTo(answerReal,1)}}</span> was {{isUserClose  ? 'pretty close!' : 'far off.'}} {{ isUserClose ? 'Good job!' : 'Needs work.' }}
+  You <span style="color:#7570b3">guessed {{$root.roundTo(guessReal, 1)}}</span>. The <span style="color:#1b9e77">expected value of  {{$root.roundTo(answerReal,1)}}</span> was {{feedbackString}}
   </div>
 
   <buton @click.native="$emit('done')">Next</buton>
@@ -2151,16 +2218,17 @@ Click where you think the balance point is...
 </script>
 
 <script type="text/x-template" id="ev-joke-template">
-<div>
-<avatar>
+<div ref="container">
+
+<avatar ref="joke">
   <div>Should I tell the joke?</div>
 
   <div v-for="outcome in joke.outcomes">
     {{$root.roundTo(outcome.certainty*100, 0)}}% chance joke {{outcome.present}}, {{outcome.payoff}} points
   </div>
 
-  <buton @click.native="userAnswer='Yes'">Yes</buton>
-  <buton @click.native="userAnswer='No'">No</buton>
+  <buton @click.native="setUserAnswer('Yes')">Yes</buton>
+  <buton @click.native="setUserAnswer('No')">No</buton>
 </avatar>
 
 
@@ -2183,17 +2251,6 @@ Click where you think the balance point is...
   <buton @click.native="finish(0)">Next</buton>
 </avatar>
 
-<avatar v-if="ev === 0 && userAnswer !== null">
-  <div>
-    The expected value is 0, so you could go either way on this one. 
-  </div>
-
-  <buton v-if="userAnswer == 'Yes'"  
-        @click.native="forceTell=true">Next</buton>
-
-  <buton v-if="userAnswer == 'No'"  
-        @click.native="finish(0)">Next</buton>
-</avatar>
 
 <pset v-if="(ev > 0 && userAnswer == 'Yes') || forceTell">
 <avatar text="Okay... here goes...">
@@ -2206,7 +2263,8 @@ Click where you think the balance point is...
 
 <avatar>
   <div><bold>{{joke.punchline}}!</bold></div>
-  <next>{{chosenOutcome.payoff > 0 ? 'Ha-ha!' : 'Eh...'}}</next>
+  <next @click.native="playJokeSound">{{chosenOutcome.payoff > 0 ? 'Ha-ha!' : 'Eh...'}}</next>
+  <div style="font-size:10px">The random number generator in the background dictates that the joke {{chosenOutcome.past}}.</div>
 </avatar>
 
 
@@ -2281,6 +2339,7 @@ Click where you think the balance point is...
 
   <samples-chart 
   :xdomain="hypotheses"
+  :xLabels="xLabels('prior')"
   :dist="arrToDist(priorArr)"
   :isDraggable="isDraggable('prior')"
   :chartHeight="chartHeight" :chartWidth="chartWidth"
@@ -2297,6 +2356,7 @@ Click where you think the balance point is...
   </div>
   <samples-chart
   :xdomain="hypotheses"
+  :xLabels="xLabels('likelihood')"
   :dist="arrToDist(likelihoodArr)"
   :isDraggable="isDraggable('likelihood')"
   :chartHeight="chartHeight" :chartWidth="chartWidth"
@@ -2311,6 +2371,7 @@ Click where you think the balance point is...
   </div>
   <samples-chart 
   :xdomain="hypotheses"
+  :xLabels="xLabels('posterior')"
   :dist="posteriorDist"
   :chartHeight="chartHeight" :chartWidth="chartWidth"
   :showRatio="true"
@@ -2485,7 +2546,7 @@ Click where you think the balance point is...
 
 
 <script>
-var DEBUG = false;
+var DEBUG = true;
 
 
 const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
@@ -2499,14 +2560,16 @@ var sounds = {
   'heads': {clip: new Audio('sounds/gold0.wav')},
   'tails': {clip: new Audio('sounds/gold1.wav')},
 
-  // 'speech': {clip: new Audio('sounds/speech_louder.wav')},
-  //'speech': {clip: new Audio('sounds/drums_text.wav')},
 
-  // 'buton': {clips: [new Audio('sounds/la2.wav'), new Audio('sounds/re1.wav'), new Audio('sounds/la1.wav')]},
+  'buton': {clips: [new Audio('sounds/237422__plasterbrain__hover-1.mp3')]},
 
-  'nope': {clip: new Audio('sounds/ci3.wav')},
-  'yay': {clip: new Audio('sounds/rere.wav')},
+  'nope': {clip: new Audio('sounds/423169__plasterbrain__pc-game-ui-error.mp3')},
+  'yay': {clip: new Audio('sounds/242855__plasterbrain__friend-request.mp3')},
 
+  'haha': {clip: new Audio('sounds/laugh.mp3')},
+  'crickets': {clip: new Audio('sounds/crickets.mp3')},
+
+  // 'coin-flips': {clip: new Audio('sounds/thank-you-for-shoppin.mp3')}
   // 'chimes': {clip: new Audio('sounds/chimes.wav')},
   // // 'right': {clip: new Audio('sounds/right_soft.wav'), duration: 1000},
   // 'glitch': {clip: new Audio('sounds/glitch.wav')},
@@ -2740,6 +2803,9 @@ Vue.component('ev-joke', {
     },
     chosenOutcome(){
       return this.joke.outcomes[this.chosenOutcomeInd];
+    },
+    isWrong(){
+      return (this.ev > 0 && this.userAnswer == 'No') || (this.ev < 0 && this.userAnswer == 'Yes');
     }
   },
   mounted(){
@@ -2753,7 +2819,18 @@ Vue.component('ev-joke', {
     }
   },
   methods: {
+    setUserAnswer(answer){
+      this.userAnswer = answer;
+      if(!this.isWrong){
+        this.$refs['joke'].$el.style.opacity = 0.5;        
+      }
+    },
+    playJokeSound(){
+      const soundName = this.chosenOutcome.payoff > 0 ? 'haha' : 'crickets';
+      this.$root.play(soundName);
+    },
     finish(payoff){
+      this.$refs['container'].style.opacity = 0.5; 
       this.$emit('done', {payoff: payoff});
     }
   },
@@ -2783,7 +2860,7 @@ Vue.component('biased-coin-machine', {
 
 Vue.component('input-box', {
   props: {
-    right: {type: Number, default: 0},
+    right: {type: Array, default: 0},
     hints: {
       type: Array, 
       default: function(){ return ['Try again', 'Nope']; },
@@ -2794,10 +2871,11 @@ Vue.component('input-box', {
       return this.hints[this.answers.length % this.hints.length];      
     },
     isYay: function(){
-      const exactMatch = this.val == this.right;
-      const europeanCommaMatch = this.val.replace(',', '.') == this.right;
-      const evalMatch = approx(eval(this.val), eval(this.right));
-      return exactMatch || europeanCommaMatch || evalMatch;
+      const this_ = this;
+      if (_.isArray(this.right)){
+        return _.some(this.right.map(r => this_.isMatch(this_.val, r)));
+      }
+      return this.isMatch(this.val, this.right);
     },
     isNope: function(){
       return !this.isYay;
@@ -2826,18 +2904,35 @@ Vue.component('input-box', {
     }
   },
   methods: {
+    isMatch(val, right){
+      if (val === undefined || val === null){
+        return false;
+      }
+      const exactMatch = val == right;
+      const europeanCommaMatch = val.replace(',', '.') == right;
+      var evalMatch;
+      try {
+        evalMatch = approx(eval(val), eval(right));
+      } catch(err){
+        evalMatch = false;
+      }
+      return exactMatch || europeanCommaMatch || evalMatch;
+    },
     answerSubmit: async function(){
       this.checkedAnswer = true;
       this.answers.push(this.val);
 
       if (this.isYay){
+        this.$root.play('yay');
         this.$emit('yay');
 
         const pset = firstAncestorOfComponent(this, 'pset');
         if (pset){
           pset.next();
         }
-      } 
+      } else {
+        this.$root.play('nope');
+      }
 
     },
     hasSlot: hasSlot,
@@ -2949,11 +3044,11 @@ Vue.component('buton', {
   methods: {
     butonClicked: async function(){
       if (this.isYay){
-        // this.$root.play('yay');        
+        this.$root.play('yay');        
       } else if (this.isNope){
-        // this.$root.play('nope');
+        this.$root.play('nope');
       } else{
-//        this.$root.play('buton');        
+        this.$root.play('buton');        
       }
       this.clickedButton = true;
       const avatar = firstAncestorOfComponent(this, 'avatar');
@@ -3140,14 +3235,26 @@ Vue.component('visual-ev-click', {
       };
     },
 
-    isUserClose: function(){
+    userDifference: function(){
       // Is close if it's less than X% away from the true answer
       var distribution_component = this.$refs['distribution'];
       const domain = distribution_component.xScale.domain();
       var total = domain[domain.length-1] - domain[0];
 
-      var difference = Math.abs(this.answerReal - this.guessReal);
-      return difference / total < .1;
+      return Math.abs(this.answerReal - this.guessReal);
+    },
+
+    feedbackString: function(){
+      if (approx(0, this.userDifference)){
+        this.$root.play('yay');
+        return 'spot on. Good work!';
+      }
+      if (this.userDifference < .3){
+        this.$root.play('yay');
+        return 'pretty close! Good job!';
+      }
+      this.$root.play('nope');
+      return 'far off. Needs work.';
     },
 
     overlayStyle(){
@@ -3260,8 +3367,19 @@ Vue.component('triple-bayes', {
     isEqual(arr1, arr2){
       return _.isEqual(this.simplifiedArr(arr1), this.simplifiedArr(arr2));
     },
+    xLabels(key){
+      if (key == 'prior'){
+        return this.hypotheses.map(x => 'P(' + x + ')');
+      }
+      if (key == 'likelihood'){
+        return this.hypotheses.map(x => 'P(D|' + x + ')' );        
+      }
+      if (key == 'posterior'){
+        return this.hypotheses.map(x => 'P(' + x + '|D)');        
+      }
+    },
     // simplifiedArr([3, 6]) => [1, 2]
-     simplifiedArr(arr){
+    simplifiedArr(arr){
       var maxFactor = _.min(arr);
       for (var i=maxFactor; i>1; i--){
         var isDivisible = _.every(arr.map(function(x){
@@ -3350,6 +3468,7 @@ Vue.component('samples-chart', {
   props: {
 
     xdomain: {type: Array}, // ['H', 'T']
+    xLabels: {type: Array}, // ['P(H'), 'P(T)'] optional. Defaults to x-domain if not set.
 
     // Specify either samples or dist
     samples: {type: Array}, // ['H', 'H', 'H', 'T']
@@ -3384,6 +3503,9 @@ Vue.component('samples-chart', {
       // Can only use for categorical domain.
       return d3.scaleBand()
           .domain(this.xdomain).paddingInner(.1).range([0, this.chartWidth]);
+    },
+    xText(){
+      return this.xLabels || this.xdomain;
     },
     numBarsInY(){
       if (!this.samples){
@@ -3422,7 +3544,10 @@ Vue.component('samples-chart', {
     // Add the axis
     // Hack: for some reason axis needs to get added after a delay, or it doesn't show up.
     await wait(500);
-    var xAxis = d3.axisBottom(this.xScale); //.ticks(8);
+    const this_ = this;
+    var xAxis = d3.axisBottom(this.xScale).tickFormat(function(d, ind){
+      return this_.xText[ind];
+    }); //.ticks(8);
     const chart = d3.select(this.$el).select('.container');
     chart.append('g').attr('transform', 'translate(0,' + this.chartHeight + ')').call(xAxis);
   },
@@ -3703,7 +3828,7 @@ const chapters = [
 {
   component: 'intro-scene',
   image: 'scroll.png',
-  description: 'The beginning'
+  description: 'The beginning',
 },
 {
   component: 'coin-flips',
@@ -3760,6 +3885,7 @@ new Vue({
     chapterInd: DEBUG ? 5 : 0,
     // Obj property additions do not update DOM, so prepopulate all the keys in the object. Or use lists.
     showTOC: false,
+    hasVolume: true,
 
     isScrolling: false,
 
@@ -3769,6 +3895,11 @@ new Vue({
 
     // Doesn't need to be reactive so this is OK.
     soundToCount: {},
+  },
+  watch: {
+    chapterInd(){
+      this.playLoop(this.chapters[this.chapterInd].component);
+    }
   },
   computed: {
     currentChapter: function(){
@@ -3794,9 +3925,17 @@ new Vue({
       this.chapterInd = Math.min(this.chapters.length-1, this.chapterInd+1);
     },
     play: function(soundName){
+      if(!this.hasVolume){
+        return;
+      }
+
+      if (!sounds[soundName]){
+        return;
+      }
+
       const clip = sounds[soundName].clip;
       if (clip){
-        this.playClip(clip);
+        this._playClip(clip);
         return;
       }
 
@@ -3808,18 +3947,28 @@ new Vue({
 
         const ind = this.soundToCount[soundName] % clips.length;
         this.soundToCount[soundName]++;
-        this.playClip(clips[ind]);
+        this._playClip(clips[ind]);
       }
     },
-    playClip(clip){
+    playLoop(soundName){
+      if(!this.hasVolume){
+        return;
+      }
+
+      if (!sounds[soundName]){
+        return;
+      }
+      const clip = sounds[soundName].clip;
+      clip.addEventListener('ended', function() {
+          this.currentTime = 0;
+          this.play();
+      }, false);
+      clip.play();
+    },
+    _playClip(clip){
       clip.play().catch(function(error){
         console.log(error.toString());
       });            
-    },
-    pause: function(soundName){
-      var sound = sounds[soundName].clip;
-      sound.pause();
-      sound.currentTime = 0;      
     },
     async scrollWindow(){
       if (this.isScrolling){
