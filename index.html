@@ -154,7 +154,7 @@ button{
   font-weight: 700;
 }
 .smaller-children, .smaller-children *{
-  font-size: 16px;
+  font-size: 14px;
 }
 
 .cropcircle{
@@ -213,14 +213,14 @@ button{
       <img v-if="showTOC" src="images/x.png" style="cursor: pointer; position:relative; top:12px" @click="showTOC = !showTOC">
     </div>
 
-    <div style="position:relative; top: 12px;  padding-bottom: 8px">
-    <div v-if="hasVolume" @click="hasVolume = !hasVolume">
-      <img src="images/volume.png" style="width:28px">
-    </div>
+    <div style="position:absolute; bottom: 8px; left:16px;  padding-bottom: 8px">
+      <div v-if="hasVolume" @click="hasVolume = !hasVolume">
+        <img src="images/volume.png" style="width:28px">
+      </div>
 
-    <div v-if="!hasVolume" @click="hasVolume = !hasVolume">
-      <img src="images/volume_off.png" style="width:28px">
-    </div>
+      <div v-if="!hasVolume" @click="hasVolume = !hasVolume">
+        <img src="images/volume_off.png" style="width:28px">
+      </div>
     </div>
 
     <span class="sideways handwriting" style="font-weight: 700; white-space: nowrap">Evil Wizard's Guide to Statistics</span>
@@ -551,7 +551,7 @@ overflow-y:scroll;padding-top:8px; background-color: #eee;">
   <ul>
     <li>The <bold>null hypothesis</bold> is the default belief (e.g. it's not possible to learn by drinking a potion).</li>
     <li>You learned that a <bold>p-value</bold> is the chance of witnessing as extreme an outcome under the null hypothesis.</li>
-    <li>p-values below a threshold of 0.05 are called <bold>statistically significant</bold> but that does not mean it is necesarrily useful.</li>
+    <li>p-values below a threshold of 0.05 are called <bold>statistically significant</bold> but that does not mean it is necessarily useful.</li>
     <li>A smaller p-value does not imply a larger effect size.</li>
   </ul> 
 
@@ -666,7 +666,7 @@ overflow-y:scroll;padding-top:8px; background-color: #eee;">
   image="monster.png" 
   text="What is the probability that after my mom flips a fair coin twice, I'll be eating peanut butter and jelly two days in a row?">
 
-  <buton nope="1/2 is the probability of tossing a single coin and getting H. Getting two heads in a row is rarer than that.">1/2</buton>
+  <buton nope="1/2 is the probability of tossing a single coin and getting T. Getting two tails in a row is rarer than that.">1/2</buton>
   <buton yay>1/4</buton>
 </avatar>
 
@@ -676,7 +676,13 @@ overflow-y:scroll;padding-top:8px; background-color: #eee;">
     Right. Coin flips are <bold>independent</bold>. Knowing the result of one event does not give you information about the other events, because coins have no memory. 
   </div>
   <div>
-    To calculate the probability that multiple independent events will occur together, you can multiply them. todo: show picture
+    To calculate the probability that multiple independent events will occur together, you can multiply them.
+  </div>
+  <div>
+    <img src="images/tt.png" style="height: 100px">
+  </div>
+  <div>
+    Probability of TT = 1/2 x 1/2.
   </div>
   <next>Next</next>
 </avatar> 
@@ -692,12 +698,16 @@ overflow-y:scroll;padding-top:8px; background-color: #eee;">
 
     <template v-slot:hint>
       <div>
-        By the same logic as before, coin flips are independent events (i.e. a result doesn't affect the next result). The probabilities of the joint event: seeing X AND Y can be combined with multiplication. The chance of getting HHH is 1/2 x 1/2 x 1/2.
+        By the same logic as before, coin flips are independent events (i.e. a result doesn't affect the next result). The probabilities of the joint event: seeing X AND Y can be combined with multiplication. 
       </div>
 
       <div>
-        todo: show the picture
+        <img src="images/ttt.png" style="height: 150px">
       </div>
+      <div>
+        Probability of TTT = 1/2 x 1/2 X 1/2.
+      </div>
+
     </template>
   </buton-group>
 </avatar>
@@ -832,19 +842,20 @@ overflow-y:scroll;padding-top:8px; background-color: #eee;">
 <avatar 
   text="Of these 3 coins, 2 are fair and 1 is unfair. Let's see if you can find the unfair one.">
 
-  <div>Click the coins to flip them at least 10 times each.</div>
-  <div>When you have enough info, submit your guess.</div>
+  <div class="smaller-children">
+    <div>Click the coins a bunch of times to flip them. When you have enough info, submit your guess.</div>
+  </div>
 
   <coin></coin>
   <coin></coin>
   <coin :bias="0.7"></coin>
 
-  <div class="handwriting">The unfair coin is:</div>
+  <div>The unfair coin is:</div>
 
   <buton-group>
-    <buton nope>A</buton>
-    <buton nope>B</buton>
-    <buton yay>C</buton>
+    <buton nope>Coin 1</buton>
+    <buton nope>Coin 2</buton>
+    <buton yay>Coin 3</buton>
 
     <template v-slot:hint>
       Hint: One coin has a tendency to land on one side more than the other.
@@ -871,19 +882,21 @@ overflow-y:scroll;padding-top:8px; background-color: #eee;">
 <avatar 
   text="HAHA this is fun. I again have 3 coins. 2 are fair, 1 is unfair. Find the unfair coin.">
 
-  <div>Click the coins to flip them.</div>
-  <div>When you have enough info, submit your guess.</div>
+
+  <div class="smaller-children">
+    <div>Click the coins to flip them. When you have enough info, submit your guess.</div>
+  </div>
 
   <coin></coin>
   <coin pattern="haha"></coin>
   <coin></coin>
 
-  <div class="handwriting">The unfair coin is:</div>
+  <div>The unfair coin is:</div>
 
   <buton-group>
-    <buton nope>A</buton>
-    <buton yay>B</buton>
-    <buton nope>C</buton>
+    <buton nope>Coin 1</buton>
+    <buton yay>Coin 2</buton>
+    <buton nope>Coin 3</buton>
 
     <template v-slot:hint>
       Hint: Look at the pattern of coin flips. The wizard may be having a joke at your expense.
@@ -902,19 +915,20 @@ overflow-y:scroll;padding-top:8px; background-color: #eee;">
 <avatar 
   text="OKOK last one. Find the unfair coin.">
 
-  <div>Click the coins to flip them.</div>
-  <div>When you have enough info, submit your guess.</div>
+  <div class="smaller-children">
+    <div>Click the coins to flip them. When you have enough info, submit your guess.</div>
+  </div>
 
   <coin></coin>
   <coin pattern="human"></coin>
   <coin></coin>
 
-  <div class="handwriting">The unfair coin is:</div>
+  <div>The unfair coin is:</div>
 
   <buton-group>
-    <buton nope>A</buton>
-    <buton yay>B</buton>
-    <buton nope>C</buton>
+    <buton nope>Coin 1</buton>
+    <buton yay>Coin 2</buton>
+    <buton nope>Coin 3</buton>
 
     <template v-slot:hint>
       Hint: Look at the pattern of coin flips. One of these coins is a bit shy.
@@ -949,6 +963,7 @@ overflow-y:scroll;padding-top:8px; background-color: #eee;">
 </avatar>
 
 <avatar text="You wanna see this other monster that I cursed?">
+  <next>Next</next>
 </avatar>
 
 
@@ -1012,7 +1027,7 @@ overflow-y:scroll;padding-top:8px; background-color: #eee;">
 
 <avatar image="brain.png">
   <div>
-    You learned about this in school... use <bold>Bayes Rule</bold>.
+    To reconcile the two pieces of information into a single belief use <bold>Bayes Rule</bold>.
   </div>
   <next>Next</next>
 </avatar>
@@ -1057,7 +1072,10 @@ overflow-y:scroll;padding-top:8px; background-color: #eee;">
 
 <avatar image="brain.png">
   <div>
-  Yes, if you remove the normalization constant P(D), you get:
+  Yes, the version of Bayes Rule if H is the hypothesis and D is the data, has a useful interpretation.
+
+  <div>
+    If you remove the normalization constant P(D), you get:
   </div>
 
   <div>P(H|D) <span style="font-size:28px">∝</span> P(D|H) × P(H)</div>
@@ -1066,12 +1084,35 @@ overflow-y:scroll;padding-top:8px; background-color: #eee;">
   <span style="font-size:28px">∝</span> means proportional to.
   </div>
 
+  <div>
+    This says that your belief after seeing the data P(H|D)
+is proportional to your prior belief P(H)
+multiplied by
+the likelihood of the evidence under your prior belief P(D|H).
+  </div>
+
+  <div>
+    Or in other words, posterior is proportional to prior x likelihood.
+  </div>
+
+  This is true in general.
 
   <next>Next</next>
 </avatar>
 
-
 <avatar image="brain.png">
+  <div>
+    But in our case, where Elena is either OK or not OK, this is 
+
+    stopped here: try to motivate the bars without talking about binary hypothesis testing.
+
+    normalize at the end
+    just see belief as shape
+
+  </div>
+</avatar>
+
+<!-- <avatar image="brain.png">
   <div>
     This tells you how to incoporate new information into your belief:
   </div>
@@ -1091,7 +1132,7 @@ overflow-y:scroll;padding-top:8px; background-color: #eee;">
     the likelihood of the evidence under your prior belief P(D|H).
   </div>
   <next>Next</next>
-</avatar>
+</avatar> -->
 
 <avatar text="Hm... what is my prior belief on Elena being okay?">
   <next>Next</next>
@@ -1322,7 +1363,7 @@ overflow-y:scroll;padding-top:8px; background-color: #eee;">
 </avatar>
 
 <avatar image="brain.png"
-  text="Congrats, you solved a problem that <X% of people get correct todo: find number. By using both the prior and likelihood of evidence, you avoided the human tendency to just use one or the other.">
+  text="Congrats, you solved a problem that few people get correct. By using both the prior and likelihood of evidence, you avoided the human tendency to just use one or the other.">
 
   <next>Next</next>
 </avatar>
@@ -2019,8 +2060,7 @@ Okay, I think that's enough for positivity. The second tenet of friendship is co
   <next>Next</next>
 </avatar>
 
-
-<avatar text="todo: come up with acrostic for CLUB">
+<avatar text="Consistent Locked-in Unpleasant Bandying">
   <next>Next</next>  
 </avatar>
 
@@ -2529,6 +2569,7 @@ Click where you think the balance point is...
 
 <script type="text/x-template" id="input-box-template">
 <div style="display:inline-block; position:relative; top:-16px;">
+
   <input v-model="val" placeholder="?" style="width:70px; display:inline; position:relative; top:16px" v-on:keyup.enter="answerSubmit">
   <slot></slot>
   <buton style="display:inline" @click="answerSubmit">Go</buton>
@@ -2573,7 +2614,7 @@ var sounds = {
   'haha': {clip: new Audio('sounds/laugh.mp3')},
   'crickets': {clip: new Audio('sounds/crickets.mp3')},
 
-  // 'coin-flips': {clip: new Audio('sounds/thank-you-for-shoppin.mp3')}
+  // 'coin-flips': {clip: new Audio('sounds/extreme-hardcore-death-metal-loop.wav')}
   // 'chimes': {clip: new Audio('sounds/chimes.wav')},
   // // 'right': {clip: new Audio('sounds/right_soft.wav'), duration: 1000},
   // 'glitch': {clip: new Audio('sounds/glitch.wav')},
@@ -2864,7 +2905,7 @@ Vue.component('biased-coin-machine', {
 
 Vue.component('input-box', {
   props: {
-    right: {type: Array, default: 0},
+    right: {type: Array},
     hints: {
       type: Array, 
       default: function(){ return ['Try again', 'Nope']; },
@@ -3886,7 +3927,7 @@ new Vue({
   el: '#app',
   data: {
     chapters: chapters,
-    chapterInd: DEBUG ? 5 : 0,
+    chapterInd: DEBUG ? 1 : 0,
     // Obj property additions do not update DOM, so prepopulate all the keys in the object. Or use lists.
     showTOC: false,
     hasVolume: true,
@@ -3900,11 +3941,11 @@ new Vue({
     // Doesn't need to be reactive so this is OK.
     soundToCount: {},
   },
-  watch: {
-    chapterInd(){
-      this.playLoop(this.chapters[this.chapterInd].component);
-    }
-  },
+  // watch: {
+  //   chapterInd(){
+  //     this.playLoop(this.chapters[this.chapterInd].component);
+  //   }
+  // },
   computed: {
     currentChapter: function(){
       return this.chapters[this.chapterInd];
@@ -3963,10 +4004,13 @@ new Vue({
         return;
       }
       const clip = sounds[soundName].clip;
-      clip.addEventListener('ended', function() {
-          this.currentTime = 0;
-          this.play();
-      }, false);
+      // https://stackoverflow.com/questions/7330023/gapless-looping-audio-html5
+      clip.addEventListener('timeupdate', function() {
+      var buffer = .14;
+        if(this.currentTime > this.duration - buffer){
+            this.currentTime = 0;
+            this.play()
+        }}, false);
       clip.play();
     },
     _playClip(clip){
