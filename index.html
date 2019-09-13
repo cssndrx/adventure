@@ -242,7 +242,7 @@ overflow-y:scroll;padding-top:8px; background-color: #eee;">
       <img :class="{'story-point-silhouette': currentChapter !== chapter}"
           :src="'images/' + chapter.image" 
           style="max-width:50px; max-height:100px">
-      <span style="top:60px; font-size:12px; display: inline-block; margin:8px;"><bold style="font-size:12px">Chapter {{ind}}</bold><br> {{chapter.description}}</span>
+      <span style="top:60px; font-size:12px; display: inline-block; margin:8px;"><bold style="font-size:12px">{{chapter.title || 'Chapter ' + ind}}</bold><br> {{chapter.description}}</span>
     </div>
   </div>
 
@@ -564,7 +564,7 @@ overflow-y:scroll;padding-top:8px; background-color: #eee;">
   If you liked this section, you may like the book, <a href="https://smile.amazon.com/p-value-Stories-Actually-Understand-Statistics/dp/0321629302">What is a P-Value Anyways?</a>
   </div>
 
-  <buton @click="$root.nextChapter()">Next chapter</buton>
+  <buton @click="$root.nextChapter()">Next chapter?</buton>
 
 </avatar>
 
@@ -580,9 +580,7 @@ overflow-y:scroll;padding-top:8px; background-color: #eee;">
 
 
 <script type="text/x-template" id="intro-scene-template">
-<div style="width:600px; margin: 0 auto;">
-
-<div style="text-align:center;">
+<div style="width:600px; margin: 0 auto; text-align:center;">
 
   <div class="handwriting" style="font-size:48px;">The Evil Wizard's Guide to Statistics</div>
 
@@ -600,9 +598,39 @@ overflow-y:scroll;padding-top:8px; background-color: #eee;">
 
   <buton @click="$root.nextChapter()">PLAY</buton>
 </div>
+</script>
 
+<script type="text/x-template" id="thanks-template">
+<div style="width:400px; margin: 0 auto;" class="smaller-children">
+
+<h2>The End</h2>
+
+<p>
+That's all the chapters for now, but the story may continue... Afterall, the wizard could do a whole section on useful distributions. Sign up here to be notified of future installments.
+</p>
+
+<p>
+But first I want to thank the backers and supporters of Ishaan/Timmy's Journey, including Brienne and Eliezer Yudkowsky, Eric Chisholm, Alia McCutcheon and other folks from the LessWrong scene who encouraged me to develop this further and who were very patient with me as I took unnecessary detours. 
+</p>
+
+<p>
+Nicky Case who helped nurture an amazing community around explorable  explanations, and created multiple examples for how to make experiences both fun + educational. Spencer Greenberg and Mike Mozer who kept the project alive through their enthuasism and insightful critique on the original version. And thank you to all the folks who emailed in with encouragement and offers to help. 
+</p>
+
+<p>
+Anand Babu and Google Kernel friends that provided a safe space and the final push of energy to rewrite this story. Fred Bertsch and Vivek Sri who helped massage the story. Tianyu Liu for always recommending inspirational prior work. Meg Gordon the tireless cheerleader and content expert. Nathan Martz, the oracle that was right about all the pitfalls.
+</p>
+
+<p>
+On the tech side, Vue.js greatly simplified the code needed for this project, and actually made it pleasant to write. And jpegslayer who helped me on the friendly Vue forums.
+</p>
+
+<p>
+If you'd like to submit feedback or buy the monk a coffee, both would be very appreciated!
+</p>
 </div>
 </script>
+
 
 
 <script type="text/x-template" id="next-template">
@@ -1039,6 +1067,9 @@ overflow-y:scroll;padding-top:8px; background-color: #eee;">
 
 <avatar>
   <div>
+    I thought Bayes Rule was just the relationship between conditional probabilities
+  </div>
+  <div>
   P(A|B) = <big-frac style="position:relative; top:12px">
     <template v-slot:num>
       P(B|A) × P(A)
@@ -1052,94 +1083,23 @@ overflow-y:scroll;padding-top:8px; background-color: #eee;">
 </avatar>
 
 
-<avatar image="brain.png"
-        text="No... use the more useful form of Bayes Rule...">
-    <next>Next</next>
+<avatar image="brain.png">
+  <div>
+    Yes, but if you plug in meaningful values like "H" for hypothesis and "D" for data, then Bayes Rule becomes a general relationship of how to change your mind in response to new data.
+  </div>
+
+  <img src="images/bayes-annotated.png" style="width:300px">
+
+
+  <div>
+  Don't worry about all the terms for now, but the main takeaway is that <bold>what you think after</bold> is dependent on two components (1) what you thought before and (2) the likelihood of evidence.
+  </div>
+
+  <next>Next</next>
 </avatar>
 
 <avatar>
-  <div>
-  P(H|D) = <big-frac style="position:relative; top:12px">
-    <template v-slot:num>
-      P(D|H) × P(H)
-    </template>
-    <template v-slot:den>
-      P(D)
-    </template>
-  </big-frac>
-  </div>
-
-  <div>
-    The same formula as above, but where H is hypothesis and D is data?
-  </div>
-  <next>Next</next>
-</avatar>
-
-<avatar image="brain.png">
-  <div>
-  Yes, the version of Bayes Rule if H is the hypothesis and D is the data, has a useful interpretation.
-
-  <div>
-    If you remove the normalization constant P(D), you get:
-  </div>
-
-  <div>P(H|D) <span style="font-size:28px">∝</span> P(D|H) × P(H)</div>
-
-  <div>
-  <span style="font-size:28px">∝</span> means proportional to.
-  </div>
-
-  <div>
-    This says that your belief after seeing the data P(H|D)
-is proportional to your prior belief P(H)
-multiplied by
-the likelihood of the evidence under your prior belief P(D|H).
-  </div>
-
-  <div>
-    Or in other words, posterior is proportional to prior x likelihood.
-  </div>
-
-  This is true in general.
-
-  <next>Next</next>
-</avatar>
-
-<avatar image="brain.png">
-  <div>
-    But in our case, where Elena is either OK or not OK, this is 
-
-    stopped here: try to motivate the bars without talking about binary hypothesis testing.
-
-    normalize at the end
-    just see belief as shape
-
-  </div>
-</avatar>
-
-<!-- <avatar image="brain.png">
-  <div>
-    This tells you how to incoporate new information into your belief:
-  </div>
-  <div>
-    Your belief after seeing the data  P(H|D)
-  </div>
-
-  <div>
-    is proportional to your prior belief P(H)
-  </div>
-
-  <div>
-    multiplied by
-  </div>
-
-  <div>
-    the likelihood of the evidence under your prior belief P(D|H).
-  </div>
-  <next>Next</next>
-</avatar> -->
-
-<avatar text="Hm... what is my prior belief on Elena being okay?">
+  <div>What is my <bold>prior belief</bold> on Elena being okay? (i.e. what did I think before I found out she was ruffled?)</div>
   <next>Next</next>
 </avatar>
 
@@ -1148,7 +1108,7 @@ the likelihood of the evidence under your prior belief P(D|H).
     Elena is a very self-sufficient bird, so 80% of the times she's disappeared on me, she has been okay.
   </div>
 
-  <div>Drag the bars to show the odds that Elena is okay. This is called your <bold>prior belief</bold>.
+  <div>Drag the bars to show your prior belief that Elena is okay. 
   </div>
 
   <triple-bayes 
@@ -3810,7 +3770,7 @@ function makeComponent(componentName){
     template: '#' + componentName + '-template'
   });
 }
-['intro-scene', 'coin-flips', 'wizard-flips', 'chain-rule', 'ev-story', 'risk-reward', 'intro-to-pvalues', 'bayes-rule'].forEach(x => makeComponent(x));
+['intro-scene', 'coin-flips', 'wizard-flips', 'chain-rule', 'ev-story', 'risk-reward', 'intro-to-pvalues', 'bayes-rule', 'thanks'].forEach(x => makeComponent(x));
 
 
 Vue.component('next', {
@@ -3878,7 +3838,7 @@ const chapters = [
 {
   component: 'intro-scene',
   image: 'scroll.png',
-  description: 'The beginning',
+  title: 'The beginning',
 },
 {
   component: 'coin-flips',
@@ -3910,6 +3870,12 @@ const chapters = [
   description: 'Bayes Rule', 
   image: 'crow.png',
 },
+{
+  component: 'thanks',
+  image: 'wizard.png',
+  title: 'The End', 
+},
+
 ];
 
 
@@ -3932,7 +3898,7 @@ new Vue({
   el: '#app',
   data: {
     chapters: chapters,
-    chapterInd: DEBUG ? 1 : 0,
+    chapterInd: DEBUG ? 6 : 0,
     // Obj property additions do not update DOM, so prepopulate all the keys in the object. Or use lists.
     showTOC: false,
     hasVolume: true,
