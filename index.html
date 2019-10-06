@@ -2,6 +2,7 @@
 <head>
 <meta charset="utf-8" />
 
+<title>The Evil Wizard's Guide to Statistics</title>
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=59181255"></script>
 <script>
@@ -55,18 +56,6 @@ li, li * {
 
 .ev-answer-bar{
   transition: all 1s ease;
-}
-
-.rainbow-text{
-  font-size: 16px;
-  margin: 8px;
-  font-weight: 700;
-
-/*  background: linear-gradient(to right, orange , yellow, green, cyan, blue, violet);*/
-
-  background: linear-gradient(to right, orange, yellow, cyan, violet);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
 }
 
 .hint, .hint *{
@@ -209,21 +198,20 @@ button{
 <div id="app" style="position:relative;left: 60px;width:calc(100% - 60px);" @click="mainClick($event)">
 
   <div ref="toc"
-  :style="{'background-color': showTOC ? '#777' : '#ddd', 'color': showTOC ? 'white': 'black'}"
-  style="width:60px;position: fixed; top:0px; left:0px; height: 100%; text-align: center; "
+  style="width:60px;position: fixed; top:0px; left:0px; height: 100%; text-align: center; background-color: #eee"
   class="normal-div">
 
     <div style="height:58px; ">
-      <img v-if="!showTOC" src="images/menu.png" style="cursor: pointer; position:relative; top:12px" @click="showTOC = !showTOC">
-      <img v-if="showTOC" src="images/x.png" style="cursor: pointer; position:relative; top:12px" @click="showTOC = !showTOC">
+      <img v-if="!showTOC" src="images/menu.png" style="cursor: pointer; position:relative; top:12px" @click="toggleTOC">
+      <img v-if="showTOC" src="images/x.png" style="cursor: pointer; position:relative; top:12px" @click="toggleTOC">
     </div>
 
     <div style="position:absolute; bottom: 8px; left:16px;  padding-bottom: 8px">
-      <div v-if="hasVolume" @click="hasVolume = !hasVolume">
+      <div v-if="hasVolume" @click="toggleVolume">
         <img src="images/volume.png" style="width:28px">
       </div>
 
-      <div v-if="!hasVolume" @click="hasVolume = !hasVolume">
+      <div v-if="!hasVolume" @click="toggleVolume">
         <img src="images/volume_off.png" style="width:28px">
       </div>
     </div>
@@ -234,7 +222,7 @@ button{
 
   <div v-if="showTOC" class="normal-div" style="position:fixed; z-index:1; width:200px;top:0px; left:60px; top:0;
     bottom:0;
-overflow-y:scroll;padding-top:8px; background-color: #eee;">
+overflow-y:scroll;padding-top:8px; background-color: rgb(247,247,247);">
     <div v-for="(chapter, ind) in chapters"
          @click="showTOC = false; chapterInd = ind"
          class="toc-chapter"
@@ -601,33 +589,48 @@ overflow-y:scroll;padding-top:8px; background-color: #eee;">
 </script>
 
 <script type="text/x-template" id="thanks-template">
-<div style="width:400px; margin: 0 auto;" class="smaller-children">
+<div style="width:400px; margin: 0 auto;" >
 
 <h2>The End</h2>
 
+<div class="smaller-children">
 <p>
-That's all the chapters for now, but the story may continue... Afterall, the wizard could do a whole section on useful distributions. Sign up here to be notified of future installments.
+That's all the chapters for now, but the story may continue... Afterall, the wizard could do a whole section on useful distributions. Sign up here to be notified of future installments. Or leave me some feedback on the current story.
+
+http://eepurl.com/c8ur5T
+https://forms.gle/QeUmVfvoxpNJMEcDA
 </p>
 
 <p>
-But first I want to thank the backers and supporters of Ishaan/Timmy's Journey, including Brienne and Eliezer Yudkowsky, Eric Chisholm, Alia McCutcheon and other folks from the LessWrong scene who encouraged me to develop this further and who were very patient with me as I took unnecessary detours. 
+The backers and supporters of Ishaan's Journey, including Vivek Rajkumar, Brienne and Eliezer Yudkowsky, Eric Chisholm, Alia McCutcheon and other folks from the LessWrong scene encouraged me to develop this further and who were very patient with me as I took several unnecessary detours. 
 </p>
 
 <p>
-Nicky Case who helped nurture an amazing community around explorable  explanations, and created multiple examples for how to make experiences both fun + educational. Spencer Greenberg and Mike Mozer who kept the project alive through their enthuasism and insightful critique on the original version. And thank you to all the folks who emailed in with encouragement and offers to help. 
+Nicky Case who created multiple examples for how to make experiences both fun + educational. Spencer Greenberg and Mike Mozer who kept the project alive through their enthuasism and insightful critique on the original version. And thank you to all the folks who emailed in with encouragement and offers to help. 
 </p>
 
 <p>
-Anand Babu and Google Kernel friends that provided a safe space and the final push of energy to rewrite this story. Fred Bertsch and Vivek Sri who helped massage the story. Tianyu Liu for always recommending inspirational prior work. Meg Gordon the tireless cheerleader and content expert. Nathan Martz, the oracle that was right about all the pitfalls.
+Anand Babu and Google Kernel friends provided a safe space and the final push of energy to rewrite this. Fred Bertsch and Vivek Sri  greatly improved the story in different ways. Tianyu Liu recommended the perfect pieces of prior work. Nathan Martz was the oracle who was right about all the pitfalls.
 </p>
 
 <p>
-On the tech side, Vue.js greatly simplified the code needed for this project, and actually made it pleasant to write. And jpegslayer who helped me on the friendly Vue forums.
+On the tech side, <a href="//vuejs.org/" target="_blank">Vue.js</a> greatly simplified the code needed for this project, omgggg try it out. I think it's better than React. I also want to thank jpegslayer who helped me on the friendly Vue forums.
 </p>
 
 <p>
-If you'd like to submit feedback or buy the monk a coffee, both would be very appreciated!
+If after all this, you're still here and want to buy me a coffee, that would be a great boost to my ego!
 </p>
+
+<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+<input type="hidden" name="cmd" value="_donations" />
+<input type="hidden" name="business" value="cssndrx@gmail.com" />
+<input type="hidden" name="currency_code" value="USD" />
+<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button" />
+<img alt="" border="0" src="https://www.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1" />
+</form>
+
+
+</div>
 </div>
 </script>
 
@@ -817,7 +820,7 @@ If you'd like to submit feedback or buy the monk a coffee, both would be very ap
 </avatar>
 
 <avatar image="monster.png"
-  text="Mom has been packing lunch for me for 1540 days, so I guess this was bound to happen.">
+  text="Mom has been packing lunch for me for 1540 days, so I guess this was not that surprising.">
   <next>Next</next>
 </avatar>
 
@@ -873,7 +876,7 @@ If you'd like to submit feedback or buy the monk a coffee, both would be very ap
 </avatar>
 
 <avatar 
-  text="Of these 3 coins, 2 are fair and 1 is unfair. Let's see if you can find the unfair one.">
+  text="Of these 3 coins, 2 are fair and 1 is unusual. Let's see if you can find the unusual one.">
 
   <div class="smaller-children">
     <div>Click the coins a bunch of times to flip them. When you have enough info, submit your guess.</div>
@@ -883,7 +886,7 @@ If you'd like to submit feedback or buy the monk a coffee, both would be very ap
   <coin></coin>
   <coin :bias="0.7"></coin>
 
-  <div>The unfair coin is:</div>
+  <div>The unusual coin is:</div>
 
   <buton-group>
     <buton nope>Coin 1</buton>
@@ -913,7 +916,7 @@ If you'd like to submit feedback or buy the monk a coffee, both would be very ap
 </avatar>
 
 <avatar 
-  text="HAHA this is fun. I again have 3 coins. 2 are fair, 1 is unfair. Find the unfair coin.">
+  text="HAHA this is fun. I again have 3 coins. 2 are fair, 1 is unusual. Find the unusual coin.">
 
 
   <div class="smaller-children">
@@ -924,7 +927,7 @@ If you'd like to submit feedback or buy the monk a coffee, both would be very ap
   <coin pattern="haha"></coin>
   <coin></coin>
 
-  <div>The unfair coin is:</div>
+  <div>The unusual coin is:</div>
 
   <buton-group>
     <buton nope>Coin 1</buton>
@@ -939,14 +942,14 @@ If you'd like to submit feedback or buy the monk a coffee, both would be very ap
 
 
 <avatar 
-  text="HAHA yes, that coin always says HAHA. It lands on heads 50% of the time, but it's unfair because I know what's coming next. Genius, isn't it??">
+  text="HAHA yes, that coin always says HAHA. It lands on heads 50% of the time, but it's unusual because I know what's coming next. Genius, isn't it??">
 
   <next>Next</next>
 </avatar>
 
 
 <avatar 
-  text="OKOK last one. Find the unfair coin.">
+  text="OKOK last one. Find the unusual coin.">
 
   <div class="smaller-children">
     <div>Click the coins to flip them. When you have enough info, submit your guess.</div>
@@ -956,7 +959,7 @@ If you'd like to submit feedback or buy the monk a coffee, both would be very ap
   <coin pattern="human"></coin>
   <coin></coin>
 
-  <div>The unfair coin is:</div>
+  <div>The unusual coin is:</div>
 
   <buton-group>
     <buton nope>Coin 1</buton>
@@ -964,7 +967,7 @@ If you'd like to submit feedback or buy the monk a coffee, both would be very ap
     <buton nope>Coin 3</buton>
 
     <template v-slot:hint>
-      Hint: Look at the pattern of coin flips. One of these coins is a bit shy.
+      Hint: Look at the streaks within the pattern of coin flips.
     </template>
   </buton-group>
 </avatar>
@@ -978,7 +981,7 @@ If you'd like to submit feedback or buy the monk a coffee, both would be very ap
 
 
 <avatar 
-  text="HAHAHA. Aren't these coins great? Isn't Elena great? ">
+  text="HAHAHA. Aren't these coins great? Isn't Elena the Crow great? ">
   <next>Yes</next>
 </avatar>
 
@@ -1420,7 +1423,7 @@ If you'd like to submit feedback or buy the monk a coffee, both would be very ap
     <img v-if="isShowingH" src="images/coin_heads.png" style="width:100px">
     <img v-if="!isShowingH" src="images/coin_tails.png" style="width:100px">
     <div ref="flip-string" style="font-size:13px; margin-left:8px; margin-right:8px" :style="flipStringStyle">{{flipString}}</div>
-    <samples-chart v-if="flips.length > 8" :xdomain="xDomain" :samples="samples" :style="chartStyle"></samples-chart>
+    <samples-chart v-if="flips.length > 0" :xdomain="xDomain" :samples="samples" :style="chartStyle"></samples-chart>
   </div>
 </script>
 
@@ -2503,10 +2506,14 @@ Click where you think the balance point is...
   <div style="display:inline-block">
     <div v-if="showX" 
          class="handwriting" 
-         style="display:inline-block; position:absolute; color:#999; font-size: 48px; top:-4px"
-         :style="xStyle">X</div>
-    <button 
-      ref="button"
+         style="display:inline-block; position:absolute; color:red; font-size: 48px; top:-4px;"
+         :style="xStyle">✗</div>
+     <div v-if="showYay"
+              class="handwriting" 
+         style="display:inline-block; position:absolute; color:green; font-size: 48px; top:0px; left:calc(50% - 10px)">
+     	✓
+     </div>
+    <button ref="button" 
       @click="butonClicked()" v-on="$listeners" 
       :class="{'clicked-button': clickedButton}" 
       class="handwriting"
@@ -2515,10 +2522,10 @@ Click where you think the balance point is...
     </button>
   </div>
 
-  <div v-if="showNopeText" class="hint" style="margin-left:12px">
+  <div v-if="showNopeText" class="hint" style="margin-left:12px;">
     {{nopeText}}
   </div>
-  <div v-if="showYay" class="rainbow-text" style="font-size:15px; margin:8px">
+  <div v-if="showYay" style="margin:8px;" class="hint" >
     Yay
   </div>
 
@@ -2571,23 +2578,26 @@ var sounds = {
   'tails': {clip: new Audio('sounds/gold1.wav')},
 
 
-  'buton': {clips: [new Audio('sounds/237422__plasterbrain__hover-1.mp3')]},
+  // 'buton': {clips: [new Audio('sounds/237422__plasterbrain__hover-1.mp3')]},
 
   'nope': {clip: new Audio('sounds/423169__plasterbrain__pc-game-ui-error.mp3')},
-  'yay': {clip: new Audio('sounds/242855__plasterbrain__friend-request.mp3')},
+  'yay': {clip: new Audio('sounds/237422__plasterbrain__hover-1.mp3')},
 
   'haha': {clip: new Audio('sounds/laugh.mp3')},
   'crickets': {clip: new Audio('sounds/crickets.mp3')},
 
-  // 'coin-flips': {clip: new Audio('sounds/extreme-hardcore-death-metal-loop.wav')}
-  // 'chimes': {clip: new Audio('sounds/chimes.wav')},
-  // // 'right': {clip: new Audio('sounds/right_soft.wav'), duration: 1000},
-  // 'glitch': {clip: new Audio('sounds/glitch.wav')},
-  // 'spell': {clip: new Audio('sounds/spell.wav')},
-  // 'coy': {clip: new Audio('sounds/laugh.wav')},
-  // 'right': {clip: new Audio('sounds/swish1.wav')},
-  // 'curious': {clip: new Audio('sounds/curious.wav')},
-  // 'achievement': {clip: new Audio('sounds/achievement.wav')},
+  'open': {clip: new Audio('sounds/swish0.wav')},
+  'close': {clip: new Audio('sounds/swish1.wav')},
+
+
+	// 'intro-scene': {clip: new Audio('sounds/sneaky-snitch-by-kevin-macleod.mp3')},  
+	// 'coin-flips': {clip: new Audio('sounds/sneaky-snitch-by-kevin-macleod.mp3')},
+	// 'wizard-flips': {clip: new Audio('sounds/rusted-maid.wav')},
+	// 'chain-rule': {clip: new Audio('sounds/wholesome-by-kevin-macleod.mp3')},
+	// 'ev-story': {clip: new Audio('sounds/extreme-hardcore-death-metal-loop.mp3')},
+	// 'intro-to-pvalues': {clip: new Audio('sounds/comma-flaw.wav')},
+	// 'bayes-rule': {clip: new Audio('sounds/find-my-body-please.wav')},
+	// 'thanks': {clip: new Audio('sounds/sneaky-snitch-by-kevin-macleod.mp3')},
 };
 
 
@@ -3046,9 +3056,9 @@ Vue.component('buton', {
     },
     showX(){
       return this.clickedButton && this.isNope;
-    },
+    }, 
     xStyle(){
-      return {left: (this.$refs['button'].clientWidth/2 - 10)+'px'};
+      return {left: (this.$refs['button'].clientWidth/2 - 5)+'px'};
     }
   },
   methods: {
@@ -3542,6 +3552,7 @@ Vue.component('samples-chart', {
       isCreated: false,
       counts: null,
       draggedDot: null,
+
     }
   },
   created: function(){
@@ -3834,6 +3845,7 @@ Vue.component('pset', {
   template: '#pset-template'
 });
 
+
 const chapters = [
 {
   component: 'intro-scene',
@@ -3898,10 +3910,10 @@ new Vue({
   el: '#app',
   data: {
     chapters: chapters,
-    chapterInd: DEBUG ? 6 : 0,
+    chapterInd: DEBUG ? 1 : 0,
     // Obj property additions do not update DOM, so prepopulate all the keys in the object. Or use lists.
     showTOC: false,
-    hasVolume: true,
+    hasVolume: false,
 
     isScrolling: false,
 
@@ -3909,14 +3921,15 @@ new Vue({
     elapsedSeconds: null,
 
 
+    activeClips: [],
     // Doesn't need to be reactive so this is OK.
     soundToCount: {},
   },
-  // watch: {
-  //   chapterInd(){
-  //     this.playLoop(this.chapters[this.chapterInd].component);
-  //   }
-  // },
+  watch: {
+    chapterInd(){
+    	this.playChapterAudio();
+    }
+  },
   computed: {
     currentChapter: function(){
       return this.chapters[this.chapterInd];
@@ -3937,6 +3950,10 @@ new Vue({
   methods: {
     formatPct: formatPct,
     roundTo: roundTo,
+    playChapterAudio(){
+ 	  this.silenceClips();
+      this.playLoop(this.chapters[this.chapterInd].component);
+    },
     nextChapter: async function(){
       this.chapterInd = Math.min(this.chapters.length-1, this.chapterInd+1);
     },
@@ -3983,6 +4000,7 @@ new Vue({
             this.play()
         }}, false);
       clip.play();
+      this.activeClips.push(clip);
     },
     _playClip(clip){
       clip.play().catch(function(error){
@@ -4026,6 +4044,17 @@ new Vue({
         'value': ind
       });
     },
+    toggleVolume(){
+		this.hasVolume = !this.hasVolume;
+		if (this.hasVolume){
+			this.playChapterAudio();
+		} else {
+			this.silenceClips();			
+		}
+    },
+    silenceClips(){
+    	this.activeClips.forEach(clip => clip.pause());
+    },
     mainClick(event){
       //console.log('click');
       // When you click on the margins, event.target is the "app" node. 
@@ -4035,6 +4064,14 @@ new Vue({
         this.showTOC = false;
       }
     },
+    toggleTOC(){
+		this.showTOC = !this.showTOC;
+		if (this.showTOC){
+			this.play('open');
+		} else {
+			this.play('close');
+		}
+    }
 
   } // end methods
 });

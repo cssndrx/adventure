@@ -1,0 +1,4078 @@
+<!doctype html>
+<head>
+<meta charset="utf-8" />
+
+<title>The Evil Wizard's Guide to Statistics</title>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=59181255"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', '59181255');
+</script>
+
+
+<link href="https://fonts.googleapis.com/css?family=Itim|Fira+Sans:300,700" rel="stylesheet">
+
+<script src="js/lodash.min.js"></script>
+<script src="js/d3.v5.min.js"></script>
+<script src="js/vue.min.js"></script>
+
+<style>
+
+*{
+  font-family: 'Fira Sans', sans-serif;
+  font-size: 18px;
+  font-weight: 300;
+}
+
+.handwriting, .handwriting *{
+  font-family: 'Itim';
+}
+
+h2{
+  font-family: 'Itim';
+  font-size: 36px;  
+  width: 600px;
+  margin: 0 auto;
+  margin-bottom: 16px;
+  margin-top: 16px;
+}
+
+html, body, #app{
+  height: 100%;
+}
+
+ul {
+  list-style-type: square;
+}
+
+li, li * {
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+
+.ev-answer-bar{
+  transition: all 1s ease;
+}
+
+.hint, .hint *{
+  font-size: 16px;
+  margin: 8px;
+  font-weight: 700;
+  color: #777;
+}
+
+.samples-chart{
+  -webkit-user-select: none; /* Safari 3.1+ */
+  -moz-user-select: none; /* Firefox 2+ */
+  -ms-user-select: none; /* IE 10+ */
+  user-select: none; /* Standard syntax */
+}
+
+.bayes-comp{
+  display: inline-block;
+  position:relative;
+  width: 120px;
+  height: 270px;
+  vertical-align: top;
+  text-align: center;
+
+  -webkit-user-select: none; /* Safari 3.1+ */
+  -moz-user-select: none; /* Firefox 2+ */
+  -ms-user-select: none; /* IE 10+ */
+  user-select: none; /* Standard syntax */
+}
+.bayes-comp .label *{
+  font-size: 14px;
+  text-align: center;
+}
+.bayes-comp .rainbow{
+  position:absolute; 
+  left: 8px;
+  width:90%; 
+  opacity:0.5
+}
+
+.dot{
+  border-radius: 50%;
+  width: 12px;
+  height: 12px;
+  background-color: blue;
+  cursor: ns-resize;
+}
+
+text{
+  font-size: 10px;
+}
+
+div{
+  margin-bottom: 16px;
+}
+
+.normal-div, .normal-div div{
+  margin-bottom: 0px;
+}
+
+a{
+  color: #337ab7; /* bootstrap blue */
+  text-decoration: none;
+  cursor: pointer;
+}
+
+img{
+  max-width: 400px;
+}
+
+button{
+  cursor: pointer;
+  background-color: white;
+  border-radius: 4px;
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 8px; 
+  padding: 8px 16px;
+  margin: 8px;
+  max-width: 180px;
+  display: inline-block;
+}
+
+.bold{
+  font-weight: 700;
+}
+.smaller-children, .smaller-children *{
+  font-size: 14px;
+}
+
+.cropcircle{
+    width: 100px;
+    height: 100px;
+    border-radius: 100%;
+    background-size: cover;
+    border: 4px solid black;
+}
+
+.coin{
+  display: inline-block;
+  width: 120px;
+  cursor: pointer;
+  vertical-align: top;
+  word-wrap: break-word;
+
+  -webkit-user-select: none; /* Safari 3.1+ */
+  -moz-user-select: none; /* Firefox 2+ */
+  -ms-user-select: none; /* IE 10+ */
+  user-select: none; /* Standard syntax */
+}
+
+.sideways{
+  transform: translateX(-50%) translateY(-50%) rotate(-90deg);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+}
+
+.toc-chapter{
+  display: grid;
+  grid-template-columns: 50px auto;
+}
+
+.toc-chapter:hover{
+  background-color: #ddd;
+}
+
+.disabled, .disabled * { 
+  pointer-events: none;
+  user-select: none; 
+}
+
+</style>
+</head>
+
+
+<body>
+
+
+<div id="app" style="position:relative;left: 60px;width:calc(100% - 60px);" @click="mainClick($event)">
+
+  <div ref="toc"
+  style="width:60px;position: fixed; top:0px; left:0px; height: 100%; text-align: center; background-color: #eee"
+  class="normal-div">
+
+    <div style="height:58px; ">
+      <img v-if="!showTOC" src="images/menu.png" style="cursor: pointer; position:relative; top:12px" @click="toggleTOC">
+      <img v-if="showTOC" src="images/x.png" style="cursor: pointer; position:relative; top:12px" @click="toggleTOC">
+    </div>
+
+    <div style="position:absolute; bottom: 8px; left:16px;  padding-bottom: 8px">
+      <div v-if="hasVolume" @click="toggleVolume">
+        <img src="images/volume.png" style="width:28px">
+      </div>
+
+      <div v-if="!hasVolume" @click="toggleVolume">
+        <img src="images/volume_off.png" style="width:28px">
+      </div>
+    </div>
+
+    <span class="sideways handwriting" style="font-weight: 700; white-space: nowrap">Evil Wizard's Guide to Statistics</span>
+
+  </div> 
+
+  <div v-if="showTOC" class="normal-div" style="position:fixed; z-index:1; width:200px;top:0px; left:60px; top:0;
+    bottom:0;
+overflow-y:scroll;padding-top:8px; background-color: rgb(247,247,247);">
+    <div v-for="(chapter, ind) in chapters"
+         @click="showTOC = false; chapterInd = ind"
+         class="toc-chapter"
+         style="padding:4px">
+      <img :class="{'story-point-silhouette': currentChapter !== chapter}"
+          :src="'images/' + chapter.image" 
+          style="max-width:50px; max-height:100px">
+      <span style="top:60px; font-size:12px; display: inline-block; margin:8px;"><bold style="font-size:12px">{{chapter.title || 'Chapter ' + ind}}</bold><br> {{chapter.description}}</span>
+    </div>
+  </div>
+
+<keep-alive>
+  <component v-bind:is="visibleScreen"></component>
+</keep-alive>
+</div> <!-- end #app -->
+
+
+
+<script type="text/x-template" id="intro-to-pvalues-template">
+<div>
+
+<h2>Chapter 5</h2>
+
+<pset>
+
+<avatar image="scroll.png">
+  <div>
+    This is a flashback to the recent past in which Elena was still with us...
+  </div>
+  <next>Next</next>
+</avatar>
+
+<avatar 
+  text="Elena, my crow friend is really smart.">
+  <next>Next</next>
+</avatar>
+
+
+<avatar 
+  text="I'm going to get her evaluated by Wei the Scientist to see if her intelligence is statistically significant.">
+  <next>Next</next>
+</avatar>
+
+
+<avatar image="scientist.png"
+  text="My my, what a pretty little bird.">
+  <next>Next</next>
+</avatar>
+
+<avatar image="crow.png"
+  text="Caw caw!">
+  <next>Next</next>
+</avatar>
+
+<avatar image="scientist.png"
+  text="I can certainly design an intelligence test worthy of this lovely creature.">
+  <next>Next</next>
+</avatar>
+
+<avatar image="scientist.png">
+  <div>
+    Although, I guess the default belief is that you're just an average crow.
+  </div>
+  <next>Next</next>
+</avatar>
+
+<avatar image="crow.png"
+  text="Cawwww (Don't insult my intelligence, human).">
+  <next>Next</next>
+</avatar>
+
+<avatar image="brain.png">
+  <div>
+    Another name for default belief is <bold>null hypothesis</bold>.
+  </div>
+  <next>Next</next>
+</avatar>
+
+
+<avatar 
+  image="scientist.png">
+  <div>My apologies, clever crow. I'm just trying to explain what a p-value is. A <bold>p-value</bold> is the probability that you'll see as extreme a result if the null hypothesis is true.</div>
+  <next>Next</next>
+</avatar>
+
+
+<avatar 
+  image="scientist.png"
+  text="I ran Elena through my first battery of intelligence tests, and got a p-value of 0.6.">
+
+  <div>
+    What does a p-value of 0.6 mean?
+  </div>
+
+  <buton-group>
+    <buton nope>There's a 60% chance that Elena is smarter than the average crow</buton>
+    <buton nope>There's a 60% chance that Elena is an average crow</buton>
+    <buton yay>There's a 60% chance of observing as extreme a result even if Elena is just an average crow</buton>
+
+    <template v-slot:hint>
+    P-values only speak about the probability of obtaining the results if the null hypothesis is true. It isn't the probability of the null hypothesis being correct, or the alternative hypothesis ("Elena is smarter than an average crow") being correct.
+    </template>
+  </buton-group>
+
+</avatar>
+
+<avatar image="scientist.png">
+  <div>
+    Correct. A P-value assumes the null hypothesis (aka that Elena is just an average crow) and says how extreme the results are under this assumption.
+  </div>
+  <next>Next</next>
+</avatar>
+
+<avatar  image="scientist.png"
+  text="I ran Elena through a different intelligence test and got a p-value of 0.01. What does a p-value of 0.01 mean?">
+
+  <buton-group>
+    <buton yay>There's a 1% chance of observing as extreme a result even if Elena is just an average crow</buton>
+    <buton nope>There's a 1% chance that Elena is an average crow</buton>
+    <buton nope>There's a 1% chance that the results are due to chance</buton>
+
+    <template v-slot:hint>
+    P-values only speak about the probability of obtaining the results if the null hypothesis is true. It isn't the probability of the null hypothesis being correct, or the alternative hypothesis being correct.
+    </template>
+  </buton-group>
+</avatar>
+
+<avatar 
+  image="scientist.png"
+  text="For one of my experiments, what would be a more exciting result? A p-value of 0.01 or 0.001? ">
+
+  <buton-group>
+    <buton nope>0.01</buton>
+    <buton yay>0.001</buton>
+
+    <template v-slot:hint>
+    A p-value of 0.01 would mean that there's a 1% chance that we would observe as extreme a result if the potion didn't work. While that's nice, it would be nicer if there were only a 0.1% chance that the result would occur.
+    </template>
+  </buton-group>
+</avatar>
+
+<avatar image="scientist.png">
+  <div>
+    Yes! We're hoping that Elena is smarter than an average crow, so a lower p-value is better. 
+  </div>
+  <next>Next</next>
+</avatar>
+
+<avatar image="scientist.png"
+  text="Oh interesting...">
+  <next>What?</next>
+</avatar>
+
+<avatar image="scientist.png"
+  key="trap"
+  text="Some other scientists have been testing unusual crows as well. One scientist found a crow that tested more intelligent than normal  at a p-value of 0.05. Another scientist found a crow that tested more intelligent than normal at a p-value of 0.1. Which crow do you think is smarter?">
+
+  <buton-group>
+    <buton nope>p<0.05 crow</buton>
+    <buton nope>p<0.1 crow</buton>
+    <buton yay>Not enough info</buton>
+  </buton-group>
+
+</avatar>
+
+
+<avatar image="brain.png">
+  <div>
+    {{ got('trap') ? "Correct! There's not enough info." : 'Good attempt, but not quite.' }}  
+  </div>
+
+   <div>
+    The surprising thing about p-values is that they don't say anything about <bold>effect size</bold>. The effect size is the actual difference in the measured quantity. A p-value just tells you how likely something is under the null hypothesis. 
+  </div>
+  <next>Next</next>
+</avatar>
+
+
+<avatar image="scientist.png">
+  <div>
+    The two other crows scored as such. Which one do you think is the smarter bird?
+  </div>
+
+<div style="margin-bottom:24px;">
+<bold>Bird A</bold>
+<div>Scores compared to average:
+  <div style="font-size:14px">+2% +0% +6% +6% +8% +3% +4% +0% +9% +4% +7% +5% +9% +9% +4% +3% +7% +7% +1% +8% +3% +9% +5%</div>
+</div>
+<div>Average effect size: 5%</div>
+<div>P-value: 0.05</div>
+</div>
+
+
+<div>
+<bold>Bird B</bold>
+<div>Scores compared to average:
+  <div style="font-size:14px">+47% +46% +6% +0% -7% -3% +13% +0% -10% +28% -4% +30% +1% +48% +37% +26% +47% +46% -13% +15% +33% +33% +26% </div>
+</div>
+<div>Average effect size: 11% </div>
+<div>P-value: 0.1</div>
+</div>
+
+<once-group>
+  <next>Bird A</next>
+  <next>Bird B</next>
+</once-group>
+</avatar>
+
+<avatar image="brain.png" text="It's hard to say, right? It's possible to have a greater average effect size but a less compelling p-value.">
+<next>Next</next>
+</avatar>
+
+<avatar text="I don't care about these other birds. What is Elena's p-value?">
+  <next>Next</next>
+</avatar>
+
+<avatar image="scientist.png"
+  text="Well, based on the exxperiments I've run so far... Elena's p-value is 0.14.">
+
+  <next>Next</next>
+</avatar>
+
+<avatar text="WHAT!">
+  <next>Next</next>
+</avatar>
+
+<avatar image="crow.png"
+  text="CAW!??! (WHAT!??!)">
+  <next>Next</next>
+</avatar>
+
+<avatar 
+  image="scientist.png">
+
+  <div>
+    Scienitific journals usually require a p-value of 0.05 or smaller to publish. If a p-value is less than 0.05, it is called <bold>statistically significant</bold>. Experimenting with another battery of tests yielded a p-value of 0.14. Which is...
+  </div>
+
+  <buton nope>Statistically significant</buton>
+  <buton yay>Not statistically significant</buton>
+</avatar>
+
+
+<avatar text="I DO NOT accept this!!!!">
+  <next>Next</next>
+</avatar>
+
+<avatar image="crow.png"
+  text="Cawwww!! (Indeed, what a gross miscalculation!!)">
+  <next>Next</next>
+</avatar>
+
+
+<avatar image="scientist.png">
+  <div>
+    Well "statistically significant" sounds really important, but it's just the scientific name for p-value less than a threshold. It's up to the domain expert to determine if the result is meaningful or not.
+  </div>
+  <next>Next</next>
+</avatar>
+
+<avatar text="I am SO OFFENDED (on Elena's behalf).">
+  <next>Next</next>
+</avatar>
+
+
+<avatar 
+  image="scientist.png"
+  text="How should a p-value of 0.14 be interpreted?">
+
+  <buton nope>Weak evidence that Elena is the same as an average crow</buton>
+  <buton yay>Weak evidence that Elena is smarter than an average crow</buton>
+  <buton nope>Strong evidence that Elena is the same as an average crow</buton>
+  <buton nope>Strong evidence that Elena is smarter than an average crow</buton>
+
+</avatar>
+
+<avatar image="scientist.png">
+  <div>
+    Correct. Although a p-value of 0.14 does not meet the threshold for "statistical significance", it is still weak evidence that the results may be unusual under the null hypothesis (aka default world view). There was only a 14% chance that we would observe as extreme a result. 
+  </div>
+
+  <next>Next</next>
+</avatar>
+
+<avatar image="scientist.png">
+  <div>
+    When you get a borderline p-value like 0.14 it is worth investigating further, perhaps redesigning part of the experiment to better capture signal from the noise. 
+  </div>
+  <next>Next</next>
+</avatar>
+
+<avatar image="crow.png"
+  text="Caw caw caw caw?? (Test me 10 more times!)">
+  <next>Er...</next>
+</avatar>
+
+
+<avatar image="scientist.png">
+  <div>
+    I can't test just randomly test you until I get a positive result. That is p-hacking like in the <a href="//xkcd.com/882/" target="_blank">xkcd green jelly bean case</a>.
+  </div>
+  <next>Next</next>
+</avatar>
+
+
+<avatar text="Well, I don't need a p-value to tell me that Elena is no average bird.">
+  <next>Next</next>
+</avatar>
+
+<avatar image="crow.png"
+  text="Caw... (Sad...)">
+  <next>Next</next>
+</avatar>
+
+<avatar 
+  image="brain.png">
+
+  <div>You learned....</div>
+  <ul>
+    <li>The <bold>null hypothesis</bold> is the default belief (e.g. it's not possible to learn by drinking a potion).</li>
+    <li>You learned that a <bold>p-value</bold> is the chance of witnessing as extreme an outcome under the null hypothesis.</li>
+    <li>p-values below a threshold of 0.05 are called <bold>statistically significant</bold> but that does not mean it is necessarily useful.</li>
+    <li>A smaller p-value does not imply a larger effect size.</li>
+  </ul> 
+
+  <div>
+  If you liked this section, you may like the book, <a href="https://smile.amazon.com/p-value-Stories-Actually-Understand-Statistics/dp/0321629302">What is a P-Value Anyways?</a>
+  </div>
+
+  <buton @click="$root.nextChapter()">Next chapter?</buton>
+
+</avatar>
+
+
+</pset>
+</div>
+</script>
+
+
+<script type="text/x-template" id="once-group-template">
+<div :class="{disabled: isClicked}"><slot></slot></div>
+</script>
+
+
+<script type="text/x-template" id="intro-scene-template">
+<div style="width:600px; margin: 0 auto; text-align:center;">
+
+  <div class="handwriting" style="font-size:48px;">The Evil Wizard's Guide to Statistics</div>
+
+  <img src="images/wizard.png" style="width:300px">
+
+  <div style="max-width:500px; margin: 0 auto">
+    <div>
+    Not really motivated by a normal statistics class, but you'll get out of bed to save the world?
+    </div>
+
+    <div>
+    Learn probability and statistics to stop the Evil Wizard.
+    </div>
+  </div>
+
+  <buton @click="$root.nextChapter()">PLAY</buton>
+</div>
+</script>
+
+<script type="text/x-template" id="thanks-template">
+<div style="width:400px; margin: 0 auto;" >
+
+<h2>The End</h2>
+
+<div class="smaller-children">
+<p>
+That's all the chapters for now, but the story may continue... Afterall, the wizard could do a whole section on useful distributions. Sign up here to be notified of future installments. Or leave me some feedback on the current story.
+
+http://eepurl.com/c8ur5T
+https://forms.gle/QeUmVfvoxpNJMEcDA
+</p>
+
+<p>
+The backers and supporters of Ishaan's Journey, including Vivek Rajkumar, Brienne and Eliezer Yudkowsky, Eric Chisholm, Alia McCutcheon and other folks from the LessWrong scene encouraged me to develop this further and who were very patient with me as I took several unnecessary detours. 
+</p>
+
+<p>
+Nicky Case who created multiple examples for how to make experiences both fun + educational. Spencer Greenberg and Mike Mozer who kept the project alive through their enthuasism and insightful critique on the original version. And thank you to all the folks who emailed in with encouragement and offers to help. 
+</p>
+
+<p>
+Anand Babu and Google Kernel friends provided a safe space and the final push of energy to rewrite this. Fred Bertsch and Vivek Sri  greatly improved the story in different ways. Tianyu Liu recommended the perfect pieces of prior work. Nathan Martz was the oracle who was right about all the pitfalls.
+</p>
+
+<p>
+On the tech side, <a href="//vuejs.org/" target="_blank">Vue.js</a> greatly simplified the code needed for this project, omgggg try it out. I think it's better than React. I also want to thank jpegslayer who helped me on the friendly Vue forums.
+</p>
+
+<p>
+If after all this, you're still here and want to buy me a coffee, that would be a great boost to my ego!
+</p>
+
+<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+<input type="hidden" name="cmd" value="_donations" />
+<input type="hidden" name="business" value="cssndrx@gmail.com" />
+<input type="hidden" name="currency_code" value="USD" />
+<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button" />
+<img alt="" border="0" src="https://www.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1" />
+</form>
+
+
+</div>
+</div>
+</script>
+
+
+
+<script type="text/x-template" id="next-template">
+  <buton @click="next()"><slot></slot></buton>
+</script>
+
+
+<script type="text/x-template" id="coin-flips-template">
+<div>
+<h2>Chapter 1</h2>
+<pset>
+
+
+<!-- why is calc 50% being so large?? 
+<avatar key="HH"
+  image="monster.png" 
+  text="What is the probability that I toss a fair coin twice and get HH?">
+
+  <buton nope="1/2 is the probability of tossing a single coin and getting H. Getting two heads in a row is rarer than that.">1/2</buton>
+  <buton yay>1/4</buton>
+  <buton nope="Assume it is a fair coin that lands on heads with 50% probability.">Not enough info</buton>
+
+</avatar>-->
+
+
+<avatar>
+  <p>
+    Not too long ago, I was just like you. Just a regular nerdy wizard on the internet.
+  </p>
+  <p>
+    But one day, I realized... I could do good... by doing evil... if I could cause mischief in the world that everyone would be forced to notice the probability and statistics in their daily life.
+  </p>
+
+  <p style="font-style:italic">
+    And that is where you come in.
+  </p>
+
+  <next>Oh dear</next>
+</avatar>
+
+
+<avatar
+  text="Bobby the Green Monster was unkind to me before I got my wizarding powers. Let's see if my evil plan has worked.">
+  <next>Next</next>
+</avatar>
+
+
+<avatar 
+  image="monster_cry.png"
+  text="Ugh! Peanut butter and jelly again?">
+  <next>What's wrong?</next>
+</avatar>
+
+<avatar image="monster.png" 
+  text="Every day my mom packs me lunch by flipping a coin. If it lands tails, I get a peanut butter jelly sandwich. If it lands heads, I get my favorite — a deluxe fried potato & cream cheese roll. ">
+  <next>Is that good?</next>
+</avatar>
+
+<avatar image="monster_yay.png" 
+  text="Duh it's good. You're missing out if you've never had it before.">
+  <next>Next</next>
+</avatar>
+
+
+<avatar key="HH"
+  image="monster.png" 
+  text="What is the probability that after my mom flips a fair coin twice, I'll be eating peanut butter and jelly two days in a row?">
+
+  <buton nope="1/2 is the probability of tossing a single coin and getting T. Getting two tails in a row is rarer than that.">1/2</buton>
+  <buton yay>1/4</buton>
+</avatar>
+
+<avatar image="brain.png"
+  key="HH-explanation">
+  <div>
+    Right. Coin flips are <bold>independent</bold>. Knowing the result of one event does not give you information about the other events, because coins have no memory. 
+  </div>
+  <div>
+    To calculate the probability that multiple independent events will occur together, you can multiply them.
+  </div>
+  <div>
+    <img src="images/tt.png" style="height: 100px">
+  </div>
+  <div>
+    Probability of TT = 1/2 x 1/2.
+  </div>
+  <next>Next</next>
+</avatar> 
+
+<avatar key="HHH"
+  image="monster_cry.png" 
+  text="Well, truth is I've been eating peanut butter and jelly a LOT. What is the probability that after my mom tosses a fair coin three times, I'll be eating peanut butter and jelly three days in a row?">
+
+  <buton-group>
+    <buton nope>1/2</buton>
+    <buton nope>1/3</buton>
+    <buton yay>1/8</buton>
+
+    <template v-slot:hint>
+      <div>
+        By the same logic as before, coin flips are independent events (i.e. a result doesn't affect the next result). The probabilities of the joint event: seeing X AND Y can be combined with multiplication. 
+      </div>
+
+      <div>
+        <img src="images/ttt.png" style="height: 150px">
+      </div>
+      <div>
+        Probability of TTT = 1/2 x 1/2 X 1/2.
+      </div>
+
+    </template>
+  </buton-group>
+</avatar>
+
+<avatar key="HHHHH"
+  image="monster.png" 
+  text="If I got peanut butter and jelly the last five days in a row, am I more likely to get peanut butter and jelly OR potato cream cheese today?">
+
+  <buton-group>
+    <buton @click="memory='userSaidT'" nope>Peanut butter & jelly</buton>
+    <buton @click="memory='userSaidH'" nope>Potato & cream cheese</buton>
+    <buton yay>It's 50-50</buton>
+
+    <template v-slot:hint>
+      <div v-if="memory == 'userSaidT'">
+        <div>That's the Gambler's Fallacy... a common misconception that events that haven't occured are more likely to occur.</div>
+
+        <div>Coins have no memory, so just because tails came up a lot, doesn't mean that heads is more likely to come up in the future.</div>
+      </div>
+
+      <div v-if="memory == 'userSaidH'">
+        <div>That's the Hot Hand Fallacy... a common misconception that events that have occurred recently are "hot" and more likely to come up.</div>
+
+        <div>Coins have no memory, so just because tails came up a lot, doesn't mean that tails is any more likely to come up in the future.</div>
+      </div>
+
+    </template>
+  </buton-group>
+</avatar>
+
+<avatar image="monster.png" 
+  text="Yeah! If mom's coin is fair, I still have a 50-50 chance to get potato & cream cheese since coins have no memory.">
+  <next>Next</next>
+</avatar>
+
+
+<avatar key="100H"
+  image="monster.png" 
+  text="Okay, but if I told you my mom's coin doomed me to peanut butter and jelly the last 100 days, what do you think I would get today?">
+
+  <buton-group>
+    <buton yay>Peanut butter and jelly</buton>
+    <buton nope>Potato and cream cheese</buton>
+    <next>It's 50-50</next>
+  </buton-group>
+</avatar>
+
+<avatar image="brain.png">
+  <div>
+   {{got('100H') ? 'Yeah!': 'Nice try but not quite.'}} The probability of seeing 100 tails in a row on a fair coin is so tiny... 1/<exp base="2" pow="100"/>. If all the <exp base="2" pow="80"/> atoms in the universe were flipping coins, it still would only have a 1 in million chance of happening. 
+ </div>
+
+   <next>How many days has Bobby been eating PB&J?</next>
+</avatar>
+
+<avatar image="monster.png"
+  text="I've been eating PB&J for the last 10 days. Poor me. Do you think mom's coin is fair?">
+
+
+  <next>Yes</next>
+  <next>No</next>
+  <next>I don't know</next>
+</avatar>
+
+<avatar image="monster.png">
+  <div>Well, I guess the probability of getting 10 PB&J sandwiches in a row is <frac num="1" den="X"/>  where X = ?. 
+  </div>
+  <input-box :right="['1024', '2^10']" />
+</avatar>
+
+<avatar image="monster.png"
+  text="So, I should see a streak of 10 PB&J sandwiches every 1024 days or so.">
+  <next>Next</next>
+</avatar>
+
+<avatar image="monster.png"
+  text="Mom has been packing lunch for me for 1540 days, so I guess this was not that surprising.">
+  <next>Next</next>
+</avatar>
+
+<avatar image="monster.png"
+  text="And here I was being paranoid that I was cursed by an evil wizard or something.">
+  <next>Er...</next>
+</avatar>
+
+<avatar image="monster_cry.png"
+  text="I guess I'll wait a few more days to see if I get a potato & cream cheese sandwich. Thanks!">
+  <next>Next</next>  
+</avatar>
+
+
+<avatar image="brain.png">
+  <ul>
+    <li>You learned about <bold>independent events</bold></li>
+    <li>You learned to calculate the <bold>joint probability</bold> of independent events.</li>
+    <li>You learned that there are <exp base="2" pow="80"/> atoms in the universe.</li>
+  </ul> 
+  <next>Next</next>  
+</avatar>
+
+<avatar>
+  <div>
+  Haha! That was great... I wonder how many more peanut butter and jelly sandwiches I can get Bobby to eat. 
+  </div>
+  <buton @click.native="$root.nextChapter()">Next chapter</buton>
+</avatar>
+
+</pset>
+</div>
+</script>
+
+<script type="text/x-template" id="wizard-flips-template">
+<div>
+
+<h2>Chapter 2</h2>
+<pset>
+
+<avatar  
+  text="By the way, have you met my crow friend Elena?">
+  <next>Next</next>
+</avatar>
+
+<avatar image="crow.png"
+  text="Caw!">
+  <next>Next</next>
+</avatar>
+
+<avatar text="Elena found some hilarious coins. They say H on one side, and A on the other. Let's play with them! ">
+  <next>Next</next>
+</avatar>
+
+<avatar 
+  text="Of these 3 coins, 2 are fair and 1 is unusual. Let's see if you can find the unusual one.">
+
+  <div class="smaller-children">
+    <div>Click the coins a bunch of times to flip them. When you have enough info, submit your guess.</div>
+  </div>
+
+  <coin></coin>
+  <coin></coin>
+  <coin :bias="0.7"></coin>
+
+  <div>The unusual coin is:</div>
+
+  <buton-group>
+    <buton nope>Coin 1</buton>
+    <buton nope>Coin 2</buton>
+    <buton yay>Coin 3</buton>
+
+    <template v-slot:hint>
+      Hint: One coin has a tendency to land on one side more than the other.
+    </template>
+  </buton-group>
+
+</avatar>
+
+<avatar >
+
+  <div>
+    {{ perfect('3coins') ? 'Oh. You got me. That coin was biased to land on H, 70% of the time.' : "HAAAHHAA! It's pretty hard to find the biased coin, right? And that was when the coin was biased to land on H, 70% of the time!"}} 
+  </div>
+
+  <div>
+     What is the weakest bias with which you can easily tell that the coin is biased?
+   </div>
+
+  <biased-coin-machine></biased-coin-machine>
+  <next>Done with this</next> 
+
+</avatar>
+
+<avatar 
+  text="HAHA this is fun. I again have 3 coins. 2 are fair, 1 is unusual. Find the unusual coin.">
+
+
+  <div class="smaller-children">
+    <div>Click the coins to flip them. When you have enough info, submit your guess.</div>
+  </div>
+
+  <coin></coin>
+  <coin pattern="haha"></coin>
+  <coin></coin>
+
+  <div>The unusual coin is:</div>
+
+  <buton-group>
+    <buton nope>Coin 1</buton>
+    <buton yay>Coin 2</buton>
+    <buton nope>Coin 3</buton>
+
+    <template v-slot:hint>
+      Hint: Look at the pattern of coin flips. The wizard may be having a joke at your expense.
+    </template>
+  </buton-group>
+</avatar>
+
+
+<avatar 
+  text="HAHA yes, that coin always says HAHA. It lands on heads 50% of the time, but it's unusual because I know what's coming next. Genius, isn't it??">
+
+  <next>Next</next>
+</avatar>
+
+
+<avatar 
+  text="OKOK last one. Find the unusual coin.">
+
+  <div class="smaller-children">
+    <div>Click the coins to flip them. When you have enough info, submit your guess.</div>
+  </div>
+
+  <coin></coin>
+  <coin pattern="human"></coin>
+  <coin></coin>
+
+  <div>The unusual coin is:</div>
+
+  <buton-group>
+    <buton nope>Coin 1</buton>
+    <buton yay>Coin 2</buton>
+    <buton nope>Coin 3</buton>
+
+    <template v-slot:hint>
+      Hint: Look at the streaks within the pattern of coin flips.
+    </template>
+  </buton-group>
+</avatar>
+
+
+<avatar 
+  text="You got it. Interesting isn't it. This coin never has long streaks of one thing or the other. Humans tend to generate 'random' sequences like this. But they aren't random, because nature doesn't mind having long streaks.">
+
+  <next>Next</next>
+</avatar>
+
+
+<avatar 
+  text="HAHAHA. Aren't these coins great? Isn't Elena the Crow great? ">
+  <next>Yes</next>
+</avatar>
+
+<avatar text="Elena is my only friend actually. Bobby and the other kids at school aren't nice to me.">
+  <next>Oh</next>
+</avatar>
+
+<avatar image="crow.png"
+  text="Caw!">
+  <next>Next</next>
+</avatar>
+
+<avatar text="Bobby isn't actually a green monster by the way. I just drew him like that... because I could.">
+  <next>Oh</next>
+</avatar>
+
+<avatar text="You wanna see this other monster that I cursed?">
+  <next>Next</next>
+</avatar>
+
+
+<avatar image="brain.png">
+  <div>
+    Well, at least you learned
+  </div>
+  <ul>
+    <li>What real randomness feels like</li>
+  </ul> 
+
+  <buton @click="$root.nextChapter()">Next Story</buton>
+</avatar>
+
+</pset>
+</div>
+</script>
+
+
+<script type="text/x-template" id="bayes-rule-template">
+<div>
+
+<h2>Chapter 6</h2>  
+
+<pset>
+
+<avatar text="Elena??? Where's Elena??">
+  <next>NEXT</next>
+</avatar>
+
+<avatar text="Oh noooo my one and only friend!">
+  <next>NEXT?!?!!</next>
+</avatar>
+
+<avatar image="brain.png"
+        text="Calm down calm down CALM DOWN.">
+  <next>Breathe</next>
+</avatar>
+
+<avatar text="Wait... does this have to do with Chapter 5??">
+  <next>Next</next>
+</avatar>
+
+<avatar text="Do you think Elena was offended by her p-value?">
+  <next>Possibly</next>
+</avatar>
+
+
+<avatar text="But Elena is a very clever self sufficient crow. Chances are that she's okay.">
+  <next>Next</next>
+</avatar>
+
+
+<avatar text="But then again, I've never seen Elena so ruffled before.">
+  <next>Next</next>  
+</avatar>
+
+<avatar text="There's too much conflicting info!! Is Elena okay or not??">
+  <next>Next</next>
+</avatar>
+
+<avatar image="brain.png">
+  <div>
+    To reconcile the two pieces of information into a single belief use <bold>Bayes Rule</bold>.
+  </div>
+  <next>Next</next>
+</avatar>
+
+<avatar>
+  <div>
+    I thought Bayes Rule was just the relationship between conditional probabilities
+  </div>
+  <div>
+  P(A|B) = <big-frac style="position:relative; top:12px">
+    <template v-slot:num>
+      P(B|A) × P(A)
+    </template>
+    <template v-slot:den>
+      P(B)
+    </template>
+  </big-frac> ?
+  </div>
+  <next>Next</next>
+</avatar>
+
+
+<avatar image="brain.png">
+  <div>
+    Yes, but if you plug in meaningful values like "H" for hypothesis and "D" for data, then Bayes Rule becomes a general relationship of how to change your mind in response to new data.
+  </div>
+
+  <img src="images/bayes-annotated.png" style="width:300px">
+
+
+  <div>
+  Don't worry about all the terms for now, but the main takeaway is that <bold>what you think after</bold> is dependent on two components (1) what you thought before and (2) the likelihood of evidence.
+  </div>
+
+  <next>Next</next>
+</avatar>
+
+<avatar>
+  <div>What is my <bold>prior belief</bold> on Elena being okay? (i.e. what did I think before I found out she was ruffled?)</div>
+  <next>Next</next>
+</avatar>
+
+<avatar>
+  <div>
+    Elena is a very self-sufficient bird, so 80% of the times she's disappeared on me, she has been okay.
+  </div>
+
+  <div>Drag the bars to show your prior belief that Elena is okay. 
+  </div>
+
+  <triple-bayes 
+    :hypotheses="['OK', 'Not OK']" 
+    :config="{prior: {dist: [1, 1], correct: [4, 1], isActive: true, isDraggable:true}}">
+  </triple-bayes>
+
+</avatar>
+
+<avatar image="brain.png">
+  <div>
+    Now you need to take into account the data that Elena was last seen visibly ruffled. 
+  </div>
+  <div>
+    To incorporate this data, Bayes Rule says to look at the likelihood of the data under each hypothesis P(D|H). 
+  </div>
+
+  <div>
+    We need to compute the ratio of
+  </div>
+
+  <div>
+    P(Ruffled|OK) vs P(Ruffled|Not OK).
+  </div>
+
+  <div>
+    This is called the <bold>likelihood ratio of the evidence</bold>.
+  </div>
+  <next>Next</next>
+</avatar>
+
+
+<avatar>
+  <div>
+    Out of 100 OK birds, I imagine 10 of them might be ruffled.
+    Out of 100 Not OK Birds, probably 80 are ruffled.
+  </div>
+
+  <div>
+    Drag the bars to reflect the likelihood ratio of the evidence.
+  </div>
+
+  <triple-bayes 
+    :hypotheses="['OK', 'Not OK']" 
+    :config="{prior: {dist: [4, 1]}, likelihood: {dist: [1, 1], correct: [1, 8], isActive: true, isDraggable: true}}">
+  </triple-bayes>
+
+</avatar>
+
+<avatar 
+  text="Bayes Rule says our belief after seeing the evidence is our prior belief multiplied by the likelihood ratio.">
+
+  <div>
+    The belief after we have considered the evidence is called the <bold>posterior belief</bold>.
+  </div>
+
+  <triple-bayes 
+    :hypotheses="['OK', 'Not OK']" 
+    :config="{prior: {dist: [4, 1]}, likelihood: {dist: [1, 8]}, posterior: {isActive: true}}">
+  </triple-bayes>
+
+  <div>
+    Looking at the posterior belief, what is the probability that Elena is OK?
+  </div>
+  <buton yay>33%</buton>
+  <buton nope>40%</buton>
+  <buton nope>80%</buton>
+</avatar>
+
+<avatar text="That's not great odds.">
+  <next>Oh no</next>
+</avatar>
+
+
+<avatar text="The other thing is she didn't leave a note.">
+  <div>
+  50 out of 100 OK people don't leave a note when they are ruffled.<br>
+  90 out of 100 Not OK people don't leave a note when they are ruffled.
+  </div>
+
+  <div>
+  Use this information to create a likelihood ratio.<br>
+  </div>
+
+  <triple-bayes 
+    :hypotheses="['Ok', 'Not OK']" 
+    :config="{prior: {dist: [4, 8]}, likelihood: {dist: [1, 1], correct: [5, 9], isActive: true, isDraggable: true}, posterior: {isActive:true}}">
+  </triple-bayes>
+</avatar>
+
+<avatar text="Oh no!!! Only a 22% chance she's okay??">
+  <next>Next</next>
+</avatar>
+
+<avatar text="Wait I hear a cacophony of crows!">
+  <next>Next</next>
+</avatar>
+
+<avatar>
+  <div>
+    What's the probability that I'd hear a cacophony of crows under each hypothesis?
+  </div>
+
+  <next>Next</next>
+</avatar>
+
+<avatar image="brain.png"
+  text="Get out of your head and follow the noise!">
+  <next>Next</next>
+</avatar>
+
+<avatar text="ELENA!!!">
+  <next>Next</next>
+</avatar>
+
+<avatar image="crow.png" text="CAWW (HELP)">
+  <next>Next</next>
+</avatar>
+
+<avatar text="There you are Elena!">
+  <next>Next</next>
+</avatar>
+
+<avatar text="Was I right to infer that there was a 78% chance you were in trouble?">
+  <next>Next</next>
+</avatar>
+
+<avatar image="crow.png" text="CAWW CAWW (HELP HELP)">
+  <next>Next</next>
+</avatar>
+
+<avatar text="You get away from her, mean crows!">
+  <next>Next</next>
+</avatar>
+
+<avatar text="Thank you for helping me find Elena.">
+  <next>Next</next>
+</avatar>
+
+<avatar text="Elena, I hope that p-value nonsense didn't cause you to run away.">
+  <next>Next</next>
+</avatar>
+
+<avatar image="crow.png" text="...">
+  <next>Next</next>
+</avatar>
+
+<avatar text="Not only are you the cleverest crow I know, you're my best friend.">
+  <next>Next</next>
+</avatar>
+
+<avatar image="crow.png" text="c... aw...">
+  <next>Next</next>
+</avatar>
+
+<avatar image="brain.png">
+  <div>
+  While this is all touching, let's take another look at Bayes Rule that saved the day.
+  </div>
+  <next>Next</next>
+</avatar>
+
+<avatar image="brain.png"
+      text="This is the Taxi-cab problem by psychologists Kahneman & Tversky.">
+
+  <div style="max-width: 350px; margin:0 auto; margin-bottom: 16px; line-height:1.4em; text-align: justify" class="smaller-children">
+  30% of the cabs in the city are Blue and 70% are Green.
+  A cab was involved in a hit and run, and the witness identified the cab as Blue. 
+  The court tested the reliability of the witness under the circumstances that existed on the night of the accident, and concluded that the witness correctly identified each one of the two colors 80% of the time and failed 20% of the time.
+  What is the probability that the cab involved in the accident was Blue?
+  </div>
+
+  <div>
+    Use the widget to solve the problem.
+  </div>
+
+  <triple-bayes 
+    :hypotheses="['B guilty', 'G guilty']" 
+    :config="{prior: {dist: [1, 1], correct: [3, 7], isActive: true, isDraggable: true}, likelihood: {dist: [1, 1], correct:[4, 1], isActive:true, isDraggable: true}, posterior: {isActive: true}}">
+
+    <template v-slot:yay>
+      <buton @click="set('bayes-rule')">Next</buton>
+    </template>
+
+    <template v-slot:hint>
+
+      <div>
+      <div><bold>Prior</bold></div>
+      Ignoring the eye witness evidence, and just considering the base rate of cabs in the city gets the prior.
+      </div>
+
+      <div>
+      <div><bold>Likelihood Ratio</bold></div>
+      The likelihood ratio of the data P(D|H) given that the eyewitness saw a blue cab consists of
+      </div>
+      <big-frac>
+        <template v-slot:num>
+          P(Saw blue|Blue guilty)
+          </template>
+          <template v-slot:den>
+          P(Saw blue|Green guilty)
+        </template>
+      </big-frac>
+    </template>
+  </triple-bayes>
+
+</avatar>
+
+
+<avatar>
+  <div>
+    <div>
+      So even though there is pretty accurate eyewitness testimony pointing to Blue cabs, given the low base rate of Blue cabs, it's still pretty uncertain which cab company was at fault.
+    </div>
+    <next>Next</next>
+  </div>
+</avatar>
+
+<avatar image="brain.png"
+  text="Congrats, you solved a problem that few people get correct. By using both the prior and likelihood of evidence, you avoided the human tendency to just use one or the other.">
+
+  <next>Next</next>
+</avatar>
+
+<avatar text="Hey... are you my friend? ">
+  <next>Next</next>
+</avatar>
+
+<avatar text="I feel like we've hit the three tenets of friendship from Chapter 4.">
+  <next>Next</next>
+</avatar>
+
+<avatar>
+  <div>
+    We have consistency — you've hung out with me for {{$root.elapsedMinutes}} minutes and {{$root.elapsedSeconds}} seconds.
+  </div>
+  <next>Next</next>
+</avatar> 
+
+<avatar text="And positivity — you look like you're having fun.">
+  <next>Next</next>
+</avatar>
+
+<avatar text="And vulnerability — you know that I don't have friends.">
+  <next>Next</next>
+</avatar>
+
+<avatar>
+  <div>
+  So... I guess we're friends now? 
+  </div>
+
+  <once-group>
+    <next>Yes</next><next>Possibly</next>
+  </once-group>
+</avatar>
+
+<avatar>
+  <div>
+  And you see probability and statistics IRL now? 
+  </div>
+
+  <once-group>
+    <next>Yes</next><next>Possibly</next>
+  </once-group>
+</avatar>
+
+<avatar>
+  <div>
+  Then my work here is done, friend.
+  </div>
+  <next>Next</next>
+</avatar>
+
+<avatar 
+  image="brain.png">
+
+  <div>You learned....</div>
+
+  <ul>
+    <li>how to update beliefs with <bold>Bayes Rule</bold> is the average reward.</li>
+    <li>posterior belief <span style="font-size:28px">∝</span> prior belief × likelihood</li>
+    <li>To breathe when panicking.</li>
+    <li>That you have a new friend.</li>
+  </ul> 
+
+  <buton @click="$root.nextChapter()">Next chapter</buton>
+
+</avatar>
+
+
+</pset>
+</div>
+</script>
+
+<script type="text/x-template" id="the-end">
+<div>
+</div>
+</script>
+
+<script type="text/x-template" id="pset-template">
+  <div class="pset">
+    <slot></slot>
+  </div>
+</script>
+
+<script type="text/x-template" id="coin-template">
+  <div @click="flip" class="coin normal-div" style="position:relative">
+    <img v-if="isShowingH" src="images/coin_heads.png" style="width:100px">
+    <img v-if="!isShowingH" src="images/coin_tails.png" style="width:100px">
+    <div ref="flip-string" style="font-size:13px; margin-left:8px; margin-right:8px" :style="flipStringStyle">{{flipString}}</div>
+    <samples-chart v-if="flips.length > 0" :xdomain="xDomain" :samples="samples" :style="chartStyle"></samples-chart>
+  </div>
+</script>
+
+
+<script type="text/x-template" id="biased-coin-machine-template">
+<div>
+
+  <div class="smaller-children">Adjust the bias, and click coin to flip.</div>
+
+  <div>
+    <span class="smaller-children">Lands H with <bold>{{$root.formatPct(bias)}}</bold> chance:</span>
+    <input v-model="slider" type="range" min="0" max="100" style="width:100px; display:inline">
+  </div>
+
+
+  <div>
+  <coin ref="coin" :bias="bias" style="width:120px" :sideBySide="true"></coin>
+  </div>
+</div>
+</script>
+
+
+<script type="text/x-template" id="chain-rule-template">
+<div>
+
+  <h2>Chapter 3</h2>
+<pset>
+
+<avatar text="I like a girl but she doesn't like me back.">
+  <next>Next</next>
+</avatar>
+
+<avatar 
+  image="girl.png" 
+  text="I'm Veronica and I only date monsters that are tall and have beards.">
+
+  <next>Next</next>
+</avatar>
+
+
+<avatar 
+  text="So I cast a spell to cause many monsters to be unable to grow beards...">
+  <next>Oh</next>
+</avatar>
+
+
+<avatar image="girl.png"
+  text="Is that why it's so hard to find someone I like?">
+  <next>Next</next>
+</avatar>
+
+<avatar image="girl_happy.png"
+  text="Naw, I don't think that's it. I'm just waiting for my Mister Right.">
+  <next>Next</next>
+</avatar>
+
+
+<avatar 
+  image="girl.png" 
+  text="1/2 of all monsters are tall and 1/4 of monsters have beards.">
+  <next>Next</next>
+</avatar>
+
+<avatar image="brain.png">
+  <div>
+    Let's write what Veronica told us in math language.
+  </div>
+
+  <div>
+    The probability of a monster having a beard can be written as:
+  </div>
+
+  <div>
+    P(beard) = 1/4
+  </div>
+
+  <div>
+    This is pronounced as "the probability of a beard is 1/4".
+  </div>
+
+  <div>
+    Veronica also told us
+  </div>
+
+  <div>
+    P(tall) = 1/2
+  </div>
+  <next>Next</next>
+</avatar>
+<avatar key="fakeout1"
+  image="girl.png" 
+  text="What is the probability that a random monster is datable? i.e. What is P(tall AND beard)?">
+
+  <buton-group>
+    <next>1/8</next>
+    <buton nope="Hm... 1/3 doesn't make sense. Try again.">1/3</buton>
+    <buton nope="Although 1/4 is the number of monsters have beard, it's not clear that all bearded monsters are tall. Try again.">1/4</buton>
+    <buton nope="There aren't even that many tall monsters! Try again.">3/4</buton>
+    <buton yay>Not enough info</buton>
+  </buton-group>
+</avatar>
+
+
+<avatar image="brain.png">
+
+  <div>
+    {{got('fakeout1') ? "Right! It's not possible to say." : "Nice try, but there's a catch." }}
+  </div>
+
+  <div>
+    It is only valid to multiply two probabilities to calculate the joint probability if the two events are <bold>independent</bold> — like coin flips.
+  </div>
+
+  <div>
+     In our case, independence occurs if a monster's height <bold>does not provide any information</bold> on the greatness of a monsters hair. 
+  </div>
+
+  <div>
+    So if knowing that a monster is tall or short, does not make it any more or less likely that the monster has a beard... then it's safe to say that having a beard and being tall are independent.
+  </div>
+
+  <next>Next</next>
+</avatar>
+
+
+<avatar image="girl.png" 
+        text="I guess I do see some correlation between being tall and having a beard, so they're not independent. If I know a monster is tall, there's a 1/3 chance that they have a beard.">
+  <next>Next</next>
+</avatar>
+
+
+
+<avatar image="brain.png">
+
+  <div>
+  Veronica told us a <bold>conditional probability</bold> when she said:
+  </div>
+
+  <div>
+   The probability a monster has a beard is 1/3 <bold>given</bold> that we know the monster is tall. 
+  </div>
+
+  <div>
+    Conditional probabilities are written like P(X|Y). The bar "|" is  pronounced as "given", and P(X|Y) indicates the probability of X given that we know Y to be true.
+  </div>
+
+
+  <div>
+    Veronica told us P(beard|tall) = 1/3.
+  </div>
+
+
+  <div>
+   This is read as "the probability a monster has a beard given that we know the monster is tall is 1/3". 
+  </div>
+
+
+  <next>Next</next>
+</avatar>
+
+
+<avatar  image="brain.png">
+
+  <div>
+    We can use the conditional probability to calculate P(tall AND beard) without assuming independence:
+  </div>
+
+  <div>
+    P(tall AND beard) = P(tall) x P(beard|tall)
+  </div>
+
+  <div>
+    The formula says to get the probability of finding a tall monster with a beard = (probability of finding a tall monster) x (probability that a tall monster has a beard).
+  </div>
+
+  <next>Try it</next>
+</avatar>
+
+
+<avatar key="tall-hair" 
+        image="girl.png" 
+        text="Okay so what is the probability that a random monster is datable?">
+
+  <div>What is P(tall AND beard)?</div>
+
+  <div class="extra-info">Facts from before:
+  <ul>
+    <li>P(tall) = 1/2</li>
+    <li>P(beard) = 1/4</li>
+    <li>P(beard | tall) = 1/3</li>
+  </ul>
+  </div>
+
+  <buton-group>
+    <buton yay>1/6</buton>
+    <buton nope="We said that being tall and having a beard are not independent, so we can't just multiply 1/2 x 1/4.">1/8</buton>
+    <buton nope="Are you just multiplying things together? Try again.">1/24</buton>
+    <buton nope="The answer isn't always 'Not enough info'...">Not enough info</buton>
+  </buton-group>
+</avatar>
+
+
+<avatar image="girl_happy.png" text="Thank you for your help so far. But I forgot... ">
+  <next>Yes?</next>
+</avatar>
+
+
+<avatar key="fakeout2"
+        image="girl.png"
+        text="I also want my monster to have tattoos. 1/5 of monsters have tattoos.">
+
+  <div>In math speak, <bold>P(tattoos) = 1/5.</bold></div>
+  <div>What is P(tall, beard, tattoos)? <span style="color:#777"><- Note: This is a more compact way of writing P(tall AND beard AND tattoos).</span></div>
+
+  <div class="extra-info">Facts from before:
+    <ul>
+      <li>P(tall) = 1/2</li>
+      <li>P(beard) = 1/4</li>
+      <li>P(beard|tall) = 1/3</li>
+      <li>You calculated P(beard, tall) = 1/6</li>
+    </ul>
+  </div>
+
+  <buton-group>
+    <next>1/30</next>
+    <buton nope="Remember, we want to use P(beard|tall), not P(tall).">1/40</buton>
+    <buton nope="Wait, are you just blindly multiplying numbers? Stop that.">1/120</buton>
+    <buton yay>Not enough info</buton>
+  </buton-group>
+</avatar>
+
+
+<avatar 
+    image="brain.png">
+
+  <div>
+    {{ got('fakeout2') ? 'Right.': 'Not quite.' }} Again, it's not possible to say!
+  </div>
+
+  <div>
+    To get P(tattoo, beard, tall), we can't just multiply
+    P(tattoo) x P(beard, tall) without assuming independence.
+  </div>
+
+  <div>
+    We need another conditional probability.
+  </div>
+
+  <next>Next</next>
+</avatar>
+
+<avatar image="brain.png">
+  <div>
+    And this brings us to the <bold>Chain Rule of Probability</bold>.
+  </div>
+
+  <div class="smaller-children">
+    P(tattoo, beard, tall) = <br>
+    <span style="color:#7570b3">P(tall)</span> x <span style="color:#1b9e77">P(beard | tall)</span> x <span style="color:#d95f02">P(tattoo | beard AND tall)</span>
+  </div>
+
+  <div class="smaller-children" style="margin-left: 16px;">
+    <div>
+      First, consider the <span style="color:#7570b3">probability of the monster being tall</span>.
+    </div>
+
+    <div>
+      Then, consider the <span style="color:#1b9e77">probability of a tall monster having a beard</span>.
+    </div>
+
+    <div>
+      Then, consider the <span style="color:#d95f02">probability that a tall monster with a beard, would have a tattoo</span>.
+    </div>
+
+    <div>
+      Multiply together to get monsters that are tall and have a beard and have tattoos.
+    </div>
+  </div>
+
+  <div>
+    Basically, the Chain Rule says that when bringing a new item to the joint probability, condition on all the events that already exist.
+  </div>
+
+  <next>Try it</next>
+</avatar>
+
+
+<avatar key="problem3" 
+        image="girl.png" 
+        text="Ooh yes, I've heard of the Chain Rule. Here are the numbers that you'll need.">
+
+  <div>
+  What is P(tall, beard, tattoos)?
+  </div>
+
+  <div class="extra-info">
+  Facts from before:
+  <ul>
+    <li>P(tall) = 1/2</li>
+    <li>P(beard) = 1/4</li>
+    <li>P(beard|tall) = 1/3</li>
+    <li>You calculated P(beard AND tall) = 1/6</li>
+    <li>P(tattoos) = 1/5</li>
+    <li>P(tattoos|tall) = 1/6</li>
+    <li>P(tattoos|tall AND beard) = 1/7</li>
+  </ul>
+  </div>
+
+  <div>
+  P(tall, beard, tattoos) = 1/<input-box right="42">
+    <template v-slot:hint>
+      <div>
+        Recall the Chain Rule says that everything must be conditioned on what came before. 
+      </div>
+      <div>
+        So P(tall, beard, tattoos) = P(tall) x P(beard | tall) x P(tattoos | beard AND tall). 
+      </div>
+    </template>
+  </input-box>
+  </div>
+
+</avatar>
+
+<avatar key="problem4" 
+        image="girl.png" 
+        text="Yes, thank you! But silly us! We forgot to include that these tall, bearded, tattooed monsters also need to be... around my age and single.">
+
+    <div class="extra-info">
+    Facts from before:
+    <ul>
+      <li>P(tall) = 1/2</li>
+      <li>P(beard) = 1/4</li>
+      <li>P(beard|tall) = 1/3</li>
+      <li>You calculated P(beard AND tall) = 1/6</li>
+      <li>P(tattoos) = 1/5</li>
+      <li>P(tattoos|tall) = 1/6</li>
+      <li>P(tattoos|tall AND beard) = 1/7</li>
+      <li>You calculated P(beard, tall, tattoos) = 1/42</li>
+      <li>P(around her age | tall, beard, tattoos) = 1/5</li>
+      <li>P(single | tall, beard, tattoos, around her age) = 1/2</li>
+    </ul>
+    </div>
+
+
+    <template v-slot:hint>
+      <div>
+        Recall the Chain Rule says that everything must be conditioned on what came before. 
+      </div>
+      <div>
+        So in the case of four events, P(tall, beard, tattoos, single) = P(tall) x P(beard | tall) x P(tattoos | beard AND tall) * P(beard AND tall AND tattoos | single). 
+      </div>
+      <div>
+        What is it for five events?
+      </div>
+    </template>
+
+    <div>
+    P(tall, beard, tattoos, around her age, single) =
+    </div>
+
+    1/<input-box right="420"/>
+</avatar>
+
+
+<avatar image="girl_shock.png"
+        text="That's not very many people!">
+  <next>Next</next>
+</avatar>
+
+<avatar>
+  <div>
+    Even though each individual criteria may not seem picky, requiring that a monster have all the traits leaves Veronica with a very small dating pool. Ha-ha!
+  </div>
+  <next>Next</next>
+</avatar>
+
+<avatar>
+  <div>But hey, at least Veronica's pickiness taught you the Chain Rule.</div>
+
+  <next>Next</next>
+</avatar>
+
+<avatar 
+    image="brain.png"
+    key="decompose" >
+
+  <div>
+    We had been decomposing:
+  </div>
+
+  <div style="font-size:16px">
+    P(tall, beard, tattoos) = P(tall) x P(beard|tall) x P(tattoos | tall AND beard).
+  </div>
+
+  <div>
+    But notice... that we can also decompose it as:
+  </div>
+
+  <div style="font-size:16px">
+    P(tall AND beard and tattoos) = P(beard) x P(tattoos | beard) x P(tall | tattoos AND beard).
+  </div>
+
+  <div>
+    We can decompose it in any order we choose to, depending on what information we have on hand.
+  </div>
+
+  <div>
+    How many different ways are there to decompose P(tall, beard, tattoos) using the Chain Rule?
+  </div>
+  <input-box right="6" :feedback="true"/>
+</avatar>
+
+
+<avatar image="wizard.png"
+        text="Aw... you foiled my plan by showing Veronica how picky she was. But....">
+  <ul>
+    <li>You learned about independence</li>
+    <li>You learned about Chain Rule</li>
+    <li>You learned to not be too picky ❤️</li>
+  </ul> 
+
+  <next>Are you doing this all for revenge?</next>
+</avatar>
+
+
+<avatar text="I have a lot of free time because I don't have any friends.">
+  <next>Surely you must have some friends though?</next>
+</avatar>
+
+<avatar text="No, I really don't.">
+  <next>Let's get you friends</next>
+</avatar>
+
+<avatar text="Uh... it might be harder than you think...">
+  <buton @click="$root.nextChapter()">Next chapter</buton>
+</avatar>
+
+</pset>
+</div>
+</script>
+
+<script type="text/x-template" id="ev-story-template">
+<div>
+<h2>Chapter 4</h2>
+<pset ref="pset">
+
+
+<avatar text="How can I make friends?">
+  <next>Next</next>
+</avatar>
+
+<avatar image="brain.png">
+
+<div>The <a target="_blank" href="//www.youtube.com/watch?v=hmJyWreER7A">internet</a> claims that the 3 tenets of friendships are...</div>
+
+<ul>
+  <li>positivity</li>
+  <li>consistency</li>
+  <li>vulnerability</li>
+</ul>
+<next>Thanks internet</next>
+</avatar>
+
+<avatar>
+  <div>To become friends, interactions need to be positive. That makes sense.</div>
+  <next>Next</next>
+</avatar>
+
+<avatar>
+  <div>
+    I'm pretty good at telling jokes. I'll memorize some jokes from the <a target="_blank" href="//www.rd.com/funny-stuff/short-jokes/">internet</a> and make people laugh.
+  </div>
+  <next>Next</next>
+</avatar>
+
+<avatar text="Hm... but jokes don't always hit. A bad joke might actually be a negative.">
+  <next>Next</next>
+</avatar>
+
+<avatar text="Take this joke for instance... should I tell it?">
+  <div>
+  40% of the time it lands favorably<br>
+  60% of the time it fails<br>
+  </div>
+
+  <next>Uh...</next>
+</avatar>
+
+<avatar image="brain.png"
+        text="The answer depends on the payoffs.">
+  <div>
+    If the wizard get +1 positivity point when it lands.<br>
+    And -1 positivity point when it fails<br>
+  </div>
+
+  <div>
+    Then it seems like a bad deal, because on average the wizard loses -0.2 positivity points each time I tell the joke. 
+  </div>
+
+  <div>
+    This average is called the <bold>expected value</bold>.
+  </div>
+
+  <next>Next</next>
+</avatar>
+
+
+<avatar>
+  <div>
+    Hm... everyone already thinks I'm weird. I feel like, if the joke fails I might lose 1 point. But if the joke lands, I'll gain 5 points because there's nowhere to go but up for my reputation. Ha-ha!
+  </div>
+
+  <div>
+    So I need to calculate the expected value of:
+  </div>
+
+  <div>
+    40% joke lands favorably, +5 points.<br>
+    60% jake fails, -1 point.<br>
+  </div>
+
+  <next>Next</next>
+</avatar>
+
+<avatar image="brain.png">
+  <div>
+    To calculate the expected value, <bold>multiply the probability</bold> of each outcome occuring <bold>with the reward</bold> for the outcome <bold>then add</bold> everything together. 
+  </div>
+
+  <div>
+    This captures the sense of the "average" reward.
+  </div>
+
+  <div>The expected value of the joke in question is?</div>
+
+  <input-box right="1.4"/>
+</avatar>
+
+
+<avatar>
+  <div>So, I should tell the joke?</div>
+  <buton-group>
+    <buton yay>Yes</buton>
+    <buton nope>No</buton>
+
+    <template v-slot:hint>
+      The wizard should tell the joke because it has positive expected value, given that there aren't options that are higher in expected value.
+    </template>
+  </buton-group>
+</avatar>
+
+<avatar text="Okay... here goes...">
+  <next>Next</next>
+</avatar>
+
+<avatar text="Where are average things manufactured?">
+  <next>Next</next>
+</avatar>
+
+<avatar>
+  <div><bold>The satisfactory!</bold></div>
+  <next @click.native="memory='haha'; positivityPoints+=5; $root.play('haha')">Ha-ha!</next> 
+  <next @click.native="memory='eh'; positivityPoints-=1; $root.play('crickets')">Eh...</next>
+</avatar>
+
+<avatar>
+  <div v-if="memory=='haha'">
+    Yay!! That joke landed! So I gain 5 positivity points.
+  </div>
+  <div v-if="memory=='eh'">
+    Aw... it seems like that joke didn't land. So I lost 1 positivity point. I'm still glad I told the joke, because it was positive expected value.
+  </div>
+  <next>Next</next>
+</avatar>
+
+<avatar>
+  <div>
+Help me decide whether to tell each joke or not, by calculating their expected value.
+</div>
+<next>Next</next>
+</avatar>
+
+
+<div>
+  <ev-joke 
+    v-for="(joke, index) in jokes" 
+    v-if="index <= jokeInd" 
+    :joke="joke"
+    :key="joke.lead"
+    @done="nextJoke"
+   />
+</div>
+
+<avatar image="brain.png">
+<div>
+Okay, I think that's enough for positivity. The second tenet of friendship is consistency... you need to find a structure to make people repeatedly hangout with you.
+</div>
+<next>Next</next>
+</avatar>
+
+<avatar text="Hm... I could join a CLUB.">
+  <next>Next</next>
+</avatar>
+
+<avatar text="Consistent Locked-in Unpleasant Bandying">
+  <next>Next</next>  
+</avatar>
+
+<avatar text="But which club should I join to maximize the number of interactions?">
+  <next>Next</next>
+</avatar>
+
+<avatar>
+
+  <div>
+    I could join the fencing club...
+  </div>
+
+  <next>Next</next>
+</avatar>
+
+<avatar>
+  <div>I've plotted the average number of interactions other people have experienced from joining the fencing club.</div>
+
+  <distribution :outcomes="[{x: 1, y: 0.1},{x: 2, y: 0.2},{x: 3, y: 0.3},{x: 4, y: 0.4},]" xLabel="Number of interactions" yLabel="Probability" title="Fencing Club 💖" />
+
+  <div>This type of plot with possibilities on the x-axis, and probabilities on the y-axis is called a <bold>distribution</bold>.</div>
+  <next>Next</next>
+</avatar>
+
+<avatar>
+  <div>
+    Hm... I wonder how many interactions I could expect to get from joining the fencing club?
+  </div>
+
+  <next>Next</next>
+</avatar>
+
+<avatar image="brain.png">
+  <div>
+  Just like before, you can take the expected value. Once the data is plotted as a distribution is the same as finding the balance point (where would the distribution balance on your finger if it were made of cardboard).
+  </div>
+
+  <visual-ev-click 
+    :outcomes="clubs[0].outcomes"
+    :title="clubs[0].name + ' 💖'"
+    xLabel="Number of interactions"
+    yLabel="Probability"
+    @done="next" /> 
+</avatar>
+
+<avatar text="That's not a bad number of interactions. What about the math team?">
+
+  <visual-ev-click 
+    :outcomes="clubs[1].outcomes"
+    :title="clubs[1].name + ' 💖'"
+    xLabel="Number of interactions"
+    yLabel="Probability"
+    @done="next" /> 
+</avatar>
+
+<avatar text="What about Biology Olympiad?">
+  <visual-ev-click 
+    :outcomes="clubs[2].outcomes"
+    :title="clubs[2].name + ' 💖'"
+    xLabel="Number of interactions"
+    yLabel="Probability"
+    @done="next" /> 
+</avatar>
+
+<avatar text="The other club I was considering was the Knitting Circle.">
+  <visual-ev-click 
+    :outcomes="clubs[3].outcomes"
+    :title="clubs[3].name + ' 💖'"
+    xLabel="Number of interactions"
+    yLabel="Probability"
+    @done="next" /> 
+</avatar>
+
+<avatar>
+  <div>
+    Okay, so which club should I join? 
+  </div>
+
+  <buton-group>
+    <buton nope>Fencing Club</buton>
+    <buton nope>Math Team</buton>
+    <buton yay>Bio Olympiad</buton>
+    <buton nope>Knitting Circle</buton>
+
+    <template v-slot:hint>
+      Join the club with the maximum expected number of interactions.
+    </template>
+  </buton-group>
+</avatar>
+
+<avatar>
+  <div>
+Cool, so now I'm a member of Bio Olympiad. And I have {{positivityPoints}} positivity points. What's next?
+</div>
+<next>Next</next>
+</avatar>
+
+
+<avatar image="brain.png">
+  <div>
+For the final ingredient in making friends... you need to be vulnerable.
+</div>
+<next>Next</next>
+</avatar>
+
+<avatar>
+  <div>
+Eh... I'm not going there. Who needs friends anyways?
+</div>
+<next>Next</next>
+</avatar>
+
+<avatar>
+  <div>
+Why bother... I have Elena. 
+</div>
+<next>Next</next>
+</avatar>
+
+<avatar image="" text="(silence)">
+  <next>Next</next>
+</avatar>
+
+<avatar text="Elena??? Where's Elena??">
+  <buton>Next</buton>
+</avatar>
+
+<avatar 
+  image="brain.png">
+
+  <div>You learned....</div>
+
+  <ul>
+    <li>The <bold>expected value</bold> is the average reward.</li>
+    <li>To use the expected value to make good decisions (on average).</li>
+    <li>To take the expected value of a scenario by multiplying the probability of each outcome by the reward, and then summing.</li>
+    <li>That the expected value of a distribution its balance point.</li>
+  </ul> 
+
+  <buton @click="$root.nextChapter()">Next chapter</buton>
+
+</avatar>
+
+</pset>
+</div>
+</script>
+
+
+<script type="text/x-template" id="visual-ev-click-template">
+
+<div>
+
+<div>
+Click where you think the balance point is...
+</div>
+
+
+<div style="position:relative">
+
+<distribution ref="distribution" 
+  :outcomes="outcomes"
+  :title="title"
+  :xLabel="xLabel"
+  :yLabel="yLabel" ></distribution>
+
+<div style="position:absolute; top:0px; z-index:1"   
+  class="overlay"
+  :style="overlayStyle"
+  @mousemove="mouseX = getRelativeMouseX($event)"
+  @mouseenter="isMouseover = true"
+  @click.once="distributionClicked">
+
+  <!-- tracks the user mouseover and user answer -->
+  <div v-if="isMouseover" 
+       style="border-left:2px solid #7570b3; width:1px; height:200px; position:absolute; bottom: -48px; pointer-events:none;"
+       :style="trackerStyle"></div>
+
+  <!-- show the real answer -->
+  <div ref="answer-marker"
+       v-if="answerPx" 
+       class="ev-answer-bar"
+       :style="{left: answerPx + 'px'}"
+       style="border-left:2px solid #1b9e77; width:1px; height:200px; position:absolute; bottom: -48px; pointer-events:none;"></div>
+</div>
+
+
+<div v-if="answerReal" class="smaller-children">
+  <div>
+  You <span style="color:#7570b3">guessed {{$root.roundTo(guessReal, 1)}}</span>. The <span style="color:#1b9e77">expected value of  {{$root.roundTo(answerReal,1)}}</span> was {{feedbackString}}
+  </div>
+
+  <buton @click.native="$emit('done')">Next</buton>
+</div>
+
+
+</div>
+</div>
+</script>
+
+<script type="text/x-template" id="ev-joke-template">
+<div ref="container">
+
+<avatar ref="joke">
+  <div>Should I tell the joke?</div>
+
+  <div v-for="outcome in joke.outcomes">
+    {{$root.roundTo(outcome.certainty*100, 0)}}% chance joke {{outcome.present}}, {{outcome.payoff}} points
+  </div>
+
+  <buton @click.native="setUserAnswer('Yes')">Yes</buton>
+  <buton @click.native="setUserAnswer('No')">No</buton>
+</avatar>
+
+
+<avatar v-if="ev > 0 && userAnswer == 'No'">
+  <div>Oh, what's wrong with this joke? It seems like positive expected value to me: </div>
+  <div>{{evCalculation}}</div>
+  <div>Pick again.</div>
+</avatar>
+
+<avatar v-if="ev < 0 && userAnswer == 'Yes'">
+  <div>Hmm... I'm not sure if this is a good idea: </div>
+  <div>{{evCalculation}}</div>
+  <div>Pick again.</div>
+</avatar>
+
+<avatar v-if="ev < 0 && userAnswer == 'No'">
+  <div>
+    Good call... that joke has negative expected value so I probably shouldn't tell it.
+  </div>
+  <buton @click.native="finish(0)">Next</buton>
+</avatar>
+
+
+<pset v-if="(ev > 0 && userAnswer == 'Yes') || forceTell">
+<avatar text="Okay... here goes...">
+  <next>Next</next>
+</avatar>
+
+<avatar :text="joke.lead">
+  <next>Next</next>
+</avatar>
+
+<avatar>
+  <div><bold>{{joke.punchline}}!</bold></div>
+  <next @click.native="playJokeSound">{{chosenOutcome.payoff > 0 ? 'Ha-ha!' : 'Eh...'}}</next>
+  <div style="font-size:10px">The random number generator in the background dictates that the joke {{chosenOutcome.past}}.</div>
+</avatar>
+
+
+<avatar v-if="userAnswer !== null && chosenOutcome.payoff < 0">
+  <div>
+    Aw... it seems like that joke {{chosenOutcome.past}}. So I lost {{chosenOutcome.payoff}} positivity points. I'm still glad I told the joke, because it was positive expected value.
+  </div>
+
+  <div>
+    {{evCalculation}} points in expectation.
+  </div>
+
+  <next @click.native="finish(chosenOutcome.payoff)">Next</next>
+</avatar>
+
+<avatar v-if="userAnswer !== null && chosenOutcome.payoff > 0">
+  <div>
+    Yay!! That joke {{chosenOutcome.past}}! So I gain {{chosenOutcome.payoff}} positivity points.
+  </div>
+  <next @click.native="finish(chosenOutcome.payoff)">Next</next>
+</avatar>
+
+</pset>
+
+</div>
+</script>
+
+<script type="text/x-template" id="bold-template">
+<span class="bold"><slot></slot></span> 
+</script>
+
+
+<script type="text/x-template" id="distribution-template">
+<div class="distribution" style="display:inline-block">
+<div v-if="title" style="text-align: center; font-size: 16px; text-transform:capitalize" :style="titleStyle">{{title}}</div>
+
+<svg :width="chartWidth+margin.left+margin.right" 
+     :height="chartHeight+margin.top+margin.bottom">
+    <g v-if="isCreated" 
+      class="container"
+      :transform="'translate(' + margin.left + ',' + margin.top + ')'">
+      <rect v-for="outcome in outcomes"
+          :x="xScale(outcome.x)"
+          :y="yScale(outcome.y)"
+          :width="xScale.bandwidth()"
+          :height="chartHeight - yScale(outcome.y)"
+          :key="outcome.x"
+          fill="#EA27A2"/>
+
+      <!-- top of bar 
+      <text v-for="outcome in outcomes" 
+        :x="xScale(outcome.x) + xScale.bandwidth()/2 - 8"
+        :y="yScale(outcome.y) - 2">
+        {{ outcome.y }}
+      </text>-->
+    </g>
+</svg>
+</div>
+</script>
+
+<!-- <triple-bayes 
+  :hypotheses="['Nice', 'Evil']" 
+  :config="{prior: {dist: [1, 1], correct: [1, 2], isActive: true, isDraggable:true}, likelihood: {dist: [10, 1], isActive: true, isDraggable: true}, posterior: {}}"></triple-bayes> -->
+<script type="text/x-template" id="triple-bayes-template">
+<div style="display:inline-block">
+
+<div v-if="hasKey('prior')" class="bayes-comp" :style="compStyle('prior')">
+  <div class="label normal-div">
+    <div style="font-weight:700">{{title('prior')}}</div>
+    <div>{{subtitle('prior')}}</div>
+  </div>
+
+  <samples-chart 
+  :xdomain="hypotheses"
+  :xLabels="xLabels('prior')"
+  :dist="arrToDist(priorArr)"
+  :isDraggable="isDraggable('prior')"
+  :chartHeight="chartHeight" :chartWidth="chartWidth"
+  :showRatio="true"
+  :colors="colors"
+  @dist-changed="priorChanged" /> 
+</div>
+
+
+<div v-if="hasKey('likelihood')" class="bayes-comp" :style="compStyle('likelihood')">
+  <div class="label normal-div">
+    <div style="font-weight:700">{{title('likelihood')}}</div>
+    <div>{{subtitle('likelihood')}}</div>
+  </div>
+  <samples-chart
+  :xdomain="hypotheses"
+  :xLabels="xLabels('likelihood')"
+  :dist="arrToDist(likelihoodArr)"
+  :isDraggable="isDraggable('likelihood')"
+  :chartHeight="chartHeight" :chartWidth="chartWidth"
+  :colors="colors"
+  @dist-changed="likelihoodChanged" /> 
+</div>
+
+<div v-if="hasKey('posterior')" class="bayes-comp" :style="compStyle('posterior')">
+  <div class="label normal-div">
+    <div style="font-weight:700">{{title('posterior')}}</div>
+    <div>{{subtitle('posterior')}}</div>
+  </div>
+  <samples-chart 
+  :xdomain="hypotheses"
+  :xLabels="xLabels('posterior')"
+  :dist="posteriorDist"
+  :chartHeight="chartHeight" :chartWidth="chartWidth"
+  :showRatio="true"
+  :colors="colors"
+  ref="posterior-samples-chart" /> 
+</div>
+
+<div v-if="showFeedback && !allCorrect" class="handwriting">
+  <div>Not quite. Try again!</div>
+  <slot name="hint"></slot>
+</div>
+
+
+<div v-if="showFeedback && allCorrect" class="handwriting">
+  <div>Correct!</div>
+  <slot name="yay"></slot>
+</div>
+
+<div v-if="(isDraggable('prior') || isDraggable('likelihood')) && !(showFeedback && allCorrect)">
+<buton @click="submitClicked">Submit</buton>
+</div>
+
+  </div>
+</script>
+
+<script type="text/x-template" id="samples-chart-template">
+<div style="position:relative; display:inline-block" class="samples-chart">
+
+<svg :width="chartWidth+margin.left+margin.right" 
+     :height="chartHeight+margin.top+margin.bottom">
+    <g v-if="isCreated && counts" 
+      class="container"
+      :transform="'translate(' + margin.left + ',' + margin.top + ')'">
+<!--      <rect v-for="(count, x) in counts"
+          :x="xScale(x)"
+          :y="chartHeight - yScale(count)"
+          :width="xScale.bandwidth()"
+          :height="yScale(count)"
+          :key="x"
+          fill="#D1D9E0"/>  -->
+
+        <g v-for="x in xdomain">
+          <rect v-for="countInd in counts[x]"
+          :x="xScale(x)"
+          :y="chartHeight - yScale(counts[x]) + yScaleBandwidth*(countInd-1)+yPadBetweenBars"
+          :width="xScale.bandwidth()"
+          :height="yScaleBandwidth-yPadBetweenBars"
+          :key="x + countInd"
+          :fill="colors.bar || '#D1D9E0'"/>
+        </g>
+
+
+      <text v-for="x in xdomain" 
+        :x="xScale(x)+ xScale.bandwidth()/2 - 4"
+        :y="Math.max(0, chartHeight - yScale(counts[x]) - (isDraggable ? 8 : 2))">
+        {{ counts[x] }}
+      </text>
+
+      <text v-if="showRatio"
+        v-for="x in xdomain" 
+        :x="xScale(x)+ xScale.bandwidth()/2 - 8"
+        :y="chartHeight + 40"
+        fill="#999">
+        {{ prob(x) }}%
+      </text>
+
+    </g>
+</svg>
+
+  <div v-for="x in xdomain" 
+      v-if="isDraggable && counts"
+      class="dot"
+      style="position:absolute"
+      draggable="true"
+      @dragstart="dragstart(x)"
+      @dragend="dragend"
+      @drag="drag(x, $event)"
+      :style="dotStyle(x)"></div>
+
+
+</div>
+</script>
+
+<script type="text/x-template" id="avatar-template">
+<div style="position: relative; width:600px; margin:0 auto; margin-top:16px">
+
+ <div class="cropcircle" :style="cropCircleStyle" style="display:inline-block; vertical-align:top">
+ </div>
+
+
+<div style="display:inline-block; width:400px">
+    <div>{{text}}<slot name="text"></slot></div>
+
+    <slot></slot>
+</div>
+
+</div>
+</script>
+
+
+<script type="text/x-template" id="exp-template">
+<var>{{base}}<sup>{{pow}}</sup></var>
+</script>
+
+
+<script type="text/x-template" id="big-frac-template">
+<div style="display: inline-block; text-align:center" class="normal-div">
+    <div style="border-bottom:1px solid">{{num}}<slot name="num"></slot></div>
+    <div>{{den}}<slot name="den"></slot></div>
+  </td>
+</div>
+</script>
+
+<script type="text/x-template" id="frac-template">
+<var><sup>{{num}}</sup>&frasl;<sub>{{den}}</sub></var>
+</script>
+
+<script type="text/x-template" id="buton-template">
+<span style="margin-bottom:0px; position:relative; display:inline-block; vertical-align:top" class="normal-div">
+  <div style="display:inline-block">
+    <div v-if="showX" 
+         class="handwriting" 
+         style="display:inline-block; position:absolute; color:red; font-size: 48px; top:-4px;"
+         :style="xStyle">✗</div>
+     <div v-if="showYay"
+              class="handwriting" 
+         style="display:inline-block; position:absolute; color:green; font-size: 48px; top:0px; left:calc(50% - 10px)">
+     	✓
+     </div>
+    <button ref="button" 
+      @click="butonClicked()" v-on="$listeners" 
+      :class="{'clicked-button': clickedButton}" 
+      class="handwriting"
+      :style="buttonStyle"
+      style="margin-bottom:4px"><slot></slot>
+    </button>
+  </div>
+
+  <div v-if="showNopeText" class="hint" style="margin-left:12px;">
+    {{nopeText}}
+  </div>
+  <div v-if="showYay" style="margin:8px;" class="hint" >
+    Yay
+  </div>
+
+</span>
+</script>
+
+<script type="text/x-template" id="buton-group-template">
+<div>
+  <slot></slot>
+  <div v-if="showHint" class="hint"><slot name="hint"></slot></div>
+</div>
+</script>
+
+<script type="text/x-template" id="input-box-template">
+<div style="display:inline-block; position:relative; top:-16px;">
+
+  <input v-model="val" placeholder="?" style="width:70px; display:inline; position:relative; top:16px" v-on:keyup.enter="answerSubmit">
+  <slot></slot>
+  <buton style="display:inline" @click="answerSubmit">Go</buton>
+
+  <!-- absolute position so they don't shift the screen -->
+  <span v-if="showCannedHint" class="hint" style="position:absolute; bottom:-24px; right:4px">
+    {{cannedHint}}
+  </span>
+  <span v-if="showYay" class="rainbow-text" style="position:absolute; bottom:-24px; right:4px">
+    Yay!
+  </span>
+
+
+  <div v-if="showHintSlot" class="hint normal-div">
+    <slot name="hint"></slot>
+  </div>
+</div>
+</script>
+
+
+<script>
+var DEBUG = false;
+
+
+const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
+// https://alligator.io/vuejs/global-event-bus/
+const bus = new Vue();
+
+
+
+var sounds = {
+  // 'coin': {clip: new Audio('sounds/gold1.wav')},
+  'heads': {clip: new Audio('sounds/gold0.wav')},
+  'tails': {clip: new Audio('sounds/gold1.wav')},
+
+
+  // 'buton': {clips: [new Audio('sounds/237422__plasterbrain__hover-1.mp3')]},
+
+  'nope': {clip: new Audio('sounds/423169__plasterbrain__pc-game-ui-error.mp3')},
+  'yay': {clip: new Audio('sounds/237422__plasterbrain__hover-1.mp3')},
+
+  'haha': {clip: new Audio('sounds/laugh.mp3')},
+  'crickets': {clip: new Audio('sounds/crickets.mp3')},
+
+  'open': {clip: new Audio('sounds/swish0.wav')},
+  'close': {clip: new Audio('sounds/swish1.wav')},
+
+
+	// 'intro-scene': {clip: new Audio('sounds/sneaky-snitch-by-kevin-macleod.mp3')},  
+	// 'coin-flips': {clip: new Audio('sounds/sneaky-snitch-by-kevin-macleod.mp3')},
+	// 'wizard-flips': {clip: new Audio('sounds/rusted-maid.wav')},
+	// 'chain-rule': {clip: new Audio('sounds/wholesome-by-kevin-macleod.mp3')},
+	// 'ev-story': {clip: new Audio('sounds/extreme-hardcore-death-metal-loop.mp3')},
+	// 'intro-to-pvalues': {clip: new Audio('sounds/comma-flaw.wav')},
+	// 'bayes-rule': {clip: new Audio('sounds/find-my-body-please.wav')},
+	// 'thanks': {clip: new Audio('sounds/sneaky-snitch-by-kevin-macleod.mp3')},
+};
+
+
+const jokes = [
+{
+  outcomes: [
+    {present: 'fails', past: 'failed', certainty: 0.5, payoff: -1}, 
+    {present: 'lands', past: 'landed', certainty: 0.5, payoff: 3}
+  ],
+  lead: "Did you hear about the mathematician who's afraid of negative numbers?",
+  punchline: "He'll stop at nothing to avoid them",
+},
+
+{
+  outcomes: [
+    {present: 'fails', past: 'failed', certainty: 0.6, payoff: -1}, 
+    {present: 'lands', past: 'landed', certainty: 0.4, payoff: 1}
+  ]
+},
+
+{
+  outcomes: [
+    {present: 'fails', past: 'failed', certainty: 0.6, payoff: -1}, 
+    {present: 'lands', past: 'landed', certainty: 0.4, payoff: 5}
+  ],
+  lead:"Why don't scientists trust atoms?",
+  punchline:"Because they make up everything"
+},
+
+{
+  outcomes: [
+    {present: 'fails', past: 'failed', certainty: 0.55, payoff: -1}, 
+    {present: 'lands', past: 'landed', certainty: 0.45, payoff: 3}
+  ],
+  lead:   "How many times can you subtract 10 from 100?",
+  punchline: "Once. The next time you would be subtracting 10 from 90"
+},
+
+{
+  outcomes: [
+    {present: 'fails', past: 'failed', certainty: 0.7, payoff: -2}, 
+    {present: 'lands', past: 'landed', certainty: 0.3, payoff: 4}
+  ]
+},
+
+{
+  outcomes: [
+    {present: 'fails', past: 'failed', certainty: 0.32, payoff: -1}, 
+    {present: 'lands', past: 'landed', certainty: 0.68, payoff: 4}
+  ],
+  lead: "The numbers 19 and 20 got into a fight.",
+  punchline: "21"
+},
+];
+
+const clubs = [
+  {
+    name: 'fencing club',
+    outcomes: [{x: 1, y: 0.2},{x: 2, y: 0.3},{x: 3, y: 0.3},{x: 4, y: 0.2},]
+  },
+  {
+    name: 'math team',
+    outcomes: [{x: 1, y: 0.1},{x: 2, y: 0.2},{x: 3, y: 0.3},{x: 4, y: 0.4},]
+  },
+  {
+    name: 'biology olympiad',
+    outcomes: [{x: 1, y: 0.1},{x: 2, y: 0.2},{x: 3, y: 0.1},{x: 4, y: 0.6},]
+  },
+  {
+    name: 'knitting circle',
+    outcomes: [{x:1, y: 0}, {x: 2, y: 0.5},{x: 3, y: 0.3},{x: 4, y: 0.2},]
+  },
+];
+
+
+
+Vue.component('coin', {
+  props: {
+    bias: {type: Number, default: 0.5},
+    pattern: {type: String},
+    sideBySide: {type: Boolean, default: false},
+  },
+  data: function(){
+    return {
+      flips: [], //true, false, true, true], 
+    }
+  },
+  computed: {
+    flipString: function(){
+      return this.samples.join('');
+    },
+    flipStringStyle: function(){
+      return { 'min-height': '30px'};
+    },
+    isShowingH: function(){
+      if (this.flips.length == 0){
+        return true;
+      }
+      return this.render(this.last) == 'H';
+    },
+    last: function(){
+      return this.flips[this.flips.length-1];
+    },
+
+    xDomain(){
+      return ['H', 'A'];
+    },
+    // ['H', 'A', 'H', 'A']
+    samples(){
+      return this.flips.map(this.render);
+    },
+    chartStyle(){
+      if (this.sideBySide){
+      return {
+        position: 'absolute',
+        left: '150px',
+        bottom: '0px'       
+      };
+    }
+    }
+  },
+  methods: {
+    render: function(flip){
+      return flip ? 'H' : 'A';
+    },
+    append: function(flip){
+      this.$root.play(flip ? 'heads' : 'tails');
+      this.flips.push(!!flip);
+    },
+    reset: function(){
+      this.flips = [];
+    },
+    flip: function(){
+      // Always repeats as HAHA.
+      if (this.pattern == 'haha'){
+        if (this.flips.length == 0){
+          this.append(1);
+        } else {
+          this.append(Math.abs(this.last - 1));
+        }
+
+        // Early return.
+        return;
+      }
+
+      // Prevents long streaks from happening.
+      if (this.pattern == 'human'){
+        const maxStreak = 3;
+        if (this.flips.length > maxStreak){
+          const slice = this.flips.slice(-maxStreak);
+          if(_.every(slice) || _.every(slice, x => !x)){ 
+            // If the last ones have all been of a type, the new one must be opposite.
+            this.append(Math.abs(this.last - 1));
+          } 
+
+          // Fallthrough.
+        }
+      }
+
+      // True coin flip.
+      this.append(Math.random() < this.bias); 
+    }
+  },
+  template: '#coin-template'
+});
+
+
+// Returns a boolean measuring if two numbers are approximately equal.
+function approx(a, b, epsilon){
+  var epsilon = _.isUndefined(epsilon) ? .001 : epsilon;
+  return Math.abs(a - b) < epsilon;
+}
+
+function cumulativeSum(arr){
+  if (arr.length < 1){
+    return [];
+  }
+
+  var total = [arr[0]];
+  for (var i=1; i<arr.length; i++){
+    var last = total[total.length - 1];
+    total.push(last + arr[i]);
+  }
+  return total;
+}
+
+
+// outcomes = [
+//  {certainty: 0.4, ...}, 
+//  {certainty: 0.6, ...}
+// ]
+function drawFromOutcomes(outcomes){
+  var ind = drawIndFromOutcomes(outcomes);
+  return outcomes[ind];
+}
+
+function drawIndFromOutcomes(outcomes){
+  var certainties = _.map(outcomes, 'certainty');
+  if (!approx(_.sum(certainties), 1.0)){
+    debugger;
+    console.error('certainties for outcomes did not sum to 1: ' + outcomes);
+  }
+
+  var rand = Math.random();
+  var cumsum_certainties = cumulativeSum(certainties);
+  var cumsum_ind = 0;
+  while (cumsum_certainties[cumsum_ind] < rand){
+    cumsum_ind++;
+  }
+  return cumsum_ind;
+}
+
+Vue.component('ev-joke', {
+  props: {
+    joke: {type: Object},
+  },
+  computed: {
+    ev(){
+      return _.sum(this.joke.outcomes.map(outcome => outcome.certainty * outcome.payoff));
+    },
+    evCalculation(){
+      return this.joke.outcomes.map(outcome => outcome.certainty + ' × ' + outcome.payoff).join(' + ') + ' = ' + this.$root.roundTo(this.ev, 2);
+    },
+    chosenOutcome(){
+      return this.joke.outcomes[this.chosenOutcomeInd];
+    },
+    isWrong(){
+      return (this.ev > 0 && this.userAnswer == 'No') || (this.ev < 0 && this.userAnswer == 'Yes');
+    }
+  },
+  mounted(){
+   this.chosenOutcomeInd = drawIndFromOutcomes(this.joke.outcomes);
+  },
+  data: function(){
+    return {
+      stage: 0,
+      userAnswer: null,
+      forceTell:null,
+    }
+  },
+  methods: {
+    setUserAnswer(answer){
+      this.userAnswer = answer;
+      if(!this.isWrong){
+        this.$refs['joke'].$el.style.opacity = 0.5;        
+      }
+    },
+    playJokeSound(){
+      const soundName = this.chosenOutcome.payoff > 0 ? 'haha' : 'crickets';
+      this.$root.play(soundName);
+    },
+    finish(payoff){
+      this.$refs['container'].style.opacity = 0.5; 
+      this.$emit('done', {payoff: payoff});
+    }
+  },
+  template: '#ev-joke-template'
+});
+
+
+Vue.component('biased-coin-machine', {
+  data: function(){
+    return {
+      slider: '50',
+    }
+  },
+  computed: {
+    bias: function(){
+      return +this.slider / 100;
+    },
+  },
+  watch:{
+    bias: function(){
+      this.$refs['coin'].reset();
+    },
+  },
+  template: '#biased-coin-machine-template'
+});
+
+
+Vue.component('input-box', {
+  props: {
+    right: {type: Array},
+    hints: {
+      type: Array, 
+      default: function(){ return ['Try again', 'Nope']; },
+    },
+  },
+  computed: {
+    cannedHint(){
+      return this.hints[this.answers.length % this.hints.length];      
+    },
+    isYay: function(){
+      const this_ = this;
+      if (_.isArray(this.right)){
+        return _.some(this.right.map(r => this_.isMatch(this_.val, r)));
+      }
+      return this.isMatch(this.val, this.right);
+    },
+    isNope: function(){
+      return !this.isYay;
+    },
+    showYay(){
+      return this.checkedAnswer && this.isYay;
+    },
+    showCannedHint(){
+      return this.checkedAnswer && !this.hasSlot('hint') && this.isNope;
+    },
+    showHintSlot(){
+      return (DEBUG || this.checkedAnswer) && this.hasSlot('hint') && this.isNope;
+    }
+  },
+  data: function(){
+    return {
+      val: null,
+      answers: [],
+
+      checkedAnswer: false,
+    }
+  },
+  watch:{
+    val(){
+      this.checkedAnswer = false;
+    }
+  },
+  methods: {
+    isMatch(val, right){
+      if (val === undefined || val === null){
+        return false;
+      }
+      const exactMatch = val == right;
+      const europeanCommaMatch = val.replace(',', '.') == right;
+      var evalMatch;
+      try {
+        evalMatch = approx(eval(val), eval(right));
+      } catch(err){
+        evalMatch = false;
+      }
+      return exactMatch || europeanCommaMatch || evalMatch;
+    },
+    answerSubmit: async function(){
+      this.checkedAnswer = true;
+      this.answers.push(this.val);
+
+      if (this.isYay){
+        this.$root.play('yay');
+        this.$emit('yay');
+
+        const pset = firstAncestorOfComponent(this, 'pset');
+        if (pset){
+          pset.next();
+        }
+      } else {
+        this.$root.play('nope');
+      }
+
+    },
+    hasSlot: hasSlot,
+  },
+  template: '#input-box-template'
+});
+
+
+function firstAncestorOfComponent(node, componentName){
+  while(node !== undefined){
+    node = node.$parent;
+    if (node !== undefined && node.$options.name === componentName){
+      return node;
+    }
+  }
+  return undefined;
+}
+function isDescendant(ancestor, maybeChild){
+
+  // If maybeChild is a vue component
+  var node = maybeChild.$parent;
+  while(node){
+    if (node === ancestor){
+      return true;
+    }
+    node = node.$parent;
+  }
+
+  // If maybeChild is an HTML element
+  var node = maybeChild.parentElement;
+  while(node){
+    if (node === ancestor){
+      return true;
+    }
+    node = node.parentElement;
+  }
+
+  return false;
+}
+
+function hasSlot(name){
+  return !!this.$slots[ name ] || !!this.$scopedSlots[ name ];
+}
+
+Vue.component('avatar', {
+  props: {
+    image: {type: String, default:'wizard.png'},
+    text: {type: String, default: ''},
+    sound: {type: String},
+  },
+  mounted: async function(){
+    // Add a blink
+    var this_ = this;
+    if (this.sound){
+      this.$root.play(this.sound);
+      await wait(sounds[this.sound].duration || 500);
+    }
+  },
+  computed: {
+    cropCircleStyle: function(){
+      return {'background-image': 'url("images/' + this.image + '")'};
+    },
+  },
+  template: '#avatar-template'
+});
+
+// Just like a button, but with some special abilities.
+Vue.component('buton', {
+  props: {
+    nope: {type: String}, // Text for why the answer is wrong. Blocks progression.
+  },
+  data: function(){
+    return {
+      clickedButton: false,
+    }
+  },
+  computed: {
+    nopeText: function(){
+      if (this.nope){
+        return this.nope;        
+      }
+      if (this.isNope){
+        return 'Nope';
+      }
+    },
+    // Returns true for: <buton nope> or <buton nope="why not">
+    isNope: function(){
+      return this.nope || this.nope==="";
+    },
+    isYay: function(){
+      return 'yay' in this.$attrs;
+    },
+    buttonStyle: function(){
+      return {'font-size': this.$slots.default[0].text.length > 40 ? '16px' : '20px'};
+    },
+    showNopeText(){
+      return (DEBUG || this.clickedButton) && this.isNope;
+    },
+    showYay(){
+      return (DEBUG || this.clickedButton) && this.isYay;
+    },
+    showX(){
+      return this.clickedButton && this.isNope;
+    }, 
+    xStyle(){
+      return {left: (this.$refs['button'].clientWidth/2 - 5)+'px'};
+    }
+  },
+  methods: {
+    butonClicked: async function(){
+      if (this.isYay){
+        this.$root.play('yay');        
+      } else if (this.isNope){
+        this.$root.play('nope');
+      } else{
+        this.$root.play('buton');        
+      }
+      this.clickedButton = true;
+      const avatar = firstAncestorOfComponent(this, 'avatar');
+
+      // Tell those listening on the bus that the buton has been clicked... unless it's a buton within an input-box.
+      if(!firstAncestorOfComponent(this, 'input-box')){
+        // Don't emit again if this is the buton inside PS either.
+        if (avatar && avatar.psButton !== this){
+          bus.$emit('answer-submitted', this);        
+        }
+      }
+
+      // Add yourself to parent butonGroup's clicked children
+      // so it can show feedback.
+      const butonGroup = firstAncestorOfComponent(this, 'buton-group');
+      if (butonGroup){
+        butonGroup.clickedChildren.push(this);
+      }
+
+      // Move the screen along.
+      if (this.isYay){
+        const pset = firstAncestorOfComponent(this, 'pset');
+        if (pset){
+          pset.next();
+        }        
+      }
+      this.$root.scrollWindow();
+
+    },
+  },
+  template: '#buton-template'
+});
+
+
+Vue.component('exp', {
+  props: {
+    base: {type: String },
+    pow: {type: String },
+  },
+  template: '#exp-template'
+});
+
+
+Vue.component('frac', {
+  props: {
+    num: {type: String },
+    den: {type: String },
+  },
+  template: '#frac-template'
+});
+
+
+Vue.component('big-frac', {
+  props: {
+    num: {type: String },
+    den: {type: String },
+  },
+  template: '#big-frac-template'
+});
+
+
+// histogram example
+// https://bl.ocks.org/d3noob/96b74d0bd6d11427dd797892551a103c
+Vue.component('distribution', {
+  props: {
+
+    title: {type: String},
+    xLabel: {type: String},
+    yLabel: {type: String},
+
+    // Pass in outcomes directly.
+    outcomes: {type: Array, default: function(){
+      return [
+        {x: 'tattoos', y: 0.2},
+        {x: 'no tattoos', y: 0.8},
+      ];
+    }},
+    chartHeight: {type: Number, default: 150},
+    chartWidth: {type: Number, default: 200},
+    margin: {
+      type: Object, 
+      default: function(){
+        return {top: 10, right: 10, bottom: 50, left: 50};
+      }
+    },
+  },
+  computed: {
+    xScale(){
+      return d3.scaleBand()
+          .domain(this.outcomes.map(d => d.x)).paddingInner(0.01).range([0, this.chartWidth]);
+    },
+    xScaleContinuous(){
+      const domain = this.xScale.domain();
+      const range = this.xScale.range();
+      const bandwidth = this.xScale.bandwidth();
+      return d3.scaleLinear().domain([domain[0], domain[domain.length-1]]).range([range[0] + bandwidth/2, range[1] - bandwidth/2]);
+    },
+    yScale(){
+      return d3.scaleLinear()
+          .domain([0, 1]).range([this.chartHeight, 0]);
+    },
+    titleStyle(){
+      return {'margin-left': this.margin.left + 'px', 'margin-right': this.margin.right + 'px'};
+    },
+    mean: function(){
+      return _.sum(this.outcomes.map(outcome => outcome.x * outcome.y));
+    },
+  },
+  data: function(){
+    return {
+      isCreated: false,
+    }
+  },
+  created: function(){
+    // Add domains
+    this.isCreated = true;
+  },
+  mounted: function() {
+    // Add the axis
+    var xAxis = d3.axisBottom(this.xScale); //.ticks(8);
+    var yAxis = d3.axisLeft(this.yScale).ticks(4);
+
+    const chart = d3.select(this.$el).select('.container');
+    chart.append('g').call(yAxis);
+    chart.append('g').attr('transform', 'translate(0,' + this.chartHeight + ')').call(xAxis);
+
+
+    // x axis label
+    chart.append("text")             
+      .attr("transform",
+            "translate(" + (this.chartWidth/2) + " ," + 
+                           (this.chartHeight + this.margin.top + 20) + ")")
+      .style("text-anchor", "middle")
+      .text(this.xLabel);
+
+    // y axis label
+    chart.append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 0 - this.margin.left)
+      .attr("x",0 - (this.chartHeight / 2))
+      .attr("dy", "1em")
+      .style("text-anchor", "middle")
+      .text(this.yLabel);    
+
+  },
+  template: '#distribution-template'
+});
+
+
+Vue.component('visual-ev-click', {
+  props: {
+    title: {type: String},
+    xLabel: {type: String},
+    yLabel: {type: String},
+
+    outcomes: {type: Array, default: () => [{certainty: 0.1, hp:4}, {certainty: 0.3, hp:3}, {certainty: 0.4, hp:2}, {certainty: 0.2, hp:1}] },
+  },
+  data: function(){
+    return {
+      isMouseover: false,
+
+      mouseX: null,  // tracks mouse position always
+
+      guessPx: null, // populated when user clicks
+      guessReal: null, // populated when user clicks
+
+      answerPx: null, // populated after delay when user clicks
+      answerReal: null, // populated after delay when user clicks
+
+      isMounted: false,
+    };
+  },
+
+  watch:{
+    answerReal(){
+      this.$root.scrollWindow();
+    }
+  },
+
+  computed: {
+    trackerStyle: function(){
+      return {
+        left: (this.guessPx !== null ? this.guessPx : this.mouseX) + 'px'
+      };
+    },
+
+    userDifference: function(){
+      // Is close if it's less than X% away from the true answer
+      var distribution_component = this.$refs['distribution'];
+      const domain = distribution_component.xScale.domain();
+      var total = domain[domain.length-1] - domain[0];
+
+      return Math.abs(this.answerReal - this.guessReal);
+    },
+
+    feedbackString: function(){
+      if (approx(0, this.userDifference)){
+        this.$root.play('yay');
+        return 'spot on. Good work!';
+      }
+      if (this.userDifference < .3){
+        this.$root.play('yay');
+        return 'pretty close! Good job!';
+      }
+      this.$root.play('nope');
+      return 'far off. Needs work.';
+    },
+
+    overlayStyle(){
+       if(!this.isMounted){
+          return;        
+       }
+       console.log('here');
+       const d = this.$refs['distribution'];
+
+       return {
+          left: d.margin.left + 'px',
+          height: d.chartHeight + d.margin.bottom + 'px',
+          width: d.chartWidth + 'px'
+       };
+    }
+  },
+
+  mounted(){
+    this.isMounted = true;
+  },
+
+  methods: {
+    distributionClicked: async function(event){
+      const distribution_component = this.$refs['distribution'];
+      const distMean = distribution_component.mean;
+      const xScale = distribution_component.xScaleContinuous; 
+
+      this.guessPx = this.getRelativeMouseX(event);
+      this.guessReal = xScale.invert(this.guessPx);
+
+      // answerPx gets animated into the correct position.
+      this.answerPx = this.guessPx;
+
+      // Make the answer bar animate.
+      await wait(300);
+      this.answerPx = xScale(distMean);
+      //debugger;
+
+      // Make the text show.
+      await wait(1300);
+      this.answerReal = distMean;
+    },
+
+    getRelativeMouseX: function(event){
+      // Find the parent element to compute relative mouse coords.
+      var refElement = event.target;
+      while (refElement.className !== 'overlay'){
+        refElement = refElement.parentElement;
+      }
+      return event.clientX - refElement.getBoundingClientRect().x;
+    },
+
+  },
+  template: '#visual-ev-click-template',
+});
+
+
+Vue.component('triple-bayes', {
+  props: {
+
+    hypotheses: {type: Array}, // ['Nice', 'Evil']
+        
+    chartHeight: {type: Number, default: 160},
+    chartWidth: {type: Number, default: 100},
+
+    // Missing keys from config are not rendered.
+    // {prior: {dist: [1, 4]}, likelihood: {isActive: true, isDraggable: true, dist: [1, 10]}, posterior: {}}
+    config: {type: Object},
+
+    colors: {
+      type: Object, 
+      default: function(){
+        return {bar: '#ddd', dot: '#EF6D21'};
+      }
+    },
+  },
+  data: function(){
+    return {
+     conf: null,
+     showFeedback: null,
+    }
+  },
+  computed: {
+    posteriorDist(){
+      var distArr = _.zip(this.priorArr, this.likelihoodArr).map(x => _.reduce(x, _.multiply));
+      if (_.max(distArr) > 9){ // Start attempting to simplify posterior when it gets too big.
+        distArr = this.simplifiedArr(distArr);
+      }
+      return _.zipObject(this.hypotheses, distArr);
+    },
+    priorArr(){
+      const ones = _.range(this.hypotheses.length).map(_ => 1);
+      return this.conf['prior'].dist || ones;
+    },
+
+    likelihoodArr(){
+      const ones = _.range(this.hypotheses.length).map(_ => 1);
+      return this.conf['likelihood'].dist || ones;
+    },
+    allCorrect(){
+      const keys = ['prior', 'likelihood', 'posterior'];
+      const parts = keys.map(key => !this.conf[key] || !this.conf[key].correct || this.isEqual(this.conf[key].correct, this.conf[key].dist));
+      return _.every(parts);
+    }
+  },
+  created(){
+    this.conf = _.cloneDeep(this.config);
+  },
+  methods: {
+    isEqual(arr1, arr2){
+      return _.isEqual(this.simplifiedArr(arr1), this.simplifiedArr(arr2));
+    },
+    xLabels(key){
+      if (key == 'prior'){
+        return this.hypotheses.map(x => 'P(' + x + ')');
+      }
+      if (key == 'likelihood'){
+        return this.hypotheses.map(x => 'P(D|' + x + ')' );        
+      }
+      if (key == 'posterior'){
+        return this.hypotheses.map(x => 'P(' + x + '|D)');        
+      }
+    },
+    // simplifiedArr([3, 6]) => [1, 2]
+    simplifiedArr(arr){
+      var maxFactor = _.min(arr);
+      for (var i=maxFactor; i>1; i--){
+        var isDivisible = _.every(arr.map(function(x){
+          return Math.abs(x/i - Math.floor(x/i)) < .0001;
+        }));
+        if (isDivisible){
+          break;
+        }
+      }
+      var result = arr.map(x => Math.floor(x / i));
+      //console.log(result);
+      return result;
+    },
+    title(key){
+      if (this.conf[key].title !== undefined){
+        return this.conf[key].title;
+      }
+      const defaultTitles = {
+        'prior': 'Prior Belief',
+        'likelihood': 'Likelihood Ratio',
+        'posterior': 'Posterior Belief'
+      };
+      return defaultTitles[key];
+    },
+    subtitle(key){
+      if (this.conf[key].subtitle !== undefined){
+        return this.conf[key].subtitle;
+      }
+      const defaultTitles = {
+        'prior': 'What you thought before',
+        'likelihood': 'Likelihood ratio of the evidence',
+        'posterior': 'What you think after the evidence'
+      };
+      return defaultTitles[key];
+    },
+    hasKey(key){
+      return this.conf[key];
+    },
+    isActive(key){
+      return this.conf[key] && this.conf[key].isActive;
+    },
+    isDraggable(key){
+      return this.conf[key] && this.conf[key].isDraggable;      
+    },
+    arrToDist(arr){
+      return _.zipObject(this.hypotheses, arr);
+    },
+    isCompRight(key){
+      return this.showFeedback && this.conf[key] && this.conf[key].correct && this.isEqual(this.conf[key].correct, this.conf[key].dist);
+    },
+    compStyle(key){
+      return {opacity: this.conf[key] && this.conf[key].isActive ? 1 : 0.5};
+    },
+    likelihoodChanged(params){
+      this.showFeedback = false;
+      const distArr = this.hypotheses.map(hyp => params.dist[hyp]);
+      Vue.set(this.conf.likelihood, 'dist', distArr);
+      this.refreshPosterior();
+    },
+    priorChanged(params){
+      this.showFeedback = false;
+      const distArr = this.hypotheses.map(hyp => params.dist[hyp]);
+      Vue.set(this.conf.prior, 'dist', distArr);
+      this.refreshPosterior();
+    },
+    refreshPosterior(){
+      if (this.$refs['posterior-samples-chart']){
+        this.$refs['posterior-samples-chart'].countsFromProps()         
+      }
+    },
+    submitClicked(){
+      this.showFeedback=true;
+      if(this.allCorrect){
+        const pset = firstAncestorOfComponent(this, 'pset');
+        if (pset){
+          pset.next();
+        }
+        this.$emit('yay');
+      }
+    }
+  },
+  template: '#triple-bayes-template'
+});
+
+Vue.component('samples-chart', {
+  props: {
+
+    xdomain: {type: Array}, // ['H', 'T']
+    xLabels: {type: Array}, // ['P(H'), 'P(T)'] optional. Defaults to x-domain if not set.
+
+    // Specify either samples or dist
+    samples: {type: Array}, // ['H', 'H', 'H', 'T']
+
+    dist: {type: Object}, // {H: 3, T: 1}
+        
+    chartHeight: {type: Number, default: 100},
+    chartWidth: {type: Number, default: 100},
+    margin: {
+      type: Object, 
+      default: function(){
+        return {top: 10, right: 10, bottom: 40, left: 10};
+      }
+    },
+
+    showRatio: {type: Boolean, default: false}, 
+    isDraggable: {type: Boolean, default: false}, 
+
+    // Minimum number of bars in y direction.
+    minNumInY: {type: Number, default: 15},
+
+    colors: {
+      type: Object, 
+      default: function(){
+        return {bar: '', dot: ''};
+      }
+    },
+
+  },
+  computed: {
+    xScale(){
+      // Can only use for categorical domain.
+      return d3.scaleBand()
+          .domain(this.xdomain).paddingInner(.1).range([0, this.chartWidth]);
+    },
+    xText(){
+      return this.xLabels || this.xdomain;
+    },
+    numBarsInY(){
+      if (!this.samples){
+        return this.minNumInY;
+      }
+
+      const bins = _.groupBy(this.samples);
+      const maxBinLength = _.max(_.values(bins).map(arr => arr.length));
+      return Math.max(this.minNumInY, maxBinLength);
+    },
+    yScale(){
+      return d3.scaleLinear()
+          .domain([0, this.numBarsInY]).range([0, this.chartHeight]);
+    },
+    yScaleBandwidth(){
+      return this.chartHeight / this.numBarsInY;
+    },
+    yPadBetweenBars(){
+      return this.numBarsInY < 40 ? 2 : 0;
+    }
+  },
+  data: function(){
+    return {
+      isCreated: false,
+      counts: null,
+      draggedDot: null,
+
+    }
+  },
+  created: function(){
+    // Add domains
+    this.isCreated = true;
+  },
+  mounted: async function() {
+    this.countsFromProps();
+
+    // Add the axis
+    // Hack: for some reason axis needs to get added after a delay, or it doesn't show up.
+    await wait(500);
+    const this_ = this;
+    var xAxis = d3.axisBottom(this.xScale).tickFormat(function(d, ind){
+      return this_.xText[ind];
+    }); //.ticks(8);
+    const chart = d3.select(this.$el).select('.container');
+    chart.append('g').attr('transform', 'translate(0,' + this.chartHeight + ')').call(xAxis);
+  },
+  watch: {
+    samples(){
+      this.countsFromProps();
+    },
+    dist(){
+      this.countsFromProps();
+    },
+  },
+  methods: {
+    prob(x){
+      const total = _.sum(_.values(this.counts));
+      return this.$root.roundTo(this.counts[x]/total*100, 0);
+    },
+    dragstart(x){
+      this.draggedDot = x;
+    },
+    dragend(){
+      this.draggedDot = null; 
+    },
+    countsFromProps(){
+      if (this.dist){
+        this.counts = _.cloneDeep(this.dist);
+      } else {
+        const bins = _.groupBy(this.samples);
+        this.counts = _.zipObject(this.xdomain, this.xdomain.map(function(x){
+            return x in bins ? bins[x].length : 0;
+          }));
+      }
+    },
+    dotStyle(x){
+      return {
+        left: this.xScale(x)+ this.xScale.bandwidth()/2+ 4 + 'px', 
+        bottom: this.yScale(this.counts[x]) + 24 + 'px',
+        'background-color': this.colors.dot,
+      };
+    },
+    drag(x, event){
+      //console.log('dragging');
+      //debugger;
+      const distanceFromTop = this.getRelativeMouseY(event);
+      if (distanceFromTop < 0){
+        return;
+      }
+      const height = this.chartHeight - distanceFromTop;
+
+      const numBars = Math.max(1, Math.floor(height / this.yScaleBandwidth));
+
+      const isNewNumBars = this.counts[x] && this.counts[x] !== numBars;
+      Vue.set(this.counts, x, numBars);
+
+      if (isNewNumBars){
+          this.$emit('dist-changed', {dist: this.counts});
+      }
+    },
+    getRelativeMouseY: function(event){
+      // Find the parent element to compute relative mouse coords.
+      var refElement = event.target;
+      while (refElement.className !== 'samples-chart'){
+        refElement = refElement.parentElement;
+      }
+      return event.clientY - refElement.getBoundingClientRect().y;
+    },
+
+  },
+  template: '#samples-chart-template'
+});
+
+// Put a buton inside a once-group to ensure it is only clicked once.
+Vue.component('once-group', {
+  data: function(){
+    return {
+      isClicked: false
+    }
+  },
+  methods: {
+    childClicked: function(childComponent) {
+      if (this.isClicked){
+        return;
+      }
+      this.isClicked = true;
+    }
+  },
+  template: '#once-group-template',
+});
+
+// Allows hints to be shown. Buttons within the group can be clicked multiple times.
+Vue.component('buton-group', {
+  props: {
+    onClick: {type: Function, 
+              default: () => console.warn('buton-group should have onClick') },
+  },
+  computed: {
+    lastChild(){
+      if (this.clickedChildren.length > 0){
+        return this.clickedChildren[this.clickedChildren.length-1];
+      }
+    },
+    showHint(){
+      if (DEBUG){
+        return true;
+      }
+      if (this.lastChild){
+        return this.lastChild.isNope;
+      }
+      return false;
+    }
+  },
+  data: function(){
+    return {
+      clickedChildren: [],
+    }
+  },
+  template: '#buton-group-template'
+});
+
+
+Vue.component('bold', {
+  template: '#bold-template'
+});
+
+function makeComponent(componentName){
+  Vue.component(componentName, {
+    data: function(){
+      return {
+
+        problemTuples: [], // [ ['problem1', true], ['problem2', false] ]
+        memory: null, // A variable for dumping short term component state.
+
+        chapters: chapters,
+
+        // State for 'ev-story'
+        positivityPoints: 0,
+        jokes: jokes,
+        jokeInd: 0,
+        clubs: clubs,
+        clubInd: 0,
+
+
+      };
+    },
+    computed: {
+      // 'fakeout1': [false, true]
+      problemToCorrectness(){
+        return _.groupBy(this.problemTuples, d => d[0]);
+      }
+    },
+    mounted: async function(){
+      var this_ = this;
+      bus.$on('answer-submitted', async function(input){        
+        // Respond only if the input is within the current component.
+        if (!isDescendant(this_, input)){
+          return;
+        }
+
+        var avatar = firstAncestorOfComponent(input, 'avatar');
+        if (!avatar){
+          return;
+        }
+
+        var problemKey = avatar.$vnode.data.key;
+        if (input.isYay){
+          this_.addCorrectness(problemKey, true);          
+        } 
+        if (input.isNope){
+          this_.addCorrectness(problemKey, false);          
+        } 
+      });
+    },
+    methods: {
+      addCorrectness(key, isCorrect){
+        this.problemTuples.push([key, isCorrect]);
+        console.log('logging ' + key + ': ' + isCorrect);
+      },
+
+      // Got the correct answer once.
+      got: function(key){
+        console.log('calling "got" for ' + key);
+        // Return the latest value
+        if (this.problemToCorrectness[key]){
+          var answers = this.problemToCorrectness[key];
+          return answers[answers.length-1];
+        } else {
+          console.warn('checking for correctness of ' + key + ' which did not exist');
+          return false;
+        }
+      },
+
+      // Got the correct answer every time.
+      perfect: function(key){
+        if(this.problemToCorrectness[key] && _.every(this.problemToCorrectness[key])){
+          return true;
+        }
+        return false;
+      },
+      nextJoke(params){
+        this.positivityPoints += params.payoff;
+        this.jokeInd++;
+        console.log(this.jokeInd + ' ' + this.jokes.length);
+        if (this.jokeInd >= this.jokes.length){
+          this.next();
+        }
+      },
+      next(){
+        this.$refs['pset'].next();
+      }
+    },
+    template: '#' + componentName + '-template'
+  });
+}
+['intro-scene', 'coin-flips', 'wizard-flips', 'chain-rule', 'ev-story', 'risk-reward', 'intro-to-pvalues', 'bayes-rule', 'thanks'].forEach(x => makeComponent(x));
+
+
+Vue.component('next', {
+  methods: {
+    next(){
+      const pset = firstAncestorOfComponent(this, 'pset');
+      if (pset){
+        pset.next();
+      }      
+    }
+  },
+  template: '#next-template'
+});
+
+
+// Child slot should call next() on the parent to advance.
+Vue.component('pset', {
+  computed: {
+    elms(){
+      return this.$slots.default.filter(x => x.tag).map(x => x.elm);
+    }
+  },
+  data: function(){
+    return {
+      ind: 0, // active index
+    };
+  },
+
+  mounted: function(){
+    // Hides elements initially.
+    if (!DEBUG){
+      for (var i=1; i<this.elms.length; i++){
+        this.elms[i].style.display = 'none';
+      }      
+    }
+
+    this.$root.report(0);
+  },
+  methods: {
+    async next(){
+      this.ind = this.ind + 1;
+      if (this.ind >= this.elms.length){
+        this.$emit('done');
+        return;
+      }
+
+      // grey out previous indices
+      for (var i=0; i<this.ind; i++){
+        this.elms[i].style.opacity = 0.5;        
+      }
+
+      // make current ind, fully visible
+      this.elms[this.ind].style.display = 'block';
+
+      this.$root.report(this.ind);
+
+      await wait(200);
+      this.$root.scrollWindow();
+    }
+  },
+  template: '#pset-template'
+});
+
+
+const chapters = [
+{
+  component: 'intro-scene',
+  image: 'scroll.png',
+  title: 'The beginning',
+},
+{
+  component: 'coin-flips',
+  description: 'Independent events',
+  image: 'monster.png',
+},
+{
+  component: 'wizard-flips',
+  description: 'What does randomness look like',
+  image: 'wizard.png',
+},
+{
+  component: 'chain-rule',
+  description: 'Chain rule of probability',
+  image: 'girl.png',
+},
+{
+  component: 'ev-story',
+  description: 'Expected value',
+  image: 'wizard.png',
+},
+{
+  component: 'intro-to-pvalues',
+  description: 'P-values', 
+  image: 'scientist.png',
+},
+{
+  component: 'bayes-rule',
+  description: 'Bayes Rule', 
+  image: 'crow.png',
+},
+{
+  component: 'thanks',
+  image: 'wizard.png',
+  title: 'The End', 
+},
+
+];
+
+
+function formatPct(certainty){
+  return roundTo(certainty*100, 0) + '%';
+}
+
+// round_to(2.777777, 0) -> 3
+// round_to(2.777777, 2) -> 2.78
+function roundTo(x, num_decimals){
+  return parseFloat(x.toFixed(num_decimals));
+}
+
+
+// Gotchas:
+// DOM does not update for new property additions.
+// DOM does not update for direct assignments within arrays.
+// https://vuejs.org/2016/02/06/common-gotchas/#Why-isn%E2%80%99t-the-DOM-updating  
+new Vue({
+  el: '#app',
+  data: {
+    chapters: chapters,
+    chapterInd: DEBUG ? 1 : 0,
+    // Obj property additions do not update DOM, so prepopulate all the keys in the object. Or use lists.
+    showTOC: false,
+    hasVolume: false,
+
+    isScrolling: false,
+
+    elapsedMinutes: null,
+    elapsedSeconds: null,
+
+
+    activeClips: [],
+    // Doesn't need to be reactive so this is OK.
+    soundToCount: {},
+  },
+  watch: {
+    chapterInd(){
+    	this.playChapterAudio();
+    }
+  },
+  computed: {
+    currentChapter: function(){
+      return this.chapters[this.chapterInd];
+    },
+    visibleScreen: function(){
+      return this.currentChapter.component;
+    }
+  },
+  mounted(){
+    const loadTime = Date.now();
+    var this_ = this;
+    setInterval(function(){
+      const seconds = (Date.now() - loadTime) / 1000;
+      this_.elapsedMinutes = Math.floor(seconds/60);
+      this_.elapsedSeconds = this_.roundTo(seconds % 60, 0);
+    }, 1000);
+  },
+  methods: {
+    formatPct: formatPct,
+    roundTo: roundTo,
+    playChapterAudio(){
+ 	  this.silenceClips();
+      this.playLoop(this.chapters[this.chapterInd].component);
+    },
+    nextChapter: async function(){
+      this.chapterInd = Math.min(this.chapters.length-1, this.chapterInd+1);
+    },
+    play: function(soundName){
+      if(!this.hasVolume){
+        return;
+      }
+
+      if (!sounds[soundName]){
+        return;
+      }
+
+      const clip = sounds[soundName].clip;
+      if (clip){
+        this._playClip(clip);
+        return;
+      }
+
+      const clips = sounds[soundName].clips;
+      if (clips){
+        if (!(soundName in this.soundToCount)){
+          this.soundToCount[soundName] = 0;
+        }
+
+        const ind = this.soundToCount[soundName] % clips.length;
+        this.soundToCount[soundName]++;
+        this._playClip(clips[ind]);
+      }
+    },
+    playLoop(soundName){
+      if(!this.hasVolume){
+        return;
+      }
+
+      if (!sounds[soundName]){
+        return;
+      }
+      const clip = sounds[soundName].clip;
+      // https://stackoverflow.com/questions/7330023/gapless-looping-audio-html5
+      clip.addEventListener('timeupdate', function() {
+      var buffer = .14;
+        if(this.currentTime > this.duration - buffer){
+            this.currentTime = 0;
+            this.play()
+        }}, false);
+      clip.play();
+      this.activeClips.push(clip);
+    },
+    _playClip(clip){
+      clip.play().catch(function(error){
+        console.log(error.toString());
+      });            
+    },
+    async scrollWindow(){
+      if (this.isScrolling){
+        return;
+      }
+
+      var minNumScrolls = 3;
+      this.isScrolling = true;
+      // Scroll down a little bit and see if we should keep scrolling.
+      // Stop scrolling if we've reached the bottom, 
+      // Or if we have somehow traveled up (i.e. user has moved the mouse)
+      while (true){
+        const startY = window.scrollY;
+        if (this.lastStartY >= startY && minNumScrolls <= 0){
+
+          // Hack: Wait and try one more time to scroll before exiting. 
+          // Seems like there might be a delay to add stuff to the DOM?
+          await wait(150);
+          window.scrollBy(0, 10);
+          if (this.lastStartY >= window.scrollY){
+            break;
+          }
+        }
+        this.lastStartY = startY;
+        window.scrollBy(0, 10);
+        minNumScrolls--;
+        await wait(30);
+      }
+      this.isScrolling = false;
+    }, 
+    report(ind){
+      const chapterName = this.currentChapter.component;
+      gtag('event', 'statsstory_v1', {
+        'event_category': 'read',
+        'event_label': chapterName,
+        'value': ind
+      });
+    },
+    toggleVolume(){
+		this.hasVolume = !this.hasVolume;
+		if (this.hasVolume){
+			this.playChapterAudio();
+		} else {
+			this.silenceClips();			
+		}
+    },
+    silenceClips(){
+    	this.activeClips.forEach(clip => clip.pause());
+    },
+    mainClick(event){
+      //console.log('click');
+      // When you click on the margins, event.target is the "app" node. 
+      //this.mouseEvent = event; 
+
+      if (!isDescendant(this.$refs['toc'], event.target)){
+        this.showTOC = false;
+      }
+    },
+    toggleTOC(){
+		this.showTOC = !this.showTOC;
+		if (this.showTOC){
+			this.play('open');
+		} else {
+			this.play('close');
+		}
+    }
+
+  } // end methods
+});
+</script>
