@@ -2,7 +2,7 @@
 <head>
 <meta charset="utf-8" />
 
-<title>The Evil Wizard's Guide to Statistics</title>
+<title>Weird and Not Scary Guide to Statistics</title>
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=59181255"></script>
 <script>
@@ -39,6 +39,13 @@ h2{
   margin: 0 auto;
   margin-bottom: 16px;
   margin-top: 16px;
+}
+
+h4{
+  font-family: 'Itim';
+  font-size: 18px;  
+  margin-top: 16px;  
+  margin-bottom: 16px;
 }
 
 html, body, #app{
@@ -216,7 +223,7 @@ button{
       </div>
     </div>
 
-    <span class="sideways handwriting" style="font-weight: 700; white-space: nowrap">Evil Wizard's Guide to Statistics</span>
+    <span class="sideways handwriting" style="font-weight: 700; white-space: nowrap">Weird and Not Scary Guide to Statistics</span>
 
   </div> 
 
@@ -229,7 +236,7 @@ overflow-y:scroll;padding-top:8px; background-color: rgb(247,247,247);">
          style="padding:4px">
       <img :class="{'story-point-silhouette': currentChapter !== chapter}"
           :src="'images/' + chapter.image" 
-          style="max-width:50px; max-height:100px">
+          style="max-width:50px; max-height:90px">
       <span style="top:60px; font-size:12px; display: inline-block; margin:8px;"><bold style="font-size:12px">{{chapter.title || 'Chapter ' + ind}}</bold><br> {{chapter.description}}</span>
     </div>
   </div>
@@ -548,10 +555,6 @@ overflow-y:scroll;padding-top:8px; background-color: rgb(247,247,247);">
     <li>A smaller p-value does not imply a larger effect size.</li>
   </ul> 
 
-  <div>
-  If you liked this section, you may like the book, <a href="https://smile.amazon.com/p-value-Stories-Actually-Understand-Statistics/dp/0321629302">What is a P-Value Anyways?</a>
-  </div>
-
   <buton @click="$root.nextChapter()">Next chapter?</buton>
 
 </avatar>
@@ -570,19 +573,16 @@ overflow-y:scroll;padding-top:8px; background-color: rgb(247,247,247);">
 <script type="text/x-template" id="intro-scene-template">
 <div style="width:600px; margin: 0 auto; text-align:center;">
 
-  <div class="handwriting" style="font-size:48px;">The Evil Wizard's Guide to Statistics</div>
+  <div class="handwriting" style="font-size:48px;">Weird and Not Scary Guide to Statistics</div>
 
   <img src="images/wizard.png" style="width:300px">
 
   <div style="max-width:500px; margin: 0 auto">
     <div>
-    Not really motivated by a normal statistics class, but you'll get out of bed to save the world?
-    </div>
-
-    <div>
-    Learn probability and statistics to stop the Evil Wizard.
+      Statistics doesn't need to be scary. It's useful in both daily life and subjects like machine learning. This story will walk through probability & statistics most practical topics, motivated by cute and badly drawn characters.
     </div>
   </div>
+
 
   <buton @click="$root.nextChapter()">PLAY</buton>
 </div>
@@ -593,28 +593,78 @@ overflow-y:scroll;padding-top:8px; background-color: rgb(247,247,247);">
 
 <h2>The End</h2>
 
+
+<p>
+  As you can see, life can be quite eventful with probability and statistics. I hope this guide helps add a bit of mischief to your life.
+</p>
+
+<img src="images/wizard.png" style="width:200px">
+
+
+
+<p>
+That's all the chapters for now, but the story may continue... Afterall, the wizard could do a whole section on useful distributions. 
+
+
+<ul>
+<li>Sign up to be notified of <a href="//eepurl.com/c8ur5T" target="_blank">future chapters</a></li>
+<li>Or leave me some <a href="//forms.gle/QeUmVfvoxpNJMEcDA">feedback</a> on story so far</li>
+</ul>
+</p>
+
+
+<p>
+If you liked this story, you might like:
+
+<ul>
+<li>My other story about thinking rationally <a href="//cassandraxia.com/cogbiases/" target="_blank">Adventures in Cognitive Biases</a></li>
+<li>A much more comprehensive text covering much more statistics <a target="_blank" href="https://www.amazon.com/gp/product/1446210456/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=1446210456&linkCode=as2&tag=cassandraxia-20&linkId=38c49070a217a5b8b289553486d6d721">An Adventure in Statistics: The Reality Enigma</a><img src="//ir-na.amazon-adsystem.com/e/ir?t=cassandraxia-20&l=am2&o=1&a=1446210456" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" /></li>
+<li>A very enlightening book on frequentist statistics used by real scientists <a target="_blank" href="https://www.amazon.com/gp/product/0321629302/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=0321629302&linkCode=as2&tag=cassandraxia-20&linkId=8acaf4f7bf04f2ff7ac0341e952c9670">What is a p-value anyway? 34 Stories to Help You Actually Understand Statistics</a><img src="//ir-na.amazon-adsystem.com/e/ir?t=cassandraxia-20&l=am2&o=1&a=0321629302" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" /></li>
+</ul>
+
+</p>
+
+
+<h4>Music</h4>
 <div class="smaller-children">
 <p>
-That's all the chapters for now, but the story may continue... Afterall, the wizard could do a whole section on useful distributions. Sign up here to be notified of future installments. Or leave me some feedback on the current story.
-
-http://eepurl.com/c8ur5T
-https://forms.gle/QeUmVfvoxpNJMEcDA
+The sound for this story was graciously edited to be nonobtrusive by auditory god Hanoi Hantrakul.
 </p>
 
 <p>
-The backers and supporters of Ishaan's Journey, including Vivek Rajkumar, Brienne and Eliezer Yudkowsky, Eric Chisholm, Alia McCutcheon and other folks from the LessWrong scene encouraged me to develop this further and who were very patient with me as I took several unnecessary detours. 
+Background pieces included those created by <a href="//plasterbrain.com" target="_blank">plasterbrain</a> including 'Rusted Maid', 'Extreme Hardcore Death Metal Loop', 'Comma Flaw', and 'Find My Body Please'. 
 </p>
 
 <p>
-Nicky Case who created multiple examples for how to make experiences both fun + educational. Spencer Greenberg and Mike Mozer who kept the project alive through their enthuasism and insightful critique on the original version. And thank you to all the folks who emailed in with encouragement and offers to help. 
+And two pieces from <a href="//filmmusic.io" target="_blank">https://filmmusic.io</a>
+"Sneaky Snitch" and "Wholesome" by Kevin MacLeod (<a href="//incompetech.com" target="_blank">https://incompetech.com</a>)
+License: CC BY (http://creativecommons.org/licenses/by/4.0/)
+</p>
+</div>
+
+
+<h4>Thanks</h4>
+
+<div class="smaller-children">
+
+<p>
+I want to thank my parents and sister who made me weird.
 </p>
 
 <p>
-Anand Babu and Google Kernel friends provided a safe space and the final push of energy to rewrite this. Fred Bertsch and Vivek Sri  greatly improved the story in different ways. Tianyu Liu recommended the perfect pieces of prior work. Nathan Martz was the oracle who was right about all the pitfalls.
+I also want to thank the backers and supporters of Ishaan's Journey, including Vivek Rajkumar, Brienne and Eliezer Yudkowsky, Eric Chisholm, Alia McCutcheon and other folks from the LessWrong scene encouraged me to develop Adventures in Cognitive Biases further.
 </p>
 
 <p>
-On the tech side, <a href="//vuejs.org/" target="_blank">Vue.js</a> greatly simplified the code needed for this project, omgggg try it out. I think it's better than React. I also want to thank jpegslayer who helped me on the friendly Vue forums.
+Nicky Case who created multiple examples for how to make experiences both fun and educational. Spencer Greenberg and Mike Mozer who kept the project alive through their enthuasism and insightful critique on the original version. And thank you to all the folks who emailed in with encouragement and offers to help when earlier projects stagnated. 
+</p>
+
+<p>
+Anand Babu and Google Kernel friends provided a safe space and the final push of energy to rewrite this. Ric Ewing who designed Chapter 2 and taught me how to properly do paper prototypes. Fred Bertsch and Vivek Sri greatly improved the story in different ways. Tianyu Liu recommended the perfect pieces of prior work. Nathan Martz was the oracle who was right about all the pitfalls.
+</p>
+
+<p>
+On the tech side, <a href="//vuejs.org/" target="_blank">Vue.js</a> greatly simplified the code needed for this project. I think it's better than React. I also want to thank jpegslayer who helped me on the friendly Vue forums.
 </p>
 
 <p>
@@ -646,61 +696,24 @@ If after all this, you're still here and want to buy me a coffee, that would be 
 <h2>Chapter 1</h2>
 <pset>
 
-
-<!-- why is calc 50% being so large?? 
-<avatar key="HH"
-  image="monster.png" 
-  text="What is the probability that I toss a fair coin twice and get HH?">
-
-  <buton nope="1/2 is the probability of tossing a single coin and getting H. Getting two heads in a row is rarer than that.">1/2</buton>
-  <buton yay>1/4</buton>
-  <buton nope="Assume it is a fair coin that lands on heads with 50% probability.">Not enough info</buton>
-
-</avatar>-->
-
-
-<avatar>
-  <p>
-    Not too long ago, I was just like you. Just a regular nerdy wizard on the internet.
-  </p>
-  <p>
-    But one day, I realized... I could do good... by doing evil... if I could cause mischief in the world that everyone would be forced to notice the probability and statistics in their daily life.
-  </p>
-
-  <p style="font-style:italic">
-    And that is where you come in.
-  </p>
-
-  <next>Oh dear</next>
-</avatar>
-
-
 <avatar
-  text="Bobby the Green Monster was unkind to me before I got my wizarding powers. Let's see if my evil plan has worked.">
+  text="I've been learning about statistics my whole life. When I was a kid wizard, it was relevant to me because it was how my mom would pack my lunch.">
   <next>Next</next>
 </avatar>
 
 
 <avatar 
-  image="monster_cry.png"
-  text="Ugh! Peanut butter and jelly again?">
-  <next>What's wrong?</next>
-</avatar>
-
-<avatar image="monster.png" 
-  text="Every day my mom packs me lunch by flipping a coin. If it lands tails, I get a peanut butter jelly sandwich. If it lands heads, I get my favorite — a deluxe fried potato & cream cheese roll. ">
-  <next>Is that good?</next>
-</avatar>
-
-<avatar image="monster_yay.png" 
-  text="Duh it's good. You're missing out if you've never had it before.">
+  text="My mom would flip a (presumably) fair coin, and if it would land heads she would pack me a lunch like a normal mother.">
   <next>Next</next>
 </avatar>
 
+<avatar image="potion2.png"
+    text="But if it landed tails, she would pack me a salty slimy potion to make me stronger.">
+  <next>Next</next>
+</avatar>
 
 <avatar key="HH"
-  image="monster.png" 
-  text="What is the probability that after my mom flips a fair coin twice, I'll be eating peanut butter and jelly two days in a row?">
+  text="What is the probability that after my mom flips a fair coin twice, I'll be drinking the slimy potion two days in a row?">
 
   <buton nope="1/2 is the probability of tossing a single coin and getting T. Getting two tails in a row is rarer than that.">1/2</buton>
   <buton yay>1/4</buton>
@@ -724,8 +737,7 @@ If after all this, you're still here and want to buy me a coffee, that would be 
 </avatar> 
 
 <avatar key="HHH"
-  image="monster_cry.png" 
-  text="Well, truth is I've been eating peanut butter and jelly a LOT. What is the probability that after my mom tosses a fair coin three times, I'll be eating peanut butter and jelly three days in a row?">
+  text="What is the probability that after my mom tosses a (presumably) fair coin three times, I'll end up drinking the potion three days in a row?">
 
   <buton-group>
     <buton nope>1/2</buton>
@@ -749,12 +761,11 @@ If after all this, you're still here and want to buy me a coffee, that would be 
 </avatar>
 
 <avatar key="HHHHH"
-  image="monster.png" 
-  text="If I got peanut butter and jelly the last five days in a row, am I more likely to get peanut butter and jelly OR potato cream cheese today?">
+  text="If mom's (presumably) fair coin gave me the slimy potion for the last five days, am I more likely to get the potion today OR a normal lunch today?">
 
   <buton-group>
-    <buton @click="memory='userSaidT'" nope>Peanut butter & jelly</buton>
-    <buton @click="memory='userSaidH'" nope>Potato & cream cheese</buton>
+    <buton @click="memory='userSaidT'" nope>Slimy potion</buton>
+    <buton @click="memory='userSaidH'" nope>Normal lunch</buton>
     <buton yay>It's 50-50</buton>
 
     <template v-slot:hint>
@@ -774,64 +785,41 @@ If after all this, you're still here and want to buy me a coffee, that would be 
   </buton-group>
 </avatar>
 
-<avatar image="monster.png" 
-  text="Yeah! If mom's coin is fair, I still have a 50-50 chance to get potato & cream cheese since coins have no memory.">
+<avatar
+  text="Yeah! If mom's coin is really fair, I still have a 50-50 chance to get a normal lunch since coins have no memory.">
   <next>Next</next>
 </avatar>
 
 
 <avatar key="100H"
-  image="monster.png" 
-  text="Okay, but if I told you my mom's coin doomed me to peanut butter and jelly the last 100 days, what do you think I would get today?">
+  text="Okay, but if I told you my mom's coin doomed me to the potion the last 100 days, what would you think I would get today?">
 
   <buton-group>
-    <buton yay>Peanut butter and jelly</buton>
-    <buton nope>Potato and cream cheese</buton>
+    <buton yay>Potion</buton>
+    <buton nope>Normal lunch</buton>
     <next>It's 50-50</next>
   </buton-group>
 </avatar>
 
 <avatar image="brain.png">
   <div>
-   {{got('100H') ? 'Yeah!': 'Nice try but not quite.'}} The probability of seeing 100 tails in a row on a fair coin is so tiny... 1/<exp base="2" pow="100"/>. If all the <exp base="2" pow="80"/> atoms in the universe were flipping coins, it still would only have a 1 in million chance of happening. 
+   {{got('100H') ? 'Yeah!': 'Nice try but not quite.'}} The problem of seeing 100 tails in a row on a fair coin is different from seeing 5 tails in a row, because seeing 100 tails is basically impossible. 
  </div>
 
-   <next>How many days has Bobby been eating PB&J?</next>
+ <div>The probability is so tiny (1/<exp base="2" pow="100"/>) that if all the <exp base="2" pow="80"/> atoms in the universe were flipping coins, it still be a 1 in million chance of happening of any atom seeing 100 tails in a row. So if the wizard's mom says tails came up 100 times in a row, we know the coin is not fair. 
+ </div>
+
+   <next>Oh</next>
 </avatar>
 
-<avatar image="monster.png"
-  text="I've been eating PB&J for the last 10 days. Poor me. Do you think mom's coin is fair?">
-
-
-  <next>Yes</next>
-  <next>No</next>
-  <next>I don't know</next>
-</avatar>
-
-<avatar image="monster.png">
-  <div>Well, I guess the probability of getting 10 PB&J sandwiches in a row is <frac num="1" den="X"/>  where X = ?. 
-  </div>
-  <input-box :right="['1024', '2^10']" />
-</avatar>
-
-<avatar image="monster.png"
-  text="So, I should see a streak of 10 PB&J sandwiches every 1024 days or so.">
+<avatar text="So somewhere in between drinking the potion 5 days in a row and a 100 days in a row, I ought to start questioning if my mom is playing fair. We will formalize this idea in Chapter 5: P-values.
+">
   <next>Next</next>
 </avatar>
 
-<avatar image="monster.png"
-  text="Mom has been packing lunch for me for 1540 days, so I guess this was not that surprising.">
+
+<avatar text="But this was around the time that I stopped trusting what people said and started testing their claims for myself.">
   <next>Next</next>
-</avatar>
-
-<avatar image="monster.png"
-  text="And here I was being paranoid that I was cursed by an evil wizard or something.">
-  <next>Er...</next>
-</avatar>
-
-<avatar image="monster_cry.png"
-  text="I guess I'll wait a few more days to see if I get a potato & cream cheese sandwich. Thanks!">
-  <next>Next</next>  
 </avatar>
 
 
@@ -841,15 +829,10 @@ If after all this, you're still here and want to buy me a coffee, that would be 
     <li>You learned to calculate the <bold>joint probability</bold> of independent events.</li>
     <li>You learned that there are <exp base="2" pow="80"/> atoms in the universe.</li>
   </ul> 
-  <next>Next</next>  
-</avatar>
-
-<avatar>
-  <div>
-  Haha! That was great... I wonder how many more peanut butter and jelly sandwiches I can get Bobby to eat. 
-  </div>
   <buton @click.native="$root.nextChapter()">Next chapter</buton>
 </avatar>
+
+
 
 </pset>
 </div>
@@ -985,20 +968,12 @@ If after all this, you're still here and want to buy me a coffee, that would be 
   <next>Yes</next>
 </avatar>
 
-<avatar text="Elena is my only friend actually. Bobby and the other kids at school aren't nice to me.">
+<avatar text="Elena is my only friend actually.">
   <next>Oh</next>
 </avatar>
 
 <avatar image="crow.png"
   text="Caw!">
-  <next>Next</next>
-</avatar>
-
-<avatar text="Bobby isn't actually a green monster by the way. I just drew him like that... because I could.">
-  <next>Oh</next>
-</avatar>
-
-<avatar text="You wanna see this other monster that I cursed?">
   <next>Next</next>
 </avatar>
 
@@ -1355,7 +1330,17 @@ If after all this, you're still here and want to buy me a coffee, that would be 
   <next>Next</next>
 </avatar>
 
-<avatar text="And vulnerability — you know that I don't have friends.">
+<avatar text="And vulnerability — you saw my struggle to make friends.">
+  <next>Next</next>
+</avatar>
+
+<avatar>
+  <p>
+    Wait, I don't know anything vulnerable about you.
+  </p>
+
+  <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfD8mzdkhL4XiSSg-Z2hCtRxvsxjvanklWZrODVEmbtW4LV5Q/viewform?embedded=true" width="400" height="471" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
+
   <next>Next</next>
 </avatar>
 
@@ -1371,19 +1356,12 @@ If after all this, you're still here and want to buy me a coffee, that would be 
 
 <avatar>
   <div>
-  And you see probability and statistics IRL now? 
+  And you see probability and statistics in real life now? 
   </div>
 
   <once-group>
     <next>Yes</next><next>Possibly</next>
   </once-group>
-</avatar>
-
-<avatar>
-  <div>
-  Then my work here is done, friend.
-  </div>
-  <next>Next</next>
 </avatar>
 
 <avatar 
@@ -1393,7 +1371,7 @@ If after all this, you're still here and want to buy me a coffee, that would be 
 
   <ul>
     <li>how to update beliefs with <bold>Bayes Rule</bold> is the average reward.</li>
-    <li>posterior belief <span style="font-size:28px">∝</span> prior belief × likelihood</li>
+    <li><bold>posterior belief</bold> is proportional to <bold>prior belief</bold> × <bold>likelihood of evidence</bold></li>
     <li>To breathe when panicking.</li>
     <li>That you have a new friend.</li>
   </ul> 
@@ -1452,7 +1430,7 @@ If after all this, you're still here and want to buy me a coffee, that would be 
   <h2>Chapter 3</h2>
 <pset>
 
-<avatar text="I like a girl but she doesn't like me back.">
+<avatar text="I like someone but she doesn't like me back.">
   <next>Next</next>
 </avatar>
 
@@ -1845,15 +1823,16 @@ If after all this, you're still here and want to buy me a coffee, that would be 
     <li>You learned to not be too picky ❤️</li>
   </ul> 
 
-  <next>Are you doing this all for revenge?</next>
+  <next>Next</next>
 </avatar>
 
 
-<avatar text="I have a lot of free time because I don't have any friends.">
-  <next>Surely you must have some friends though?</next>
+<avatar text="Hey, do you think I'll find love one day?">
+  <next>Yes</next>  <next>No</next>
+
 </avatar>
 
-<avatar text="No, I really don't.">
+<avatar text="What about a friend?">
   <next>Let's get you friends</next>
 </avatar>
 
@@ -2590,14 +2569,14 @@ var sounds = {
   'close': {clip: new Audio('sounds/swish1.wav')},
 
 
-	// 'intro-scene': {clip: new Audio('sounds/sneaky-snitch-by-kevin-macleod.mp3')},  
-	// 'coin-flips': {clip: new Audio('sounds/sneaky-snitch-by-kevin-macleod.mp3')},
-	// 'wizard-flips': {clip: new Audio('sounds/rusted-maid.wav')},
-	// 'chain-rule': {clip: new Audio('sounds/wholesome-by-kevin-macleod.mp3')},
-	// 'ev-story': {clip: new Audio('sounds/extreme-hardcore-death-metal-loop.mp3')},
-	// 'intro-to-pvalues': {clip: new Audio('sounds/comma-flaw.wav')},
-	// 'bayes-rule': {clip: new Audio('sounds/find-my-body-please.wav')},
-	// 'thanks': {clip: new Audio('sounds/sneaky-snitch-by-kevin-macleod.mp3')},
+	'intro-scene': {clip: new Audio('sounds/sneaky-snitch-by-kevin-macleod.mp3')},  
+	'coin-flips': {clip: new Audio('sounds/sneaky-snitch-by-kevin-macleod.mp3')},
+	'wizard-flips': {clip: new Audio('sounds/rusted-maid.wav')},
+	'chain-rule': {clip: new Audio('sounds/wholesome-by-kevin-macleod.mp3')},
+	'ev-story': {clip: new Audio('sounds/extreme-hardcore-death-metal-loop.mp3')},
+	'intro-to-pvalues': {clip: new Audio('sounds/comma-flaw.wav')},
+	'bayes-rule': {clip: new Audio('sounds/find-my-body-please.wav')},
+	'thanks': {clip: new Audio('sounds/sneaky-snitch-by-kevin-macleod.mp3')},
 };
 
 
@@ -3855,7 +3834,7 @@ const chapters = [
 {
   component: 'coin-flips',
   description: 'Independent events',
-  image: 'monster.png',
+  image: 'potion2.png',
 },
 {
   component: 'wizard-flips',
@@ -3910,7 +3889,7 @@ new Vue({
   el: '#app',
   data: {
     chapters: chapters,
-    chapterInd: DEBUG ? 1 : 0,
+    chapterInd: DEBUG ? 7 : 0,
     // Obj property additions do not update DOM, so prepopulate all the keys in the object. Or use lists.
     showTOC: false,
     hasVolume: false,
