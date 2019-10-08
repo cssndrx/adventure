@@ -48,10 +48,6 @@ h4{
   margin-bottom: 16px;
 }
 
-html, body, #app{
-  height: 100%;
-}
-
 ul {
   list-style-type: square;
 }
@@ -159,6 +155,7 @@ button{
     border-radius: 100%;
     background-size: cover;
     border: 4px solid black;
+    margin-right: 16px;
 }
 
 .coin{
@@ -229,7 +226,7 @@ button{
 
   <div v-if="showTOC" class="normal-div" style="position:fixed; z-index:1; width:200px;top:0px; left:60px; top:0;
     bottom:0;
-overflow-y:scroll;padding-top:8px; background-color: rgb(247,247,247);">
+overflow-y:auto;padding-top:8px; background-color: rgb(247,247,247);">
     <div v-for="(chapter, ind) in chapters"
          @click="showTOC = false; chapterInd = ind"
          class="toc-chapter"
@@ -575,11 +572,11 @@ overflow-y:scroll;padding-top:8px; background-color: rgb(247,247,247);">
 
   <div class="handwriting" style="font-size:48px;">Weird and Not Scary Guide to Statistics</div>
 
-  <img src="images/wizard.png" style="width:300px">
+  <img src="images/wizard.png" style="width:280px">
 
   <div style="max-width:500px; margin: 0 auto">
     <div>
-      Statistics doesn't need to be scary. It's useful in both daily life and subjects like machine learning. This story will walk through probability & statistics most practical topics, motivated by cute and badly drawn characters.
+      <bold>Statistics is useful — </bold> in daily life and machine learning. Approach this topic in a non-scary way... through weird stories, cartoon characters, and interactivity!
     </div>
   </div>
 
@@ -656,7 +653,7 @@ I also want to thank the backers and supporters of Ishaan's Journey, including V
 </p>
 
 <p>
-Nicky Case who created multiple examples for how to make experiences both fun and educational. Spencer Greenberg and Mike Mozer who kept the project alive through their enthuasism and insightful critique on the original version. And thank you to all the folks who emailed in with encouragement and offers to help when earlier projects stagnated. 
+Nicky Case who created multiple examples for how to make experiences both <a href="//ncase.me/" target="_blank">fun and educational</a>. Spencer Greenberg and Mike Mozer who kept the project alive through their enthuasism and insightful critique on the original version. And thank you to all the folks who emailed in with encouragement and offers to help when earlier projects stagnated. 
 </p>
 
 <p>
@@ -803,7 +800,7 @@ If after all this, you're still here and want to buy me a coffee, that would be 
 
 <avatar image="brain.png">
   <div>
-   {{got('100H') ? 'Yeah!': 'Nice try but not quite.'}} The problem of seeing 100 tails in a row on a fair coin is different from seeing 5 tails in a row, because seeing 100 tails is basically impossible. 
+   {{got('100H') ? 'Yeah!': 'Nice try but not quite.'}} The problem of seeing 100 tails in a row on a fair coin is different from seeing 5 tails in a row, because seeing 100 tails in a row is basically impossible. 
  </div>
 
  <div>The probability is so tiny (1/<exp base="2" pow="100"/>) that if all the <exp base="2" pow="80"/> atoms in the universe were flipping coins, it still be a 1 in million chance of happening of any atom seeing 100 tails in a row. So if the wizard's mom says tails came up 100 times in a row, we know the coin is not fair. 
