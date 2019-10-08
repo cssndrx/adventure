@@ -3907,13 +3907,6 @@ new Vue({
   watch: {
     chapterInd(){
     	this.playChapterAudio();
-    },
-    showTOC(){
-      if (this.showTOC){
-        this.play('open');
-      } else {
-        this.play('close');
-      }
     }
   },
   computed: {
@@ -4051,7 +4044,12 @@ new Vue({
       }
     },
     toggleTOC(){
-  		this.showTOC = !this.showTOC;
+		this.showTOC = !this.showTOC;
+		if (this.showTOC){
+			this.play('open');
+		} else {
+			this.play('close');
+		}
     }
 
   } // end methods
