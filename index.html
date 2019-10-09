@@ -1422,7 +1422,10 @@ If after all this, you're still here and want to buy me a coffee, that would be 
 </script>
 
 <script type="text/x-template" id="coin-template">
-  <div @click="flip" class="coin normal-div" style="position:relative">
+  <div @mousedown="isMouseDown = true" 
+       @mouseup="isMouseDown = false" 
+       @contextmenu="isMouseDown = false"
+       class="coin normal-div" style="position:relative">
     <img v-if="isShowingH" src="images/coin_heads.png" style="width:100px">
     <img v-if="!isShowingH" src="images/coin_tails.png" style="width:100px">
     <div ref="flip-string" style="font-size:13px; margin-left:8px; margin-right:8px" :style="flipStringStyle">{{flipString}}</div>
@@ -2567,7 +2570,7 @@ Click where you think the balance point is...
 
 
 <script>
-var DEBUG = true;
+var DEBUG = false;
 
 
 const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
@@ -2687,6 +2690,28 @@ Vue.component('coin', {
   data: function(){
     return {
       flips: [], //true, false, true, true], 
+      isMouseDown: false,
+      autoFlipper: null,
+    }
+  },
+  watch: {
+    isMouseDown(){
+      if (this.isMouseDown == false){
+        // This flip handles the click case.
+        this.flip();
+        if (this.autoFlipper){
+          clearInterval(this.autoFlipper);
+        }
+      }
+
+      if (this.isMouseDown == true){
+        const this_ = this;
+        this.autoFlipper = setInterval(function(){
+          if (this_.isMouseDown == true){
+            this_.flip();
+          }
+        }, 150);        
+      }
     }
   },
   computed: {
