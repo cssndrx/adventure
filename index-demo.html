@@ -1,6 +1,7 @@
 <!doctype html>
 <head>
 <meta charset="utf-8" />
+<base target="_blank">
 
 <title>Weird and Not Scary Guide to Statistics</title>
 <!-- Global site tag (gtag.js) - Google Analytics -->
@@ -31,6 +32,13 @@
 .handwriting, .handwriting *{
   font-family: 'Itim';
 }
+
+.comment{
+  font-family: 'Itim';
+  font-size:14px;
+  margin-left: 16px;  
+}
+
 
 h2{
   font-family: 'Itim';
@@ -191,6 +199,7 @@ button{
   pointer-events: none;
   user-select: none; 
 }
+
 
 </style>
 </head>
@@ -526,7 +535,7 @@ overflow-y:auto;padding-top:8px; background-color: rgb(247,247,247);">
 
 <avatar image="scientist.png">
   <div>
-    I can't just randomly test you until I get a positive result. That is p-hacking like in the <a href="//xkcd.com/882/" target="_blank">xkcd green jelly bean case</a>.
+    I can't just randomly test you until I get a positive result. That is p-hacking like in the <a href="//xkcd.com/882/">xkcd green jelly bean case</a>.
   </div>
   <next>Next</next>
 </avatar>
@@ -581,7 +590,7 @@ overflow-y:auto;padding-top:8px; background-color: rgb(247,247,247);">
   </div>
 
 
-  <buton @click.native="$root.nextChapter()">PLAY</buton>
+  <buton @click.native="$root.nextChapter()" :font-size="28">PLAY</buton>
 </div>
 </script>
 
@@ -604,7 +613,7 @@ That's all the chapters for now, but the story may continue... Afterall, the wiz
 
 
 <ul>
-<li>Sign up to be notified of <a href="//eepurl.com/c8ur5T" target="_blank">future chapters</a></li>
+<li>Sign up to be notified of <a href="//eepurl.com/c8ur5T">future chapters</a></li>
 <li>Or leave me some <a href="//forms.gle/QeUmVfvoxpNJMEcDA">feedback</a> on story so far</li>
 </ul>
 </p>
@@ -614,9 +623,9 @@ That's all the chapters for now, but the story may continue... Afterall, the wiz
 If you liked this story, you might like:
 
 <ul>
-<li>My other story about thinking rationally <a href="//cassandraxia.com/cogbiases/" target="_blank">Adventures in Cognitive Biases</a></li>
-<li>A much more comprehensive text covering much more statistics <a target="_blank" href="https://www.amazon.com/gp/product/1446210456/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=1446210456&linkCode=as2&tag=cassandraxia-20&linkId=38c49070a217a5b8b289553486d6d721">An Adventure in Statistics: The Reality Enigma</a><img src="//ir-na.amazon-adsystem.com/e/ir?t=cassandraxia-20&l=am2&o=1&a=1446210456" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" /></li>
-<li>A very enlightening book on frequentist statistics used by real scientists <a target="_blank" href="https://www.amazon.com/gp/product/0321629302/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=0321629302&linkCode=as2&tag=cassandraxia-20&linkId=8acaf4f7bf04f2ff7ac0341e952c9670">What is a p-value anyway? 34 Stories to Help You Actually Understand Statistics</a><img src="//ir-na.amazon-adsystem.com/e/ir?t=cassandraxia-20&l=am2&o=1&a=0321629302" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" /></li>
+<li>My other story about thinking rationally <a href="//cassandraxia.com/cogbiases/">Adventures in Cognitive Biases</a></li>
+<li>A much more comprehensive text covering much more statistics <a href="https://www.amazon.com/gp/product/1446210456/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=1446210456&linkCode=as2&tag=cassandraxia-20&linkId=38c49070a217a5b8b289553486d6d721">An Adventure in Statistics: The Reality Enigma</a><img src="//ir-na.amazon-adsystem.com/e/ir?t=cassandraxia-20&l=am2&o=1&a=1446210456" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" /></li>
+<li>A very enlightening book on frequentist statistics used by real scientists <a href="https://www.amazon.com/gp/product/0321629302/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=0321629302&linkCode=as2&tag=cassandraxia-20&linkId=8acaf4f7bf04f2ff7ac0341e952c9670">What is a p-value anyway? 34 Stories to Help You Actually Understand Statistics</a><img src="//ir-na.amazon-adsystem.com/e/ir?t=cassandraxia-20&l=am2&o=1&a=0321629302" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" /></li>
 </ul>
 
 </p>
@@ -629,12 +638,12 @@ The sound for this story was graciously edited to be nonobtrusive by auditory go
 </p>
 
 <p>
-Background pieces included those created by <a href="//plasterbrain.com" target="_blank">plasterbrain</a> including 'Rusted Maid', 'Extreme Hardcore Death Metal Loop', 'Comma Flaw', and 'Find My Body Please'. 
+Background pieces included those created by <a href="//plasterbrain.com">plasterbrain</a> including 'Rusted Maid', 'Extreme Hardcore Death Metal Loop', 'Comma Flaw', and 'Find My Body Please'. 
 </p>
 
 <p>
-And two pieces from <a href="//filmmusic.io" target="_blank">https://filmmusic.io</a>
-"Sneaky Snitch" and "Wholesome" by Kevin MacLeod (<a href="//incompetech.com" target="_blank">https://incompetech.com</a>)
+And two pieces from <a href="//filmmusic.io">https://filmmusic.io</a>
+"Sneaky Snitch" and "Wholesome" by Kevin MacLeod (<a href="//incompetech.com">https://incompetech.com</a>)
 License: CC BY (http://creativecommons.org/licenses/by/4.0/)
 </p>
 </div>
@@ -649,19 +658,19 @@ I want to thank my parents and sister who made me weird.
 </p>
 
 <p>
-I also want to thank the backers and supporters of Ishaan's Journey, including Vivek Rajkumar, Brienne and Eliezer Yudkowsky, Eric Chisholm, Alia McCutcheon and other folks from the LessWrong scene encouraged me to develop Adventures in Cognitive Biases further.
+I also want to thank the backers and supporters of Timmy's Journey, including Vivek Rajkumar, Brienne and Eliezer Yudkowsky, Eric Chisholm, Alia McCutcheon and other folks from the LessWrong scene encouraged me to develop Adventures in Cognitive Biases further.
 </p>
 
 <p>
-Nicky Case who created multiple examples for how to make experiences both <a href="//ncase.me/" target="_blank">fun and educational</a>. Spencer Greenberg and Mike Mozer who kept the project alive through their enthuasism and insightful critique on the original version. And thank you to all the folks who emailed in with encouragement and offers to help when earlier projects stagnated. 
+<a href="//ncase.me/">Nicky Case</a> who created multiple examples for how to make experiences both fun and educational. <a href="//www.spencergreenberg.com/">Spencer Greenberg</a> and Mike Mozer who kept the project alive through their enthuasism and insightful critique on the original version. And thank you to all the folks who emailed in with encouragement and offers to help when earlier projects stagnated. 
 </p>
 
 <p>
-Anand Babu and Google Kernel friends provided a safe space and the final push of energy to rewrite this. Ric Ewing who designed Chapter 2 and taught me how to properly do paper prototypes. Fred Bertsch and Vivek Sri greatly improved the story in different ways. Kourosh Gharachorloo for all the bugs he found, and accidentally the most senior QA engineer I've ever had. Tianyu Liu recommended the perfect pieces of prior work. Nathan Martz was the oracle who was right about all the pitfalls.
+Anand Babu and Google Kernel friends provided a safe space and the final push of energy to rewrite this. Ric Ewing designed Chapter 2 and taught me how to properly do paper prototypes. Fred Bertsch and Vivek Sri greatly improved the story in different ways. Kourosh Gharachorloo for all the bugs he found, and accidentally the most senior QA tester I've ever had. Tianyu Liu recommended the perfect pieces of prior work. Nathan Martz was the oracle who was right about all the pitfalls.
 </p>
 
 <p>
-On the tech side, <a href="//vuejs.org/" target="_blank">Vue.js</a> greatly simplified the code needed for this project. I think it's better than React. I also want to thank jpegslayer who helped me on the friendly Vue forums.
+On the tech side, <a href="//vuejs.org/">Vue.js</a> greatly simplified the code needed for this project. I think it's better than React. I also want to thank jpegslayer who helped me on the friendly Vue forums.
 </p>
 
 <p>
@@ -1045,14 +1054,7 @@ If after all this, you're still here and want to buy me a coffee, that would be 
     I thought Bayes Rule was just the relationship between conditional probabilities
   </div>
   <div>
-  P(A|B) = <big-frac style="position:relative; top:12px">
-    <template v-slot:num>
-      P(B|A) × P(A)
-    </template>
-    <template v-slot:den>
-      P(B)
-    </template>
-  </big-frac> ?
+  P(A|B) = <big-frac style="position:relative; top:12px" num="P(B|A) × P(A)" den="P(B)" />?
   </div>
   <next>Next</next>
 </avatar>
@@ -1060,7 +1062,7 @@ If after all this, you're still here and want to buy me a coffee, that would be 
 
 <avatar image="brain.png">
   <div>
-    Yes, but if you plug in meaningful values like "H" for hypothesis and "D" for data, then Bayes Rule becomes a general relationship of how to change your mind in response to new data.
+    Yes, but if you plug in meaningful values like "H" for hypothesis and "D" for observed data, then Bayes Rule becomes a general relationship of how to change your mind in response to new data.
   </div>
 
   <img src="images/bayes-annotated.png" style="width:300px">
@@ -1373,8 +1375,34 @@ If after all this, you're still here and want to buy me a coffee, that would be 
     <li>That you have a new friend.</li>
   </ul> 
 
-  <buton @click.native="$root.nextChapter()">Next chapter</buton>
+  <next>Next</next>
+</avatar>
 
+<avatar image="brain.png">
+  <div>
+    By the way, Bayes Rule is easy to derive, if you ever forget it.
+  </div>
+
+  <div>
+    P(A AND B) = P(A|B) × P(B)  <span class="comment"># From Chapter 3</span>
+  </div>
+
+  <div>
+    P(A|B) = <big-frac num="P(A AND B)" den="P(B)"/>  <span class="comment"># Rearrange the terms</span>
+  </div>
+
+  <div>
+    P(A|B) = <big-frac num="P(B|A) × P(A)" den="P(B)" />  <span class="comment"># Expand P(A AND B) again</span>
+  </div>
+
+
+  <div>
+    P(A|B) = <big-frac style="position:relative; top:12px" num="P(B|A) × P(A)" den="P(B)" /> <span class="comment"># Tada! It's Bayes Rule</span>
+  </div> 
+
+  <div>
+    <buton @click.native="$root.nextChapter()">Next chapter</buton>
+  </div>
 </avatar>
 
 
@@ -1394,7 +1422,10 @@ If after all this, you're still here and want to buy me a coffee, that would be 
 </script>
 
 <script type="text/x-template" id="coin-template">
-  <div @click="flip" class="coin normal-div" style="position:relative">
+  <div @mousedown="isMouseDown = true" 
+       @mouseup="isMouseDown = false" 
+       @contextmenu="isMouseDown = false"
+       class="coin normal-div" style="position:relative">
     <img v-if="isShowingH" src="images/coin_heads.png" style="width:100px">
     <img v-if="!isShowingH" src="images/coin_tails.png" style="width:100px">
     <div ref="flip-string" style="font-size:13px; margin-left:8px; margin-right:8px" :style="flipStringStyle">{{flipString}}</div>
@@ -1410,7 +1441,7 @@ If after all this, you're still here and want to buy me a coffee, that would be 
 
   <div>
     <span class="smaller-children">Lands H with <bold>{{$root.formatPct(bias)}}</bold> chance:</span>
-    <input v-model="slider" type="range" min="0" max="100" style="width:100px; display:inline">
+    <input v-model="slider" type="range" min="0" max="100" style="width:200px; display:inline">
   </div>
 
 
@@ -1853,7 +1884,7 @@ If after all this, you're still here and want to buy me a coffee, that would be 
 
 <avatar image="brain.png">
 
-<div>The <a target="_blank" href="//www.youtube.com/watch?v=hmJyWreER7A">internet</a> claims that the 3 tenets of friendships are...</div>
+<div>The <a href="//www.youtube.com/watch?v=hmJyWreER7A">internet</a> claims that the 3 tenets of friendships are...</div>
 
 <ul>
   <li>positivity</li>
@@ -1870,7 +1901,7 @@ If after all this, you're still here and want to buy me a coffee, that would be 
 
 <avatar>
   <div>
-    I'm pretty good at telling jokes. I'll memorize some jokes from the <a target="_blank" href="//www.rd.com/funny-stuff/short-jokes/">internet</a> and make people laugh.
+    I'm pretty good at telling jokes. I'll memorize some jokes from the <a href="//www.rd.com/funny-stuff/short-jokes/">internet</a> and make people laugh.
   </div>
   <next>Next</next>
 </avatar>
@@ -1918,7 +1949,7 @@ If after all this, you're still here and want to buy me a coffee, that would be 
 
   <div>
     40% joke lands favorably, +5 points.<br>
-    60% jake fails, -1 point.<br>
+    60% joke fails, -1 point.<br>
   </div>
 
   <next>Next</next>
@@ -2040,7 +2071,7 @@ Okay, I think that's enough for positivity. The second tenet of friendship is co
 
 <avatar image="brain.png">
   <div>
-  Just like before, you can take the expected value. Once the data is plotted as a distribution is the same as finding the balance point (where would the distribution balance on your finger if it were made of cardboard).
+  Just like before, you can take the expected value. Once the data is plotted as a distribution is the same as finding the <bold>balance point</bold> (where would the distribution balance on your finger if it were made of cardboard).
   </div>
 
   <visual-ev-click 
@@ -2659,6 +2690,28 @@ Vue.component('coin', {
   data: function(){
     return {
       flips: [], //true, false, true, true], 
+      isMouseDown: false,
+      autoFlipper: null,
+    }
+  },
+  watch: {
+    isMouseDown(){
+      if (this.isMouseDown == false){
+        // This flip handles the click case.
+        this.flip();
+        if (this.autoFlipper){
+          clearInterval(this.autoFlipper);
+        }
+      }
+
+      if (this.isMouseDown == true){
+        const this_ = this;
+        this.autoFlipper = setInterval(function(){
+          if (this_.isMouseDown == true){
+            this_.flip();
+          }
+        }, 150);        
+      }
     }
   },
   computed: {
@@ -2999,6 +3052,7 @@ Vue.component('avatar', {
 Vue.component('buton', {
   props: {
     nope: {type: String}, // Text for why the answer is wrong. Blocks progression.
+    fontSize: {type: Number},
   },
   data: function(){
     return {
@@ -3022,7 +3076,8 @@ Vue.component('buton', {
       return 'yay' in this.$attrs;
     },
     buttonStyle: function(){
-      return {'font-size': this.$slots.default[0].text.length > 40 ? '16px' : '20px'};
+      const defaultFontSize = this.$slots.default[0].text.length > 40 ?16 : 20;
+      return {'font-size': (this.fontSize || defaultFontSize) + 'px'};
     },
     showNopeText(){
       return (DEBUG || this.clickedButton) && this.isNope;
@@ -3886,7 +3941,7 @@ new Vue({
   el: '#app',
   data: {
     chapters: chapters,
-    chapterInd: DEBUG ? 7 : 0,
+    chapterInd: DEBUG ? 2 : 0,
     // Obj property additions do not update DOM, so prepopulate all the keys in the object. Or use lists.
     showTOC: false,
     hasVolume: false,
@@ -3904,6 +3959,10 @@ new Vue({
   watch: {
     chapterInd(){
     	this.playChapterAudio();
+      if (this.chapterInd == 7){
+        // scroll to the top
+        window.scrollTo(0, 0);
+      }
     },
     showTOC(){
       if (this.showTOC){
