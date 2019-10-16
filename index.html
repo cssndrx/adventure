@@ -41,6 +41,11 @@
   margin-left: 16px;  
 }
 
+.chapter-icon{
+  max-width:50px; 
+  max-height:70px;
+  margin: 0 auto;
+}
 
 h2{
   font-family: 'Itim';
@@ -82,7 +87,7 @@ li, li * {
   display: inline-block;
   position:relative;
   width: 120px;
-  height: 270px;
+  height: 300px;
   vertical-align: top;
   text-align: center;
 }
@@ -232,9 +237,8 @@ overflow-y:auto;padding-top:8px; background-color: rgb(247,247,247);">
          @click="showTOC = false; chapterInd = ind"
          class="toc-chapter"
          style="padding:4px">
-      <img :class="{'story-point-silhouette': currentChapter !== chapter}"
-          :src="'images/' + chapter.image" 
-          style="max-width:50px; max-height:90px">
+      <img :src="'images/' + chapter.image" 
+           class="chapter-icon">
       <span style="top:60px; font-size:12px; display: inline-block; margin:8px;"><bold style="font-size:12px">{{chapter.title || 'Chapter ' + ind}}</bold><br> {{chapter.description}}</span>
     </div>
   </div>
@@ -710,8 +714,8 @@ If after all this, you're still here and want to buy me a coffee, that would be 
   <next>Next</next>
 </avatar>
 
-<avatar image="potion2.png"
-    text="But if it landed tails, she would pack me a salty slimy potion to make me stronger.">
+<avatar image="potion.png"
+    text="But if it landed tails, she would pack me a gross and slimy potion to make me stronger.">
   <next>Next</next>
 </avatar>
 
@@ -734,7 +738,7 @@ If after all this, you're still here and want to buy me a coffee, that would be 
     <img src="images/tt.png" style="height: 100px">
   </div>
   <div>
-    Probability of TT = 1/2 x 1/2.
+    Probability of TT = 1/2 × 1/2.
   </div>
   <next>Next</next>
 </avatar> 
@@ -756,7 +760,7 @@ If after all this, you're still here and want to buy me a coffee, that would be 
         <img src="images/ttt.png" style="height: 150px">
       </div>
       <div>
-        Probability of TTT = 1/2 x 1/2 X 1/2.
+        Probability of TTT = 1/2 × 1/2 × 1/2.
       </div>
 
     </template>
@@ -798,9 +802,9 @@ If after all this, you're still here and want to buy me a coffee, that would be 
   text="Okay, but if I told you my mom's coin doomed me to the potion the last 100 days, what would you think I would get today?">
 
   <buton-group>
-    <buton yay>Potion</buton>
+    <buton yay>Slimy potion</buton>
     <buton nope>Normal lunch</buton>
-    <next>It's 50-50</next>
+    <next nope>It's 50-50</next>
   </buton-group>
 </avatar>
 
@@ -1082,12 +1086,12 @@ If after all this, you're still here and want to buy me a coffee, that would be 
     Elena is a very self-sufficient bird, so 80% of the times she's disappeared on me, she has been okay.
   </div>
 
-  <div>Drag the bars to show your prior belief that Elena is okay. 
+  <div>Input your prior belief that Elena is okay. 
   </div>
 
   <triple-bayes 
     :hypotheses="['OK', 'Not OK']" 
-    :config="{prior: {dist: [1, 1], correct: [4, 1], isActive: true, isDraggable:true}}">
+    :config="{prior: {dist: [1, 1], correct: [4, 1], isActive: true, isControllable:true}}">
   </triple-bayes>
 
 </avatar>
@@ -1122,12 +1126,12 @@ If after all this, you're still here and want to buy me a coffee, that would be 
   </div>
 
   <div>
-    Drag the bars to reflect the likelihood ratio of the evidence.
+    Input the likelihood ratio of the evidence.
   </div>
 
   <triple-bayes 
     :hypotheses="['OK', 'Not OK']" 
-    :config="{prior: {dist: [4, 1]}, likelihood: {dist: [1, 1], correct: [1, 8], isActive: true, isDraggable: true}}">
+    :config="{prior: {dist: [4, 1]}, likelihood: {dist: [1, 1], correct: [1, 8], isActive: true, isControllable: true}}">
   </triple-bayes>
 
 </avatar>
@@ -1169,7 +1173,7 @@ If after all this, you're still here and want to buy me a coffee, that would be 
 
   <triple-bayes 
     :hypotheses="['Ok', 'Not OK']" 
-    :config="{prior: {dist: [4, 8]}, likelihood: {dist: [1, 1], correct: [5, 9], isActive: true, isDraggable: true}, posterior: {isActive:true}}">
+    :config="{prior: {dist: [4, 8]}, likelihood: {dist: [1, 1], correct: [5, 9], isActive: true, isControllable: true}, posterior: {isActive:true}}">
   </triple-bayes>
 </avatar>
 
@@ -1261,7 +1265,7 @@ If after all this, you're still here and want to buy me a coffee, that would be 
 
   <triple-bayes 
     :hypotheses="['B guilty', 'G guilty']" 
-    :config="{prior: {dist: [1, 1], correct: [3, 7], isActive: true, isDraggable: true}, likelihood: {dist: [1, 1], correct:[4, 1], isActive:true, isDraggable: true}, posterior: {isActive: true}}">
+    :config="{prior: {dist: [1, 1], correct: [3, 7], isActive: true, isControllable: true}, likelihood: {dist: [1, 1], correct:[4, 1], isActive:true, isControllable: true}, posterior: {isActive: true}}">
 
     <template v-slot:yay>
       <buton @click="set('bayes-rule')">Next</buton>
@@ -1398,7 +1402,7 @@ If after all this, you're still here and want to buy me a coffee, that would be 
   </div> 
 
   <div>
-    <buton @click.native="$root.nextChapter()">Next chapter</buton>
+    <buton @click.native="$root.nextChapter()" :scroll="false">Next chapter</buton>
   </div>
 </avatar>
 
@@ -1430,7 +1434,7 @@ If after all this, you're still here and want to buy me a coffee, that would be 
     <img v-if="isShowingH" src="images/coin_heads.png" style="width:100px">
     <img v-if="!isShowingH" src="images/coin_tails.png" style="width:100px">
     <div ref="flip-string" style="font-size:13px; margin-left:8px; margin-right:8px" :style="flipStringStyle">{{flipString}}</div>
-    <samples-chart v-if="flips.length > 0" :xdomain="xDomain" :samples="samples" :style="chartStyle"></samples-chart>
+    <samples-chart v-if="flips.length > 0" :xdomain="xDomain" :dist="dist" :style="chartStyle"></samples-chart>
   </div>
 </script>
 
@@ -1845,7 +1849,7 @@ If after all this, you're still here and want to buy me a coffee, that would be 
 
 
 <avatar image="wizard.png"
-        text="Aw... you foiled my plan by showing Veronica how picky she was. But....">
+        text="Aw, you foiled my plan by showing Veronica how picky she was. But....">
   <ul>
     <li>You learned about independence</li>
     <li>You learned about Chain Rule</li>
@@ -2347,7 +2351,7 @@ Click where you think the balance point is...
 
 <!-- <triple-bayes 
   :hypotheses="['Nice', 'Evil']" 
-  :config="{prior: {dist: [1, 1], correct: [1, 2], isActive: true, isDraggable:true}, likelihood: {dist: [10, 1], isActive: true, isDraggable: true}, posterior: {}}"></triple-bayes> -->
+  :config="{prior: {dist: [1, 1], correct: [1, 2], isActive: true, isControllable:true}, likelihood: {dist: [10, 1], isActive: true, isControllable: true}, posterior: {}}"></triple-bayes> -->
 <script type="text/x-template" id="triple-bayes-template">
 <div style="display:inline-block" class="no-select">
 
@@ -2361,7 +2365,7 @@ Click where you think the balance point is...
   :xdomain="hypotheses"
   :xLabels="xLabels('prior')"
   :dist="arrToDist(priorArr)"
-  :isDraggable="isDraggable('prior')"
+  :isControllable="isControllable('prior')"
   :chartHeight="chartHeight" :chartWidth="chartWidth"
   :showRatio="true"
   :colors="colors"
@@ -2378,7 +2382,7 @@ Click where you think the balance point is...
   :xdomain="hypotheses"
   :xLabels="xLabels('likelihood')"
   :dist="arrToDist(likelihoodArr)"
-  :isDraggable="isDraggable('likelihood')"
+  :isControllable="isControllable('likelihood')"
   :chartHeight="chartHeight" :chartWidth="chartWidth"
   :colors="colors"
   @dist-changed="likelihoodChanged" /> 
@@ -2410,7 +2414,7 @@ Click where you think the balance point is...
   <slot name="yay"></slot>
 </div>
 
-<div v-if="(isDraggable('prior') || isDraggable('likelihood')) && !(showFeedback && allCorrect)">
+<div v-if="(isControllable('prior') || isControllable('likelihood')) && !(showFeedback && allCorrect)">
 <buton @click="submitClicked">Submit</buton>
 </div>
 
@@ -2418,11 +2422,12 @@ Click where you think the balance point is...
 </script>
 
 <script type="text/x-template" id="samples-chart-template">
-<div style="position:relative; display:inline-block" class="samples-chart no-select">
+<div style="position:relative; display:inline-block" class="samples-chart no-select normal-div"
+:class="{disabled: !isControllable}">
 
 <svg :width="chartWidth+margin.left+margin.right" 
      :height="chartHeight+margin.top+margin.bottom">
-    <g v-if="isCreated && counts" 
+    <g v-if="isCreated" 
       class="container"
       :transform="'translate(' + margin.left + ',' + margin.top + ')'">
 
@@ -2439,30 +2444,18 @@ Click where you think the balance point is...
 
       <text v-for="x in xdomain" 
         :x="xScale(x)+ xScale.bandwidth()/2 - 4"
-        :y="Math.max(0, chartHeight - yScale(counts[x]) - (isDraggable ? 8 : 2))">
-        {{ counts[x] }}
-      </text>
-
-      <text v-if="showRatio"
-        v-for="x in xdomain" 
-        :x="xScale(x)+ xScale.bandwidth()/2 - 8"
-        :y="chartHeight + 40"
-        fill="#999">
+        :y="Math.max(0, chartHeight - yScale(counts[x]) - 4)">
         {{ prob(x) }}%
       </text>
 
     </g>
 </svg>
 
-  <div v-for="x in xdomain" 
-      v-if="isDraggable && counts"
-      class="dot"
-      style="position:absolute"
-      draggable="true"
-      @dragstart="dragstart(x)"
-      @dragend="dragend"
-      @drag="drag(x, $event)"
-      :style="dotStyle(x)"></div>
+<input v-if="isCreated && isControllable"
+       v-for="x in xdomain" 
+      :key="x" 
+      v-model="counts[x]"
+      style="font-size:28px; width:50px; text-align:center" />
 
 
 </div>
@@ -2732,6 +2725,9 @@ Vue.component('coin', {
     samples(){
       return this.flips.map(this.render);
     },
+    dist(){
+      return _.assign({'H': 0, 'A': 0}, _.countBy(this.samples));
+    },
     chartStyle(){
       if (this.sideBySide){
       return {
@@ -2939,6 +2935,7 @@ Vue.component('input-box', {
       answers: [],
 
       checkedAnswer: false,
+      calledNext: false,
     }
   },
   watch:{
@@ -2970,8 +2967,9 @@ Vue.component('input-box', {
         this.$emit('yay');
 
         const pset = firstAncestorOfComponent(this, 'pset');
-        if (pset){
+        if (pset && !this.calledNext){
           pset.next();
+          this.calledNext = true;
         }
       } else {
         this.$root.play('nope');
@@ -3047,6 +3045,7 @@ Vue.component('buton', {
   props: {
     nope: {type: String}, // Text for why the answer is wrong. Blocks progression.
     fontSize: {type: Number},
+    scroll: {type: Boolean, default: true},
   },
   data: function(){
     return {
@@ -3120,7 +3119,10 @@ Vue.component('buton', {
           pset.next();
         }        
       }
-      this.$root.scrollWindow();
+
+      if (this.scroll){
+        this.$root.scrollWindow();        
+      }
 
     },
   },
@@ -3366,7 +3368,7 @@ Vue.component('triple-bayes', {
     chartWidth: {type: Number, default: 100},
 
     // Missing keys from config are not rendered.
-    // {prior: {dist: [1, 4]}, likelihood: {isActive: true, isDraggable: true, dist: [1, 10]}, posterior: {}}
+    // {prior: {dist: [1, 4]}, likelihood: {isActive: true, isControllable: true, dist: [1, 10]}, posterior: {}}
     config: {type: Object},
 
     colors: {
@@ -3466,8 +3468,8 @@ Vue.component('triple-bayes', {
     isActive(key){
       return this.conf[key] && this.conf[key].isActive;
     },
-    isDraggable(key){
-      return this.conf[key] && this.conf[key].isDraggable;      
+    isControllable(key){
+      return this.conf[key] && this.conf[key].isControllable;      
     },
     arrToDist(arr){
       return _.zipObject(this.hypotheses, arr);
@@ -3515,9 +3517,6 @@ Vue.component('samples-chart', {
     xdomain: {type: Array}, // ['H', 'T']
     xLabels: {type: Array}, // ['P(H'), 'P(T)'] optional. Defaults to x-domain if not set.
 
-    // Specify either samples or dist
-    samples: {type: Array}, // ['H', 'H', 'H', 'T']
-
     dist: {type: Object}, // {H: 3, T: 1}
         
     chartHeight: {type: Number, default: 100},
@@ -3530,7 +3529,7 @@ Vue.component('samples-chart', {
     },
 
     showRatio: {type: Boolean, default: false}, 
-    isDraggable: {type: Boolean, default: false}, 
+    isControllable: {type: Boolean, default: false}, 
 
     // Minimum number of bars in y direction.
     minNumInY: {type: Number, default: 15},
@@ -3575,17 +3574,12 @@ Vue.component('samples-chart', {
   data: function(){
     return {
       isCreated: false,
-      counts: null,
-      draggedDot: null,
-
+      counts: {},
     }
-  },
-  created: function(){
-    // Add domains
-    this.isCreated = true;
   },
   mounted: async function() {
     this.countsFromProps();
+    this.isCreated = true;
 
     // Add the axis
     // Hack: for some reason axis needs to get added after a delay, or it doesn't show up.
@@ -3598,11 +3592,17 @@ Vue.component('samples-chart', {
     chart.append('g').attr('transform', 'translate(0,' + this.chartHeight + ')').call(xAxis);
   },
   watch: {
-    samples(){
-      this.countsFromProps();
+    dist: {
+      handler(){
+        this.countsFromProps();        
+      },
+      deep: true
     },
-    dist(){
-      this.countsFromProps();
+    counts: {
+      handler(){
+        this.$emit('dist-changed', {dist: _.mapValues(this.counts, x => Number(x))});  
+      },
+      deep: true
     },
   },
   methods: {
@@ -3610,56 +3610,14 @@ Vue.component('samples-chart', {
       const total = _.sum(_.values(this.counts));
       return this.$root.roundTo(this.counts[x]/total*100, 0);
     },
-    dragstart(x){
-      this.draggedDot = x;
-    },
-    dragend(){
-      this.draggedDot = null; 
-    },
     countsFromProps(){
+      // Can't modify props, so we reactively copy it here.
       if (this.dist){
-        this.counts = _.cloneDeep(this.dist);
-      } else {
-        const bins = _.groupBy(this.samples);
-        this.counts = _.zipObject(this.xdomain, this.xdomain.map(function(x){
-            return x in bins ? bins[x].length : 0;
-          }));
-      }
+        for (var key in this.dist){
+          Vue.set(this.counts, key, this.dist[key]);
+        }        
+      }      
     },
-    dotStyle(x){
-      return {
-        left: this.xScale(x)+ this.xScale.bandwidth()/2+ 4 + 'px', 
-        bottom: this.yScale(this.counts[x]) + 24 + 'px',
-        'background-color': this.colors.dot,
-      };
-    },
-    drag(x, event){
-      //console.log('dragging');
-      //debugger;
-      const distanceFromTop = this.getRelativeMouseY(event);
-      if (distanceFromTop < 0){
-        return;
-      }
-      const height = this.chartHeight - distanceFromTop;
-
-      const numBars = Math.max(1, Math.floor(height / this.yScaleBandwidth));
-
-      const isNewNumBars = this.counts[x] && this.counts[x] !== numBars;
-      Vue.set(this.counts, x, numBars);
-
-      if (isNewNumBars){
-          this.$emit('dist-changed', {dist: this.counts});
-      }
-    },
-    getRelativeMouseY: function(event){
-      // Find the parent element to compute relative mouse coords.
-      var refElement = event.target;
-      while (refElement.className !== 'samples-chart'){
-        refElement = refElement.parentElement;
-      }
-      return event.clientY - refElement.getBoundingClientRect().y;
-    },
-
   },
   template: '#samples-chart-template'
 });
@@ -3740,7 +3698,7 @@ function makeComponent(componentName){
     computed: {
       // 'fakeout1': [false, true]
       problemToCorrectness(){
-        return _.groupBy(this.problemTuples, d => d[0]);
+        return _.mapValues(_.groupBy(this.problemTuples, d => d[0]), arr => arr.map(d => d[1]));
       }
     },
     mounted: async function(){
@@ -3812,6 +3770,9 @@ function makeComponent(componentName){
 Vue.component('next', {
   methods: {
     next(){
+      if ('nope' in this.$attrs){
+        this.$root.play('nope');
+      }
       const pset = firstAncestorOfComponent(this, 'pset');
       if (pset){
         pset.next();
@@ -3880,7 +3841,7 @@ const chapters = [
 {
   component: 'coin-flips',
   description: 'Independent events',
-  image: 'potion2.png',
+  image: 'potion.png',
 },
 {
   component: 'wizard-flips',
@@ -3987,7 +3948,7 @@ new Vue({
     formatPct: formatPct,
     roundTo: roundTo,
     playChapterAudio(){
- 	  this.silenceClips();
+ 	    this.silenceClips();
       this.playLoop(this.chapters[this.chapterInd].component);
     },
     nextChapter: async function(){
