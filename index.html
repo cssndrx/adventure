@@ -22,6 +22,7 @@
 <script src="js/lodash.min.js"></script>
 <script src="js/d3.v5.min.js"></script>
 <script src="js/vue.min.js"></script>
+<script src="js/howler.min.js"></script>
 
 <style>
 
@@ -206,7 +207,6 @@ button{
 
 
 <div id="app" style="position:relative;left: 60px;width:calc(100% - 60px); margin-top:32px" @click="mainClick($event)">
-
   <div ref="toc"
   style="width:60px;position: fixed; top:0px; left:0px; height: 100%; text-align: center; background-color: #eee"
   class="normal-div">
@@ -2566,7 +2566,9 @@ const bus = new Vue();
 
 
 
-var sounds = {
+const sneakySnitch = new Howl({src: ['sounds/sneaky-snitch-by-kevin-macleod_edit.wav'], loop: true});
+
+const sounds = {
   // 'coin': {clip: new Audio('sounds/gold1.wav')},
   'heads': {clip: new Audio('sounds/gold0.wav')},
   'tails': {clip: new Audio('sounds/gold1.wav')},
@@ -2584,15 +2586,24 @@ var sounds = {
   'close': {clip: new Audio('sounds/swish1.wav')},
 
 
-	'intro-scene': {clip: new Audio('sounds/sneaky-snitch-by-kevin-macleod_edit.wav')},  
-	'coin-flips': {clip: new Audio('sounds/sneaky-snitch-by-kevin-macleod_edit.wav')},
-	'wizard-flips': {clip: new Audio('sounds/honey-tree.wav')},
-	'chain-rule': {clip: new Audio('sounds/wholesome-by-kevin-macleod_edit.wav')},
-	'ev-story': {clip: new Audio('sounds/extreme-hardcore-death-metal-loop_edit.wav')},
-	'intro-to-pvalues': {clip: new Audio('sounds/comma-flaw_edit.wav')},
-	'bayes-rule': {clip: new Audio('sounds/find-my-body-please_edit.wav')},
-	'thanks': {clip: new Audio('sounds/sneaky-snitch-by-kevin-macleod_edit.wav')},
+	'intro-scene': sneakySnitch,  
+	'coin-flips': sneakySnitch,
+	'wizard-flips': new Howl({src: ['sounds/honey-tree.wav'], loop:true}),
+  // 'chain-rule': new Howl({src: ['sounds/wholesome-by-kevin-macleod_edit.wav'], loop:true}),
+  'chain-rule': new Howl({src: ['sounds/rusted-maid.wav'], loop:true}),
+
+  'ev-story': new Howl({src: ['sounds/extreme-hardcore-death-metal-loop_edit.wav'], loop:true}),
+  'intro-to-pvalues': new Howl({src: ['sounds/comma-flaw_edit.wav'], loop:true}),
+  'bayes-rule': new Howl({src: ['sounds/find-my-body-please_edit.wav'], loop:true}),
+	'thanks': sneakySnitch,
 };
+
+const volume = {
+  'chain-rule': 0.3,
+  'ev-story': 0.7,
+}
+
+Howler.volume(0.5);
 
 
 const jokes = [
@@ -3308,7 +3319,6 @@ Vue.component('visual-ev-click', {
        if(!this.isMounted){
           return;        
        }
-       console.log('here');
        const d = this.$refs['distribution'];
 
        return {
@@ -3726,12 +3736,12 @@ function makeComponent(componentName){
     methods: {
       addCorrectness(key, isCorrect){
         this.problemTuples.push([key, isCorrect]);
-        console.log('logging ' + key + ': ' + isCorrect);
+//        console.log('logging ' + key + ': ' + isCorrect);
       },
 
       // Got the correct answer once.
       got: function(key){
-        console.log('calling "got" for ' + key);
+//        console.log('calling "got" for ' + key);
         // Return the latest value
         if (this.problemToCorrectness[key]){
           var answers = this.problemToCorrectness[key];
@@ -3752,7 +3762,7 @@ function makeComponent(componentName){
       nextJoke(params){
         this.positivityPoints += params.payoff;
         this.jokeInd++;
-        console.log(this.jokeInd + ' ' + this.jokes.length);
+//        console.log(this.jokeInd + ' ' + this.jokes.length);
         if (this.jokeInd >= this.jokes.length){
           this.next();
         }
@@ -3907,7 +3917,7 @@ new Vue({
     elapsedSeconds: null,
 
 
-    activeClips: [],
+    activeLoops: [],
     // Doesn't need to be reactive so this is OK.
     soundToCount: {},
   },
@@ -3948,7 +3958,7 @@ new Vue({
     formatPct: formatPct,
     roundTo: roundTo,
     playChapterAudio(){
- 	    this.silenceClips();
+ 	    this.silenceLoops();
       this.playLoop(this.chapters[this.chapterInd].component);
     },
     nextChapter: async function(){
@@ -3988,16 +3998,19 @@ new Vue({
       if (!sounds[soundName]){
         return;
       }
-      const clip = sounds[soundName].clip;
-      // https://stackoverflow.com/questions/7330023/gapless-looping-audio-html5
-      clip.addEventListener('timeupdate', function() {
-      var buffer = .14;
-        if(this.currentTime > this.duration - buffer){
-            this.currentTime = 0;
-            this.play()
-        }}, false);
-      clip.play();
-      this.activeClips.push(clip);
+      const loop = sounds[soundName];
+      if (this.activeLoops.indexOf(loop) == -1){
+        loop.play(); 
+        loop.fade(0, volume[soundName] || 1, 1000);
+        this.activeLoops.push(loop);
+      }
+    },
+    silenceLoops(){
+      this.activeLoops.forEach(function(loop){
+        loop.fade(1, 0, 1000); 
+        loop.stop();
+      });
+      this.activeLoops = [];
     },
     _playClip(clip){
       clip.play().catch(function(error){
@@ -4042,15 +4055,12 @@ new Vue({
       });
     },
     toggleVolume(){
-		this.hasVolume = !this.hasVolume;
-		if (this.hasVolume){
-			this.playChapterAudio();
-		} else {
-			this.silenceClips();			
-		}
-    },
-    silenceClips(){
-    	this.activeClips.forEach(clip => clip.pause());
+  		this.hasVolume = !this.hasVolume;
+  		if (this.hasVolume){
+  			this.playChapterAudio();
+  		} else {
+  			this.silenceLoops();			
+  		}
     },
     mainClick(event){
       //console.log('click');
@@ -4067,4 +4077,5 @@ new Vue({
 
   } // end methods
 });
+
 </script>
