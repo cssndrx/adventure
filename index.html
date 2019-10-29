@@ -1,7 +1,7 @@
 <!doctype html>
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<!--<meta name="viewport" content="width=device-width, initial-scale=1"> -->
 
 <base target="_blank">
 
@@ -196,6 +196,15 @@ button{
 .disabled, .disabled * { 
   pointer-events: none;
   user-select: none; 
+}
+
+/*.unused {
+  color: red;
+  opacity: 0.5;
+}*/
+
+.disabled .highlight{
+  font-weight: bold;
 }
 
 
@@ -938,7 +947,7 @@ If after all this, you're still here and want to buy me a coffee, that would be 
 
 
 <avatar 
-  text="HAHA yes, that coin always says HAHA. It lands on heads 50% of the time, but it's unusual because I know what's coming next. Genius, isn't it??">
+  text="Good find (or lucky guess)! That coin always says HAHA. It lands on heads 50% of the time, but it's unusual because I know what's coming next. Genius, isn't it??">
 
   <next>Next</next>
 </avatar>
@@ -970,7 +979,7 @@ If after all this, you're still here and want to buy me a coffee, that would be 
 
 
 <avatar 
-  text="You got it. Interesting isn't it. This coin never has long streaks of one thing or the other. Humans tend to generate 'random' sequences like this. But they aren't random, because nature doesn't mind having long streaks.">
+  text="Yes, Coin 2 never has long streaks of one thing or the other. Humans tend to generate 'random' sequences like this. But they aren't random, because nature doesn't mind having long streaks.">
 
   <next>Next</next>
 </avatar>
@@ -1439,7 +1448,7 @@ If after all this, you're still here and want to buy me a coffee, that would be 
        class="coin normal-div no-select" style="position:relative">
     <img v-if="isShowingH" src="images/coin_heads.png" style="width:100px">
     <img v-if="!isShowingH" src="images/coin_tails.png" style="width:100px">
-    <div ref="flip-string" style="font-size:13px; margin-left:8px; margin-right:8px" :style="flipStringStyle">{{flipString}}</div>
+    <div ref="flip-string" style="font-size:13px; margin-left:8px; margin-right:8px" :style="flipStringStyle">{{flipString ? flipString.length + ' flips ' : ''}} {{flipString}}</div>
     <samples-chart v-if="flips.length > 0" :xdomain="xDomain" :dist="dist" :style="chartStyle"></samples-chart>
   </div>
 </script>
@@ -1628,9 +1637,9 @@ If after all this, you're still here and want to buy me a coffee, that would be 
 
   <div class="extra-info">Facts from before:
   <ul>
-    <li>P(tall) = 1/2</li>
-    <li>P(beard) = 1/4</li>
-    <li>P(beard | tall) = 1/3</li>
+    <li class="highlight">P(tall) = 1/2</li>
+    <li class="unused">P(beard) = 1/4</li>
+    <li class="highlight">P(beard | tall) = 1/3</li>
   </ul>
   </div>
 
@@ -1740,12 +1749,12 @@ If after all this, you're still here and want to buy me a coffee, that would be 
   Facts from before:
   <ul>
     <li>P(tall) = 1/2</li>
-    <li>P(beard) = 1/4</li>
+    <li class="unused">P(beard) = 1/4</li>
     <li>P(beard|tall) = 1/3</li>
-    <li>You calculated P(beard AND tall) = 1/6</li>
-    <li>P(tattoos) = 1/5</li>
-    <li>P(tattoos|tall) = 1/6</li>
-    <li>P(tattoos|tall AND beard) = 1/7</li>
+    <li class="highlight">You calculated P(beard AND tall) = 1/6</li>
+    <li class="unused">P(tattoos) = 1/5</li>
+    <li class="unused">P(tattoos|tall) = 1/6</li>
+    <li class="highlight">P(tattoos|tall AND beard) = 1/7</li>
   </ul>
   </div>
 
@@ -1771,16 +1780,16 @@ If after all this, you're still here and want to buy me a coffee, that would be 
     <div class="extra-info">
     Facts from before:
     <ul>
-      <li>P(tall) = 1/2</li>
-      <li>P(beard) = 1/4</li>
-      <li>P(beard|tall) = 1/3</li>
-      <li>You calculated P(beard AND tall) = 1/6</li>
-      <li>P(tattoos) = 1/5</li>
-      <li>P(tattoos|tall) = 1/6</li>
-      <li>P(tattoos|tall AND beard) = 1/7</li>
-      <li>You calculated P(beard, tall, tattoos) = 1/42</li>
-      <li>P(around her age | tall, beard, tattoos) = 1/5</li>
-      <li>P(single | tall, beard, tattoos, around her age) = 1/2</li>
+      <li class="unused">P(tall) = 1/2</li>
+      <li class="unused">P(beard) = 1/4</li>
+      <li class="unused">P(beard|tall) = 1/3</li>
+      <li class="unused">You calculated P(beard AND tall) = 1/6</li>
+      <li class="unused">P(tattoos) = 1/5</li>
+      <li class="unused">P(tattoos|tall) = 1/6</li>
+      <li class="unused">P(tattoos|tall AND beard) = 1/7</li>
+      <li class="highlight">You calculated P(beard, tall, tattoos) = 1/42</li>
+      <li class="highlight">P(around her age | tall, beard, tattoos) = 1/5</li>
+      <li class="highlight">P(single | tall, beard, tattoos, around her age) = 1/2</li>
     </ul>
     </div>
 
@@ -1812,7 +1821,7 @@ If after all this, you're still here and want to buy me a coffee, that would be 
 
 <avatar>
   <div>
-    Even though each individual criteria may not seem picky, requiring that a monster have all the traits leaves Veronica with a very small dating pool. Ha-ha!
+    Even though each individual criterion may not seem picky, requiring that a monster have all the traits leaves Veronica with a very small dating pool. Ha-ha!
   </div>
   <next>Next</next>
 </avatar>
@@ -3859,7 +3868,7 @@ Vue.component('pset', {
 
       // grey out previous indices
       for (var i=0; i<this.ind; i++){
-        this.elms[i].style.opacity = 0.5;        
+        this.elms[i].style.opacity = 0.5;   
         this.elms[i].classList.add('disabled');  
       }
 
