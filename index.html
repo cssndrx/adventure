@@ -5,7 +5,7 @@
 
 <base target="_blank">
 
-<title>Weird and Not Scary Guide to Statistics</title>
+<title>Totally Not Scary Guide to Statistics</title>
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-59181255-1"></script>
 <script>
@@ -226,7 +226,7 @@ button{
       </div>
     </div>
 
-    <span class="sideways handwriting" style="font-weight: 700; white-space: nowrap">Weird and Not Scary Guide to Statistics</span>
+    <span class="sideways handwriting" style="font-weight: 700; white-space: nowrap">Totally Not Scary Guide to Statistics</span>
 
   </div> 
 
@@ -575,7 +575,7 @@ overflow-y:auto;padding-top:8px; background-color: rgb(247,247,247);">
 <script type="text/x-template" id="intro-scene-template">
 <div style="width:600px; margin: 0 auto; text-align:center;">
 
-  <div class="handwriting" style="font-size:48px;">Weird and Not Scary Guide to Statistics</div>
+  <div class="handwriting" style="font-size:48px;">Totally Not Scary Guide to Statistics</div>
 
   <img src="images/wizard.png" style="width:280px">
 
@@ -616,11 +616,13 @@ That's all the chapters for now, but the story may continue... Afterall, the wiz
 
 
 <p>
-If you liked this story, you might like:
+If you liked this story, you might like
 
 <ul>
 <li>My other story about thinking rationally <a href="//cassandraxia.com/cogbiases/">Adventures in Cognitive Biases</a></li>
+
 <li>A much more comprehensive text covering much more statistics <a href="https://www.amazon.com/gp/product/1446210456/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=1446210456&linkCode=as2&tag=cassandraxia-20&linkId=38c49070a217a5b8b289553486d6d721">An Adventure in Statistics: The Reality Enigma</a><img src="//ir-na.amazon-adsystem.com/e/ir?t=cassandraxia-20&l=am2&o=1&a=1446210456" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" /></li>
+
 <li>A very enlightening book on frequentist statistics used by real scientists <a href="https://www.amazon.com/gp/product/0321629302/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=0321629302&linkCode=as2&tag=cassandraxia-20&linkId=8acaf4f7bf04f2ff7ac0341e952c9670">What is a p-value anyway? 34 Stories to Help You Actually Understand Statistics</a><img src="//ir-na.amazon-adsystem.com/e/ir?t=cassandraxia-20&l=am2&o=1&a=0321629302" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" /></li>
 </ul>
 
@@ -869,7 +871,7 @@ If after all this, you're still here and want to buy me a coffee, that would be 
   text="Of these 3 coins, 2 are fair and 1 is unusual. Let's see if you can find the unusual one.">
 
   <div class="smaller-children">
-    <div>Click the coins a bunch of times to flip them. When you have enough info, submit your guess.</div>
+    <div>Click (or hold down) the coins to flip them. When you have enough info, submit your guess.</div>
   </div>
 
   <coin></coin>
@@ -910,7 +912,7 @@ If after all this, you're still here and want to buy me a coffee, that would be 
 
 
   <div class="smaller-children">
-    <div>Click the coins to flip them. When you have enough info, submit your guess.</div>
+    <div>Click (or hold down) the coins to flip them. When you have enough info, submit your guess.</div>
   </div>
 
   <coin></coin>
@@ -942,7 +944,7 @@ If after all this, you're still here and want to buy me a coffee, that would be 
   text="OKOK last one. Find the unusual coin.">
 
   <div class="smaller-children">
-    <div>Click the coins to flip them. When you have enough info, submit your guess.</div>
+    <div>Click (or hold down) the coins to flip them. When you have enough info, submit your guess.</div>
   </div>
 
   <coin></coin>
@@ -2353,7 +2355,7 @@ Click where you think the balance point is...
   :hypotheses="['Nice', 'Evil']" 
   :config="{prior: {dist: [1, 1], correct: [1, 2], isActive: true, isControllable:true}, likelihood: {dist: [10, 1], isActive: true, isControllable: true}, posterior: {}}"></triple-bayes> -->
 <script type="text/x-template" id="triple-bayes-template">
-<div style="display:inline-block" class="no-select">
+<div style="display:inline-block">
 
 <div v-if="hasKey('prior')" class="bayes-comp" :style="compStyle('prior')">
   <div class="label normal-div">
@@ -2367,7 +2369,6 @@ Click where you think the balance point is...
   :dist="arrToDist(priorArr)"
   :isControllable="isControllable('prior')"
   :chartHeight="chartHeight" :chartWidth="chartWidth"
-  :showRatio="true"
   :colors="colors"
   @dist-changed="priorChanged" /> 
 </div>
@@ -2398,7 +2399,6 @@ Click where you think the balance point is...
   :xLabels="xLabels('posterior')"
   :dist="posteriorDist"
   :chartHeight="chartHeight" :chartWidth="chartWidth"
-  :showRatio="true"
   :colors="colors"
   ref="posterior-samples-chart" /> 
 </div>
@@ -2425,7 +2425,9 @@ Click where you think the balance point is...
 <div style="position:relative; display:inline-block" class="samples-chart no-select normal-div"
 :class="{disabled: !isControllable}">
 
-<svg :width="chartWidth+margin.left+margin.right" 
+<!-- discrete -->
+  <svg v-if="view=='discrete'"
+     :width="chartWidth+margin.left+margin.right" 
      :height="chartHeight+margin.top+margin.bottom">
     <g v-if="isCreated" 
       class="container"
@@ -2450,6 +2452,34 @@ Click where you think the balance point is...
 
     </g>
 </svg>
+
+<!-- continuous -->
+ <svg v-if="view=='continuous'"
+     :width="chartWidth+margin.left+margin.right" 
+     :height="chartHeight+margin.top+margin.bottom">
+    <g v-if="isCreated" 
+      class="container"
+      :transform="'translate(' + margin.left + ',' + margin.top + ')'">
+
+        <g v-for="x in xdomain">
+          <rect
+          :x="xScale(x)"
+          :y="chartHeight - yScale(counts[x])"
+          :width="xScale.bandwidth()"
+          :height="yScale(counts[x])"
+          :fill="colors.bar || '#D1D9E0'"/>
+        </g>
+
+
+      <text v-for="x in xdomain" 
+        :x="xScale(x)+ xScale.bandwidth()/2 - 4"
+        :y="Math.max(0, chartHeight - yScale(counts[x])) - 4">
+        {{ prob(x) }}%
+      </text>
+
+    </g>
+</svg>
+
 
 <input v-if="isCreated && isControllable"
        v-for="x in xdomain" 
@@ -2557,7 +2587,7 @@ Click where you think the balance point is...
 
 
 <script>
-var DEBUG = false;
+var DEBUG = true;
 
 
 const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
@@ -3534,15 +3564,14 @@ Vue.component('samples-chart', {
     margin: {
       type: Object, 
       default: function(){
-        return {top: 10, right: 10, bottom: 40, left: 10};
+        return {top: 20, right: 10, bottom: 40, left: 10};
       }
     },
 
-    showRatio: {type: Boolean, default: false}, 
     isControllable: {type: Boolean, default: false}, 
 
     // Minimum number of bars in y direction.
-    minNumInY: {type: Number, default: 15},
+    minNumInY: {type: Number, default: 10},
 
     colors: {
       type: Object, 
@@ -3561,28 +3590,28 @@ Vue.component('samples-chart', {
     xText(){
       return this.xLabels || this.xdomain;
     },
-    numBarsInY(){
-      if (!this.samples){
-        return this.minNumInY;
-      }
 
-      const bins = _.groupBy(this.samples);
-      const maxBinLength = _.max(_.values(bins).map(arr => arr.length));
-      return Math.max(this.minNumInY, maxBinLength);
+    maxBinLength(){
+      return Math.max.apply(this, _.values(this.dist));
+    },
+
+    numBarsInY(){
+      return Math.max(this.minNumInY, this.maxBinLength);
     },
     yScale(){
       return d3.scaleLinear()
           .domain([0, this.numBarsInY]).range([0, this.chartHeight]);
     },
     yScaleBandwidth(){
-      return this.chartHeight / this.numBarsInY;
+      return this.chartHeight / this.numBarsInY; 
     },
-    yPadBetweenBars(){
-      return this.numBarsInY < 40 ? 2 : 0;
+    view(){
+      return this.maxBinLength < this.minNumInY ? 'discrete' : 'continuous';
     }
   },
   data: function(){
     return {
+      yPadBetweenBars: 2,
       isCreated: false,
       counts: {},
     }
@@ -3909,7 +3938,7 @@ new Vue({
     chapterInd: DEBUG ? 2 : 0,
     // Obj property additions do not update DOM, so prepopulate all the keys in the object. Or use lists.
     showTOC: false,
-    hasVolume: true,
+    hasVolume: false,
 
     isScrolling: false,
 
