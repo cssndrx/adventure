@@ -900,7 +900,11 @@ If after all this, you're still here and want to buy me a coffee, that would be 
 
   <div>
      What is the weakest bias with which you can easily tell that the coin is biased?
-   </div>
+  </div>
+
+  <div>
+    On weakly biased coins, how many flips do you need to see that it's unfair?
+  </div>
 
   <biased-coin-machine></biased-coin-machine>
   <next>Done with this</next> 
@@ -1444,7 +1448,7 @@ If after all this, you're still here and want to buy me a coffee, that would be 
 <script type="text/x-template" id="biased-coin-machine-template">
 <div>
 
-  <div class="smaller-children">Adjust the bias, and click coin to flip.</div>
+  <div class="smaller-children">Adjust the bias, and click (or hold down) on the coin to flip.</div>
 
   <div>
     <span class="smaller-children">Lands H with <bold>{{$root.formatPct(bias)}}</bold> chance:</span>
@@ -2587,7 +2591,7 @@ Click where you think the balance point is...
 
 
 <script>
-var DEBUG = true;
+var DEBUG = false;
 
 
 const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
@@ -3856,10 +3860,12 @@ Vue.component('pset', {
       // grey out previous indices
       for (var i=0; i<this.ind; i++){
         this.elms[i].style.opacity = 0.5;        
+        this.elms[i].classList.add('disabled');  
       }
 
       // make current ind, fully visible
-      this.elms[this.ind].style.display = 'block';
+//      this.elms[this.ind].style.display = 'block';
+      this.elms[this.ind].style.display = 'inherit';
 
       this.$root.report(this.ind);
 
