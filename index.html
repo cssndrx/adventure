@@ -48,6 +48,16 @@
   margin: 0 auto;
 }
 
+.tree-header{
+  width: 80px;
+  font-size: 12px;
+  display: inline-block;
+  text-align: center;
+  background-color: black;
+  font-weight: bold;
+  color: white;
+}
+
 h2{
   font-family: 'Itim';
   font-size: 36px;  
@@ -95,12 +105,6 @@ li, li * {
 .bayes-comp .label *{
   font-size: 14px;
   text-align: center;
-}
-.bayes-comp .rainbow{
-  position:absolute; 
-  left: 8px;
-  width:90%; 
-  opacity:0.5
 }
 
 .dot{
@@ -207,6 +211,26 @@ button{
   font-weight: bold;
 }
 
+svg *{
+    font-family: 'Itim';
+}
+svg .emoji-outcome{
+  font-size: 30px;
+}
+
+svg .emoji-branch{
+  font-size: 16px;
+}
+
+svg .outcome{
+  font-size: 30px;
+}
+
+
+.shrink .emoji-outcome{
+  font-size: 20px;
+}
+
 
 </style>
 </head>
@@ -262,7 +286,7 @@ overflow-y:auto;padding-top:8px; background-color: rgb(247,247,247);">
 <script type="text/x-template" id="intro-to-pvalues-template">
 <div>
 
-<h2>Chapter 5</h2>
+<h2>Chapter 5: P-Values</h2>
 
 <pset>
 
@@ -632,7 +656,7 @@ If you liked this story, you might like
 
 <li>A much more comprehensive text covering much more statistics <a href="https://www.amazon.com/gp/product/1446210456/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=1446210456&linkCode=as2&tag=cassandraxia-20&linkId=38c49070a217a5b8b289553486d6d721">An Adventure in Statistics: The Reality Enigma</a><img src="//ir-na.amazon-adsystem.com/e/ir?t=cassandraxia-20&l=am2&o=1&a=1446210456" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" /></li>
 
-<li>A very enlightening book on frequentist statistics used by real scientists <a href="https://www.amazon.com/gp/product/0321629302/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=0321629302&linkCode=as2&tag=cassandraxia-20&linkId=8acaf4f7bf04f2ff7ac0341e952c9670">What is a p-value anyway? 34 Stories to Help You Actually Understand Statistics</a><img src="//ir-na.amazon-adsystem.com/e/ir?t=cassandraxia-20&l=am2&o=1&a=0321629302" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" /></li>
+<li>A very enlightening book on the parts of frequentist statistics that are used by real scientists <a href="https://www.amazon.com/gp/product/0321629302/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=0321629302&linkCode=as2&tag=cassandraxia-20&linkId=8acaf4f7bf04f2ff7ac0341e952c9670">What is a p-value anyway? 34 Stories to Help You Actually Understand Statistics</a><img src="//ir-na.amazon-adsystem.com/e/ir?t=cassandraxia-20&l=am2&o=1&a=0321629302" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" /></li>
 </ul>
 
 </p>
@@ -709,31 +733,109 @@ If after all this, you're still here and want to buy me a coffee, that would be 
 </script>
 
 
+<script type="text/x-template" id="ev-tree-template">
+<svg height="100" width="90">
+   <line x1="0" y1="55" x2="45" y2="20" style="stroke:#ddd;stroke-width:2" />
+   <line x1="0" y1="55" x2="45" y2="90" style="stroke:#ddd;stroke-width:2" />
+
+   <text class="outcome" x="50" y="30">{{prettyString(outcomes[0].payoff)}}</text>
+   <text class="outcome" x="50" y="100">{{prettyString(outcomes[1].payoff)}}</text>
+
+   <text class="branch" x="10" y="30" >{{$root.formatPct(outcomes[0].certainty)}}</text>
+   <text class="emoji-branch" x="28" y="50">{{outcomes[0].emoji}}</text>
+
+   <text class="emoji-branch" x="28" y="74">{{outcomes[1].emoji}}</text>
+   <text class="branch" x="10" y="86">{{$root.formatPct(outcomes[1].certainty)}}</text>
+</svg>
+</script>
+
+
+<script type="text/x-template" id="tree-node-template">
+  <g>
+   <line x1="0" :y1="height/2" :x2="lineX"" :y2="linePadding" style="stroke-width:2"
+   :style="{stroke: color.indexOf('0') > -1 ? 'black': '#eee'}" />
+
+   <line x1="0" :y1="height/2" :x2="lineX" :y2="height-linePadding" style="stroke-width:2"
+   :style="{stroke: color.indexOf('1') > -1 ? 'black': '#eee'}" />
+
+   <text class="emoji-outcome" :x="lineX+emojiPadding" :y="emojiHeight">🍱</text>
+   <text class="emoji-outcome" :x="lineX+emojiPadding" :y="height-10">🥛</text>
+  </g>
+</script>
+
+<!-- 
+
+2 day tree
+  <tree-node transform="translate(0, 150)"></tree-node>
+  <tree-node transform="translate(80,90)"></tree-node>
+  <tree-node transform="translate(80,200)"></tree-node>
+
+3 day tree
+-->
+<script type="text/x-template" id="tree-diagram-template">
+
+<div>
+<svg height="150" width="80" style="border: 1px solid red">
+  <tree-node :height="150" :width="80"></tree-node>
+</svg>
+
+
+  <svg height="210" width="180">
+    <g transform="translate(0,-90)">
+      <tree-node color="1" transform="translate(0, 150)"></tree-node>
+      <tree-node color="" transform="translate(80,90)"></tree-node>
+      <tree-node color="1" transform="translate(80,200)"></tree-node>
+    </g>
+  </svg>
+
+</div>
+
+</script>
+
+
 <script type="text/x-template" id="coin-flips-template">
 <div>
-<h2>Chapter 1</h2>
+<h2>Chapter 1: Independent Events</h2>
 <pset>
 
+
 <avatar
-  text="I've been learning about statistics my whole life. When I was a kid wizard, it was relevant to me because it was how my mom would pack my lunch.">
+  text="I am a statistics wizard and I will take you through this Totally Not Scary Guide to Statistics.">
+  <next>Next</next>
+</avatar>
+
+
+<avatar
+  text="I've been learning about statistics my whole life. It was even relevant to me as kid, because it was how my mom would pack my lunch.">
   <next>Next</next>
 </avatar>
 
 
 <avatar 
-  text="My mom would flip a (presumably) fair coin, and if it would land heads she would pack me a lunch like a normal mother.">
+  text="My mom would flip a (presumably) fair coin, and if it would land heads she would pack me lunch 🍱 like a normal mother.">
   <next>Next</next>
 </avatar>
 
-<avatar image="potion.png"
-    text="But if it landed tails, she would pack me a gross and slimy potion to make me stronger.">
+<avatar image="milk.png"
+    text="But if it landed tails, she would pack me a gross white potion 🥛 to make me stronger.">
   <next>Next</next>
 </avatar>
 
 <avatar key="HH"
-  text="What is the probability that after my mom flips a fair coin twice, I'll be drinking the slimy potion two days in a row?">
+  text="What is the probability that after my mom flips a fair coin twice, I'll be drinking the gross potion 🥛 two days in a row?">
+  <div>
+    <div class="tree-header">Day 1</div>
+    <div class="tree-header">Day 2</div>
+  </div>
+  <svg height="210" width="180">
+    <g transform="translate(0,-90)">
+      <tree-node color="1" transform="translate(0, 150)"></tree-node>
+      <tree-node color="" transform="translate(80,90)"></tree-node>
+      <tree-node color="1" transform="translate(80,200)"></tree-node>
+    </g>
+  </svg> <span style="font-size:32px; position:relative:-20px">?</span>
 
-  <buton nope="1/2 is the probability of tossing a single coin and getting T. Getting two tails in a row is rarer than that.">1/2</buton>
+  <buton nope="1/2 is the probability of tossing a single coin and getting T. Getting two tails is rarer, but how much rarer?">1/2</buton>
   <buton yay>1/4</buton>
 </avatar>
 
@@ -746,9 +848,6 @@ If after all this, you're still here and want to buy me a coffee, that would be 
     To calculate the probability that multiple independent events will occur together, you can multiply them.
   </div>
   <div>
-    <img src="images/tt.png" style="height: 100px">
-  </div>
-  <div>
     Probability of TT = 1/2 × 1/2.
   </div>
   <next>Next</next>
@@ -757,33 +856,46 @@ If after all this, you're still here and want to buy me a coffee, that would be 
 <avatar key="HHH"
   text="What is the probability that after my mom tosses a (presumably) fair coin three times, I'll end up drinking the potion three days in a row?">
 
+  <div>
+    <div class="tree-header">Day 1</div>
+    <div class="tree-header">Day 2</div>
+    <div class="tree-header">Day 3</div>
+  </div>
+
+  <svg height="420" width="300">
+
+    <g transform="translate(0,-30)">
+      <tree-node color="1" transform="translate(0, 150)" :height="200" :width="80"></tree-node>
+
+      <g transform="translate(84, -60)">
+        <tree-node color="" transform="translate(0, 150)"></tree-node>
+        <tree-node color="" transform="translate(80,90)"></tree-node>
+        <tree-node color="" transform="translate(80,200)"></tree-node>
+      </g>
+
+
+      <g transform="translate(84, 150)">
+        <tree-node color="1" transform="translate(0, 150)"></tree-node>
+        <tree-node color="" transform="translate(80,90)"></tree-node>
+        <tree-node color="1" transform="translate(80,200)"></tree-node>
+      </g>
+    </g>
+
+  </svg>
+
   <buton-group>
     <buton nope>1/2</buton>
     <buton nope>1/3</buton>
     <buton yay>1/8</buton>
-
-    <template v-slot:hint>
-      <div>
-        By the same logic as before, coin flips are independent events (i.e. a result doesn't affect the next result). The probabilities of the joint event: seeing X AND Y can be combined with multiplication. 
-      </div>
-
-      <div>
-        <img src="images/ttt.png" style="height: 150px">
-      </div>
-      <div>
-        Probability of TTT = 1/2 × 1/2 × 1/2.
-      </div>
-
-    </template>
   </buton-group>
 </avatar>
 
 <avatar key="HHHHH"
-  text="If mom's (presumably) fair coin gave me the slimy potion for the last five days, am I more likely to get the potion today OR a normal lunch today?">
+  text="If mom's (presumably) fair coin gave me the gross potion for the last five days, am I more likely to get the potion today OR a normal lunch today?">
 
   <buton-group>
-    <buton @click="memory='userSaidT'" nope>Slimy potion</buton>
-    <buton @click="memory='userSaidH'" nope>Normal lunch</buton>
+    <buton @click="memory='userSaidT'" nope>Gross potion 🥛</buton>
+    <buton @click="memory='userSaidH'" nope>Normal lunch 🍱</buton>
     <buton yay>It's 50-50</buton>
 
     <template v-slot:hint>
@@ -813,8 +925,8 @@ If after all this, you're still here and want to buy me a coffee, that would be 
   text="Okay, but if I told you my mom's coin doomed me to the potion the last 100 days, what would you think I would get today?">
 
   <buton-group>
-    <buton yay>Slimy potion</buton>
-    <buton nope>Normal lunch</buton>
+    <buton yay>Gross potion 🥛</buton>
+    <buton nope>Normal lunch 🍱</buton>
     <next nope>It's 50-50</next>
   </buton-group>
 </avatar>
@@ -836,7 +948,10 @@ If after all this, you're still here and want to buy me a coffee, that would be 
 </avatar>
 
 
-<avatar text="But this was around the time that I stopped trusting what people said and started testing their claims for myself.">
+<avatar>
+  <div>
+    But this was around the time that I stopped trusting what people said and started <bold>testing their claims</bold>.
+  </div>
   <next>Next</next>
 </avatar>
 
@@ -846,6 +961,7 @@ If after all this, you're still here and want to buy me a coffee, that would be 
     <li>You learned about <bold>independent events</bold></li>
     <li>You learned to calculate the <bold>joint probability</bold> of independent events.</li>
     <li>You learned that there are <exp base="2" pow="80"/> atoms in the universe.</li>
+    <li>You learned to test people's claims.</li>
   </ul> 
   <buton @click.native="$root.nextChapter()">Next chapter</buton>
 </avatar>
@@ -859,7 +975,7 @@ If after all this, you're still here and want to buy me a coffee, that would be 
 <script type="text/x-template" id="wizard-flips-template">
 <div>
 
-<h2>Chapter 2</h2>
+<h2>Chapter 2: Randomness</h2>
 <pset>
 
 <avatar  
@@ -1019,7 +1135,7 @@ If after all this, you're still here and want to buy me a coffee, that would be 
 <script type="text/x-template" id="bayes-rule-template">
 <div>
 
-<h2>Chapter 6</h2>  
+<h2>Chapter 6: Bayes Rule</h2>  
 
 <pset>
 
@@ -1475,7 +1591,7 @@ If after all this, you're still here and want to buy me a coffee, that would be 
 <script type="text/x-template" id="chain-rule-template">
 <div>
 
-  <h2>Chapter 3</h2>
+  <h2>Chapter 3: Chain Rule of Probability</h2>
 <pset>
 
 <avatar text="I like someone but she doesn't like me back.">
@@ -1894,9 +2010,8 @@ If after all this, you're still here and want to buy me a coffee, that would be 
 
 <script type="text/x-template" id="ev-story-template">
 <div>
-<h2>Chapter 4</h2>
+<h2>Chapter 4: Expected Value</h2>
 <pset ref="pset">
-
 
 <avatar text="How can I make friends?">
   <next>Next</next>
@@ -1915,35 +2030,41 @@ If after all this, you're still here and want to buy me a coffee, that would be 
 </avatar>
 
 <avatar>
-  <div>To become friends, interactions need to be positive. That makes sense.</div>
+  <div>To become friends, make interactions positive. That makes sense.</div>
   <next>Next</next>
 </avatar>
 
 <avatar>
   <div>
-    I'm pretty good at telling jokes. I'll memorize some jokes from the <a href="//www.rd.com/funny-stuff/short-jokes/">internet</a> and make people laugh.
+    I'm a pretty good joke teller. I'll memorize some jokes from the <a href="//www.rd.com/funny-stuff/short-jokes/">internet</a> and make people laugh.
   </div>
   <next>Next</next>
 </avatar>
 
-<avatar text="Hm... but jokes don't always hit. A bad joke might actually be a negative.">
-  <next>Next</next>
+<avatar>
+  <div>
+    But jokes don't always hit. A bad joke might lead to an awkward silence. 
+  </div>
+  <next @click.native="$root.play('crickets')">Crickets 🦗🦗🦗</next>
 </avatar>
 
 <avatar text="Take this joke for instance... should I tell it?">
   <div>
-  40% of the time it lands favorably<br>
-  60% of the time it fails<br>
+  40% of the time it lands 😂😂😂😂
   </div>
 
-  <next>Uh...</next>
+  <div>
+  60% of the time it fails 🦗🦗🦗🦗🦗🦗
+  </div>
+
+  <next>Yes</next>  <next>No</next>
 </avatar>
 
 <avatar image="brain.png"
-        text="The answer depends on the payoffs.">
+        text="The answer actually depends on the payoffs. If ">
   <div>
-    If the wizard get +1 positivity point when it lands.<br>
-    And -1 positivity point when it fails<br>
+    😂 = +1 positivity point<br>
+    🦗 = -1 positivity point<br>
   </div>
 
   <div>
@@ -1960,16 +2081,12 @@ If after all this, you're still here and want to buy me a coffee, that would be 
 
 <avatar>
   <div>
-    Hm... everyone already thinks I'm weird. I feel like, if the joke fails I might lose 1 point. But if the joke lands, I'll gain 5 points because there's nowhere to go but up for my reputation. Ha-ha!
+    I feel like the payoff looks like this. If the joke lands, I'll gain 5 points because there's nowhere to go but up for my reputation. Ha-ha!
   </div>
 
   <div>
-    So I need to calculate the expected value of:
-  </div>
-
-  <div>
-    40% joke lands favorably, +5 points.<br>
-    60% joke fails, -1 point.<br>
+    😂 = +5 positivity points<br>
+    🦗 = -1 positivity point<br>
   </div>
 
   <next>Next</next>
@@ -1977,14 +2094,14 @@ If after all this, you're still here and want to buy me a coffee, that would be 
 
 <avatar image="brain.png">
   <div>
-    To calculate the expected value, <bold>multiply the probability</bold> of each outcome occuring <bold>with the reward</bold> for the outcome <bold>then add</bold> everything together. 
-  </div>
-
-  <div>
-    This captures the sense of the "average" reward.
+    To calculate the expected value, calculate the <bold>average outcome</bold>. For each possible outcome, multiply the probability of that outcome with the reward of that outcome, and add it all together. 
   </div>
 
   <div>The expected value of the joke in question is?</div>
+
+  <div>
+    <ev-tree></ev-tree>
+  </div>
 
   <input-box right="1.4"/>
 </avatar>
@@ -2046,7 +2163,7 @@ Help me decide whether to tell each joke or not, by calculating their expected v
 
 <avatar image="brain.png">
 <div>
-Okay, I think that's enough for positivity. The second tenet of friendship is consistency... you need to find a structure to make people repeatedly hangout with you.
+Okay, I think that's enough for positivity. The second tenet of friendship is consistency... find a structure that makes people repeatedly hangout with you.
 </div>
 <next>Next</next>
 </avatar>
@@ -2055,27 +2172,19 @@ Okay, I think that's enough for positivity. The second tenet of friendship is co
   <next>Next</next>
 </avatar>
 
-<avatar text="Consistent Locked-in Unpleasant Bandying">
+<avatar text="Captive Lovable Uniform Besties">
   <next>Next</next>  
 </avatar>
 
-<avatar text="But which club should I join to maximize the number of interactions?">
+<avatar text="Which club should I join to maximize the number of interactions?">
   <next>Next</next>
 </avatar>
 
-<avatar>
-
-  <div>
-    I could join the fencing club...
-  </div>
-
-  <next>Next</next>
-</avatar>
 
 <avatar>
   <div>I've plotted the average number of interactions other people have experienced from joining the fencing club.</div>
 
-  <distribution :outcomes="[{x: 1, y: 0.1},{x: 2, y: 0.2},{x: 3, y: 0.3},{x: 4, y: 0.4},]" xLabel="Number of interactions" yLabel="Probability" title="Fencing Club 💖" />
+  <distribution :outcomes="[{x: 1, y: 0.1},{x: 2, y: 0.2},{x: 3, y: 0.3},{x: 4, y: 0.4},]" xLabel="Number of interactions" yLabel="Probability" title="Fencing Club" />
 
   <div>This type of plot with possibilities on the x-axis, and probabilities on the y-axis is called a <bold>distribution</bold>.</div>
   <next>Next</next>
@@ -2096,7 +2205,7 @@ Okay, I think that's enough for positivity. The second tenet of friendship is co
 
   <visual-ev-click 
     :outcomes="clubs[0].outcomes"
-    :title="clubs[0].name + ' 💖'"
+    :title="clubs[0].name"
     xLabel="Number of interactions"
     yLabel="Probability"
     @done="next" /> 
@@ -2106,7 +2215,7 @@ Okay, I think that's enough for positivity. The second tenet of friendship is co
 
   <visual-ev-click 
     :outcomes="clubs[1].outcomes"
-    :title="clubs[1].name + ' 💖'"
+    :title="clubs[1].name"
     xLabel="Number of interactions"
     yLabel="Probability"
     @done="next" /> 
@@ -2115,7 +2224,7 @@ Okay, I think that's enough for positivity. The second tenet of friendship is co
 <avatar text="What about Biology Olympiad?">
   <visual-ev-click 
     :outcomes="clubs[2].outcomes"
-    :title="clubs[2].name + ' 💖'"
+    :title="clubs[2].name"
     xLabel="Number of interactions"
     yLabel="Probability"
     @done="next" /> 
@@ -2124,7 +2233,7 @@ Okay, I think that's enough for positivity. The second tenet of friendship is co
 <avatar text="The other club I was considering was the Knitting Circle.">
   <visual-ev-click 
     :outcomes="clubs[3].outcomes"
-    :title="clubs[3].name + ' 💖'"
+    :title="clubs[3].name"
     xLabel="Number of interactions"
     yLabel="Probability"
     @done="next" /> 
@@ -2157,7 +2266,7 @@ Cool, so now I'm a member of Bio Olympiad. And I have {{positivityPoints}} posit
 
 <avatar image="brain.png">
   <div>
-For the final ingredient in making friends... you need to be vulnerable.
+The final ingredient in making friends is that you need to be vulnerable.
 </div>
 <next>Next</next>
 </avatar>
@@ -2266,6 +2375,10 @@ Click where you think the balance point is...
     {{$root.roundTo(outcome.certainty*100, 0)}}% chance joke {{outcome.present}}, {{outcome.payoff}} points
   </div>
 
+  <div>
+    <ev-tree :outcomes="joke.outcomes" /> 
+  </div>
+
   <buton @click.native="setUserAnswer('Yes')">Yes</buton>
   <buton @click.native="setUserAnswer('No')">No</buton>
 </avatar>
@@ -2309,11 +2422,11 @@ Click where you think the balance point is...
 
 <avatar v-if="userAnswer !== null && chosenOutcome.payoff < 0">
   <div>
-    Aw... it seems like that joke {{chosenOutcome.past}}. So I lost {{chosenOutcome.payoff}} positivity points. I'm still glad I told the joke, because it was positive expected value.
+    Aw... it seems like that joke {{chosenOutcome.past}}. So I lost {{chosenOutcome.payoff}} positivity points. I'm still glad I told the joke, because it was +{{evString}} points in expected value.
   </div>
 
   <div>
-    {{evCalculation}} points in expectation.
+    {{evCalculation}}
   </div>
 
   <next @click.native="finish(chosenOutcome.payoff)">Next</next>
@@ -2587,7 +2700,7 @@ Click where you think the balance point is...
   <span v-if="showCannedHint" class="hint" style="position:absolute; bottom:-24px; right:4px">
     {{cannedHint}}
   </span>
-  <span v-if="showYay" class="rainbow-text" style="position:absolute; bottom:-24px; right:4px">
+  <span v-if="showYay" class="hint" style="position:absolute; bottom:-24px; right:4px">
     Yay!
   </span>
 
@@ -2631,9 +2744,10 @@ const sounds = {
 
 	'intro-scene': sneakySnitch,  
 	'coin-flips': sneakySnitch,
-	'wizard-flips': new Howl({src: ['sounds/honey-tree.wav'], loop:true}),
+	'wizard-flips': new Howl({src: ['sounds/comfortable_mystery_edit.wav'], loop:true}),
   // 'chain-rule': new Howl({src: ['sounds/wholesome-by-kevin-macleod_edit.wav'], loop:true}),
-  'chain-rule': new Howl({src: ['sounds/rusted-maid.wav'], loop:true}),
+  // 'chain-rule': new Howl({src: ['sounds/rusted-maid.wav'], loop:true}),
+  'chain-rule': new Howl({src: ['sounds/your_call_edit.wav'], loop:true}),
 
   'ev-story': new Howl({src: ['sounds/extreme-hardcore-death-metal-loop_edit.wav'], loop:true}),
   'intro-to-pvalues': new Howl({src: ['sounds/comma-flaw_edit.wav'], loop:true}),
@@ -2642,8 +2756,11 @@ const sounds = {
 };
 
 const volume = {
+  'wizard-flips': 0.7,
   'chain-rule': 0.3,
-  'ev-story': 0.7,
+  'ev-story': 0.3,
+  'intro-to-pvalues': 0.7,
+  'bayes-rule': 0.7
 }
 
 Howler.volume(0.5);
@@ -2652,8 +2769,8 @@ Howler.volume(0.5);
 const jokes = [
 {
   outcomes: [
-    {present: 'fails', past: 'failed', certainty: 0.5, payoff: -1}, 
-    {present: 'lands', past: 'landed', certainty: 0.5, payoff: 3}
+    {present: 'lands', past: 'landed', emoji: '😂', certainty: 0.5, payoff: 3},
+    {present: 'fails', past: 'failed', emoji: '🦗', certainty: 0.5, payoff: -1}, 
   ],
   lead: "Did you hear about the mathematician who's afraid of negative numbers?",
   punchline: "He'll stop at nothing to avoid them",
@@ -2661,15 +2778,15 @@ const jokes = [
 
 {
   outcomes: [
-    {present: 'fails', past: 'failed', certainty: 0.6, payoff: -1}, 
-    {present: 'lands', past: 'landed', certainty: 0.4, payoff: 1}
+    {present: 'lands', past: 'landed', emoji: '😂',certainty: 0.4, payoff: 1},
+    {present: 'fails', past: 'failed', emoji: '🦗', certainty: 0.6, payoff: -1}, 
   ]
 },
 
 {
   outcomes: [
-    {present: 'fails', past: 'failed', certainty: 0.6, payoff: -1}, 
-    {present: 'lands', past: 'landed', certainty: 0.4, payoff: 5}
+    {present: 'lands', past: 'landed', emoji: '😂', certainty: 0.4, payoff: 5},
+    {present: 'fails', past: 'failed', emoji: '🦗', certainty: 0.6, payoff: -1}, 
   ],
   lead:"Why don't scientists trust atoms?",
   punchline:"Because they make up everything"
@@ -2677,8 +2794,8 @@ const jokes = [
 
 {
   outcomes: [
-    {present: 'fails', past: 'failed', certainty: 0.55, payoff: -1}, 
-    {present: 'lands', past: 'landed', certainty: 0.45, payoff: 3}
+    {present: 'lands', past: 'landed', emoji: '😂', certainty: 0.45, payoff: 3},
+    {present: 'fails', past: 'failed', emoji: '🦗', certainty: 0.55, payoff: -1}, 
   ],
   lead:   "How many times can you subtract 10 from 100?",
   punchline: "Once. The next time you would be subtracting 10 from 90"
@@ -2686,15 +2803,15 @@ const jokes = [
 
 {
   outcomes: [
-    {present: 'fails', past: 'failed', certainty: 0.7, payoff: -2}, 
-    {present: 'lands', past: 'landed', certainty: 0.3, payoff: 4}
+    {present: 'lands', past: 'landed', emoji: '😂', certainty: 0.3, payoff: 4},
+    {present: 'fails', past: 'failed', emoji: '🦗', certainty: 0.7, payoff: -2}, 
   ]
 },
 
 {
   outcomes: [
-    {present: 'fails', past: 'failed', certainty: 0.32, payoff: -1}, 
-    {present: 'lands', past: 'landed', certainty: 0.68, payoff: 4}
+    {present: 'lands', past: 'landed', emoji: '😂', certainty: 0.68, payoff: 4},
+    {present: 'fails', past: 'failed', emoji: '🦗', certainty: 0.32, payoff: -1}, 
   ],
   lead: "The numbers 19 and 20 got into a fight.",
   punchline: "21"
@@ -2891,8 +3008,11 @@ Vue.component('ev-joke', {
     ev(){
       return _.sum(this.joke.outcomes.map(outcome => outcome.certainty * outcome.payoff));
     },
+    evString(){
+      return this.$root.roundTo(this.ev, 2);
+    },
     evCalculation(){
-      return this.joke.outcomes.map(outcome => outcome.certainty + ' × ' + outcome.payoff).join(' + ') + ' = ' + this.$root.roundTo(this.ev, 2);
+      return this.joke.outcomes.map(outcome => outcome.certainty + ' × ' + outcome.payoff).join(' + ') + ' = ' + this.evString;
     },
     chosenOutcome(){
       return this.joke.outcomes[this.chosenOutcomeInd];
@@ -3112,7 +3232,7 @@ Vue.component('buton', {
         return this.nope;        
       }
       if (this.isNope){
-        return 'Nope';
+        return 'Try again';
       }
     },
     // Returns true for: <buton nope> or <buton nope="why not">
@@ -3346,7 +3466,7 @@ Vue.component('visual-ev-click', {
     },
 
     feedbackString: function(){
-      if (approx(0, this.userDifference)){
+      if (this.userDifference < .1){
         this.$root.play('yay');
         return 'spot on. Good work!';
       }
@@ -3835,6 +3955,60 @@ Vue.component('next', {
 });
 
 
+Vue.component('tree-diagram', {
+  template: '#tree-diagram-template'
+});
+
+
+Vue.component('ev-tree', {
+  props:{
+    outcomes: {type: Array, default: () => [
+        {certainty: 0.5, payoff: -1}, 
+        {certainty: 0.5, payoff: 3}
+      ]
+    },
+  },
+  methods: {
+    prettyString(val){
+      return val > 0 ? '+' + val : val;
+    }
+  },
+  template: '#ev-tree-template'
+});
+
+
+Vue.component('tree-node', {
+  props:{
+    height: {type: Number, default: 100},
+    width: {type: Number, default: 80},
+
+    emojiHeight: {type: Number, default: 30},
+    emojiWidth: {type: Number, default: 30},
+    emojiPadding: {type: Number, default: 8}, // distance from emoji to line    
+
+    linePadding: {type: Number, default: 20}, // distance from top/bottom
+
+    margin: {
+      type: Object, 
+      default: function(){
+        return {top: 10, right: 10, bottom: 50, left: 50};
+      }
+    },
+
+    color: {
+      type: String, default: '01' // which path to highlight
+    },
+
+  },
+  computed: {
+    lineX(){
+      return this.width - this.emojiWidth - this.emojiPadding;
+    }
+  },
+  template: '#tree-node-template'
+});
+
+
 // Child slot should call next() on the parent to advance.
 Vue.component('pset', {
   computed: {
@@ -3895,7 +4069,7 @@ const chapters = [
 {
   component: 'coin-flips',
   description: 'Independent events',
-  image: 'potion.png',
+  image: 'milk.png',
 },
 {
   component: 'wizard-flips',
@@ -3950,7 +4124,7 @@ new Vue({
   el: '#app',
   data: {
     chapters: chapters,
-    chapterInd: DEBUG ? 2 : 0,
+    chapterInd: DEBUG ? 4 : 0,
     // Obj property additions do not update DOM, so prepopulate all the keys in the object. Or use lists.
     showTOC: false,
     hasVolume: false,
