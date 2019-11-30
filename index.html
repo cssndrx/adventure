@@ -1,7 +1,7 @@
 <!doctype html>
 <head>
 <meta charset="utf-8" />
-<!--<meta name="viewport" content="width=device-width, initial-scale=1"> -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
 <base target="_blank">
 
@@ -875,6 +875,8 @@ If after all this, you're still here and want to buy me a coffee, that would be 
 
 <avatar key="HH"
   text="What is the probability that after my mom flips a fair coin twice, I'll be drinking the gross potion 🥛 two days in a row?">
+
+  <div>
   <div>
     <div class="tree-header">Day 1</div>
     <div class="tree-header">Day 2</div>
@@ -886,6 +888,7 @@ If after all this, you're still here and want to buy me a coffee, that would be 
       <tree-node color="1" transform="translate(80,200)"></tree-node>
     </g>
   </svg> <span style="font-size:32px; position:relative:-20px">?</span>
+  </div>
 
   <buton nope="1/2 is the probability of tossing a single coin and getting T. Getting two tails is rarer, but how much rarer?">1/2</buton>
   <buton yay>1/4</buton>
@@ -914,6 +917,7 @@ If after all this, you're still here and want to buy me a coffee, that would be 
     <div class="tree-header">Day 3</div>
   </div>
 
+  <div>
   <svg height="420" width="300">
 
     <g transform="translate(0,-30)">
@@ -934,6 +938,7 @@ If after all this, you're still here and want to buy me a coffee, that would be 
     </g>
 
   </svg>
+  </div>
 
   <buton-group>
     <buton nope>1/2</buton>
@@ -2827,7 +2832,7 @@ Click where you think the balance point is...
 
 
 <script>
-var DEBUG = false;
+var DEBUG = true;
 
 
 const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
