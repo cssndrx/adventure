@@ -274,6 +274,21 @@ svg .outcome{
 }
 
 
+/*@media only screen and (max-width: 500px) {
+
+}
+*/
+
+.sidebar{
+  width:60px;
+  position: fixed; 
+  top:0px; left:0px; 
+  height: 100%; 
+  text-align: center; 
+  background-color: #eee;
+}
+
+
 </style>
 </head>
 
@@ -283,8 +298,7 @@ svg .outcome{
 
 <div id="app" style="position:relative;left: 60px;width:calc(100% - 60px); margin-top:32px" @click="mainClick($event)">
   <div ref="toc"
-  style="width:60px;position: fixed; top:0px; left:0px; height: 100%; text-align: center; background-color: #eee"
-  class="normal-div">
+  class="normal-div sidebar">
 
     <div style="height:58px; ">
       <img v-if="!showTOC" src="images/menu.png" style="cursor: pointer; position:relative; top:12px" @click="toggleTOC">
@@ -652,7 +666,7 @@ overflow-y:auto;padding-top:8px; background-color: rgb(247,247,247);">
 
   <div class="handwriting" style="font-size:48px;">Totally Not Scary Guide to Statistics</div>
 
-  <img src="images/wizard.png" style="width:280px">
+  <img src="images/wizard.png" style="max-width:280px">
 
   <div style="max-width:500px; margin: 0 auto">
     <div>
@@ -667,7 +681,7 @@ overflow-y:auto;padding-top:8px; background-color: rgb(247,247,247);">
 </script>
 
 <script type="text/x-template" id="thanks-template">
-<div style="width:400px; margin: 0 auto;" >
+<div style="max-width:400px; margin: 0 auto;" >
 
 <h2>The End</h2>
 
@@ -676,7 +690,7 @@ overflow-y:auto;padding-top:8px; background-color: rgb(247,247,247);">
   As you can see, life can be quite eventful with probability and statistics. I hope this guide helps add a bit of mischief to your life.
 </p>
 
-<img src="images/wizard.png" style="width:200px">
+<img src="images/wizard.png" style="max-width:200px">
 
 
 
@@ -2737,13 +2751,13 @@ Click where you think the balance point is...
 </script>
 
 <script type="text/x-template" id="avatar-template">
-<div style="position: relative; max-width:600px; margin:0 auto; margin-top:16px">
+<div style="position: relative; display:grid; grid-auto-flow:column; max-width:600px; margin:0 auto; margin-top:16px; grid-template-columns: auto 1fr">
 
- <div class="cropcircle" :style="cropCircleStyle" style="display:inline-block; vertical-align:top">
+ <div class="cropcircle" :style="cropCircleStyle" style="display:inline-block; vertical-align:top;">
  </div>
 
 
-<div style="display:inline-block; width:400px">
+<div style="display:inline-block; max-width:400px">
     <div>{{text}}<slot name="text"></slot></div>
 
     <slot></slot>
@@ -4222,7 +4236,7 @@ Vue.component('pset', {
 
       // make current ind, fully visible
 //      this.elms[this.ind].style.display = 'block';
-      this.elms[this.ind].style.display = 'inherit';
+      this.elms[this.ind].style.display = 'grid';
 
       this.$root.report(this.ind);
 
