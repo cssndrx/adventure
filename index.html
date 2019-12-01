@@ -279,11 +279,12 @@ svg .outcome{
 }
 */
 
-.sidebar{
+.navbar{
   width:60px;
   position: fixed; 
-  top:0px; left:0px; 
-  height: 100%; 
+  top:0px; 
+  left:0px; 
+  width: 100vw;
   text-align: center; 
   background-color: #eee;
 }
@@ -296,30 +297,26 @@ svg .outcome{
 <body>
 
 
-<div id="app" style="position:relative;left: 60px;width:calc(100% - 60px); margin-top:32px" @click="mainClick($event)">
-  <div ref="toc"
-  class="normal-div sidebar">
+<div id="app" @click="mainClick($event)">
 
-    <div style="height:58px; ">
-      <img v-if="!showTOC" src="images/menu.png" style="cursor: pointer; position:relative; top:12px" @click="toggleTOC">
-      <img v-if="showTOC" src="images/x.png" style="cursor: pointer; position:relative; top:12px" @click="toggleTOC">
-    </div>
+  <div ref="toc" class="normal-div navbar" style="text-align: left; position:fixed; z-index: 1; display: grid; grid-auto-flow: column; padding-top:8px; ">
 
-    <div style="position:absolute; bottom: 8px; left:16px;  padding-bottom: 8px">
-      <div v-if="hasVolume" @click="toggleVolume">
-        <img src="images/volume.png" style="width:28px">
-      </div>
+    <div style="display: inline-block; white-space: nowrap; margin-right:8px">
+    <img @click="toggleTOC" 
+         :src="showTOC ? 'images/x.png' : 'images/menu.png'"
+         style="cursor: pointer; height: 28px; margin-left: 8px" >
 
-      <div v-if="!hasVolume" @click="toggleVolume">
-        <img src="images/volume_off.png" style="width:28px">
-      </div>
-    </div>
+    <img @click="toggleVolume" 
+         :src="hasVolume ? 'images/volume.png' : 'images/volume_off.png'" 
+         style="width:20px; padding-bottom: 4px; padding-left: 4px" >
+     </div>
 
-    <span class="sideways handwriting" style="font-weight: 700; white-space: nowrap">Totally Not Scary Guide to Statistics</span>
+   <div class="handwriting" style="white-space: nowrap;display: inline-block; overflow: hidden">Totally Not Scary Guide to Statistics</div>
 
   </div> 
 
-  <div v-if="showTOC" class="normal-div" style="position:fixed; z-index:1; width:200px;top:0px; left:60px; top:0;
+
+  <div v-if="showTOC" class="normal-div" style="position:fixed; z-index:1; width:200px;top:40px; left:0px;
     bottom:0;
 overflow-y:auto;padding-top:8px; background-color: rgb(247,247,247);">
     <div v-for="(chapter, ind) in chapters"
@@ -332,9 +329,12 @@ overflow-y:auto;padding-top:8px; background-color: rgb(247,247,247);">
     </div>
   </div>
 
+<!--left:calc(50% - 10px) -->
 <keep-alive>
-  <component v-bind:is="visibleScreen"></component>
+  <component v-bind:is="visibleScreen" :style="componentStyle" style="margin-top: 36px"></component>
 </keep-alive>
+
+
 </div> <!-- end #app -->
 
 
@@ -4349,6 +4349,16 @@ new Vue({
     },
     visibleScreen: function(){
       return this.currentChapter.component;
+    },
+    componentStyle(){
+      if (this.showTOC){
+        return {
+          position: 'absolute',
+          left: '200px',
+          top: '0px',
+          width: 'calc(100vw - 200px)'
+        };
+      }
     }
   },
   mounted(){
@@ -4480,7 +4490,7 @@ new Vue({
     },
     toggleTOC(){
   		this.showTOC = !this.showTOC;
-    }
+    },
 
   } // end methods
 });
