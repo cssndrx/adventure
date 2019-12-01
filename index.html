@@ -2681,19 +2681,20 @@ Click where you think the balance point is...
 </script>
 
 <script type="text/x-template" id="samples-chart-template">
-<div style="position:relative; display:inline-block" class="samples-chart no-select normal-div"
+<div style="position:relative; display:inline-block" class="samples-chart normal-div"
 :class="{disabled: !isControllable}">
 
 <!-- discrete -->
   <svg v-if="view=='discrete'"
      :width="chartWidth+margin.left+margin.right" 
-     :height="chartHeight+margin.top+margin.bottom">
+     :height="chartHeight+margin.top+margin.bottom"
+     class="no-select">
     <g v-if="isCreated" 
       class="container"
       :transform="'translate(' + margin.left + ',' + margin.top + ')'">
 
         <g v-for="x in xdomain">
-          <rect v-for="countInd in counts[x]"
+          <rect v-if="counts[x]" v-for="countInd in counts[x]"
           :x="xScale(x)"
           :y="chartHeight - yScale(counts[x]) + yScaleBandwidth*(countInd-1)+yPadBetweenBars"
           :width="xScale.bandwidth()"
@@ -2715,7 +2716,8 @@ Click where you think the balance point is...
 <!-- continuous -->
  <svg v-if="view=='continuous'"
      :width="chartWidth+margin.left+margin.right" 
-     :height="chartHeight+margin.top+margin.bottom">
+     :height="chartHeight+margin.top+margin.bottom"
+     class="no-select">
     <g v-if="isCreated" 
       class="container"
       :transform="'translate(' + margin.left + ',' + margin.top + ')'">
@@ -4312,7 +4314,7 @@ new Vue({
   el: '#app',
   data: {
     chapters: chapters,
-    chapterInd: DEBUG ? 1 : 0,
+    chapterInd: DEBUG ? 6 : 0,
     // Obj property additions do not update DOM, so prepopulate all the keys in the object. Or use lists.
     showTOC: false,
     hasVolume: true,
