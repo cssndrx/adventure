@@ -284,7 +284,7 @@ svg .outcome{
   position: fixed; 
   top:0px; 
   left:0px; 
-  width: 100vw;
+  width: 100%;
   text-align: center; 
   background-color: #eee;
 }
@@ -316,7 +316,7 @@ svg .outcome{
   </div> 
 
 
-  <div v-if="showTOC" class="normal-div" style="position:fixed; z-index:1; width:200px;top:40px; left:0px;
+  <div v-if="showTOC" class="normal-div" style="position:fixed; z-index:1; width:150px;top:40px; left:0px;
     bottom:0;
 overflow-y:auto;padding-top:8px; background-color: rgb(247,247,247);">
     <div v-for="(chapter, ind) in chapters"
@@ -331,7 +331,7 @@ overflow-y:auto;padding-top:8px; background-color: rgb(247,247,247);">
 
 <!--left:calc(50% - 10px) -->
 <keep-alive>
-  <component v-bind:is="visibleScreen" :style="componentStyle" style="margin-top: 36px"></component>
+  <component v-bind:is="visibleScreen" :style="componentStyle" style="margin-top: 52px"></component>
 </keep-alive>
 
 
@@ -4354,9 +4354,9 @@ new Vue({
       if (this.showTOC){
         return {
           position: 'absolute',
-          left: '200px',
+          left: '180px',
           top: '0px',
-          width: 'calc(100vw - 200px)'
+          width: 'calc(100% - 180px)'
         };
       }
     }
