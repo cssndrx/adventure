@@ -2,6 +2,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
 
 <base target="_blank">
 
@@ -148,6 +149,10 @@ button{
   margin: 8px;
   max-width: 180px;
   display: inline-block;
+}
+
+button:hover{
+  background-color: #eee;
 }
 
 .bold{
@@ -299,7 +304,7 @@ svg .outcome{
 
 <div id="app" @click="mainClick($event)">
 
-  <div ref="toc" class="normal-div navbar" style="text-align: left; position:fixed; z-index: 1; display: grid; grid-auto-flow: column; padding-top:8px; ">
+  <div ref="toc" class="normal-div navbar" style="text-align: left; position:fixed; z-index: 2; display: grid; grid-auto-flow: column; padding-top:8px; ">
 
     <div style="display: inline-block; white-space: nowrap; margin-right:8px">
     <img @click="toggleTOC" 
@@ -662,6 +667,7 @@ overflow-y:auto;padding-top:8px; background-color: rgb(247,247,247);">
 
 
 <script type="text/x-template" id="intro-scene-template">
+<div>  <!-- need extra div so margin:0 auto doesn't override margin-top at component level -->
 <div style="max-width:600px; margin: 0 auto; text-align:center;">
 
   <div class="handwriting" style="font-size:48px;">Totally Not Scary Guide to Statistics</div>
@@ -678,9 +684,11 @@ overflow-y:auto;padding-top:8px; background-color: rgb(247,247,247);">
   <div>Expected playtime: <bold>60 min</bold></div>
   <buton @click.native="$root.nextChapter()" :font-size="28">PLAY</buton>
 </div>
+</div>
 </script>
 
 <script type="text/x-template" id="thanks-template">
+<div>
 <div style="max-width:400px; margin: 0 auto;" >
 
 <h2>The End</h2>
@@ -722,7 +730,7 @@ If you liked this story, you might like
 <h4>Music</h4>
 <div class="smaller-children">
 <p>
-The sound for this story was graciously edited to be nonobtrusive by auditory doctor Hanoi Hantrakul.
+The sound for this story was graciously edited to be nonobtrusive by doctor Hanoi Hantrakul.
 </p>
 
 <p>
@@ -759,7 +767,7 @@ sneaky-snitch-by-kevin-macleod_edit.wav
 
 
 <p>
-<a href="//ncase.me/">Nicky Case</a> who created multiple examples for how to make experiences both fun and educational and built a community of excellent folks around it. Folks from the explorabl.es community provided valuable advice on how to improve the design including, Srini Kadamati, Zachary Steinberg, Philipp Legner, Amit Patel, and Philipp Wacker. 
+<a href="//ncase.me/">Nicky Case</a> who created multiple examples for how to make experiences both fun and educational and built a community of excellent folks around it. Folks from the explorabl.es community provided valuable advice on how to improve the design including, Srini Kadamati, Zachary Steinberg, Philipp Legner, Amit Patel, and Philipp Wacker. Mai Akiyoshi who sat me down to talk about marketing.
 </p>
 
 <p><a href="//www.spencergreenberg.com/">Spencer Greenberg</a> and Mike Mozer resuscitated the project at points through their enthuasism and insightful critique. And thank you to all the folks who emailed in with encouragement and offers to help when earlier projects stagnated. 
@@ -786,6 +794,7 @@ If after all this, you're still here and want to buy me a coffee, that would be 
 </form>
 
 
+</div>
 </div>
 </div>
 </script>
@@ -4314,10 +4323,10 @@ new Vue({
   el: '#app',
   data: {
     chapters: chapters,
-    chapterInd: DEBUG ? 6 : 0,
+    chapterInd: DEBUG ? 5 : 0,
     // Obj property additions do not update DOM, so prepopulate all the keys in the object. Or use lists.
     showTOC: false,
-    hasVolume: true,
+    hasVolume: false,
 
     isScrolling: false,
 
@@ -4361,6 +4370,12 @@ new Vue({
           width: 'calc(100% - 180px)'
         };
       }
+      return {
+          position: 'absolute',
+          left: '0px',
+          top: '0px',
+          width: '100%'
+      };
     }
   },
   mounted(){
