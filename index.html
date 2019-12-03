@@ -676,7 +676,7 @@ overflow-y:auto;padding-top:8px; background-color: rgb(247,247,247);">
 
   <div style="max-width:500px; margin: 0 auto">
     <div>
-      <bold>Statistics is useful — </bold> in daily life and machine learning. Approach this topic in a non-scary way... through weird stories, cartoon characters, and interactivity!
+      <bold>Statistics is useful — </bold> in daily life and machine learning. Approach this topic in a non-scary way... through a friendly wizard, weird stories, and interactivity!
     </div>
   </div>
 
@@ -750,7 +750,7 @@ License: CC BY (http://creativecommons.org/licenses/by/4.0/)
 <div class="smaller-children">
 
 <p>
-I want to thank my family who made me weird. I also want to thank... 
+I want to thank
 </p>
 
 <p>
@@ -774,7 +774,11 @@ sneaky-snitch-by-kevin-macleod_edit.wav
 </p>
 
 <p>
-Anand Babu and Google Kernel friends provided a safe space and the final push of energy to rewrite this. Ric Ewing designed Chapter 2 and taught me how to properly do paper prototypes. Fred Bertsch and Vivek Sri greatly improved the story in different ways. Kourosh Gharachorloo for all the bugs he found, and accidentally the most senior QA tester I've ever had. Tianyu Liu recommended the perfect pieces of prior work. Nathan Martz was the oracle who was right about all the pitfalls.
+Anand Babu and Google Kernel friends provided a creative space and the final push of energy to rewrite this. Kourosh Gharachorloo for all the bugs he found, and accidentally the most senior QA tester I've ever had. Tianyu Liu recommended the perfect pieces of prior work. Nathan Martz was the oracle who was right about all the pitfalls.
+</p>
+
+<p>
+All the new friends that I met along the way, including Wei Ho who inspired Chapter 5. Ric Ewing who designed Chapter 2 and taught me how to properly do paper prototypes. Fred Bertsch, Picabo, Meg Gordon, Katie Kormanik, and many Google security guards who helped playtest.
 </p>
 
 <p>
@@ -872,22 +876,22 @@ If after all this, you're still here and want to buy me a coffee, that would be 
 <pset>
 
 
-<avatar
-  text="I am your companion through this Totally Not Scary Guide to Statistics.">
-  <next>Who are you?</next>
+<!--<avatar
+  text="Ready to learn statistics?">
+  <next>Next</next>
 </avatar>
-
+-->
 
 <avatar>
   <div>
-    I'm your friendly neighborhood <bold>statistics wizard</bold>. I've been learning about statistics my whole life. And mom would use statistics to pack my lunch.
+    I'm your friendly neighborhood <bold>statistics wizard</bold>. I'm here to show you statistics is everywhere.
   </div>
   <next>Next</next>
 </avatar>
 
 
 <avatar 
-  text="My mom would flip a (presumably) fair coin, and if it would land heads she would pack me lunch 🍱 like a normal mother.">
+  text="To pack my lunch, my mother would flip a (presumably) fair coin, and if it would land heads she would pack me lunch 🍱 like a normal mother.">
   <next>Next</next>
 </avatar>
 
@@ -897,7 +901,7 @@ If after all this, you're still here and want to buy me a coffee, that would be 
 </avatar>
 
 <avatar key="HH"
-  text="What is the probability that after my mom flips a fair coin twice, I'll be drinking the gross potion 🥛 two days in a row?">
+  text="What is the probability that after my mother flips a fair coin twice, I'll be drinking the gross potion 🥛 two days in a row?">
 
   <div>
   <div>
@@ -932,7 +936,7 @@ If after all this, you're still here and want to buy me a coffee, that would be 
 </avatar> 
 
 <avatar key="HHH"
-  text="What is the probability that after my mom tosses a (presumably) fair coin three times, I'll end up drinking the potion three days in a row?">
+  text="What is the probability that after my mother tosses a (presumably) fair coin three times, I'll end up drinking the potion three days in a row?">
 
   <div>
     <div class="tree-header">Day 1</div>
@@ -971,7 +975,7 @@ If after all this, you're still here and want to buy me a coffee, that would be 
 </avatar>
 
 <avatar key="HHHHH"
-  text="If mom's (presumably) fair coin gave me the gross potion for the last five days, am I more likely to get the potion today OR a normal lunch today?">
+  text="If mother's (presumably) fair coin gave me the gross potion for the last five days, am I more likely to get the potion today OR a normal lunch today?">
 
   <buton-group>
     <buton @click="memory='userSaidT'" nope>Gross potion 🥛</buton>
@@ -996,13 +1000,13 @@ If after all this, you're still here and want to buy me a coffee, that would be 
 </avatar>
 
 <avatar
-  text="Yeah! If mom's coin is really fair, I still have a 50-50 chance to get a normal lunch since coins have no memory.">
+  text="Yeah! If mother's coin is really fair, I still have a 50-50 chance to get a normal lunch since coins have no memory.">
   <next>Next</next>
 </avatar>
 
 
 <avatar key="100H"
-  text="Okay, but if I told you my mom's coin doomed me to the potion the last 100 days, what would you think I would get today?">
+  text="Okay, but if I told you my mother's coin doomed me to the potion the last 100 days, what would you think I would get today?">
 
   <buton-group>
     <buton yay>Gross potion 🥛</buton>
@@ -1016,13 +1020,13 @@ If after all this, you're still here and want to buy me a coffee, that would be 
    {{got('100H') ? 'Yeah!': 'Nice try but not quite.'}} The problem of seeing 100 tails in a row on a fair coin is different from seeing 5 tails in a row, because seeing 100 tails in a row is basically impossible. 
  </div>
 
- <div>The probability is so tiny (1/<exp base="2" pow="100"/>) that if all the <exp base="2" pow="80"/> atoms in the universe were flipping coins, it still be a 1 in million chance of happening of any atom seeing 100 tails in a row. So if the wizard's mom says tails came up 100 times in a row, we know the coin is not fair. 
+ <div>The probability is so tiny (1/<exp base="2" pow="100"/>) that if all the <exp base="2" pow="80"/> atoms in the universe were flipping coins, it still be a 1 in million chance of happening of any atom seeing 100 tails in a row. So if the wizard's mother says tails came up 100 times in a row, we know the coin is not fair. 
  </div>
 
    <next>Oh</next>
 </avatar>
 
-<avatar text="So somewhere in between drinking the potion 5 days in a row and a 100 days in a row, I ought to start questioning if my mom is playing fair. We will formalize this idea in Chapter 5: P-values.
+<avatar text="So somewhere in between drinking the potion 5 days in a row and a 100 days in a row, I ought to start questioning if my mother is cheating. We will formalize this idea in Chapter 5: P-values.
 ">
   <next>Next</next>
 </avatar>
@@ -1040,7 +1044,6 @@ If after all this, you're still here and want to buy me a coffee, that would be 
   <ul>
     <li>You met a statistics wizard.</li>
     <li>You learned about <bold>independent events</bold></li>
-    <li>You learned to calculate the <bold>joint probability</bold> of independent events.</li>
     <li>You learned that there are <exp base="2" pow="80"/> atoms in the universe.</li>
     <li>You learned to test people's claims.</li>
   </ul> 
@@ -1749,8 +1752,15 @@ If after all this, you're still here and want to buy me a coffee, that would be 
   <next>Next</next>
 </avatar>
 <avatar key="fakeout1"
-  image="girl.png" 
-  text="What is the probability that a random character is datable? i.e. What is P(tall AND beard)?">
+  image="girl.png">
+
+  <div>
+    What is the probability that a random character is datable? i.e. What is P(tall AND beard)? 
+  </div>
+
+  <div>
+    This probability is called the <bold>joint probability</bold> because it is the probability that tall and beard jointly occur. It's a fancy way of saying "and".
+  </div>
 
   <buton-group>
     <next>1/8</next>
@@ -1769,7 +1779,7 @@ If after all this, you're still here and want to buy me a coffee, that would be 
   </div>
 
   <div>
-    It is only valid to multiply two probabilities to calculate the joint probability if the two events are <bold>independent</bold> — like coin flips.
+    It is only valid to multiply two probabilities to calculate the joint probability of two events are <bold>independent</bold> — like coin flips in Chapter 1.
   </div>
 
   <div>
@@ -2449,7 +2459,7 @@ Click where you think the balance point is...
 
   <!-- tracks the user mouseover and user answer -->
   <div v-if="isMouseover" 
-       style="border-left:2px solid #7570b3; width:1px; height:200px; position:absolute; bottom: -48px; pointer-events:none;"
+       style="border-left:2px dashed #000; width:1px; height:200px; position:absolute; bottom: -48px; pointer-events:none;"
        :style="trackerStyle"></div>
 
   <!-- show the real answer -->
@@ -2457,13 +2467,13 @@ Click where you think the balance point is...
        v-if="answerPx" 
        class="ev-answer-bar"
        :style="{left: answerPx + 'px'}"
-       style="border-left:2px solid #1b9e77; width:1px; height:200px; position:absolute; bottom: -48px; pointer-events:none;"></div>
+       style="border-left:2px solid #000; width:1px; height:200px; position:absolute; bottom: -48px; pointer-events:none;"></div>
 </div>
 
 
 <div v-if="answerReal" class="smaller-children">
   <div>
-  You <span style="color:#7570b3">guessed {{$root.roundTo(guessReal, 1)}}</span>. The <span style="color:#1b9e77">expected value of  {{$root.roundTo(answerReal,1)}}</span> was {{feedbackString}}
+  You guessed {{$root.roundTo(guessReal, 1)}}. The <bold>expected value of  {{$root.roundTo(answerReal,1)}}</bold> was {{feedbackString}}
   </div>
 
   <buton @click.native="$emit('done')">Next</buton>
@@ -4323,7 +4333,7 @@ new Vue({
   el: '#app',
   data: {
     chapters: chapters,
-    chapterInd: DEBUG ? 5 : 0,
+    chapterInd: DEBUG ? 4 : 0,
     // Obj property additions do not update DOM, so prepopulate all the keys in the object. Or use lists.
     showTOC: false,
     hasVolume: false,
