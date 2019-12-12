@@ -207,6 +207,11 @@ button:hover{
   user-select: none; 
 }
 
+/*.unused {
+  color: red;
+  opacity: 0.5;
+}*/
+
 .disabled .highlight{
   font-weight: bold;
 }
@@ -289,27 +294,6 @@ svg .outcome{
   background-color: #eee;
 }
 
-@keyframes pulse {
-  from {
-    -webkit-transform: scale3d(1, 1, 1);
-    transform: scale3d(1, 1, 1);
-  }
-
-  50% {
-    -webkit-transform: scale3d(1.1, 1, 1);
-    transform: scale3d(1.1, 1, 1);
-  }
-
-  to {
-    -webkit-transform: scale3d(1, 1, 1);
-    transform: scale3d(1, 1, 1);
-  }
-}
-
-.pulse {
-    animation: pulse 2.5s ease 0s infinite;
-}
-
 
 </style>
 </head>
@@ -319,7 +303,6 @@ svg .outcome{
 
 
 <div id="app" @click="mainClick($event)">
-    <a style="position:fixed; bottom:2px; right:2px; font-size:10px; color: #aaa; z-index:2" href="//forms.gle/QeUmVfvoxpNJMEcDA">Report bug</a>
 
   <div ref="toc" class="normal-div navbar" style="text-align: left; position:fixed; z-index: 2; display: grid; grid-auto-flow: column; padding-top:8px; ">
 
@@ -699,7 +682,7 @@ overflow-y:auto;padding-top:8px; background-color: rgb(247,247,247);">
 
 
   <div>Expected playtime: <bold>60 min</bold></div>
-  <buton class="pulse" @click.native="$root.nextChapter()" :button-style="{'font-size': '28px', 'background-color': 'black', 'color': 'white'}">PLAY</buton>
+  <buton @click.native="$root.nextChapter()" :font-size="28">PLAY</buton>
 </div>
 </div>
 </script>
@@ -720,55 +703,28 @@ overflow-y:auto;padding-top:8px; background-color: rgb(247,247,247);">
 
 
 <p>
-That's all the chapters for now, but the story may continue if you clicke these buttons.
-</p>
+That's all the chapters for now, but the story may continue... Afterall, the wizard could do a whole section on useful distributions. 
 
-<a href="//eepurl.com/c8ur5T">
-<buton>
-  <div>SIGN UP</div>
-  <div style="font-size:10px">to be notified of new chapters</div>
-</buton>
-</a>
-
-<a href="//www.paypal.com/cgi-bin/webscr?cmd=_donations&business=cssndrx%40gmail.com&currency_code=USD&source=url">
-<buton>
-  <div>SEND MONEY</div>
-  <div style="font-size:10px">to me</div>
-</buton>
-</a>
-
-<!--<buton>
-  <div>DECIDE NEW CHAPTERS</div>
-  <div style="font-size:10px">with your wallet</div>
-</buton>
-
-<buton>
-  <div>PLAY</div>
-  <div style="font-size:10px">Adventures in Cognitive Biases</div>
-</buton>
 
 <ul>
 <li>Sign up to be notified of <a href="//eepurl.com/c8ur5T">future chapters</a></li>
 <li>Or leave me some <a href="//forms.gle/QeUmVfvoxpNJMEcDA">feedback</a> on story so far</li>
 </ul>
-
--->
-
 </p>
 
 
-<h4 style="margin-top:32px">If you liked this story, you might also like</h4>
+<p>
+If you liked this story, you might like
 
 <ul>
-<li>My older story about thinking rationally <a href="//cassandraxia.com/cogbiases/">Adventures in Cognitive Biases <img src="images/monk-small.png" style="height:20px; margin-bottom:0px"></a></li>
+<li>My other story about thinking rationally <a href="//cassandraxia.com/cogbiases/">Adventures in Cognitive Biases</a></li>
 
+<li>A much more comprehensive text covering much more statistics <a href="https://www.amazon.com/gp/product/1446210456/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=1446210456&linkCode=as2&tag=cassandraxia-20&linkId=38c49070a217a5b8b289553486d6d721">An Adventure in Statistics: The Reality Enigma</a><img src="//ir-na.amazon-adsystem.com/e/ir?t=cassandraxia-20&l=am2&o=1&a=1446210456" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" /></li>
 
-<li>A mathy and comprehensive text covering much more statistics <a href="https://www.amazon.com/gp/product/1446210456/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=1446210456&linkCode=as2&tag=cassandraxia-20&linkId=38c49070a217a5b8b289553486d6d721">An Adventure in Statistics: The Reality Enigma</a><img src="//ir-na.amazon-adsystem.com/e/ir?t=cassandraxia-20&l=am2&o=1&a=1446210456" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" /></li>
-
-<li>An entertaining read on which parts of statistics are used by real statisticians <a href="https://www.amazon.com/gp/product/0321629302/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=0321629302&linkCode=as2&tag=cassandraxia-20&linkId=8acaf4f7bf04f2ff7ac0341e952c9670">What is a p-value anyway? 34 Stories to Help You Actually Understand Statistics</a><img src="//ir-na.amazon-adsystem.com/e/ir?t=cassandraxia-20&l=am2&o=1&a=0321629302" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" /></li>
+<li>A very enlightening book on the parts of frequentist statistics that are used by real scientists <a href="https://www.amazon.com/gp/product/0321629302/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=0321629302&linkCode=as2&tag=cassandraxia-20&linkId=8acaf4f7bf04f2ff7ac0341e952c9670">What is a p-value anyway? 34 Stories to Help You Actually Understand Statistics</a><img src="//ir-na.amazon-adsystem.com/e/ir?t=cassandraxia-20&l=am2&o=1&a=0321629302" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" /></li>
 </ul>
 
-
+</p>
 
 
 <h4>Music</h4>
@@ -794,7 +750,7 @@ License: CC BY (http://creativecommons.org/licenses/by/4.0/)
 <div class="smaller-children">
 
 <p>
-The following people are awesome.
+I want to thank
 </p>
 
 <p>
@@ -828,6 +784,18 @@ All the new friends that I met along the way, including Wei Ho who inspired Chap
 <p>
 On the tech side, <a href="//vuejs.org/">Vue.js</a> greatly simplified the code needed for this project. I think it's better than React. I also want to thank jpegslayer who helped me on the friendly Vue forums.
 </p>
+
+<p>
+If after all this, you're still here and want to buy me a coffee, that would be a great boost to my ego!
+</p>
+
+<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+<input type="hidden" name="cmd" value="_donations" />
+<input type="hidden" name="business" value="cssndrx@gmail.com" />
+<input type="hidden" name="currency_code" value="USD" />
+<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button" />
+<img alt="" border="0" src="https://www.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1" />
+</form>
 
 
 </div>
@@ -962,7 +930,7 @@ On the tech side, <a href="//vuejs.org/">Vue.js</a> greatly simplified the code 
     To calculate the probability that multiple independent events will occur together, you can multiply them.
   </div>
   <div>
-    Probability of two potions = 1/2 × 1/2.
+    Probability of TT = 1/2 × 1/2.
   </div>
   <next>Next</next>
 </avatar> 
@@ -1321,7 +1289,7 @@ On the tech side, <a href="//vuejs.org/">Vue.js</a> greatly simplified the code 
 </avatar>
 
 <avatar image="brain.png">
-  <div>In the case that we are comparing two competing hypotheses and seeing which is more likely, we only need to look at the two parts in the numerator. The denominator P(Evidence) cancels out and two parts remain.</div>
+  <div>In the case that we are comparing two competing hypotheses and seeing which is more likely, we only need to look at the two parts in the numerator. The denominator P(Evidence) cancels out.</div>
 
   <div style="margin-bottom:28px;" class="smaller-children handwriting">
   <big-frac style="position:relative; top:12px" num="P(H=OK|Evidence)" den="P(H=Not OK|Evidence)" /> = <big-frac style="position:relative; top:12px" num="P(Evidence|H=OK) × P(H=OK)" den="P(Evidence|H=Not OK) × P(H=Not OK)" />
@@ -2913,7 +2881,7 @@ Click where you think the balance point is...
       @click="butonClicked()" v-on="$listeners" 
       :class="{'clicked-button': clickedButton}" 
       class="handwriting"
-      :style="mergedButtonStyle"
+      :style="buttonStyle"
       style="margin-bottom:4px"><slot></slot>
     </button>
   </div>
@@ -3464,7 +3432,7 @@ Vue.component('avatar', {
 Vue.component('buton', {
   props: {
     nope: {type: String}, // Text for why the answer is wrong. Blocks progression.
-    buttonStyle: {type: Object},
+    fontSize: {type: Number},
     scroll: {type: Boolean, default: true},
   },
   data: function(){
@@ -3488,14 +3456,9 @@ Vue.component('buton', {
     isYay: function(){
       return 'yay' in this.$attrs;
     },
-    defaultStyle(){
-      if (this.$slots.default[0].text){
-        const defaultFontSize = this.$slots.default[0].text.length > 40 ?16 : 20;
-        return {'font-size': defaultFontSize + 'px'};        
-      }
-    },
-    mergedButtonStyle: function(){
-      return _.merge(this.defaultStyle, this.buttonStyle);
+    buttonStyle: function(){
+      const defaultFontSize = this.$slots.default[0].text.length > 40 ?16 : 20;
+      return {'font-size': (this.fontSize || defaultFontSize) + 'px'};
     },
     showNopeText(){
       return (DEBUG || this.clickedButton) && this.isNope;
@@ -4430,7 +4393,7 @@ new Vue({
   el: '#app',
   data: {
     chapters: chapters,
-    chapterInd: DEBUG ? 7 : 0,
+    chapterInd: DEBUG ? 5 : 0,
     // Obj property additions do not update DOM, so prepopulate all the keys in the object. Or use lists.
     showTOC: false,
     hasVolume: false,
