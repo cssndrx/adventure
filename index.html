@@ -1583,7 +1583,7 @@ On the tech side, <a href="//vuejs.org/">Vue.js</a> greatly simplified the code 
   <div>This occurs when seeing which is more likely of two competing hypotheses (i.e. is Elena OK, or is she not OK).
   </div>
 
-  <div>This involves calculating the ratio  P(Hypothesis=OK|Evidence) / P(Hypothesis=Not OK|Evidence). Yielding a comparison of the numerators. The denominator cancels out.</div>
+  <div>This involves calculating the ratio  <span class="handwriting">P(Hypothesis=OK|Evidence) : P(Hypothesis=Not OK|Evidence)</span> and yields a comparison of the Bayes Formula numerators. The denominator cancels out.</div>
 
   <div style="margin-bottom:28px;" class="smaller-children handwriting">
   <big-frac style="position:relative; top:12px" num="P(H=OK|Evidence)" den="P(H=Not OK|Evidence)" /> = <big-frac style="position:relative; top:12px" num="P(Evidence|H=OK) × P(H=OK)" den="P(Evidence|H=Not OK) × P(H=Not OK)" />
@@ -1594,7 +1594,7 @@ On the tech side, <a href="//vuejs.org/">Vue.js</a> greatly simplified the code 
 </avatar>
 
 <avatar image="brain.png">
-  <div>The three remaining ratios have names, and intuitive meanings: prior belief (what you thought before), likelihood ratio (likelihood of evidence under each hypothesis), and posterior belief (what you thought after).</div>
+  <div>The three remaining ratios have names, and intuitive meanings: <bold>prior belief</bold> (what you thought before), <bold>likelihood ratio</bold> (likelihood of evidence under each hypothesis), and <bold>posterior belief</bold> (what you thought after).</div>
 
 
   <img src="images/bayes-colored.png" style="max-width:100%">
@@ -1606,9 +1606,9 @@ On the tech side, <a href="//vuejs.org/">Vue.js</a> greatly simplified the code 
   <div>What is my <bold>prior belief</bold> on Elena being okay? What is
   </div>
 
-  <div>
-  <big-frac num="P(H=OK)" den="P(H=Not OK)" /> 
-</div>
+  <div class="handwriting">
+    <big-frac num="P(H=OK)" den="P(H=Not OK)" /> 
+  </div>
 
   <div>before I found out that she was ruffled?</div>
   <next>Next</next>
@@ -1642,7 +1642,7 @@ On the tech side, <a href="//vuejs.org/">Vue.js</a> greatly simplified the code 
   </div>
 
   <div>
-    P(Ruffled|OK) vs P(Ruffled|Not OK).
+    <span class="handwriting">P(Ruffled|OK)</span> vs <span class="handwriting">P(Ruffled|Not OK)</span>.
   </div>
 
   <div>
@@ -1748,11 +1748,7 @@ On the tech side, <a href="//vuejs.org/">Vue.js</a> greatly simplified the code 
 </avatar>
 
 <avatar image="crow.png" text="CAWW CAWW (HELP HELP)">
-  <next>Next</next>
-</avatar>
-
-<avatar text="You get away from her, mean crows!">
-  <next>Next</next>
+  <next>Chase off the kidnappers</next>
 </avatar>
 
 <avatar text="Thank you for helping me find Elena.">
@@ -1841,11 +1837,11 @@ On the tech side, <a href="//vuejs.org/">Vue.js</a> greatly simplified the code 
 <avatar image="brain.png">
 
   <div>
-    Congrats, you solved a problem that so few people get correct that it inspired the naming of two cognitive biases: Base Rate Neglect (not using prior) and Bayesian Cnservatism (not using likelihood ratio).
+    Congrats, you solved a problem that so few people get correct that it inspired the naming of two cognitive biases: Base Rate Neglect (not using prior) and Bayesian Conservatism (not using likelihood ratio).
   </div>
 
   <div>
-    If you want to learn more, you may want to read <a href="hpmor.com">Harry Potter and the Methods of Rationality</a> or play <a href="//cassandraxia.com/cogbiases/">Adventures in Cognitive Biases</a>.
+    If you want to learn more, you may want to read <a href="//hpmor.com">Harry Potter and the Methods of Rationality</a> or play <a href="//cassandraxia.com/cogbiases/">Adventures in Cognitive Biases</a>.
   </div>
 
   <next>Next</next>
@@ -4770,7 +4766,7 @@ new Vue({
   el: '#app',
   data: {
     chapters: chapters,
-    chapterInd: DEBUG ? 4 : 0,
+    chapterInd: DEBUG ? 6 : 0,
     // Obj property additions do not update DOM, so prepopulate all the keys in the object. Or use lists.
     showTOC: false,
     hasVolume: false,
