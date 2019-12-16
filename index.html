@@ -162,6 +162,15 @@ button:hover{
   font-size: 14px;
 }
 
+.aside{
+  background-color:#777; 
+  color:white; 
+  padding:8px;
+  font-family: 'Itim';
+  font-size: 14px;
+}
+
+
 .cropcircle{
     width: 100px;
     height: 100px;
@@ -642,7 +651,7 @@ overflow-y:auto;padding-top:8px; background-color: rgb(247,247,247);">
 
 <avatar image="scientist.png">
   <div>
-    I can't just randomly test you until I get a positive result. That is p-hacking like in the <a href="//xkcd.com/882/">xkcd green jelly bean case</a>.
+    I can't just randomly test you until I get a positive result. That is p-hacking (<a href="//xkcd.com/882/">xkcd: green jelly beans</a>).
   </div>
   <next>Next</next>
 </avatar>
@@ -668,7 +677,86 @@ overflow-y:auto;padding-top:8px; background-color: rgb(247,247,247);">
     <li>A smaller p-value does not imply a larger effect size.</li>
   </ul> 
 
-  <buton @click.native="$root.nextChapter()">Next chapter?</buton>
+  <buton @click.native="$root.nextChapter()">Next story?</buton>
+  <next>Go deeper</next>
+
+</avatar>
+
+<!--<avatar>
+  <div>
+  In Chapter 1, when I repeatedly got the gross white potion from a presumably fair coin, and started questioning the fairness of the coin.
+  </div>
+
+  <div>
+  Now we have the tools to go back and answer the question more definitively.
+  </div>
+
+  <next>Next</next>
+
+</avatar>
+
+<avatar image="scientist.png">
+
+  <div>
+  We could run an experiment where the <bold>null hypothesis</bold> is that the coin is fair. The <bold>test statistic</bold> is the number of times the coin comes up on lunch. We would flip the coin a number of times and compute the p-value for the number of lunches observed. 
+  </div>
+
+  <div>
+  What is the p-value if the "fair" coin is flipped 10 times and yields 9 potions and 1 lunch?
+  </div>
+
+  <input-box right="6/1024"/>
+
+</avatar>
+
+
+<avatar image="scientist.png">
+<div>
+  Even if a scientist get a low p-value, it is still good to be uncertain about the results.
+</div>
+
+<div>
+  A p-value doesn't tell you how well the experiment was designed.
+</div>
+
+<div>
+  Also, if many experiments are run, then it is expected that some low p-value results were low due to randomness. 
+</div>
+
+<next>Next</next>
+</avatar> -->
+
+
+<avatar image="brain.png">
+<div>There is a <a href="//en.wikipedia.org/wiki/Replication_crisis">Replication Crisis</a> in science. Only ~60% of public scientific results are replicatable when another group of scientists try to follow the same instructions in the paper.</div>
+<next>What causes that?</next>
+</avatar>
+
+<avatar>
+<div>
+Imagine many scientists across the world are running experiments. When a scientist gets a p-value <0.05, they publish a paper about it. If they get a p-value >0.05, they file the paper away or perhaps rerun the experiment.
+</div>
+
+<div>
+This ends up in the publication of false positives. Due to random chance, the result looked statistically significant at a moment in time. 
+</div>
+
+<next>What are we doing about this?</next>
+</avatar>
+
+
+<avatar image="brain.png">
+
+<div>A few things!</div>
+
+<ul>
+<li>Forcing you to <a href="https://www.pnas.org/content/115/11/2600">preregister the experiment</a> in order to get funding. This guards against (a) the file drawer effect on negative results and (b) mining the data for insights other than what you intended to find.
+</li>
+<li><a href="//fivethirtyeight.com/features/how-to-tell-good-studies-from-bad-bet-on-them/">Prediction markets</a> on which studies are reproducible</li> 
+<li>Databases logging the success and failure of replication attempts.</li>
+</ul>
+
+<buton @click.native="$root.nextChapter()">Next story</buton>
 
 </avatar>
 
@@ -712,7 +800,7 @@ overflow-y:auto;padding-top:8px; background-color: rgb(247,247,247);">
 
 
 <p>
-  As you can see, life can be quite eventful with probability and statistics. I hope this guide helps add a bit of mischief to your life.
+  As you can see, life can be quite exciting with more probability and statistics. I hope this guide adds more mischief and color to your life.
 </p>
 
 <img src="images/wizard.png" style="max-width:200px">
@@ -720,7 +808,7 @@ overflow-y:auto;padding-top:8px; background-color: rgb(247,247,247);">
 
 
 <p>
-That's all the chapters for now, but the story may continue if you clicke these buttons.
+That's all the chapters for now, but the story may continue if you click these buttons.
 </p>
 
 <a href="//eepurl.com/c8ur5T">
@@ -763,9 +851,9 @@ That's all the chapters for now, but the story may continue if you clicke these 
 <li>My older story about thinking rationally <a href="//cassandraxia.com/cogbiases/">Adventures in Cognitive Biases <img src="images/monk-small.png" style="height:20px; margin-bottom:0px"></a></li>
 
 
-<li>A mathy and comprehensive text covering much more statistics <a href="https://www.amazon.com/gp/product/1446210456/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=1446210456&linkCode=as2&tag=cassandraxia-20&linkId=38c49070a217a5b8b289553486d6d721">An Adventure in Statistics: The Reality Enigma</a><img src="//ir-na.amazon-adsystem.com/e/ir?t=cassandraxia-20&l=am2&o=1&a=1446210456" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" /></li>
+<li>A comprehensive text covering much more statistics + cool story. <a href="https://www.amazon.com/gp/product/1446210456/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=1446210456&linkCode=as2&tag=cassandraxia-20&linkId=38c49070a217a5b8b289553486d6d721">An Adventure in Statistics: The Reality Enigma</a><img src="//ir-na.amazon-adsystem.com/e/ir?t=cassandraxia-20&l=am2&o=1&a=1446210456" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" /></li>
 
-<li>An entertaining read on which parts of statistics are used by real statisticians <a href="https://www.amazon.com/gp/product/0321629302/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=0321629302&linkCode=as2&tag=cassandraxia-20&linkId=8acaf4f7bf04f2ff7ac0341e952c9670">What is a p-value anyway? 34 Stories to Help You Actually Understand Statistics</a><img src="//ir-na.amazon-adsystem.com/e/ir?t=cassandraxia-20&l=am2&o=1&a=0321629302" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" /></li>
+<li>A juicy read on which parts of statistics are used by real statisticians <a href="https://www.amazon.com/gp/product/0321629302/ref=as_li_tl?ie=UTF8&camp=1789&creative=9325&creativeASIN=0321629302&linkCode=as2&tag=cassandraxia-20&linkId=8acaf4f7bf04f2ff7ac0341e952c9670">What is a p-value anyway? 34 Stories to Help You Actually Understand Statistics</a><img src="//ir-na.amazon-adsystem.com/e/ir?t=cassandraxia-20&l=am2&o=1&a=0321629302" width="1" height="1" border="0" alt="" style="border:none !important; margin:0px !important;" /></li>
 </ul>
 
 
@@ -773,19 +861,22 @@ That's all the chapters for now, but the story may continue if you clicke these 
 
 <h4>Music</h4>
 <div class="smaller-children">
-<p>
-The sound for this story was graciously edited to be nonobtrusive by doctor Hanoi Hantrakul.
-</p>
 
 <p>
-Background pieces included those created by <a href="//plasterbrain.com">plasterbrain</a> including 'Rusted Maid', 'Extreme Hardcore Death Metal Loop', 'Comma Flaw', and 'Find My Body Please'. 
-</p>
-
-<p>
-And two pieces from <a href="//filmmusic.io">https://filmmusic.io</a>
-"Sneaky Snitch" and "Wholesome" by Kevin MacLeod (<a href="//incompetech.com">https://incompetech.com</a>)
+Two background pieces were found at <a href="//filmmusic.io">https://filmmusic.io</a>
+"Sneaky Snitch" (Title & Chapter 1) and "Comfortable Mystery" (Chapter 2) by Kevin MacLeod (<a href="//incompetech.com">https://incompetech.com</a>)
 License: CC BY (http://creativecommons.org/licenses/by/4.0/)
 </p>
+
+<p>
+The rest came from <a href="//plasterbrain.com">plasterbrain</a> including 'Your Call' (Chapter 3), 'Extreme Hardcore Death Metal Loop' (Chapter 4), 'Comma Flaw' (Chapter 5), and 'Find My Body Please' (Chapter 6). 
+</p>
+
+
+<p>
+The sound for this story was graciously edited to be less obtrusive by doctor <a href="//cargocollective.com/lh-hantrakul">Hanoi Hantrakul</a>.
+</p>
+
 </div>
 
 
@@ -798,7 +889,7 @@ The following people are awesome.
 </p>
 
 <p>
-The backers and supporters of Timmy's Journey, including Vivek Rajkumar, Conrad Ho, Brienne and Eliezer Yudkowsky, Eric Chisholm, Alia McCutcheon and other folks from the LessWrong scene encouraged me to develop Adventures in Cognitive Biases further. Ruwen Liu contributed a few pieces of good art to this story and I found or drew the less artistic ones.
+The backers and supporters of Timmy's Journey, including <a href="//en.wikipedia.org/wiki/Vivek_Rajkumar">Vivek Rajkumar</a>, <a href="//www.conradho.com/conrad/">Conrad Ho</a>, Brienne and <a href="http://yudkowsky.net/">Eliezer Yudkowsky</a>, Eric Chisholm, Alia McCutcheon and other folks from the LessWrong scene encouraged me to develop Adventures in Cognitive Biases further. <a href="//ruwl.net/">Ruwen Liu</a> contributed a few pieces of good art to this story and I found or drew the less artistic ones.
 </p>
 
 <!--wholesome-by-kevin-macleod_edit.wav
@@ -811,14 +902,14 @@ sneaky-snitch-by-kevin-macleod_edit.wav
 
 
 <p>
-<a href="//ncase.me/">Nicky Case</a> who created multiple examples for how to make experiences both fun and educational and built a community of excellent folks around it. Folks from the explorabl.es community provided valuable advice on how to improve the design including, Srini Kadamati, Zachary Steinberg, Philipp Legner, Amit Patel, and Philipp Wacker. Mai Akiyoshi who sat me down to talk about marketing.
+<a href="//ncase.me/">Nicky Case</a>, the de facto guru in being educational and entertaining gave amazing feedback on how to make things more visual and connected (I'm sorry I wasn't able to implement it all!). Folks from the explorabl.es community provided valuable advice on how to improve the design including, Srini Kadamati, Zachary Steinberg, <a href="//mathigon.org/">Philipp Legner</a>, <a href="//www.redblobgames.com/">Amit Patel</a>, and Philipp Wacker. Mai Akiyoshi who sat me down to talk about marketing.
 </p>
 
-<p><a href="//www.spencergreenberg.com/">Spencer Greenberg</a> and Mike Mozer resuscitated the project at points through their enthuasism and insightful critique. And thank you to all the folks who emailed in with encouragement and offers to help when earlier projects stagnated. 
+<p><a href="//www.spencergreenberg.com/">Spencer Greenberg</a> and <a href="//www.cs.colorado.edu/~mozer/">Mike Mozer</a> resuscitated the project at points through their enthuasism and insightful critique. And thank you to all the folks who emailed in with encouragement and offers to help when earlier projects stagnated. 
 </p>
 
 <p>
-Anand Babu and Google Kernel friends provided a creative space and the final push of energy to rewrite this. Kourosh Gharachorloo for all the bugs he found, and accidentally the most senior QA tester I've ever had. Tianyu Liu recommended the perfect pieces of prior work. Nathan Martz was the oracle who was right about all the pitfalls.
+Anand Babu and Google Kernel friends provided a creative space and the final push of energy to rewrite this. Kourosh Gharachorloo for all the bugs he found, and accidentally the most senior QA tester I've ever had. <a href="//tianyuliu.herokuapp.com/">Tianyu Liu</a> recommended the perfect pieces of prior work. <a href="//twitter.com/nathanmartz?lang=en">Nathan Martz</a> was the game-industry oracle who was right about all the pitfalls.
 </p>
 
 <p>
@@ -826,7 +917,7 @@ All the new friends that I met along the way, including Wei Ho who inspired Chap
 </p>
 
 <p>
-On the tech side, <a href="//vuejs.org/">Vue.js</a> greatly simplified the code needed for this project. I think it's better than React. I also want to thank jpegslayer who helped me on the friendly Vue forums.
+On the tech side, <a href="//vuejs.org/">Vue.js</a> greatly simplified the code needed for this project. I think it's better than React. I also want to thank <a href="//joshcai.com/">jpegslayer</a> who helped me on the friendly Vue forums.
 </p>
 
 
@@ -867,8 +958,8 @@ On the tech side, <a href="//vuejs.org/">Vue.js</a> greatly simplified the code 
    <line x1="0" :y1="height/2" :x2="lineX" :y2="height-linePadding" style="stroke-width:2"
    :style="{stroke: color.indexOf('1') > -1 ? 'black': '#eee'}" />
 
-   <text class="emoji-outcome" :x="lineX+emojiPadding" :y="emojiHeight">🍱</text>
-   <text class="emoji-outcome" :x="lineX+emojiPadding" :y="height-10">🥛</text>
+   <text class="emoji-outcome" :x="lineX+emojiPadding" :y="emojiHeight">{{emojis[0]}}</text>
+   <text class="emoji-outcome" :x="lineX+emojiPadding" :y="height-10">{{emojis[1]}}</text>
   </g>
 </script>
 
@@ -916,29 +1007,40 @@ On the tech side, <a href="//vuejs.org/">Vue.js</a> greatly simplified the code 
 
 <avatar>
   <div>
-    I'm your friendly neighborhood <bold>statistics wizard</bold>. I'm here to show you statistics is everywhere.
+    I'm your friendly neighborhood <bold>statistics wizard</bold>. I can teach you about independent events, the chain rule of probability, expected value, p-values, and Bayes Rule.
+  </div>
+
+  <div class="smaller-children">
+    (It's best to go through the story in order, but you can use <img src="images/menu.png" style="height:18px; position:relative; top:4px"> to jump ahead)
   </div>
   <next>Next</next>
 </avatar>
 
 
-<avatar 
-  text="To pack my lunch, my mother would flip a (presumably) fair coin, and if it would land heads she would pack me lunch 🍱 like a normal mother.">
+<avatar>
+  <div>
+    There's a spell that can magically materialize food. Half the time it materializes a delicious lunch box 🍱. Half the time it materializes a gross white potion 🥛. 
+  </div>
+
+  <div>
+    The results of the spell are <bold>independent</bold>. Independence means that knowing previous results does not give any information about future results. 
+  </div>
+
+  <div>
+    This works like coin flips in your world. Coins have no memory.
+  </div>
+
   <next>Next</next>
 </avatar>
 
-<avatar image="milk.png"
-    text="But if it landed tails, she would pack me a gross white potion 🥛 to make me stronger.">
-  <next>Next</next>
-</avatar>
 
 <avatar key="HH"
-  text="What is the probability that after my mother flips a fair coin twice, I'll be drinking the gross potion 🥛 two days in a row?">
+  text="What is the probability that after I cast the spell twice, I will have two gross potions? 🥛">
 
   <div>
   <div>
-    <div class="tree-header">Day 1</div>
-    <div class="tree-header">Day 2</div>
+    <div class="tree-header">Cast 1</div>
+    <div class="tree-header">Cast 2</div>
   </div>
   <svg height="210" width="180">
     <g transform="translate(0,-90)">
@@ -949,17 +1051,13 @@ On the tech side, <a href="//vuejs.org/">Vue.js</a> greatly simplified the code 
   </svg> <span style="font-size:32px; position:relative:-20px">?</span>
   </div>
 
-  <buton nope="1/2 is the probability of tossing a single coin and getting T. Getting two tails is rarer, but how much rarer?">1/2</buton>
+  <buton nope="1/2 is the probability of getting a potion with one cast. Getting two potions is rarer, but how much rarer?">1/2</buton>
   <buton yay>1/4</buton>
 </avatar>
 
-<avatar image="brain.png"
-  key="HH-explanation">
+<avatar image="brain.png">
   <div>
-    Right. Coin flips are <bold>independent</bold>. Knowing the result of one event does not give you information about the other events, because coins have no memory. 
-  </div>
-  <div>
-    To calculate the probability that multiple independent events will occur together, you can multiply them.
+    To calculate the probability that multiple independent events will occur together, you can multiply their individual probabilities.
   </div>
   <div>
     Probability of two potions = 1/2 × 1/2.
@@ -968,12 +1066,12 @@ On the tech side, <a href="//vuejs.org/">Vue.js</a> greatly simplified the code 
 </avatar> 
 
 <avatar key="HHH"
-  text="What is the probability that after my mother tosses a (presumably) fair coin three times, I'll end up drinking the potion three days in a row?">
+  text="What is the probability that after three casts, I'll have 3 gross potions?">
 
   <div>
-    <div class="tree-header">Day 1</div>
-    <div class="tree-header">Day 2</div>
-    <div class="tree-header">Day 3</div>
+    <div class="tree-header">Cast 1</div>
+    <div class="tree-header">Cast 2</div>
+    <div class="tree-header">Cast 3</div>
   </div>
 
   <div>
@@ -1007,24 +1105,24 @@ On the tech side, <a href="//vuejs.org/">Vue.js</a> greatly simplified the code 
 </avatar>
 
 <avatar key="HHHHH"
-  text="If mother's (presumably) fair coin gave me the gross potion for the last five days, am I more likely to get the potion today OR a normal lunch today?">
+  text="If after 5 casts, I have 5 gross potions, am I more likely to get the potion OR a delicious lunchbox on my next cast?">
 
   <buton-group>
-    <buton @click="memory='userSaidT'" nope>Gross potion 🥛</buton>
-    <buton @click="memory='userSaidH'" nope>Normal lunch 🍱</buton>
+    <buton @click="memory='userSaidPotion'" nope>Gross potion 🥛</buton>
+    <buton @click="memory='userSaidLunch'" nope>Delicious lunch 🍱</buton>
     <buton yay>It's 50-50</buton>
 
     <template v-slot:hint>
-      <div v-if="memory == 'userSaidT'">
+      <div v-if="memory == 'userSaidPotion'">
         <div>That's the Gambler's Fallacy... a common misconception that events that haven't occured are more likely to occur.</div>
 
-        <div>Coins have no memory, so just because tails came up a lot, doesn't mean that heads is more likely to come up in the future.</div>
+        <div>Like a coin, this spell has no memory, so just because potions have occured a lot, doesn't mean that potions are more likely.</div>
       </div>
 
-      <div v-if="memory == 'userSaidH'">
+      <div v-if="memory == 'userSaidLunch'">
         <div>That's the Hot Hand Fallacy... a common misconception that events that have occurred recently are "hot" and more likely to come up.</div>
 
-        <div>Coins have no memory, so just because tails came up a lot, doesn't mean that tails is any more likely to come up in the future.</div>
+        <div>Like a coin, this spell has no memory, so just because potions have occured a lot, doesn't mean that lunch boxes are more likely now.</div>
       </div>
 
     </template>
@@ -1032,13 +1130,13 @@ On the tech side, <a href="//vuejs.org/">Vue.js</a> greatly simplified the code 
 </avatar>
 
 <avatar
-  text="Yeah! If mother's coin is really fair, I still have a 50-50 chance to get a normal lunch since coins have no memory.">
+  text="Yeah! If the spell is truly independent, the odds remain the same regardless of past results.">
   <next>Next</next>
 </avatar>
 
 
 <avatar key="100H"
-  text="Okay, but if I told you my mother's coin doomed me to the potion the last 100 days, what would you think I would get today?">
+  text="Okay, but if in my last 100 casts of the spell, I got the gross potion all 100 times, what do you think the next cast would yield?">
 
   <buton-group>
     <buton yay>Gross potion 🥛</buton>
@@ -1048,25 +1146,185 @@ On the tech side, <a href="//vuejs.org/">Vue.js</a> greatly simplified the code 
 </avatar>
 
 <avatar image="brain.png">
-  <div>
-   {{got('100H') ? 'Yeah!': 'Nice try but not quite.'}} The problem of seeing 100 tails in a row on a fair coin is different from seeing 5 tails in a row, because seeing 100 tails in a row is basically impossible. 
+<div>
+   {{got('100H') ? 'Yeah!': 'Nice try, but not quite.'}} Getting 100 potions in a row on is different from getting 5 potions in a row, because 100 potions in a row is basically impossible. 
  </div>
 
- <div>The probability is so tiny (1/<exp base="2" pow="100"/>) that if all the <exp base="2" pow="80"/> atoms in the universe were flipping coins, it still be a 1 in million chance of happening of any atom seeing 100 tails in a row. So if the wizard's mother says tails came up 100 times in a row, we know the coin is not fair. 
+ <div>The probability is so tiny (1/<exp base="2" pow="100"/>) that it a million times rarer than finding a particular atom by drawing from all <exp base="2" pow="80"/> atoms in the universe. 
  </div>
 
-   <next>Oh</next>
+ <div>
+   So if the wizard ever casts the spell and gets 100 potions in a row, we know the spell does not work the way it was described. 
+ </div>
+
+   <next>Okay</next>
 </avatar>
 
-<avatar text="So somewhere in between drinking the potion 5 days in a row and a 100 days in a row, I ought to start questioning if my mother is cheating. We will formalize this idea in Chapter 5: P-values.
-">
+<avatar>
+  <div>
+    There is a also set of spells that I can cast to summon an animal familiar. 
+  </div>
   <next>Next</next>
+</avatar>
+
+<avatar>
+  <div>
+    Casting each of the spells in the set is finicky and doesn't always succeed. A cast succeeds 20% of the time ✨ and is independent of previous casts. I need 3 successful casts in a row ✨✨✨ to summon the animal familiar.
+  </div>
+
+  <div>
+    What is the probability that I summon a familiar on my first try? 
+  </div>
+
+  <input-box :right="1/125">
+    <template v-slot:hint>
+      <div>
+        This is just like the coin tosses, but the probability of casting successfully is only 20% each time.
+      </div>
+    </template>
+  </input-box>
+
+
+<!--  <div>
+    <div class="tree-header">Cast 1</div>
+    <div class="tree-header">Cast 2</div>
+    <div class="tree-header">Cast 3</div>
+  </div>
+
+  <div>
+  <svg height="420" width="300">
+
+    <g transform="translate(0,-30)">
+      <tree-node :emojis="['💥', '✨']" color="1" transform="translate(0, 150)" :height="200" :width="80"></tree-node>
+
+      <g transform="translate(84, -60)">
+        <tree-node :emojis="['💥', '✨']" color="" transform="translate(0, 150)"></tree-node>
+        <tree-node :emojis="['💥', '✨']" color="" transform="translate(80,90)"></tree-node>
+        <tree-node :emojis="['💥', '✨']" color="" transform="translate(80,200)"></tree-node>
+      </g>
+
+
+      <g transform="translate(84, 150)">
+        <tree-node :emojis="['💥', '✨']" color="1" transform="translate(0, 150)"></tree-node>
+        <tree-node :emojis="['💥', '✨']" color="" transform="translate(80,90)"></tree-node>
+        <tree-node :emojis="['💥', '✨']" color="1" transform="translate(80,200)"></tree-node>
+      </g>
+    </g>
+
+  </svg>
+  </div> -->
+
+</avatar>
+
+<avatar>
+  <div>
+    What is the probability that I'll succeed ✨ on my first 2 casts and then fail 💥 the third cast? 
+  </div>
+
+  <div>
+    In other words, what is the probability that I get ✨✨💥?
+  </div>
+
+  <input-box :right=".032">
+    <template v-slot:hint>
+      <div>
+        The probability of a cast being successful is 20%. The probability of a cast failing is 80%. 
+      </div>
+      <div>
+        Multiply to get the probability that multiple events occur together.
+      </div>
+    </template>
+  </input-box>
+
+
+<!--  <div>
+    <div class="tree-header">Cast 1</div>
+    <div class="tree-header">Cast 2</div>
+    <div class="tree-header">Cast 3</div>
+  </div>
+
+  <div>
+  <svg height="420" width="300">
+
+    <g transform="translate(0,-30)">
+      <tree-node :emojis="['💥', '✨']" color="1" transform="translate(0, 150)" :height="200" :width="80"></tree-node>
+
+      <g transform="translate(84, -60)">
+        <tree-node :emojis="['💥', '✨']" color="" transform="translate(0, 150)"></tree-node>
+        <tree-node :emojis="['💥', '✨']" color="" transform="translate(80,90)"></tree-node>
+        <tree-node :emojis="['💥', '✨']" color="" transform="translate(80,200)"></tree-node>
+      </g>
+
+
+      <g transform="translate(84, 150)">
+        <tree-node :emojis="['💥', '✨']" color="1" transform="translate(0, 150)"></tree-node>
+        <tree-node :emojis="['💥', '✨']" color="" transform="translate(80,90)"></tree-node>
+        <tree-node :emojis="['💥', '✨']" color="0" transform="translate(80,200)"></tree-node>
+      </g>
+    </g>
+
+  </svg>
+  </div> -->
+</avatar>
+
+<avatar>
+  <div>
+    What is the probability that I'll get 2 successful casts ✨ and 1 failed cast 💥? (any order)
+  </div>
+
+  <div>
+    In other words, what is the probabilty that I get any of
+  </div>
+
+  <div>
+    💥✨✨<br>
+    ✨💥✨<br>
+    ✨✨💥<br>
+  </div>
+
+  <input-box :right=".096">
+    <template v-slot:hint>
+      <div>
+        This is the same as the previous question of getting ✨✨💥, except there are 3 different positions for where the failed cast 💥 could be located. 
+      </div>
+
+      <div>
+        So the probability is 3 times more than the previous question. 
+      </div>
+    </template>
+  </input-box>
+
 </avatar>
 
 
 <avatar>
   <div>
-    But this was around the time that I stopped trusting what people said and started <bold>testing their claims</bold>.
+    You want me to try it? Ok, here goes.
+  </div>
+  <div>
+    Hold down to cast until the wizard casts a ✨✨✨. It may take awhile, but it's worth it.
+  </div>
+
+  <summoning />
+</avatar>
+
+
+<avatar>
+  <div>
+    Oh my! Oh my! {{$root.summoningFlips.length > 1 ? 'I finally did it!' : 'I did it on my first shot!'}} I summoned a familiar!!
+  </div>
+
+  <next>Next</next>
+</avatar>
+
+<avatar image="crow.png"
+  text="Caw!">
+  <next>Next</next>
+</avatar>
+
+<avatar>
+  <div>
+    I'll name her Elena 💖
   </div>
   <next>Next</next>
 </avatar>
@@ -1075,13 +1333,12 @@ On the tech side, <a href="//vuejs.org/">Vue.js</a> greatly simplified the code 
 <avatar image="brain.png">
   <ul>
     <li>You met a statistics wizard.</li>
-    <li>You learned about <bold>independent events</bold></li>
+    <li>You learned about <bold>independent events</bold>.</li>
     <li>You learned that there are <exp base="2" pow="80"/> atoms in the universe.</li>
-    <li>You learned to test people's claims.</li>
+    <li>You learned to calculate the probability of many independent events happening together by multiplying their individual probabilities.</li>
   </ul> 
-  <buton @click.native="$root.nextChapter()">Next chapter</buton>
+  <buton @click.native="$root.nextChapter()">Next story</buton>
 </avatar>
-
 
 
 </pset>
@@ -1094,17 +1351,12 @@ On the tech side, <a href="//vuejs.org/">Vue.js</a> greatly simplified the code 
 <h2>Chapter 2: Randomness</h2>
 <pset>
 
-<avatar  
-  text="By the way, have you met my crow friend Elena?">
-  <next>Next</next>
-</avatar>
-
 <avatar image="crow.png"
   text="Caw!">
   <next>Next</next>
 </avatar>
 
-<avatar text="Elena found some hilarious coins. They say H on one side, and A on the other. Let's play with them! ">
+<avatar text="My crow familiar Elena found some hilarious coins. They say H on one side, and A on the other. Let's play with them! ">
   <next>Next</next>
 </avatar>
 
@@ -1112,7 +1364,7 @@ On the tech side, <a href="//vuejs.org/">Vue.js</a> greatly simplified the code 
   text="Of these 3 coins, 2 are fair and 1 is unusual. Let's see if you can find the unusual one.">
 
   <div class="smaller-children">
-    <div>Click (or hold down) the coins to flip them. When you have enough info, submit your guess.</div>
+    <div>Hold down the coins to flip them. When you have enough info, submit your guess.</div>
   </div>
 
   <coin></coin>
@@ -1157,7 +1409,7 @@ On the tech side, <a href="//vuejs.org/">Vue.js</a> greatly simplified the code 
 
 
   <div class="smaller-children">
-    <div>Click (or hold down) the coins to flip them. When you have enough info, submit your guess.</div>
+    <div>Hold down the coins to flip them. When you have enough info, submit your guess.</div>
   </div>
 
   <coin></coin>
@@ -1189,7 +1441,7 @@ On the tech side, <a href="//vuejs.org/">Vue.js</a> greatly simplified the code 
   text="OKOK last one. Find the unusual coin.">
 
   <div class="smaller-children">
-    <div>Click (or hold down) the coins to flip them. When you have enough info, submit your guess.</div>
+    <div>Hold down the coins to flip them. When you have enough info, submit your guess.</div>
   </div>
 
   <coin></coin>
@@ -1240,7 +1492,7 @@ On the tech side, <a href="//vuejs.org/">Vue.js</a> greatly simplified the code 
     <li>What real randomness feels like</li>
   </ul> 
 
-  <buton @click.native="$root.nextChapter()">Next Story</buton>
+  <buton @click.native="$root.nextChapter()">Next story</buton>
 </avatar>
 
 </pset>
@@ -1310,25 +1562,41 @@ On the tech side, <a href="//vuejs.org/">Vue.js</a> greatly simplified the code 
 
 <avatar image="brain.png">
   <div>
-    Yes, but if you plug in meaningful values, then Bayes Rule becomes a general relationship of how to change your mind in response to new data.
+    Yes, but if you plug in meaningful values, then Bayes Rule becomes a general relationship of how to change what you think (<bold>hypothesis</bold>) in response to new <bold>evidence</bold>.
   </div>
 
   <div style="margin-bottom:28px;" class="smaller-children handwriting">
   P(Hypothesis|Evidence) = <big-frac style="position:relative; top:12px" num="P(Evidence|Hypothesis) × P(Hypothesis)" den="P(Evidence)" />
   </div>
 
-  <next>Try it</next>
+  <div>This is the basis for Bayesian reasoning and Bayesian machine learning.</div>
+
+  <next>Next</next>
 </avatar>
 
 <avatar image="brain.png">
-  <div>In the case that we are comparing two competing hypotheses and seeing which is more likely, we only need to look at the two parts in the numerator. The denominator P(Evidence) cancels out and two parts remain.</div>
+
+  <div>
+  Another useful form is the <bold>odds ratio form of Bayes Rule</bold>.
+  </div>
+
+  <div>This occurs when seeing which is more likely of two competing hypotheses (i.e. is Elena OK, or is she not OK).
+  </div>
+
+  <div>This involves calculating the ratio  P(Hypothesis=OK|Evidence) / P(Hypothesis=Not OK|Evidence). Yielding a comparison of the numerators. The denominator cancels out.</div>
 
   <div style="margin-bottom:28px;" class="smaller-children handwriting">
   <big-frac style="position:relative; top:12px" num="P(H=OK|Evidence)" den="P(H=Not OK|Evidence)" /> = <big-frac style="position:relative; top:12px" num="P(Evidence|H=OK) × P(H=OK)" den="P(Evidence|H=Not OK) × P(H=Not OK)" />
-  </div>
+  </div> 
+
+</avatar>
+
+<avatar image="brain.png">
+  <div>The three remaining ratios have names, and intuitive meanings: prior belief (what you thought before), likelihood ratio (likelihood of evidence under each hypothesis), and posterior belief (what you thought after).</div>
 
 
-  STOPPED HERE: HIGHLIGHT THIS TODO
+  <img src="images/bayes-colored.png" style="max-width:100%">
+
   <next>Next</next>
 </avatar>
 
@@ -1361,10 +1629,10 @@ On the tech side, <a href="//vuejs.org/">Vue.js</a> greatly simplified the code 
 
 <avatar image="brain.png">
   <div>
-    Now you need to take into account the data that Elena was last seen visibly ruffled. 
+    Now you need to take into account the evidence that Elena was last seen visibly ruffled. 
   </div>
   <div>
-    To incorporate this data, Bayes Rule says to look at the likelihood of the data under each hypothesis P(D|H). 
+    To incorporate this evidence, Bayes Rule says to look at the likelihood of the evidence under each hypothesis P(Evidence|Hypothesis). 
   </div>
 
   <div>
@@ -1543,7 +1811,7 @@ On the tech side, <a href="//vuejs.org/">Vue.js</a> greatly simplified the code 
 
       <div>
       <div><bold>Likelihood Ratio</bold></div>
-      The likelihood ratio of the data P(D|H) given that the eyewitness saw a blue cab consists of
+      The likelihood ratio of the data P(E|H) given that the eyewitness saw a blue cab consists of
       </div>
       <big-frac>
         <template v-slot:num>
@@ -1568,50 +1836,18 @@ On the tech side, <a href="//vuejs.org/">Vue.js</a> greatly simplified the code 
   </div>
 </avatar>
 
-<avatar image="brain.png"
-  text="Congrats, you solved a problem that few people get correct. By using both the prior and likelihood of evidence, you avoided the human tendency to just use one or the other.">
-
-  <next>Next</next>
-</avatar>
-
-
-HERE IS A GOOD SPOT TO PUT IN THE NORMALIZATION THING
-
-
 <avatar image="brain.png">
-  <div>
-    Ready for a final challenge? Let's return to the Bayes Rule formula. 
-  </div>
 
-  <div style="margin-bottom:28px;" class="smaller-children handwriting">
-  P(Hypothesis|Evidence) = <big-frac style="position:relative; top:12px" num="P(Evidence|Hypothesis) × P(Hypothesis)" den="P(Evidence)" />
+  <div>
+    Congrats, you solved a problem that so few people get correct that it inspired the naming of two cognitive biases: Base Rate Neglect (not using prior) and Bayesian Cnservatism (not using likelihood ratio).
   </div>
 
   <div>
-  Up until now, we discarded the denominator by dividing it out for binary hypothesis testing. Sometimes you're not able to do that though. It's worth understanding the denominator.
+    If you want to learn more, you may want to read <a href="hpmor.com">Harry Potter and the Methods of Rationality</a> or play <a href="//cassandraxia.com/cogbiases/">Adventures in Cognitive Biases</a>.
   </div>
 
-  <div>
-    It's possible to unpack the denominator using conditional probabilities that we learned about in Chapter 3. 
-  </div>
-
-  <div>
-    P(Evidence) = P(Evidence AND H0) + P(Evidence AND H1)
-    P(Evidence AND H0) = P(Evidence|H0)*P(H0)
-    P(Evidence AND H1) = P(Evidence|H1)*P(H1)
-  </div>
-
-  <div>
-    Deconstruct based on the information available at hand. 
-  </div>
-
-
-  <div>
-    For instance, how // stopped here looking at gigerenzer paper again
-  </div>
   <next>Next</next>
 </avatar>
-
 
 
 
@@ -1674,11 +1910,15 @@ HERE IS A GOOD SPOT TO PUT IN THE NORMALIZATION THING
   <div>You learned....</div>
 
   <ul>
-    <li>how to update beliefs with <bold>Bayes Rule</bold> is the average reward.</li>
-    <li><bold>posterior belief</bold> is proportional to <bold>prior belief</bold> × <bold>likelihood of evidence</bold></li>
+    <li>How to update beliefs with <bold>Bayes Rule</bold> is the average reward.</li>
+    <li><bold>Posterior belief</bold> is proportional to <bold>prior belief</bold> × <bold>likelihood of evidence</bold></li>
     <li>To breathe when panicking.</li>
     <li>That you have a new friend.</li>
   </ul> 
+
+  <div class="smaller-children">
+    You solved the problems in this chapter using the odds ratio form of Bayes Rule. You can also solve it using the <a href="//pure.mpg.de/rest/items/item_2102205/component/file_2102204/content">Gigerenzer frequency grid technique</a> (h/t Nicky Case). Try out the sepsis problem from Gigerenzer's paper.
+  </div>
 
   <next>Next</next>
 </avatar>
@@ -1706,9 +1946,10 @@ HERE IS A GOOD SPOT TO PUT IN THE NORMALIZATION THING
   </div> 
 
   <div>
-    <buton @click.native="$root.nextChapter()" :scroll="false">Next chapter</buton>
+    <buton @click.native="$root.nextChapter()" :scroll="false">The End?</buton>
   </div>
 </avatar>
+
 
 
 </pset>
@@ -1739,6 +1980,27 @@ HERE IS A GOOD SPOT TO PUT IN THE NORMALIZATION THING
     <img v-if="!isShowingH" src="images/coin_tails.png" style="width:100px">
     <div ref="flip-string" style="font-size:13px; margin-left:8px; margin-right:8px" :style="flipStringStyle">{{flipString ? flipString.length + ' flips ' : ''}} {{flipString}}</div>
     <samples-chart v-if="flips.length > 0" :xdomain="xDomain" :dist="dist" :style="chartStyle"></samples-chart>
+  </div>
+</script>
+
+<script type="text/x-template" id="summoning-template">
+  <div>
+
+
+    <div>
+    <buton @mousedown.native="isMouseDown = true" 
+       @mouseup.native="isMouseDown = false" 
+
+       @touchstart.native="isMouseDown = true"
+       @touchend.native="isMouseDown = false"
+
+       @contextmenu.native="isMouseDown = false">Summon familiar</buton>
+     </div>
+
+    <span v-for="flip in $root.summoningFlips" style="margin-right:8px">
+      {{flip}}
+    </span>
+
   </div>
 </script>
 
@@ -1823,35 +2085,29 @@ HERE IS A GOOD SPOT TO PUT IN THE NORMALIZATION THING
   </div>
 
   <div>
-    The probability of a character having a beard can be written as:
+    The probability of a character having a beard can be written as   <span class="handwriting">P(beard) = 1/4</span>
+  </div>
+
+
+  <div class="aside">
+    This is pronounced "the probability of a beard is 1/4".
   </div>
 
   <div>
-    P(beard) = 1/4
+    Veronica also told us <span class="handwriting">P(tall) = 1/2</span>
   </div>
 
-  <div>
-    This is pronounced as "the probability of a beard is 1/4".
-  </div>
-
-  <div>
-    Veronica also told us
-  </div>
-
-  <div>
-    P(tall) = 1/2
-  </div>
   <next>Next</next>
 </avatar>
 <avatar key="fakeout1"
   image="girl.png">
 
   <div>
-    What is the probability that a random character is datable? i.e. What is P(tall AND beard)? 
+    What is the probability that a random character is datable? i.e. What is <span class="handwriting">P(tall AND beard)</span>? 
   </div>
 
   <div>
-    This probability is called the <bold>joint probability</bold> because it is the probability that tall and beard jointly occur. It's a fancy way of saying "and".
+    This probability is called the <bold>joint probability</bold> because it is the probability that tall and beard jointly occur. It's a mathy way of saying <span class="handwriting">"and"</span>.
   </div>
 
   <buton-group>
@@ -1871,15 +2127,15 @@ HERE IS A GOOD SPOT TO PUT IN THE NORMALIZATION THING
   </div>
 
   <div>
-    It is only valid to multiply two probabilities to calculate the joint probability of two events are <bold>independent</bold> — like coin flips in Chapter 1.
+    In Chapter 1, we calculated the joint probability of <span class="handwriting">P(X and Y)</span> by multiplying  <span class="handwriting">P(X)</span> and  <span class="handwriting">P(Y)</span>. But this is only valid when X and Y are <bold>independent</bold>.
   </div>
 
   <div>
-     In our case, independence occurs if a character's height <bold>does not provide any information</bold> on the greatness of a characters hair. 
+     Independence means that knowing X <bold>does not provide any information</bold> on Y — like the spell casts in Chapter 1. 
   </div>
 
   <div>
-    So if knowing that a character is tall or short, does not make it any more or less likely that the character has a beard... then it's safe to say that having a beard and being tall are independent.
+     However, if knowing that a character is tall or short, makes it more or less likely that the character has a beard... then height and beardedness are dependent. 
   </div>
 
   <next>Next</next>
@@ -1887,7 +2143,7 @@ HERE IS A GOOD SPOT TO PUT IN THE NORMALIZATION THING
 
 
 <avatar image="girl.png" 
-        text="I guess I do see some correlation between being tall and having a beard, so they're not independent. If I know a character is tall, there's a 1/3 chance that they have a beard.">
+        text="I guess I do see some correlation between being tall and having a beard, so they're not independent. If a character is tall, there's a 1/3 chance that they have a beard.">
   <next>Next</next>
 </avatar>
 
@@ -1896,25 +2152,25 @@ HERE IS A GOOD SPOT TO PUT IN THE NORMALIZATION THING
 <avatar image="brain.png">
 
   <div>
-  Veronica told us a <bold>conditional probability</bold> when she said:
+    Veronica told us a <bold>conditional probability</bold> when she said:
+  </div>
+
+  <div class="handwriting">
+   If a character is tall, there's a 1/3 chance that they have a beard.
   </div>
 
   <div>
-   The probability a character has a beard is 1/3 <bold>given</bold> that we know the character is tall. 
-  </div>
-
-  <div>
-    Conditional probabilities are written like P(X|Y). The bar "|" is  pronounced as "given", and P(X|Y) indicates the probability of X given that we know Y to be true.
-  </div>
-
-
-  <div>
-    Veronica told us P(beard|tall) = 1/3.
+    Conditional probabilities are written like <span class="handwriting">P(X|Y)</span>. The bar "|" is  pronounced as <span class="handwriting">"given"</span>, and <span class="handwriting">P(X|Y)</span> indicates the probability of X given that we know Y to be true.
   </div>
 
 
   <div>
-   This is read as "the probability a character has a beard given that we know the character is tall is 1/3". 
+    Veronica told us <span class="handwriting">P(beard|tall) = 1/3</span>.
+  </div>
+
+
+  <div class="aside">
+   This is pronounced "the probability a character has a beard <bold>given</bold> that we know the character is tall is 1/3". 
   </div>
 
 
@@ -1928,12 +2184,15 @@ HERE IS A GOOD SPOT TO PUT IN THE NORMALIZATION THING
     We can use the conditional probability to calculate P(tall AND beard) without assuming independence:
   </div>
 
-  <div>
-    P(tall AND beard) = P(tall) x P(beard|tall)
+  <div class="handwriting">
+    P(tall AND beard) = <span style="color:#a6d854">P(tall)</span> × <span style="color:#ffd92f">P(beard|tall)</span>
   </div>
 
   <div>
-    The formula says to get the probability of finding a tall character with a beard = (probability of finding a tall character) x (probability that a tall character has a beard).
+    The formula just says
+  </div>
+
+  <div class="handwriting smaller-children">probability of finding a tall character with a beard = <span style="color:#a6d854">probability of finding a tall character</span> × <span style="color:#ffd92f">probability that a tall character would have a beard</span>
   </div>
 
   <next>Try it</next>
@@ -1942,21 +2201,21 @@ HERE IS A GOOD SPOT TO PUT IN THE NORMALIZATION THING
 
 <avatar key="tall-hair" 
         image="girl.png" 
-        text="Okay so what is the probability that a random character is datable?">
+        text="Okay, so what is the probability that a random character is datable?">
 
-  <div>What is P(tall AND beard)?</div>
+  <div>What is <span class="handwriting">P(tall AND beard)</span>?</div>
 
   <div class="extra-info">Facts from before:
-  <ul>
+  <ul class="handwriting">
     <li class="highlight">P(tall) = 1/2</li>
     <li class="unused">P(beard) = 1/4</li>
-    <li class="highlight">P(beard | tall) = 1/3</li>
+    <li class="highlight">P(beard|tall) = 1/3</li>
   </ul>
   </div>
 
   <buton-group>
     <buton yay>1/6</buton>
-    <buton nope="We said that being tall and having a beard are not independent, so we can't just multiply 1/2 x 1/4.">1/8</buton>
+    <buton nope="We said that being tall and having a beard are not independent, so we can't just multiply 1/2 × 1/4.">1/8</buton>
     <buton nope="Are you just multiplying things together? Try again.">1/24</buton>
     <buton nope="The answer isn't always 'Not enough info'...">Not enough info</buton>
   </buton-group>
@@ -1972,11 +2231,15 @@ HERE IS A GOOD SPOT TO PUT IN THE NORMALIZATION THING
         image="girl.png"
         text="I also want my character to have tattoos. 1/5 of characters have tattoos.">
 
-  <div>In math speak, <bold>P(tattoos) = 1/5.</bold></div>
-  <div>What is P(tall, beard, tattoos)? <span style="color:#777"><- Note: This is a more compact way of writing P(tall AND beard AND tattoos).</span></div>
+  <div>In math speak, <span class="handwriting">P(tattoos) = 1/5.</span></div>
+  <div>What is <span class="handwriting">P(tall, beard, tattoos)?</span></div>
+
+  <div class="aside">
+    Using commas like in P(tall, beard, tattoos) is a more compact way of writing the joint probability P(tall AND beard AND tattoos).
+  </div>
 
   <div class="extra-info">Facts from before:
-    <ul>
+    <ul class="handwriting">
       <li>P(tall) = 1/2</li>
       <li>P(beard) = 1/4</li>
       <li>P(beard|tall) = 1/3</li>
@@ -2001,8 +2264,8 @@ HERE IS A GOOD SPOT TO PUT IN THE NORMALIZATION THING
   </div>
 
   <div>
-    To get P(tattoo, beard, tall), we can't just multiply
-    P(tattoo) x P(beard, tall) without assuming independence.
+    To get <span class="handwriting">P(tattoo, beard, tall)</span> we can't just multiply
+    <span class="handwriting">P(tattoo) × P(beard, tall)</span> without assuming independence.
   </div>
 
   <div>
@@ -2017,22 +2280,22 @@ HERE IS A GOOD SPOT TO PUT IN THE NORMALIZATION THING
     And this brings us to the <bold>Chain Rule of Probability</bold>.
   </div>
 
-  <div class="smaller-children">
+  <div class="smaller-children handwriting">
     P(tattoo, beard, tall) = <br>
-    <span style="color:#7570b3">P(tall)</span> x <span style="color:#1b9e77">P(beard | tall)</span> x <span style="color:#d95f02">P(tattoo | beard AND tall)</span>
+    <span style="color:#a6d854">P(tall)</span> × <span style="color:#ffd92f">P(beard | tall)</span> × <span style="color:#e78ac3">P(tattoo | beard AND tall)</span>
   </div>
 
   <div class="smaller-children" style="margin-left: 16px;">
     <div>
-      First, consider the <span style="color:#7570b3">probability of the character being tall</span>.
+      First, consider the <span class="handwriting" style="color:#a6d854">probability of the character being tall</span>.
     </div>
 
     <div>
-      Then, consider the <span style="color:#1b9e77">probability of a tall character having a beard</span>.
+      Then, consider the <span class="handwriting" style="color:#ffd92f">probability of a tall character having a beard</span>.
     </div>
 
     <div>
-      Then, consider the <span style="color:#d95f02">probability that a tall character with a beard, would have a tattoo</span>.
+      Then, consider the <span class="handwriting" style="color:#e78ac3">probability that a tall character with a beard, would have a tattoo</span>.
     </div>
 
     <div>
@@ -2058,7 +2321,7 @@ HERE IS A GOOD SPOT TO PUT IN THE NORMALIZATION THING
 
   <div class="extra-info">
   Facts from before:
-  <ul>
+  <ul class="handwriting">
     <li>P(tall) = 1/2</li>
     <li class="unused">P(beard) = 1/4</li>
     <li>P(beard|tall) = 1/3</li>
@@ -2070,13 +2333,13 @@ HERE IS A GOOD SPOT TO PUT IN THE NORMALIZATION THING
   </div>
 
   <div>
-  P(tall, beard, tattoos) = 1/<input-box right="42">
+  <span class="handwriting">P(tall, beard, tattoos) = 1/</span><input-box right="42">
     <template v-slot:hint>
       <div>
         Recall the Chain Rule says that everything must be conditioned on what came before. 
       </div>
       <div>
-        So P(tall, beard, tattoos) = P(tall) x P(beard | tall) x P(tattoos | beard AND tall). 
+        So P(tall, beard, tattoos) = P(tall) × P(beard | tall) × P(tattoos | beard AND tall). 
       </div>
     </template>
   </input-box>
@@ -2090,7 +2353,7 @@ HERE IS A GOOD SPOT TO PUT IN THE NORMALIZATION THING
 
     <div class="extra-info">
     Facts from before:
-    <ul>
+    <ul class="handwriting">
       <li class="unused">P(tall) = 1/2</li>
       <li class="unused">P(beard) = 1/4</li>
       <li class="unused">P(beard|tall) = 1/3</li>
@@ -2110,14 +2373,14 @@ HERE IS A GOOD SPOT TO PUT IN THE NORMALIZATION THING
         Recall the Chain Rule says that everything must be conditioned on what came before. 
       </div>
       <div>
-        So in the case of four events, P(tall, beard, tattoos, single) = P(tall) x P(beard | tall) x P(tattoos | beard AND tall) * P(beard AND tall AND tattoos | single). 
+        So in the case of four events, <span class="handwriting">P(tall, beard, tattoos, single) = P(tall) × P(beard | tall) × P(tattoos | beard AND tall) × P(beard AND tall AND tattoos | single)</span>. 
       </div>
       <div>
         What is it for five events?
       </div>
     </template>
 
-    <div>
+    <div class="handwriting">
     P(tall, beard, tattoos, around her age, single) =
     </div>
 
@@ -2151,16 +2414,16 @@ HERE IS A GOOD SPOT TO PUT IN THE NORMALIZATION THING
     We had been decomposing:
   </div>
 
-  <div style="font-size:16px">
-    P(tall, beard, tattoos) = P(tall) x P(beard|tall) x P(tattoos | tall AND beard).
+  <div class="handwriting">
+    P(tall, beard, tattoos) = P(tall) × P(beard|tall) × P(tattoos | tall AND beard).
   </div>
 
   <div>
     But notice... that we can also decompose it as:
   </div>
 
-  <div style="font-size:16px">
-    P(tall AND beard and tattoos) = P(beard) x P(tattoos | beard) x P(tall | tattoos AND beard).
+  <div class="handwriting">
+    P(tall AND beard and tattoos) = P(beard) × P(tattoos | beard) × P(tall | tattoos AND beard).
   </div>
 
   <div>
@@ -2168,18 +2431,32 @@ HERE IS A GOOD SPOT TO PUT IN THE NORMALIZATION THING
   </div>
 
   <div>
-    How many different ways are there to decompose P(tall, beard, tattoos) using the Chain Rule?
+    How many different ways are there to decompose <span class="handwriting">P(tall, beard, tattoos)</span> using the Chain Rule?
   </div>
   <input-box right="6" :feedback="true"/>
 </avatar>
 
 
+<!-- <avatar image="brain.png">
+<div>
+  If this process of calculating the joint probability feel similar to Chapter 1, it's because it is! Chapter 1 is just a special case where 
+P(X|what happened before) = P(X).
+</div>
+
+  <div>
+  In fact, that's exactly the definition of independence — what happens is not dependent on what happened before.
+  </div>
+
+  <next>Next</next>
+</avatar>
+-->
+
+
 <avatar image="wizard.png"
         text="Aw, you foiled my plan by showing Veronica how picky she was. But....">
   <ul>
-    <li>You learned about independence</li>
-    <li>You learned about Chain Rule</li>
-    <li>You learned to not be too picky ❤️</li>
+    <li>You learned to calculate the joint probability of multiple events occurring together (without assuming independence) by using the Chain Rule.</li>
+    <li>You learned to not be too picky ❤️.</li>
   </ul> 
 
   <next>Next</next>
@@ -2192,11 +2469,12 @@ HERE IS A GOOD SPOT TO PUT IN THE NORMALIZATION THING
 </avatar>
 
 <avatar text="What about a friend?">
-  <next>Let's get you friends</next>
+  <next>Sure</next>
+  <next>Of course</next>
 </avatar>
 
 <avatar text="Uh... it might be harder than you think...">
-  <buton @click.native="$root.nextChapter()">Next chapter</buton>
+  <buton @click.native="$root.nextChapter()">Next story</buton>
 </avatar>
 
 </pset>
@@ -2368,12 +2646,8 @@ Okay, I think that's enough for positivity. The second tenet of friendship is co
 <next>Next</next>
 </avatar>
 
-<avatar text="Hm... I could join a CLUB.">
+<avatar text="Hm... I could join a club that meets regularly.">
   <next>Next</next>
-</avatar>
-
-<avatar text="Captive Lovable Uniform Besties">
-  <next>Next</next>  
 </avatar>
 
 <avatar text="Which club should I join to maximize the number of interactions?">
@@ -2516,7 +2790,7 @@ Why bother... I have Elena.
     <li>That the expected value of a distribution its balance point.</li>
   </ul> 
 
-  <buton @click.native="$root.nextChapter()">Next chapter</buton>
+  <buton @click.native="$root.nextChapter()">Next story</buton>
 
 </avatar>
 
@@ -2946,10 +3220,9 @@ Click where you think the balance point is...
   <span v-if="showCannedHint" class="hint" style="position:absolute; bottom:-24px; right:4px">
     {{cannedHint}}
   </span>
-  <span v-if="showYay" class="hint" style="position:absolute; bottom:-24px; right:4px">
+  <span v-if="showYay" class="hint" style="position:absolute; bottom:-24px; right:12px; color:green">
     Yay!
   </span>
-
 
   <div v-if="showHintSlot" class="hint normal-div">
     <slot name="hint"></slot>
@@ -2959,7 +3232,7 @@ Click where you think the balance point is...
 
 
 <script>
-var DEBUG = true;
+var DEBUG = false;
 
 
 const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
@@ -2971,7 +3244,7 @@ const bus = new Vue();
 const sneakySnitch = new Howl({src: ['sounds/sneaky-snitch-by-kevin-macleod_edit.wav'], loop: true});
 
 const sounds = {
-  // 'coin': {clip: new Audio('sounds/gold1.wav')},
+  'spell': {clip: new Audio('sounds/spell.wav')},
   'heads': {clip: new Audio('sounds/gold0.wav')},
   'tails': {clip: new Audio('sounds/gold1.wav')},
 
@@ -3198,6 +3471,68 @@ Vue.component('coin', {
     }
   },
   template: '#coin-template'
+});
+
+
+
+Vue.component('summoning', {
+  props: {
+    bias: {type: Number, default: 0.25}, // Chance of success
+  },
+  data: function(){
+    return {
+//      flips: [], // ['✨✨✨', ' ✨✨💥'], 
+
+      isMouseDown: false,
+      autoFlipper: null,
+
+      isWon: false,
+    }
+  },
+  watch: {
+    isMouseDown(){
+      if (this.isMouseDown == false){
+        // This flip handles the click case.
+        this.flip();
+        if (this.autoFlipper){
+          clearInterval(this.autoFlipper);
+        }
+      }
+
+      if (this.isMouseDown == true){
+        const this_ = this;
+        this.autoFlipper = setInterval(function(){
+          if (this_.isMouseDown == true){
+            this_.flip();
+          }
+        }, 150);        
+      }
+    }
+  },
+
+  methods: {
+    flip: function(){
+      if (this.isWon){
+        return;
+      }
+
+      this.$root.play('spell');
+      var result = '';
+      for (var i=0; i<3; i++){
+        result += Math.random() < this.bias ? '✨' : '💥';
+      }
+      this.$root.summoningFlips.unshift(result);       
+
+      if (result === '✨✨✨'){
+        this.isWon = true;
+        const pset = firstAncestorOfComponent(this, 'pset');
+        if (pset){
+          pset.next();
+        }        
+      }
+    }
+  },
+  template: '#summoning-template'
 });
 
 
@@ -3843,10 +4178,10 @@ Vue.component('triple-bayes', {
         return this.hypotheses.map(x => 'P(' + x + ')');
       }
       if (key == 'likelihood'){
-        return this.hypotheses.map(x => 'P(D|' + x + ')' );        
+        return this.hypotheses.map(x => 'P(E|' + x + ')' );        
       }
       if (key == 'posterior'){
-        return this.hypotheses.map(x => 'P(' + x + '|D)');        
+        return this.hypotheses.map(x => 'P(' + x + '|E)');        
       }
     },
     // simplifiedArr([3, 6]) => [1, 2]
@@ -4230,6 +4565,7 @@ Vue.component('ev-tree', {
 
 Vue.component('tree-node', {
   props:{
+    emojis: {type: Array, default: () => ['🍱', '🥛']},
     height: {type: Number, default: 100},
     width: {type: Number, default: 80},
 
@@ -4430,7 +4766,7 @@ new Vue({
   el: '#app',
   data: {
     chapters: chapters,
-    chapterInd: DEBUG ? 7 : 0,
+    chapterInd: DEBUG ? 1 : 0,
     // Obj property additions do not update DOM, so prepopulate all the keys in the object. Or use lists.
     showTOC: false,
     hasVolume: false,
@@ -4444,6 +4780,8 @@ new Vue({
     activeLoops: [],
     // Doesn't need to be reactive so this is OK.
     soundToCount: {},
+
+    summoningFlips: [],
   },
   watch: {
     chapterInd(){
