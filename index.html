@@ -786,7 +786,7 @@ This ends up in the publication of false positives. Due to random chance, the re
   </div>
 
 
-  <div>Expected playtime: <bold>60 min</bold></div>
+<!--  <div>Expected playtime: <bold>60 min</bold></div> -->
   <buton class="pulse" @click.native="$root.nextChapter()" :button-style="{'font-size': '28px', 'background-color': 'black', 'color': 'white'}">PLAY</buton>
 </div>
 </div>
@@ -909,11 +909,11 @@ sneaky-snitch-by-kevin-macleod_edit.wav
 </p>
 
 <p>
-Anand Babu and Google Kernel friends provided a creative space and the final push of energy to rewrite this. Kourosh Gharachorloo for all the bugs he found, and accidentally the most senior QA tester I've ever had. <a href="//tianyuliu.herokuapp.com/">Tianyu Liu</a> recommended the perfect pieces of prior work. <a href="//twitter.com/nathanmartz?lang=en">Nathan Martz</a> was the game-industry oracle who was right about all the pitfalls.
+Anand Babu and Google Kernel friends provided a creative space and the final push of energy to rewrite this. Kourosh Gharachorloo for all the bugs he found, and accidentally the most senior QA tester I've ever had. <a href="//tianyuliu.herokuapp.com/">Tianyu Liu</a> recommended the perfect pieces of prior work. <a href="//twitter.com/nathanmartz?lang=en">Nathan Martz</a> was the game-industry oracle who was right about all the pitfalls. <a href="http://www.chrislengerich.com/">Chris Lengerich</a> was the final, heroic, 9PM-before-launch playtester!
 </p>
 
 <p>
-All the new friends that I met along the way, including Wei Ho who inspired Chapter 5. Ric Ewing who designed Chapter 2 and taught me how to properly do paper prototypes. Fred Bertsch, Picabo, Meg Gordon, Katie Kormanik, and many Google security guards who helped playtest.
+All the new friends that I met along the way, including Wei Ho who inspired Chapter 5. Ric Ewing who designed Chapter 2 and taught me how to properly do paper prototypes. Fred Bertsch, Picabo, Meg Gordon, Katie Kormanik, and many Google security guards who helped playtest. 
 </p>
 
 <p>
@@ -1179,7 +1179,7 @@ On the tech side, <a href="//vuejs.org/">Vue.js</a> greatly simplified the code 
   <input-box :right="1/125">
     <template v-slot:hint>
       <div>
-        This is just like the coin tosses, but the probability of casting successfully is only 20% each time.
+        Try again. This is just like the coin tosses, but the probability of casting successfully is only 20% each time.
       </div>
     </template>
   </input-box>
@@ -1228,7 +1228,7 @@ On the tech side, <a href="//vuejs.org/">Vue.js</a> greatly simplified the code 
   <input-box :right=".032">
     <template v-slot:hint>
       <div>
-        The probability of a cast being successful is 20%. The probability of a cast failing is 80%. 
+        Not quite. The probability of a cast being successful is 20%. The probability of a cast failing is 80%. 
       </div>
       <div>
         Multiply to get the probability that multiple events occur together.
@@ -1285,7 +1285,7 @@ On the tech side, <a href="//vuejs.org/">Vue.js</a> greatly simplified the code 
   <input-box :right=".096">
     <template v-slot:hint>
       <div>
-        This is the same as the previous question of getting ✨✨💥, except there are 3 different positions for where the failed cast 💥 could be located. 
+        Try again. This is the same as the previous question of getting ✨✨💥, except there are 3 different positions for where the failed cast 💥 could be located. 
       </div>
 
       <div>
@@ -1588,6 +1588,8 @@ On the tech side, <a href="//vuejs.org/">Vue.js</a> greatly simplified the code 
   <div style="margin-bottom:28px;" class="smaller-children handwriting">
   <big-frac style="position:relative; top:12px" num="P(H=OK|Evidence)" den="P(H=Not OK|Evidence)" /> = <big-frac style="position:relative; top:12px" num="P(Evidence|H=OK) × P(H=OK)" den="P(Evidence|H=Not OK) × P(H=Not OK)" />
   </div> 
+
+  <next>Next</next>
 
 </avatar>
 
@@ -2677,6 +2679,8 @@ Okay, I think that's enough for positivity. The second tenet of friendship is co
   Just like before, you can take the expected value. Once the data is plotted as a distribution is the same as finding the <bold>balance point</bold> (where would the distribution balance on your finger if it were made of cardboard).
   </div>
 
+  <div class="smaller-children">Click on the distribution to mark the balance point.</div>
+
 <!--  <fulcrum>
     <template v-slot:center>  <visual-ev-click 
     :outcomes="clubs[0].outcomes"
@@ -3538,7 +3542,7 @@ Vue.component('summoning', {
 
 // Returns a boolean measuring if two numbers are approximately equal.
 function approx(a, b, epsilon){
-  var epsilon = _.isUndefined(epsilon) ? .001 : epsilon;
+  var epsilon = _.isUndefined(epsilon) ? .0001 : epsilon;
   return Math.abs(a - b) < epsilon;
 }
 
@@ -4550,7 +4554,7 @@ Vue.component('ev-tree', {
   props:{
     outcomes: {type: Array, default: () => [
         {certainty: 0.5, payoff: -1}, 
-        {certainty: 0.5, payoff: 3}
+        {certainty: 0.5, payoff: 5}
       ]
     },
   },
@@ -4766,7 +4770,7 @@ new Vue({
   el: '#app',
   data: {
     chapters: chapters,
-    chapterInd: DEBUG ? 1 : 0,
+    chapterInd: DEBUG ? 4 : 0,
     // Obj property additions do not update DOM, so prepopulate all the keys in the object. Or use lists.
     showTOC: false,
     hasVolume: false,
@@ -4918,7 +4922,7 @@ new Vue({
           }
         }
         this.lastStartY = startY;
-        window.scrollBy(0, 10);
+        window.scrollBy(0, 15);
         minNumScrolls--;
         await wait(30);
       }
