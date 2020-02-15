@@ -329,6 +329,12 @@ svg .outcome{
 
 
 <div id="app" @click="mainClick($event)">
+
+<!--left:calc(50% - 10px) -->
+<keep-alive>
+  <component v-bind:is="visibleScreen" :style="componentStyle" style="margin-top: 52px"></component>
+</keep-alive>
+  
     <a style="position:fixed; bottom:2px; right:2px; font-size:10px; color: #aaa; z-index:2" href="//forms.gle/QeUmVfvoxpNJMEcDA">Report bug</a>
 
   <div ref="toc" class="normal-div navbar" style="text-align: left; position:fixed; z-index: 2; display: grid; grid-auto-flow: column; padding-top:8px; ">
@@ -363,11 +369,6 @@ overflow-y:auto;padding-top:8px; background-color: rgb(247,247,247);">
       <span style="top:60px; font-size:12px; display: inline-block; margin:8px;"><bold style="font-size:12px">{{chapter.title || 'Chapter ' + ind}}</bold><br> {{chapter.description}}</span>
     </div>
   </div>
-
-<!--left:calc(50% - 10px) -->
-<keep-alive>
-  <component v-bind:is="visibleScreen" :style="componentStyle" style="margin-top: 52px"></component>
-</keep-alive>
 
 
 </div> <!-- end #app -->
