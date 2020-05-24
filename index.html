@@ -1984,9 +1984,11 @@ On the tech side, <a href="//vuejs.org/">Vue.js</a> greatly simplified the code 
 <script type="text/x-template" id="coin-template">
   <div @mousedown="isMouseDown = true" 
        @mouseup="isMouseDown = false" 
+       @mouseleave="isMouseDown = false" 
 
        @touchstart="isMouseDown = true"
        @touchend="isMouseDown = false"
+       @touchleave="isMouseDown = false"
 
        @contextmenu="isMouseDown = false"
        class="coin normal-div no-select" style="position:relative">
@@ -2004,9 +2006,11 @@ On the tech side, <a href="//vuejs.org/">Vue.js</a> greatly simplified the code 
     <div>
     <buton @mousedown.native="isMouseDown = true" 
        @mouseup.native="isMouseDown = false" 
+       @mouseleave.native="isMouseDown = false" 
 
        @touchstart.native="isMouseDown = true"
        @touchend.native="isMouseDown = false"
+       @touchleave.native="isMouseDown = false"
 
        @contextmenu.native="isMouseDown = false">Summon familiar</buton>
      </div>
