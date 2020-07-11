@@ -21,10 +21,14 @@
 
 <link href="https://fonts.googleapis.com/css?family=Itim|Fira+Sans:300,700" rel="stylesheet">
 
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:fb="http://ogp.me/ns/fb#">
+<meta property="og:image" content="https://cassandraxia.com/wizard/images/wizard-left.png" />
+
 <script src="js/lodash.min.js"></script>
 <script src="js/d3.v5.min.js"></script>
 <script src="js/vue.min.js"></script>
-<script src="js/howler.min.js"></script>
+<!--<script src="js/howler.min.js"></script>-->
 
 <style>
 
@@ -344,11 +348,10 @@ svg .outcome{
          :src="showTOC ? 'images/x.png' : 'images/menu.png'"
          style="cursor: pointer; height: 28px; margin-left: 8px" >
 
-    <img @click="toggleVolume" 
+<!--    <img @click="toggleVolume" 
          :src="hasVolume ? 'images/volume.png' : 'images/volume_off.png'" 
-         style="width:20px; padding-bottom: 4px; padding-left: 4px" >
+         style="width:20px; padding-bottom: 4px; padding-left: 4px" > -->
     
-      <a href="https://twitter.com/CassandraXia"><img src="images/twitter.png" style="height: 16px; position:absolute; right:8px; top:12px; cursor: pointer"></a>
     </div>
 
    <div class="handwriting" style="white-space: nowrap;display: inline-block; overflow: hidden">{{chapterInd == 0 ? '': "Wizard's Guide to Statistics"}}</div>
@@ -3263,49 +3266,49 @@ const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
 const bus = new Vue();
 
 
+const sounds = {};
+// const sneakySnitch = new Howl({src: ['sounds/sneaky-snitch-by-kevin-macleod_edit.wav'], loop: true});
 
-const sneakySnitch = new Howl({src: ['sounds/sneaky-snitch-by-kevin-macleod_edit.wav'], loop: true});
-
-const sounds = {
-  'spell': {clip: new Audio('sounds/spell.wav')},
-  'heads': {clip: new Audio('sounds/gold0.wav')},
-  'tails': {clip: new Audio('sounds/gold1.wav')},
-
-
-  // 'buton': {clips: [new Audio('sounds/237422__plasterbrain__hover-1.mp3')]},
-
-  'nope': {clip: new Audio('sounds/423169__plasterbrain__pc-game-ui-error.mp3')},
-  'yay': {clip: new Audio('sounds/237422__plasterbrain__hover-1.mp3')},
-
-  'haha': {clip: new Audio('sounds/laugh.mp3')},
-  'crickets': {clip: new Audio('sounds/crickets.mp3')},
-
-  'open': {clip: new Audio('sounds/swish0.wav')},
-  'close': {clip: new Audio('sounds/swish1.wav')},
+// const sounds = {
+//   'spell': {clip: new Audio('sounds/spell.wav')},
+//   'heads': {clip: new Audio('sounds/gold0.wav')},
+//   'tails': {clip: new Audio('sounds/gold1.wav')},
 
 
-	'intro-scene': sneakySnitch,  
-	'coin-flips': sneakySnitch,
-	'wizard-flips': new Howl({src: ['sounds/comfortable_mystery_edit.wav'], loop:true}),
-  // 'chain-rule': new Howl({src: ['sounds/wholesome-by-kevin-macleod_edit.wav'], loop:true}),
-  // 'chain-rule': new Howl({src: ['sounds/rusted-maid.wav'], loop:true}),
-  'chain-rule': new Howl({src: ['sounds/your_call_edit.wav'], loop:true}),
+//   // 'buton': {clips: [new Audio('sounds/237422__plasterbrain__hover-1.mp3')]},
 
-  'ev-story': new Howl({src: ['sounds/extreme-hardcore-death-metal-loop_edit.wav'], loop:true}),
-  'intro-to-pvalues': new Howl({src: ['sounds/comma-flaw_edit.wav'], loop:true}),
-  'bayes-rule': new Howl({src: ['sounds/find-my-body-please_edit.wav'], loop:true}),
-	'thanks': sneakySnitch,
-};
+//   'nope': {clip: new Audio('sounds/423169__plasterbrain__pc-game-ui-error.mp3')},
+//   'yay': {clip: new Audio('sounds/237422__plasterbrain__hover-1.mp3')},
 
-const volume = {
-  'wizard-flips': 0.7,
-  'chain-rule': 0.3,
-  'ev-story': 0.3,
-  'intro-to-pvalues': 0.7,
-  'bayes-rule': 0.7
-}
+//   'haha': {clip: new Audio('sounds/laugh.mp3')},
+//   'crickets': {clip: new Audio('sounds/crickets.mp3')},
 
-Howler.volume(0.5);
+//   'open': {clip: new Audio('sounds/swish0.wav')},
+//   'close': {clip: new Audio('sounds/swish1.wav')},
+
+
+// 	'intro-scene': sneakySnitch,  
+// 	'coin-flips': sneakySnitch,
+// 	'wizard-flips': new Howl({src: ['sounds/comfortable_mystery_edit.wav'], loop:true}),
+//   // 'chain-rule': new Howl({src: ['sounds/wholesome-by-kevin-macleod_edit.wav'], loop:true}),
+//   // 'chain-rule': new Howl({src: ['sounds/rusted-maid.wav'], loop:true}),
+//   'chain-rule': new Howl({src: ['sounds/your_call_edit.wav'], loop:true}),
+
+//   'ev-story': new Howl({src: ['sounds/extreme-hardcore-death-metal-loop_edit.wav'], loop:true}),
+//   'intro-to-pvalues': new Howl({src: ['sounds/comma-flaw_edit.wav'], loop:true}),
+//   'bayes-rule': new Howl({src: ['sounds/find-my-body-please_edit.wav'], loop:true}),
+// 	'thanks': sneakySnitch,
+// };
+
+// const volume = {
+//   'wizard-flips': 0.7,
+//   'chain-rule': 0.3,
+//   'ev-story': 0.3,
+//   'intro-to-pvalues': 0.7,
+//   'bayes-rule': 0.7
+// }
+
+// Howler.volume(0.5);
 
 
 const jokes = [
